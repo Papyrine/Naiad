@@ -5,13 +5,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <NoWarn>$(NoWarn);CS1591;SC023</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <PackageLicenseFile>OsmfEula.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SixLaborsLicenseKey>Id=ctm_01krfkytx8bzkq3gsjc92kfmyq;Kind=Community;ExpiryDateUtc=2027-11-25T09:21:15.9115672Z;Key=EnnWb0h1t+2wdIykrPeKDQ38pqBo54wzHRtR5kVh4ULvrWgG0hTKaRo7ltVWPaY3msBMQHAXXUJJKESqEOz1/g==</SixLaborsLicenseKey>
+    <Verify_SponsorshipLicenseIgnored>true</Verify_SponsorshipLicenseIgnored>
   </PropertyGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\OsmfEula.txt" Pack="true" PackagePath="" Visible="false" />

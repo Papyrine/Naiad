@@ -18,7 +18,8 @@
       orient="auto">
       <path
         d="M0,0 V16 L24,8 Z"
-        class="arrowMarkerPath" />
+        class="arrowMarkerPath"
+        fill="#000000" />
     </marker>
     <marker
       id="timeline-connector-arrow"
@@ -30,7 +31,8 @@
       orient="auto">
       <path
         d="M0,0 V8 L12,4 Z"
-        class="arrowMarkerPath" />
+        class="arrowMarkerPath"
+        fill="#000000" />
     </marker>
   </defs>
   <g

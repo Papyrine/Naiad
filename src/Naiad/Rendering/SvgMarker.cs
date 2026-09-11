@@ -45,13 +45,18 @@ public class SvgMarker
         // stroke-width 1 is the SVG default, and "stroke-dasharray: 1, 0" is a solid line (a no-op);
         // emit a style only for the wider markers (e.g. the cross at width 2).
         var style = StrokeWidth == 1 ? "" : $" style='stroke-width: {StrokeWidth};'";
+
+        // Markers that name a fill carry it on the content element. The rasterizers read Fill off this
+        // model, so leaving it out of the markup would have them draw a colour the SVG never shows.
+        // Markers without one (the flowchart set) are left to the `.marker` CSS rule instead.
+        var fill = Fill is null ? "" : $" fill='{Fill}'";
         if (UseCircle)
         {
-            builder.Append(CultureInfo.InvariantCulture, $"<circle cx='{CircleCx:0.##}' cy='{CircleCy:0.##}' r='{CircleR:0.##}' class='arrowMarkerPath'{style}/>");
+            builder.Append(CultureInfo.InvariantCulture, $"<circle cx='{CircleCx:0.##}' cy='{CircleCy:0.##}' r='{CircleR:0.##}' class='arrowMarkerPath'{fill}{style}/>");
         }
         else
         {
-            builder.Append($"<path d='{Path}' class='arrowMarkerPath'{style}/>");
+            builder.Append($"<path d='{Path}' class='arrowMarkerPath'{fill}{style}/>");
         }
 
         builder.Append("</marker>");

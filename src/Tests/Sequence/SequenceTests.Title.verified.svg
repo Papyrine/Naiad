@@ -17,7 +17,8 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath" />
+        class="arrowMarkerPath"
+        fill="#333" />
     </marker>
     <marker
       id="arrowhead-dotted"
@@ -28,7 +29,8 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath" />
+        class="arrowMarkerPath"
+        fill="#333" />
     </marker>
     <marker
       id="cross"
@@ -39,7 +41,8 @@
       orient="auto">
       <path
         d="M1,1 L7,7 M7,1 L1,7"
-        class="arrowMarkerPath" />
+        class="arrowMarkerPath"
+        fill="none" />
     </marker>
   </defs>
   <text

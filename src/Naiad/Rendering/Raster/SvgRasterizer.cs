@@ -126,7 +126,7 @@ static class SvgRasterizer
                     case SvgPath path:
                         var subpaths = PathFlattener.Flatten(path.D);
                         DrawShape(subpaths, ctm, style, opacity);
-                        DrawMarkers(path, subpaths, ctm, chain);
+                        DrawMarkers(path, subpaths, ctm, chain, (float) style.StrokeWidth);
                         break;
                     case SvgText text:
                         DrawText(text, ctm, style, opacity);
@@ -386,28 +386,44 @@ static class SvgRasterizer
             return points;
         }
 
-        void DrawMarkers(SvgPath path, IReadOnlyList<SubPath> subpaths, Matrix3x2 ctm, List<ElementMatch> chain)
+        void DrawMarkers(
+            SvgPath path,
+            IReadOnlyList<SubPath> subpaths,
+            Matrix3x2 ctm,
+            List<ElementMatch> chain,
+            float pathStrokeWidth)
         {
             if (path.MarkerStart is { } start &&
                 MarkerLookup(start) is { } startMarker &&
                 EndpointDirection(subpaths, atStart: true) is var (startPoint, startAngle))
             {
-                DrawMarker(startMarker, startPoint, startAngle, ctm, chain);
+                DrawMarker(startMarker, startPoint, startAngle, ctm, chain, pathStrokeWidth);
             }
 
             if (path.MarkerEnd is { } end &&
                 MarkerLookup(end) is { } endMarker &&
                 EndpointDirection(subpaths, atStart: false) is var (endPoint, endAngle))
             {
-                DrawMarker(endMarker, endPoint, endAngle, ctm, chain);
+                DrawMarker(endMarker, endPoint, endAngle, ctm, chain, pathStrokeWidth);
             }
         }
 
-        void DrawMarker(SvgMarker marker, Vector2 vertex, float angle, Matrix3x2 pathCtm, List<ElementMatch> chain)
+        void DrawMarker(
+            SvgMarker marker,
+            Vector2 vertex,
+            float angle,
+            Matrix3x2 pathCtm,
+            List<ElementMatch> chain,
+            float pathStrokeWidth)
         {
             var (vbMinX, vbMinY, vbWidth, vbHeight) = ParseMarkerViewBox(marker);
-            var scaleX = vbWidth > 0 ? (float) (marker.MarkerWidth / vbWidth) : 1;
-            var scaleY = vbHeight > 0 ? (float) (marker.MarkerHeight / vbHeight) : 1;
+
+            // markerUnits defaults to strokeWidth: the marker viewport is measured in multiples of the
+            // stroked path's width, so a heavier line carries a proportionally bigger arrowhead.
+            // userSpaceOnUse takes the declared size at face value.
+            var unitScale = marker.MarkerUnits == "userSpaceOnUse" ? 1 : pathStrokeWidth;
+            var scaleX = (vbWidth > 0 ? (float) (marker.MarkerWidth / vbWidth) : 1) * unitScale;
+            var scaleY = (vbHeight > 0 ? (float) (marker.MarkerHeight / vbHeight) : 1) * unitScale;
 
             // marker content space → path-local space: shift refX/refY to the origin, scale into the
             // marker box, rotate to the path direction, then drop onto the path vertex.

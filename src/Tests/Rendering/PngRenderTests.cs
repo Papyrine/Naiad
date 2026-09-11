@@ -66,6 +66,17 @@ public class PngRenderTests
             commit
         """;
 
+    // The only diagram whose arrowhead rides a path wider than one unit, so it is what pins the
+    // markerUnits="strokeWidth" scaling; also dashed drop-lines and the arc-based score faces.
+    const string journey =
+        """
+        journey
+            title My Working Day
+            section Morning
+                Make coffee: 5: Me
+                Check emails: 3: Me
+        """;
+
     // Inline-SVG icons embedded in foreignObject labels — the rasterizer must pull them out of the
     // label HTML and draw them next to the text rather than dropping them with the other tags.
     const string flowchartIcons =
@@ -110,6 +121,9 @@ public class PngRenderTests
     public Task SkiaGitGraph() => VerifyPng(SkiaRenderer.RenderPng(gitGraph, HighDpi));
 
     [Test]
+    public Task SkiaJourney() => VerifyPng(SkiaRenderer.RenderPng(journey, HighDpi));
+
+    [Test]
     public Task ImageSharpPie() => VerifyPng(ImageSharpRenderer.RenderPng(pie, HighDpi));
 
     [Test]
@@ -126,6 +140,9 @@ public class PngRenderTests
 
     [Test]
     public Task ImageSharpGitGraph() => VerifyPng(ImageSharpRenderer.RenderPng(gitGraph, HighDpi));
+
+    [Test]
+    public Task ImageSharpJourney() => VerifyPng(ImageSharpRenderer.RenderPng(journey, HighDpi));
 
     [Test]
     public Task SkiaFlowchartIcons()

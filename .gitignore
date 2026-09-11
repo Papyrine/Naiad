@@ -12,3 +12,4 @@ nul
 /BenchmarkDotNet.Artifacts
 .dagre-ref/
 /TestResults
+*.lnk

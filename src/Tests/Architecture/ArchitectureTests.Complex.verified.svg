@@ -17,7 +17,8 @@
       orient="auto">
       <path
         d="M0,0 L10,3.5 L0,7 Z"
-        class="arrowMarkerPath" />
+        class="arrowMarkerPath"
+        fill="#666" />
     </marker>
   </defs>
   <g
