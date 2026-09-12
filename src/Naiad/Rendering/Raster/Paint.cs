@@ -3,7 +3,7 @@
 /// reference) into one of these, with gradient geometry already resolved to absolute user-space
 /// coordinates, so the surfaces never have to look anything up — they just paint what they're handed.
 /// </summary>
-abstract class Paint;
+closed class Paint;
 
 sealed class SolidPaint(Rgba color) : Paint
 {

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Pidgin" />
+    <PackageReference Include="Polyfill" PrivateAssets="all" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <PackageReference Include="SponsorCheck" PrivateAssets="all" />
   </ItemGroup>

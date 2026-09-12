@@ -111,28 +111,28 @@ sealed class SkiaSurface : IRenderSurface
 
     static void ApplyPaint(SKPaint skPaint, Paint paint, float opacity)
     {
-        switch (paint)
+        if (paint is SolidPaint solid)
         {
-            case SolidPaint solid:
-                skPaint.Color = ToColor(solid.Color.MultiplyAlpha(opacity));
-                break;
-            case LinearGradientPaint linear:
-                skPaint.Shader = SKShader.CreateLinearGradient(
-                    new(linear.Start.X, linear.Start.Y),
-                    new(linear.End.X, linear.End.Y),
-                    Colors(linear.Stops, opacity),
-                    Offsets(linear.Stops),
-                    SKShaderTileMode.Clamp);
-                break;
-            case RadialGradientPaint radial:
-                skPaint.Shader = SKShader.CreateRadialGradient(
-                    new(radial.Center.X, radial.Center.Y),
-                    radial.Radius,
-                    Colors(radial.Stops, opacity),
-                    Offsets(radial.Stops),
-                    SKShaderTileMode.Clamp);
-                break;
+            skPaint.Color = ToColor(solid.Color.MultiplyAlpha(opacity));
         }
+
+        skPaint.Shader = paint switch
+        {
+            // The paint is the colour set above; there is no shader to layer over it.
+            SolidPaint => null,
+            LinearGradientPaint linear => SKShader.CreateLinearGradient(
+                new(linear.Start.X, linear.Start.Y),
+                new(linear.End.X, linear.End.Y),
+                Colors(linear.Stops, opacity),
+                Offsets(linear.Stops),
+                SKShaderTileMode.Clamp),
+            RadialGradientPaint radial => SKShader.CreateRadialGradient(
+                new(radial.Center.X, radial.Center.Y),
+                radial.Radius,
+                Colors(radial.Stops, opacity),
+                Offsets(radial.Stops),
+                SKShaderTileMode.Clamp)
+        };
     }
 
     static SKColor[] Colors(IReadOnlyList<GradientStop> stops, float opacity)

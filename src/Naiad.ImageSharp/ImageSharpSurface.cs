@@ -118,28 +118,21 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
         return builder.Build();
     }
 
-    static Brush ToBrush(Paint paint, float opacity)
-    {
-        switch (paint)
+    static Brush ToBrush(Paint paint, float opacity) =>
+        paint switch
         {
-            case SolidPaint solid:
-                return new SolidBrush(ToColor(solid.Color.MultiplyAlpha(opacity)));
-            case LinearGradientPaint linear:
-                return new LinearGradientBrush(
-                    new(linear.Start.X, linear.Start.Y),
-                    new(linear.End.X, linear.End.Y),
-                    GradientRepetitionMode.None,
-                    Stops(linear.Stops, opacity));
-            case RadialGradientPaint radial:
-                return new RadialGradientBrush(
-                    new(radial.Center.X, radial.Center.Y),
-                    radial.Radius,
-                    GradientRepetitionMode.None,
-                    Stops(radial.Stops, opacity));
-            default:
-                return new SolidBrush(Color.Transparent);
-        }
-    }
+            SolidPaint solid => new SolidBrush(ToColor(solid.Color.MultiplyAlpha(opacity))),
+            LinearGradientPaint linear => new LinearGradientBrush(
+                new(linear.Start.X, linear.Start.Y),
+                new(linear.End.X, linear.End.Y),
+                GradientRepetitionMode.None,
+                Stops(linear.Stops, opacity)),
+            RadialGradientPaint radial => new RadialGradientBrush(
+                new(radial.Center.X, radial.Center.Y),
+                radial.Radius,
+                GradientRepetitionMode.None,
+                Stops(radial.Stops, opacity))
+        };
 
     static ColorStop[] Stops(IReadOnlyList<GradientStop> stops, float opacity)
     {
