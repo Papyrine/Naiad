@@ -11,8 +11,8 @@
     <PackageVersion Include="SponsorCheck" Version="0.24.0" GitHubSponsorsAccount="Papyrine" SponsorOwner="Papyrine" CheckTransitiveReferences="true" SponsorLandingUrl="https://github.com/sponsors/Papyrine" />
     <SponsorExemption Include="MaintainerConsulting" Message="Organizations that have engaged any of the core maintainers of Papyrine in consulting work could be exempt from the Maintenance Fee for 6 months from the final date of that work." />
     <SponsorExemption Include="SmallRevenue" Message="Consumers under US$10,000 annual gross revenue are exempt." />
-    <PackageVersion Include="TUnit" Version="1.68.0" />
-    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.4.0" />
+    <PackageVersion Include="TUnit" Version="1.68.4" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.4.1" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.11.2" />
     <PackageVersion Include="Polyfill" Version="11.3.0" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.181" />
