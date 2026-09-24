@@ -19,13 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # Install the .NET 11 preview SDK pinned by global.json; it also builds the net10.0 Naiad library.
       # No extra runtime install is needed here — the hosted Ubuntu image already ships the .NET 10
       # (LTS) runtime, and the only project run below targets net11.0.
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
 
