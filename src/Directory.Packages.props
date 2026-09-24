@@ -1,7 +1,7 @@
 <Project>
   <ItemGroup>
     <PackageVersion Include="AngleSharp" Version="1.8.2" />
-    <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.4.2" />
+    <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.4.4" />
     <PackageVersion Include="Svg.Skia" Version="5.2.3" />
     <PackageVersion Include="Pidgin" Version="3.5.1" />
     <PackageVersion Include="SkiaSharp" Version="4.152.1" />
@@ -18,14 +18,14 @@
     <PackageVersion Include="Polyfill" Version="11.4.0" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.181" />
     <PackageVersion Include="ProjectFiles" Version="1.4.0" />
-    <PackageVersion Include="Verify.TUnit" Version="33.1.2" />
+    <PackageVersion Include="Verify.TUnit" Version="33.1.4" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="Argon" Version="0.37.0" />
-    <PackageVersion Include="DiffEngine" Version="20.5.0" />
+    <PackageVersion Include="DiffEngine" Version="20.5.1" />
     <PackageVersion Include="EmptyFiles" Version="8.19.0" />
     <PackageVersion Include="SimpleInfoName" Version="3.2.0" />
-    <PackageVersion Include="Verify" Version="33.1.2" />
+    <PackageVersion Include="Verify" Version="33.1.4" />
     <!-- Naiad.Web (Blazor WebAssembly) and its bUnit + Playwright test project -->
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.12" />
     <PackageVersion Include="bunit" Version="2.11.3" />
