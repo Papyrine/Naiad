@@ -12,7 +12,7 @@
     <SponsorExemption Include="MaintainerConsulting" Message="Organizations that have engaged any of the core maintainers of Papyrine in consulting work could be exempt from the Maintenance Fee for 6 months from the final date of that work." MaxTermMonths="6" />
     <SponsorExemption Include="SmallRevenue" Message="Consumers under US$10,000 annual gross revenue are exempt." MaxTermMonths="12" />
     <SponsorExemption Include="OpenSource" Message="Open source projects that do not generate revenue are exempt. Voluntary donations and sponsorships are not revenue." MaxTermMonths="12" />
-    <PackageVersion Include="TUnit" Version="1.69.0" />
+    <PackageVersion Include="TUnit" Version="1.69.16" />
     <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.4.1" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.11.2" />
     <PackageVersion Include="Polyfill" Version="11.4.0" />
@@ -22,7 +22,7 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="Argon" Version="0.37.0" />
-    <PackageVersion Include="DiffEngine" Version="20.5.1" />
+    <PackageVersion Include="DiffEngine" Version="20.5.2" />
     <PackageVersion Include="EmptyFiles" Version="8.19.0" />
     <PackageVersion Include="SimpleInfoName" Version="3.2.0" />
     <PackageVersion Include="Verify" Version="33.1.4" />
