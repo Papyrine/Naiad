@@ -263,9 +263,23 @@ static class Util
     }
 
     // An empty sequence reduces to ±Infinity.
-    public static double ApplyMax(IReadOnlyList<double> values) =>
-        values.Count == 0 ? double.NegativeInfinity : values.Max();
+    public static double ApplyMax(IReadOnlyList<double> values)
+    {
+        if (values.Count == 0)
+        {
+            return double.NegativeInfinity;
+        }
 
-    public static double ApplyMin(IReadOnlyList<double> values) =>
-        values.Count == 0 ? double.PositiveInfinity : values.Min();
+        return values.Max();
+    }
+
+    public static double ApplyMin(IReadOnlyList<double> values)
+    {
+        if (values.Count == 0)
+        {
+            return double.PositiveInfinity;
+        }
+
+        return values.Min();
+    }
 }

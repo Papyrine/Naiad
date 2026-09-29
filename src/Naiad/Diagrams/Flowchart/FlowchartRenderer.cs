@@ -353,9 +353,12 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         if (prefix is "fa" or "fab" or "fas" or "far" &&
             name.StartsWith("fa-", StringComparison.Ordinal))
         {
-            return IconPackRegistry.Resolve(token) is { } faIcon
-                ? InlineIconSvg(faIcon)
-                : $"<i class='{prefix} {name}'></i>";
+            if (IconPackRegistry.Resolve(token) is { } faIcon)
+            {
+                return InlineIconSvg(faIcon);
+            }
+
+            return $"<i class='{prefix} {name}'></i>";
         }
 
         // Registered iconify pack icon, rendered as inline SVG sized to the text.

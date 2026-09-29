@@ -816,7 +816,12 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
     static double LabelChipHeight(string? technology, RenderOptions options)
     {
         var fontSize = options.FontSize - 3;
-        return string.IsNullOrEmpty(technology) ? fontSize + 6 : (fontSize + 4) * 2 + 2;
+        if (string.IsNullOrEmpty(technology))
+        {
+            return fontSize + 6;
+        }
+
+        return (fontSize + 4) * 2 + 2;
     }
 
     static void DrawLabelChip(
@@ -941,10 +946,15 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
     /// The description, wrapped to the box rather than cut off at an ellipsis. Elements are a fixed
     /// width, so the limit is a character count; the box height follows from how many lines come back.
     /// </summary>
-    static List<string> DescriptionLines(C4Element element) =>
-        string.IsNullOrEmpty(element.Description)
-            ? []
-            : WrapText(element.Description, descriptionWrapChars);
+    static List<string> DescriptionLines(C4Element element)
+    {
+        if (string.IsNullOrEmpty(element.Description))
+        {
+            return [];
+        }
+
+        return WrapText(element.Description, descriptionWrapChars);
+    }
 
     static List<string> WrapText(string text, int maxChars)
     {
@@ -1227,7 +1237,12 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
     {
         if (element.IsExternal)
         {
-            return element.Type == C4ElementType.Person ? personExtColor : systemExtColor;
+            if (element.Type == C4ElementType.Person)
+            {
+                return personExtColor;
+            }
+
+            return systemExtColor;
         }
 
         return element.Type switch

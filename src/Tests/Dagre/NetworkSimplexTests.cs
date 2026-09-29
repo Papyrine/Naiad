@@ -535,6 +535,13 @@ public class NetworkSimplexTests
         Util.NormalizeRanks(graph);
     }
 
-    static EdgeKey UndirectedEdge(EdgeKey e) =>
-        string.CompareOrdinal(e.V, e.W) < 0 ? new(e.V, e.W) : new EdgeKey(e.W, e.V);
+    static EdgeKey UndirectedEdge(EdgeKey e)
+    {
+        if (string.CompareOrdinal(e.V, e.W) < 0)
+        {
+            return new(e.V, e.W);
+        }
+
+        return new EdgeKey(e.W, e.V);
+    }
 }

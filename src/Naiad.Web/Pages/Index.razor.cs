@@ -116,9 +116,12 @@ public partial class Index : IDisposable
         }
 
         var kilobytes = bytes / 1024d;
-        return kilobytes < 1024
-            ? $"{kilobytes:0.#} KB"
-            : $"{kilobytes / 1024d:0.#} MB";
+        if (kilobytes < 1024)
+        {
+            return $"{kilobytes:0.#} KB";
+        }
+
+        return $"{kilobytes / 1024d:0.#} MB";
     }
 
     sealed record RenderStats(string? TypeName, (double Width, double Height)? Dimensions, int SvgByteCount, double Milliseconds);

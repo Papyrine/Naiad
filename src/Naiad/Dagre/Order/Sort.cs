@@ -62,6 +62,11 @@ static class Sort
                 return 1;
             }
 
-            return !bias ? entryV.I - entryW.I : entryW.I - entryV.I;
+            if (!bias)
+            {
+                return entryV.I - entryW.I;
+            }
+
+            return entryW.I - entryV.I;
         };
 }

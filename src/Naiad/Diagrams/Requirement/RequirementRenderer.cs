@@ -91,10 +91,15 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         return builder.Build();
     }
 
-    static double StackHeight(List<Box> boxes) =>
-        boxes.Count == 0
-            ? 0
-            : boxes.Sum(_ => _.Height) + (boxes.Count - 1) * rowSpacing;
+    static double StackHeight(List<Box> boxes)
+    {
+        if (boxes.Count == 0)
+        {
+            return 0;
+        }
+
+        return boxes.Sum(_ => _.Height) + (boxes.Count - 1) * rowSpacing;
+    }
 
     static void StackColumn(SvgBuilder builder, List<Box> boxes, double columnX, double columnWidth,
         double top, Dictionary<string, NodeBox> positions, RenderOptions options)

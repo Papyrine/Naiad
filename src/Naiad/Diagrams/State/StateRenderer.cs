@@ -573,7 +573,12 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             maxExtraNeeded = Math.Max(maxExtraNeeded, Math.Max(curveExtraNeeded, labelExtraNeeded));
         }
 
-        return maxExtraNeeded > 0 ? maxExtraNeeded + 10 : 0; // Add margin
+        if (maxExtraNeeded > 0)
+        {
+            return maxExtraNeeded + 10;
+        }
+
+        return 0; // Add margin
     }
 
     static double CalculateCurveExtraRight(StateModel model, Dictionary<string, State> stateMap)
@@ -583,7 +588,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         // Get all back-edges with their indices for position calculation
         var backEdges = model.Transitions
             .Where(_ => IsBackEdge(_, stateMap))
-            .OrderBy(_ => stateMap.TryGetValue(_.FromId, out var s) ? s.Position.X : 0)
+            .OrderBy(_ =>
+            {
+                if (stateMap.TryGetValue(_.FromId, out var s))
+                {
+                    return s.Position.X;
+                }
+
+                return 0;
+            })
             .ToList();
 
         if (backEdges.Count == 0)
@@ -676,7 +689,12 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             maxExtraNeeded = Math.Max(maxExtraNeeded, extraNeeded);
         }
 
-        return maxExtraNeeded > 0 ? maxExtraNeeded + 10 : 0;
+        if (maxExtraNeeded > 0)
+        {
+            return maxExtraNeeded + 10;
+        }
+
+        return 0;
     }
 
     // Where a note's box starts. The side is the one the diagram asked for - `note right of X` /
@@ -1010,10 +1028,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
-    static Position WithCrossAxis(Position position, double value, bool horizontalRanks) =>
-        horizontalRanks
-            ? position with {Y = value}
-            : position with {X = value};
+    static Position WithCrossAxis(Position position, double value, bool horizontalRanks)
+    {
+        if (horizontalRanks)
+        {
+            return position with {Y = value};
+        }
+
+        return position with {X = value};
+    }
 
     static void AdjustEndNodePosition(StateModel model)
     {
@@ -1304,7 +1327,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var backEdges = model.Transitions
             .Where(_ => IsBackEdge(_, stateMap) &&
                         !bidirectionalPairs.Contains(GetPairKey(_.FromId, _.ToId)))
-            .OrderBy(_ => stateMap.TryGetValue(_.FromId, out var s) ? s.Position.X : 0)
+            .OrderBy(_ =>
+            {
+                if (stateMap.TryGetValue(_.FromId, out var s))
+                {
+                    return s.Position.X;
+                }
+
+                return 0;
+            })
             .ToList();
 
         // Index back-edges once so the per-transition loop is O(E), not O(E²) via IndexOf.
@@ -1368,7 +1399,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             var nestedBackEdges = state.NestedTransitions
                 .Where(_ => IsBackEdge(_, nestedMap) && !nestedBidirectional.Contains(GetPairKey(_.FromId, _.ToId)))
-                .OrderBy(_ => nestedMap.TryGetValue(_.FromId, out var from) ? from.Position.X : 0)
+                .OrderBy(_ =>
+                {
+                    if (nestedMap.TryGetValue(_.FromId, out var from))
+                    {
+                        return from.Position.X;
+                    }
+
+                    return 0;
+                })
                 .ToList();
 
             foreach (var transition in state.NestedTransitions)
@@ -1415,8 +1454,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         return pairs;
     }
 
-    static string GetPairKey(string a, string b) =>
-        string.Compare(a, b, StringComparison.Ordinal) < 0 ? $"{a}|{b}" : $"{b}|{a}";
+    static string GetPairKey(string a, string b)
+    {
+        if (string.Compare(a, b, StringComparison.Ordinal) < 0)
+        {
+            return $"{a}|{b}";
+        }
+
+        return $"{b}|{a}";
+    }
 
     static bool IsBackEdge(StateTransition transition, Dictionary<string, State> stateMap)
     {

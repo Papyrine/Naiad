@@ -122,8 +122,15 @@ struct ComputedStyle
         }
     }
 
-    static double? Number(string value) =>
-        double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var number) ? number : null;
+    static double? Number(string value)
+    {
+        if (double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var number))
+        {
+            return number;
+        }
+
+        return null;
+    }
 
     static double? Length(string value, double emBasis)
     {
@@ -153,6 +160,11 @@ struct ComputedStyle
             return null;
         }
 
-        return double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out var number) ? number : null;
+        if (double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out var number))
+        {
+            return number;
+        }
+
+        return null;
     }
 }

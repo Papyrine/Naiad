@@ -161,7 +161,12 @@ sealed class Stylesheet
             }
         }
 
-        return simples.Count == 0 ? null : [.. simples];
+        if (simples.Count == 0)
+        {
+            return null;
+        }
+
+        return [.. simples];
     }
 
     static SimpleSelector? ParseSimple(string token)

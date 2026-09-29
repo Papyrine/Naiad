@@ -319,7 +319,12 @@ class ClassParser : IDiagramParser<ClassModel>
     {
         if (arrow.From is RelationshipMarker.Triangle || arrow.To is RelationshipMarker.Triangle)
         {
-            return arrow.Dashed ? RelationshipType.Realization : RelationshipType.Inheritance;
+            if (arrow.Dashed)
+            {
+                return RelationshipType.Realization;
+            }
+
+            return RelationshipType.Inheritance;
         }
 
         if (arrow.From is RelationshipMarker.FilledDiamond || arrow.To is RelationshipMarker.FilledDiamond)
@@ -334,12 +339,22 @@ class ClassParser : IDiagramParser<ClassModel>
 
         if (arrow.From is RelationshipMarker.Arrow)
         {
-            return arrow.Dashed ? RelationshipType.DependencyLeft : RelationshipType.Association;
+            if (arrow.Dashed)
+            {
+                return RelationshipType.DependencyLeft;
+            }
+
+            return RelationshipType.Association;
         }
 
         if (arrow.To is RelationshipMarker.Arrow)
         {
-            return arrow.Dashed ? RelationshipType.DependencyRight : RelationshipType.Association;
+            if (arrow.Dashed)
+            {
+                return RelationshipType.DependencyRight;
+            }
+
+            return RelationshipType.Association;
         }
 
         return RelationshipType.Link;

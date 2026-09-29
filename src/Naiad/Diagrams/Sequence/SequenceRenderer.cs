@@ -71,10 +71,15 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         return builder.Build();
     }
 
-    static double HeaderHeight(SequenceModel model) =>
-        model.Participants.Any(_ => _.Type == ParticipantType.Actor)
-            ? participantHeight + actorLabelHeight
-            : participantHeight;
+    static double HeaderHeight(SequenceModel model)
+    {
+        if (model.Participants.Any(_ => _.Type == ParticipantType.Actor))
+        {
+            return participantHeight + actorLabelHeight;
+        }
+
+        return participantHeight;
+    }
 
     /// <summary>
     /// Places the participants and sizes the canvas around everything that hangs off them — notes beside

@@ -229,17 +229,41 @@ sealed class Graph
     {
         if (IsCompound)
         {
-            return childrenMap!.TryGetValue(v, out var children) ? children.Count : 0;
+            if (childrenMap!.TryGetValue(v, out var children))
+            {
+                return children.Count;
+            }
+
+            return 0;
         }
 
-        return v == GraphNode ? NodeCount : 0;
+        if (v == GraphNode)
+        {
+            return NodeCount;
+        }
+
+        return 0;
     }
 
-    public List<string>? Predecessors(string v) =>
-        predsMap.TryGetValue(v, out var predsV) ? predsV.Keys() : null;
+    public List<string>? Predecessors(string v)
+    {
+        if (predsMap.TryGetValue(v, out var predsV))
+        {
+            return predsV.Keys();
+        }
 
-    public List<string>? Successors(string v) =>
-        sucsMap.TryGetValue(v, out var sucsV) ? sucsV.Keys() : null;
+        return null;
+    }
+
+    public List<string>? Successors(string v)
+    {
+        if (sucsMap.TryGetValue(v, out var sucsV))
+        {
+            return sucsV.Keys();
+        }
+
+        return null;
+    }
 
     // Allocation-free neighbour/edge views for the hot order/position passes. The node must exist
     // (those passes only ever pass real nodes), so unlike Successors/OutEdges these never return null

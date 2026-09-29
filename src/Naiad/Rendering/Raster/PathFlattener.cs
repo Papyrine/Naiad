@@ -192,8 +192,15 @@ static class PathFlattener
         return result;
     }
 
-    static Vector2 Resolve(Vector2 point, Vector2 current, bool relative) =>
-        relative ? current + point : point;
+    static Vector2 Resolve(Vector2 point, Vector2 current, bool relative)
+    {
+        if (relative)
+        {
+            return current + point;
+        }
+
+        return point;
+    }
 
     // de Casteljau subdivision, iterative: subdivide until the control points sit within the flatness
     // tolerance of the chord, then emit the endpoint. A stack-allocated, depth-first work stack replaces
@@ -350,7 +357,12 @@ static class PathFlattener
         var dot = ux * vx + uy * vy;
         var length = Math.Sqrt((ux * ux + uy * uy) * (vx * vx + vy * vy));
         var angle = Math.Acos(Math.Clamp(dot / length, -1, 1));
-        return ux * vy - uy * vx < 0 ? -angle : angle;
+        if (ux * vy - uy * vx < 0)
+        {
+            return -angle;
+        }
+
+        return angle;
     }
 
     // Cursor over path data: yields command letters, numbers, points and arc flags, treating commas
@@ -435,7 +447,12 @@ static class PathFlattener
             }
 
             var slice = text.AsSpan(startIndex, position - startIndex);
-            return double.TryParse(slice, NumberStyles.Float, CultureInfo.InvariantCulture, out var value) ? value : 0;
+            if (double.TryParse(slice, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+            {
+                return value;
+            }
+
+            return 0;
         }
 
         // Arc large-arc/sweep flags are single '0' or '1' digits that may abut the next number with no

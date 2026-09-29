@@ -431,8 +431,15 @@ public class ClassRenderer :
         return $"{visibility}{method.Name}({parameters}){Classifier(method.IsStatic, method.IsAbstract)}{returnTypeStr}";
     }
 
-    static string FormatParameter(MethodParameter parameter) =>
-        string.IsNullOrEmpty(parameter.Type) ? parameter.Name : $"{parameter.Name}: {parameter.Type}";
+    static string FormatParameter(MethodParameter parameter)
+    {
+        if (string.IsNullOrEmpty(parameter.Type))
+        {
+            return parameter.Name;
+        }
+
+        return $"{parameter.Name}: {parameter.Type}";
+    }
 
     // Mermaid's trailing classifier: $ for static, * for abstract.
     static string Classifier(bool isStatic, bool isAbstract) =>

@@ -20,7 +20,12 @@ public static class AppInfo
         }
 
         var sha = version[(plus + 1)..];
-        return sha.Length <= 7 ? version : version[..(plus + 1)] + sha[..7];
+        if (sha.Length <= 7)
+        {
+            return version;
+        }
+
+        return version[..(plus + 1)] + sha[..7];
     }
 
     /// <summary>Pre-formatted Markdown bullet lines describing the runtime, for an issue body.</summary>

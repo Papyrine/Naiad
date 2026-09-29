@@ -656,7 +656,12 @@ static class SvgRasterizer
 
             if (raw.Equals("currentColor", StringComparison.OrdinalIgnoreCase))
             {
-                return CssColor.TryParse(style.Color, out var current) ? current : null;
+                if (CssColor.TryParse(style.Color, out var current))
+                {
+                    return current;
+                }
+
+                return null;
             }
 
             if (CssColor.TryParse(raw, out var color))

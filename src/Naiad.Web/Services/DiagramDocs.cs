@@ -13,8 +13,15 @@ public static class DiagramDocs
     const string baseUrl = "https://mermaid.js.org/syntax/";
 
     /// <summary>The docs link for <paramref name="source"/>, or null when no diagram type is recognised.</summary>
-    public static DiagramDocsLink? For(string? source) =>
-        Mermaid.TryDetectType(source, out var type) ? For(type) : null;
+    public static DiagramDocsLink? For(string? source)
+    {
+        if (Mermaid.TryDetectType(source, out var type))
+        {
+            return For(type);
+        }
+
+        return null;
+    }
 
     public static DiagramDocsLink For(DiagramType type) =>
         type switch

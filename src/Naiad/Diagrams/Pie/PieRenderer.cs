@@ -159,7 +159,12 @@ public class PieRenderer : IDiagramRenderer<PieModel>
     {
         if (color is not null)
         {
-            return color.StartsWith("rgb") ? color : ConvertToRgb(color);
+            if (color.StartsWith("rgb"))
+            {
+                return color;
+            }
+
+            return ConvertToRgb(color);
         }
 
         return defaultColorRgb[index % defaultColorRgb.Length];
