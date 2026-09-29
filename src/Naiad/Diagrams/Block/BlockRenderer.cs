@@ -260,5 +260,4 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
             fontFamily: options.FontFamily,
             fill: "#333");
     }
-
 }

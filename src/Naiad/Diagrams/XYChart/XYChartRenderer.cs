@@ -229,5 +229,4 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
 
         return builder.Build();
     }
-
 }
