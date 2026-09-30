@@ -18,7 +18,6 @@
     <PackageReference Include="AngleSharp" />
     <PackageReference Include="TUnit" />
     <PackageReference Include="Verify.TUnit" />
-    <PackageReference Include="Verify.DiffPlex" />
     <PackageReference Include="Verify.Playwright" />
     <PackageReference Include="Verify.Bunit" />
     <PackageReference Include="bunit" />
