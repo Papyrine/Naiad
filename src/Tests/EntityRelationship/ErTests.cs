@@ -74,6 +74,111 @@ public class ErTests : TestBase
     }
 
     [Test]
+    public Task LowercaseKeyTypes()
+    {
+        const string input =
+            """
+            erDiagram
+                CUSTOMER {
+                    int id pk
+                    int region_id fk
+                    string email uk
+                }
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task SizedTypes()
+    {
+        const string input =
+            """
+            erDiagram
+                PRODUCT {
+                    int id PK
+                    nvarchar(200) name
+                    decimal(18,2) price
+                    varchar(max)(nullable) notes
+                    string? sku "Optional"
+                }
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task Alias()
+    {
+        const string input =
+            """
+            erDiagram
+                CUSTOMER["Customer Account"] {
+                    int id PK
+                    string name
+                }
+                ORDER[Purchase] {
+                    int id PK
+                    int customer_id FK
+                }
+                CUSTOMER ||--o{ ORDER : places
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task AliasBold()
+    {
+        const string input =
+            """
+            erDiagram
+                Company["**Company**"] {
+                    int Id pk
+                    nvarchar(200) Name
+                }
+                Employee["**Employee**: People who work here"] {
+                    int Id pk
+                    int CompanyId
+                }
+                Company ||--o{ Employee : "FK_Employee_Company"
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task SqlSchema()
+    {
+        const string input =
+            """
+            erDiagram
+              Company["**Company**"] {
+                int Id pk
+                nvarchar(200) Name
+              }
+              Employee["**Employee**: People who work here"] {
+                int Id pk "computed: the key"
+                nvarchar(100) FirstName
+                nvarchar(100)(nullable) LastName
+                decimal(18,2) Salary
+                int CompanyId
+                int(nullable) ManagerId "reports to"
+              }
+              Order_Detail["**Order_Detail**"] {
+                int Id pk
+                int EmployeeId
+                nvarchar(max)(nullable) Notes
+              }
+              Company ||--o{ Employee : "FK_Employee_Company"
+              Employee ||--o{ Employee : "FK_Employee_Manager"
+              Employee ||--o{ Order_Detail : "FK_OrderDetail_Employee"
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
     public Task OneToOne()
     {
         const string input =

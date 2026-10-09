@@ -1,0 +1,396 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 510.5 612"
+  style="max-width: 510.5px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M151.55,80 L151.55,89.67 C151.55,99.33 151.55,118.67 151.55,138 C151.55,157.33 151.55,176.67 151.55,186.33 L151.55,196"
+      fill="none"
+      stroke="#333" />
+    <line
+      x1="156.55"
+      y1="87"
+      x2="146.55"
+      y2="87"
+      stroke="#333" />
+    <line
+      x1="156.55"
+      y1="93"
+      x2="146.55"
+      y2="93"
+      stroke="#333" />
+    <line
+      x1="151.55"
+      y1="184"
+      x2="151.55"
+      y2="196"
+      stroke="#333" />
+    <line
+      x1="151.55"
+      y1="184"
+      x2="156.55"
+      y2="196"
+      stroke="#333" />
+    <line
+      x1="151.55"
+      y1="184"
+      x2="146.55"
+      y2="196"
+      stroke="#333" />
+    <circle
+      cx="151.55"
+      cy="178"
+      r="4"
+      fill="#fff"
+      stroke="#333" />
+    <rect
+      x="84.85"
+      y="130"
+      width="133.4"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="151.55"
+      y="138"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">FK_Employee_Company</text>
+    <path
+      d="M303.1,262 L333.1,262 L333.1,290 L303.1,290"
+      fill="none"
+      stroke="#333" />
+    <line
+      x1="310.1"
+      y1="257"
+      x2="310.1"
+      y2="267"
+      stroke="#333" />
+    <line
+      x1="316.1"
+      y1="257"
+      x2="316.1"
+      y2="267"
+      stroke="#333" />
+    <line
+      x1="315.1"
+      y1="290"
+      x2="303.1"
+      y2="290"
+      stroke="#333" />
+    <line
+      x1="315.1"
+      y1="290"
+      x2="303.1"
+      y2="295"
+      stroke="#333" />
+    <line
+      x1="315.1"
+      y1="290"
+      x2="303.1"
+      y2="285"
+      stroke="#333" />
+    <circle
+      cx="321.1"
+      cy="290"
+      r="4"
+      fill="#fff"
+      stroke="#333" />
+    <rect
+      x="337.1"
+      y="268"
+      width="133.4"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="403.8"
+      y="276"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">FK_Employee_Manager</text>
+    <path
+      d="M151.55,356 L151.55,365.67 C151.55,375.33 151.55,394.67 151.55,414 C151.55,433.33 151.55,452.67 151.55,462.33 L151.55,472"
+      fill="none"
+      stroke="#333" />
+    <line
+      x1="156.55"
+      y1="363"
+      x2="146.55"
+      y2="363"
+      stroke="#333" />
+    <line
+      x1="156.55"
+      y1="369"
+      x2="146.55"
+      y2="369"
+      stroke="#333" />
+    <line
+      x1="151.55"
+      y1="460"
+      x2="151.55"
+      y2="472"
+      stroke="#333" />
+    <line
+      x1="151.55"
+      y1="460"
+      x2="156.55"
+      y2="472"
+      stroke="#333" />
+    <line
+      x1="151.55"
+      y1="460"
+      x2="146.55"
+      y2="472"
+      stroke="#333" />
+    <circle
+      cx="151.55"
+      cy="454"
+      r="4"
+      fill="#fff"
+      stroke="#333" />
+    <rect
+      x="71.65"
+      y="406"
+      width="159.8"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="151.55"
+      y="414"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">FK_OrderDetail_Employee</text>
+    <rect
+      x="57.25"
+      y="0"
+      width="188.6"
+      height="80"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="2" />
+    <rect
+      x="57.25"
+      y="0"
+      width="188.6"
+      height="30"
+      fill="#9370DB"
+      stroke="#9370DB" />
+    <text
+      x="151.55"
+      y="15"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#fff">Company</text>
+    <line
+      x1="57.25"
+      y1="30"
+      x2="245.85"
+      y2="30"
+      stroke="#9370DB" />
+    <text
+      x="67.25"
+      y="50"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">PK</text>
+    <text
+      x="97.25"
+      y="50"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">int Id</text>
+    <text
+      x="97.25"
+      y="70"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">nvarchar(200) Name</text>
+    <rect
+      x="0"
+      y="196"
+      width="303.1"
+      height="160"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="2" />
+    <rect
+      x="0"
+      y="196"
+      width="303.1"
+      height="30"
+      fill="#9370DB"
+      stroke="#9370DB" />
+    <text
+      x="103.25"
+      y="211"
+      text-anchor="end"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#fff">Employee</text>
+    <text
+      x="103.25"
+      y="211"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#fff">: People who work here</text>
+    <line
+      x1="0"
+      y1="226"
+      x2="303.1"
+      y2="226"
+      stroke="#9370DB" />
+    <text
+      x="10"
+      y="246"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">PK</text>
+    <text
+      x="40"
+      y="246"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">int Id</text>
+    <text
+      x="96.2"
+      y="246"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#888">computed: the key</text>
+    <text
+      x="40"
+      y="266"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">nvarchar(100) FirstName</text>
+    <text
+      x="40"
+      y="286"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">nvarchar(100)(nullable) LastName</text>
+    <text
+      x="40"
+      y="306"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">decimal(18,2) Salary</text>
+    <text
+      x="40"
+      y="326"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">int CompanyId</text>
+    <text
+      x="40"
+      y="346"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">int(nullable) ManagerId</text>
+    <text
+      x="227.1"
+      y="346"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#888">reports to</text>
+    <rect
+      x="14.9"
+      y="472"
+      width="273.3"
+      height="100"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="2" />
+    <rect
+      x="14.9"
+      y="472"
+      width="273.3"
+      height="30"
+      fill="#9370DB"
+      stroke="#9370DB" />
+    <text
+      x="151.55"
+      y="487"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#fff">Order_Detail</text>
+    <line
+      x1="14.9"
+      y1="502"
+      x2="288.2"
+      y2="502"
+      stroke="#9370DB" />
+    <text
+      x="24.9"
+      y="522"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">PK</text>
+    <text
+      x="54.9"
+      y="522"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">int Id</text>
+    <text
+      x="54.9"
+      y="542"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">int EmployeeId</text>
+    <text
+      x="54.9"
+      y="562"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">nvarchar(max)(nullable) Notes</text>
+  </g>
+</svg>

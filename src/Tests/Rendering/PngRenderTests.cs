@@ -77,6 +77,24 @@ public class PngRenderTests
                 Check emails: 3: Me
         """;
 
+    // Aliased headers that change weight mid-line (an end-anchored run meeting a start-anchored one),
+    // crow's-foot markers built from plain lines and circles, and a self-relationship loop.
+    const string entityRelationship =
+        """
+        erDiagram
+            Company["**Company**"] {
+                int Id pk
+                nvarchar(200) Name
+            }
+            Employee["**Employee**: People who work here"] {
+                int Id pk
+                decimal(18,2) Salary
+                int(nullable) ManagerId "reports to"
+            }
+            Company ||--o{ Employee : "FK_Employee_Company"
+            Employee ||--o{ Employee : "FK_Employee_Manager"
+        """;
+
     // Inline-SVG icons embedded in foreignObject labels — the rasterizer must pull them out of the
     // label HTML and draw them next to the text rather than dropping them with the other tags.
     const string flowchartIcons =
@@ -124,6 +142,9 @@ public class PngRenderTests
     public Task SkiaJourney() => VerifyPng(SkiaRenderer.RenderPng(journey, HighDpi));
 
     [Test]
+    public Task SkiaEntityRelationship() => VerifyPng(SkiaRenderer.RenderPng(entityRelationship, HighDpi));
+
+    [Test]
     public Task ImageSharpPie() => VerifyPng(ImageSharpRenderer.RenderPng(pie, HighDpi));
 
     [Test]
@@ -143,6 +164,9 @@ public class PngRenderTests
 
     [Test]
     public Task ImageSharpJourney() => VerifyPng(ImageSharpRenderer.RenderPng(journey, HighDpi));
+
+    [Test]
+    public Task ImageSharpEntityRelationship() => VerifyPng(ImageSharpRenderer.RenderPng(entityRelationship, HighDpi));
 
     [Test]
     public Task SkiaFlowchartIcons()

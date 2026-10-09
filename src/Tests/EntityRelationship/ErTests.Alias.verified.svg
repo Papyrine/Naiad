@@ -1,0 +1,181 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 235.6 316"
+  style="max-width: 235.6px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M97.8,80 L97.8,89.67 C97.8,99.33 97.8,118.67 97.8,138 C97.8,157.33 97.8,176.67 97.8,186.33 L97.8,196"
+      fill="none"
+      stroke="#333" />
+    <line
+      x1="102.8"
+      y1="87"
+      x2="92.8"
+      y2="87"
+      stroke="#333" />
+    <line
+      x1="102.8"
+      y1="93"
+      x2="92.8"
+      y2="93"
+      stroke="#333" />
+    <line
+      x1="97.8"
+      y1="184"
+      x2="97.8"
+      y2="196"
+      stroke="#333" />
+    <line
+      x1="97.8"
+      y1="184"
+      x2="102.8"
+      y2="196"
+      stroke="#333" />
+    <line
+      x1="97.8"
+      y1="184"
+      x2="92.8"
+      y2="196"
+      stroke="#333" />
+    <circle
+      cx="97.8"
+      cy="178"
+      r="4"
+      fill="#fff"
+      stroke="#333" />
+    <rect
+      x="74"
+      y="130"
+      width="47.6"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="97.8"
+      y="138"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">places</text>
+    <rect
+      x="0"
+      y="0"
+      width="195.6"
+      height="80"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="2" />
+    <rect
+      x="0"
+      y="0"
+      width="195.6"
+      height="30"
+      fill="#9370DB"
+      stroke="#9370DB" />
+    <text
+      x="97.8"
+      y="15"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#fff">Customer Account</text>
+    <line
+      x1="0"
+      y1="30"
+      x2="195.6"
+      y2="30"
+      stroke="#9370DB" />
+    <text
+      x="10"
+      y="50"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">PK</text>
+    <text
+      x="40"
+      y="50"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">int id</text>
+    <text
+      x="40"
+      y="70"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">string name</text>
+    <rect
+      x="15.05"
+      y="196"
+      width="165.5"
+      height="80"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="2" />
+    <rect
+      x="15.05"
+      y="196"
+      width="165.5"
+      height="30"
+      fill="#9370DB"
+      stroke="#9370DB" />
+    <text
+      x="97.8"
+      y="211"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#fff">Purchase</text>
+    <line
+      x1="15.05"
+      y1="226"
+      x2="180.55"
+      y2="226"
+      stroke="#9370DB" />
+    <text
+      x="25.05"
+      y="246"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">PK</text>
+    <text
+      x="55.05"
+      y="246"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">int id</text>
+    <text
+      x="25.05"
+      y="266"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">FK</text>
+    <text
+      x="55.05"
+      y="266"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">int customer_id</text>
+  </g>
+</svg>
