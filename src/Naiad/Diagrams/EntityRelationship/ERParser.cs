@@ -66,24 +66,36 @@ class ERParser : IDiagramParser<ERModel>
                 Identifying = identifying
             };
 
-        // Attribute key type
+        // Attribute key type. Mermaid's grammar is case-insensitive, so pk is as good as PK.
         var keyTypeParser =
             OneOf(
-                Try(String("PK")).ThenReturn(AttributeKeyType.PrimaryKey),
-                Try(String("FK")).ThenReturn(AttributeKeyType.ForeignKey),
-                String("UK").ThenReturn(AttributeKeyType.UniqueKey)
+                Try(CIString("PK")).ThenReturn(AttributeKeyType.PrimaryKey),
+                Try(CIString("FK")).ThenReturn(AttributeKeyType.ForeignKey),
+                CIString("UK").ThenReturn(AttributeKeyType.UniqueKey)
             );
 
         // Attribute comment (in quotes)
         var attributeComment =
             CommonParsers.DoubleQuotedString;
 
+        // A type or a name. Beyond identifier characters Mermaid admits hyphens, brackets, parentheses,
+        // dots and commas, which is what lets a type carry its size: nvarchar(200), decimal(18,2).
+        var attributeWord =
+            Token(_ => char.IsLetterOrDigit(_) || _ is '_' or '-' or '[' or ']' or '(' or ')' or '.' or ',' or '*')
+                .AtLeastOnceString();
+
+        // A type may end in ? to mark it optional.
+        var attributeType =
+            from word in attributeWord
+            from optional in Char('?').Optional()
+            select optional.HasValue ? word + '?' : word;
+
         // Entity attribute: type name PK "comment"
         var attributeParser =
             from _ in CommonParsers.InlineWhitespace
-            from type in Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '[' || _ == ']').AtLeastOnceString()
+            from type in attributeType
             from __ in CommonParsers.RequiredWhitespace
-            from name in Token(_ => char.IsLetterOrDigit(_) || _ == '_').AtLeastOnceString()
+            from name in attributeWord
             from ___ in CommonParsers.InlineWhitespace
             from keyType in Try(keyTypeParser).Optional()
             from ____ in CommonParsers.InlineWhitespace
@@ -107,11 +119,18 @@ class ERParser : IDiagramParser<ERModel>
             ).Many()
             .Select(_ => _.Where(_ => _ != null).Cast<EntityAttribute>().ToList());
 
-        // Entity definition: EntityName { attributes }
+        // Entity alias: ["Display text"] or [Display]
+        var entityAlias =
+            Char('[')
+                .Then(CommonParsers.DoubleQuotedString.Or(entityName))
+                .Before(Char(']'));
+
+        // Entity definition: EntityName { attributes } or EntityName["alias"] { attributes }
         var entityDefinitionParser =
             Try(
                 from _ in CommonParsers.InlineWhitespace
                 from name in entityName
+                from alias in Try(CommonParsers.InlineWhitespace.Then(entityAlias)).Optional()
                 from __ in CommonParsers.InlineWhitespace
                 from open in Char('{')
                 from ___ in CommonParsers.LineEnd
@@ -119,7 +138,7 @@ class ERParser : IDiagramParser<ERModel>
                 from ____ in CommonParsers.InlineWhitespace
                 from close in Char('}')
                 from _____ in CommonParsers.LineEnd
-                select CreateEntity(name, attributes)
+                select CreateEntity(name, alias.HasValue ? alias.Value : null, attributes)
             );
 
         // Skip line (comments, empty lines)
@@ -143,9 +162,9 @@ class ERParser : IDiagramParser<ERModel>
             select BuildModel(content);
     }
 
-    static Entity CreateEntity(string name, List<EntityAttribute> attributes)
+    static Entity CreateEntity(string name, string? alias, List<EntityAttribute> attributes)
     {
-        var entity = new Entity { Name = name };
+        var entity = new Entity { Name = name, Alias = alias };
         entity.Attributes.AddRange(attributes);
         return entity;
     }
@@ -165,6 +184,7 @@ class ERParser : IDiagramParser<ERModel>
                     {
                         // Merge attributes into existing entity
                         existing.Attributes.AddRange(e.Attributes);
+                        existing.Alias ??= e.Alias;
                     }
                     else
                     {

@@ -131,6 +131,201 @@ erDiagram
 
 [Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgQ1VTVE9NRVIge1xuICAgICAgICBpbnQgaWQgUEsgXHUwMDIyUHJpbWFyeSBrZXlcdTAwMjJcbiAgICAgICAgc3RyaW5nIG5hbWUgXHUwMDIyQ3VzdG9tZXIgbmFtZVx1MDAyMlxuICAgIH0iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
 
+## LowercaseKeyTypes
+
+**Input:**
+```
+erDiagram
+    CUSTOMER {
+        int id pk
+        int region_id fk
+        string email uk
+    }
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.LowercaseKeyTypes.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+erDiagram
+    CUSTOMER {
+        int id pk
+        int region_id fk
+        string email uk
+    }
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgQ1VTVE9NRVIge1xuICAgICAgICBpbnQgaWQgcGtcbiAgICAgICAgaW50IHJlZ2lvbl9pZCBma1xuICAgICAgICBzdHJpbmcgZW1haWwgdWtcbiAgICB9IiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
+
+## SizedTypes
+
+**Input:**
+```
+erDiagram
+    PRODUCT {
+        int id PK
+        nvarchar(200) name
+        decimal(18,2) price
+        varchar(max)(nullable) notes
+        string? sku "Optional"
+    }
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.SizedTypes.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+erDiagram
+    PRODUCT {
+        int id PK
+        nvarchar(200) name
+        decimal(18,2) price
+        varchar(max)(nullable) notes
+        string? sku "Optional"
+    }
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgUFJPRFVDVCB7XG4gICAgICAgIGludCBpZCBQS1xuICAgICAgICBudmFyY2hhcigyMDApIG5hbWVcbiAgICAgICAgZGVjaW1hbCgxOCwyKSBwcmljZVxuICAgICAgICB2YXJjaGFyKG1heCkobnVsbGFibGUpIG5vdGVzXG4gICAgICAgIHN0cmluZz8gc2t1IFx1MDAyMk9wdGlvbmFsXHUwMDIyXG4gICAgfSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
+
+## Alias
+
+**Input:**
+```
+erDiagram
+    CUSTOMER["Customer Account"] {
+        int id PK
+        string name
+    }
+    ORDER[Purchase] {
+        int id PK
+        int customer_id FK
+    }
+    CUSTOMER ||--o{ ORDER : places
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.Alias.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+erDiagram
+    CUSTOMER["Customer Account"] {
+        int id PK
+        string name
+    }
+    ORDER[Purchase] {
+        int id PK
+        int customer_id FK
+    }
+    CUSTOMER ||--o{ ORDER : places
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgQ1VTVE9NRVJbXHUwMDIyQ3VzdG9tZXIgQWNjb3VudFx1MDAyMl0ge1xuICAgICAgICBpbnQgaWQgUEtcbiAgICAgICAgc3RyaW5nIG5hbWVcbiAgICB9XG4gICAgT1JERVJbUHVyY2hhc2VdIHtcbiAgICAgICAgaW50IGlkIFBLXG4gICAgICAgIGludCBjdXN0b21lcl9pZCBGS1xuICAgIH1cbiAgICBDVVNUT01FUiB8fC0tb3sgT1JERVIgOiBwbGFjZXMiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
+
+## AliasBold
+
+**Input:**
+```
+erDiagram
+    Company["**Company**"] {
+        int Id pk
+        nvarchar(200) Name
+    }
+    Employee["**Employee**: People who work here"] {
+        int Id pk
+        int CompanyId
+    }
+    Company ||--o{ Employee : "FK_Employee_Company"
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.AliasBold.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+erDiagram
+    Company["**Company**"] {
+        int Id pk
+        nvarchar(200) Name
+    }
+    Employee["**Employee**: People who work here"] {
+        int Id pk
+        int CompanyId
+    }
+    Company ||--o{ Employee : "FK_Employee_Company"
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgQ29tcGFueVtcdTAwMjIqKkNvbXBhbnkqKlx1MDAyMl0ge1xuICAgICAgICBpbnQgSWQgcGtcbiAgICAgICAgbnZhcmNoYXIoMjAwKSBOYW1lXG4gICAgfVxuICAgIEVtcGxveWVlW1x1MDAyMioqRW1wbG95ZWUqKjogUGVvcGxlIHdobyB3b3JrIGhlcmVcdTAwMjJdIHtcbiAgICAgICAgaW50IElkIHBrXG4gICAgICAgIGludCBDb21wYW55SWRcbiAgICB9XG4gICAgQ29tcGFueSB8fC0tb3sgRW1wbG95ZWUgOiBcdTAwMjJGS19FbXBsb3llZV9Db21wYW55XHUwMDIyIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0=)
+
+## SqlSchema
+
+**Input:**
+```
+erDiagram
+  Company["**Company**"] {
+    int Id pk
+    nvarchar(200) Name
+  }
+  Employee["**Employee**: People who work here"] {
+    int Id pk "computed: the key"
+    nvarchar(100) FirstName
+    nvarchar(100)(nullable) LastName
+    decimal(18,2) Salary
+    int CompanyId
+    int(nullable) ManagerId "reports to"
+  }
+  Order_Detail["**Order_Detail**"] {
+    int Id pk
+    int EmployeeId
+    nvarchar(max)(nullable) Notes
+  }
+  Company ||--o{ Employee : "FK_Employee_Company"
+  Employee ||--o{ Employee : "FK_Employee_Manager"
+  Employee ||--o{ Order_Detail : "FK_OrderDetail_Employee"
+```
+**Rendered by Naiad:**
+
+<p align="center">
+  <img src="../Tests/EntityRelationship/ErTests.SqlSchema.verified.png" />
+</p>
+
+**Rendered by Mermaid:**
+```mermaid
+erDiagram
+  Company["**Company**"] {
+    int Id pk
+    nvarchar(200) Name
+  }
+  Employee["**Employee**: People who work here"] {
+    int Id pk "computed: the key"
+    nvarchar(100) FirstName
+    nvarchar(100)(nullable) LastName
+    decimal(18,2) Salary
+    int CompanyId
+    int(nullable) ManagerId "reports to"
+  }
+  Order_Detail["**Order_Detail**"] {
+    int Id pk
+    int EmployeeId
+    nvarchar(max)(nullable) Notes
+  }
+  Company ||--o{ Employee : "FK_Employee_Company"
+  Employee ||--o{ Employee : "FK_Employee_Manager"
+  Employee ||--o{ Order_Detail : "FK_OrderDetail_Employee"
+```
+
+[Open in Mermaid Live](https://mermaid.live/edit#base64:eyJjb2RlIjoiZXJEaWFncmFtXG4gIENvbXBhbnlbXHUwMDIyKipDb21wYW55KipcdTAwMjJdIHtcbiAgICBpbnQgSWQgcGtcbiAgICBudmFyY2hhcigyMDApIE5hbWVcbiAgfVxuICBFbXBsb3llZVtcdTAwMjIqKkVtcGxveWVlKio6IFBlb3BsZSB3aG8gd29yayBoZXJlXHUwMDIyXSB7XG4gICAgaW50IElkIHBrIFx1MDAyMmNvbXB1dGVkOiB0aGUga2V5XHUwMDIyXG4gICAgbnZhcmNoYXIoMTAwKSBGaXJzdE5hbWVcbiAgICBudmFyY2hhcigxMDApKG51bGxhYmxlKSBMYXN0TmFtZVxuICAgIGRlY2ltYWwoMTgsMikgU2FsYXJ5XG4gICAgaW50IENvbXBhbnlJZFxuICAgIGludChudWxsYWJsZSkgTWFuYWdlcklkIFx1MDAyMnJlcG9ydHMgdG9cdTAwMjJcbiAgfVxuICBPcmRlcl9EZXRhaWxbXHUwMDIyKipPcmRlcl9EZXRhaWwqKlx1MDAyMl0ge1xuICAgIGludCBJZCBwa1xuICAgIGludCBFbXBsb3llZUlkXG4gICAgbnZhcmNoYXIobWF4KShudWxsYWJsZSkgTm90ZXNcbiAgfVxuICBDb21wYW55IHx8LS1veyBFbXBsb3llZSA6IFx1MDAyMkZLX0VtcGxveWVlX0NvbXBhbnlcdTAwMjJcbiAgRW1wbG95ZWUgfHwtLW97IEVtcGxveWVlIDogXHUwMDIyRktfRW1wbG95ZWVfTWFuYWdlclx1MDAyMlxuICBFbXBsb3llZSB8fC0tb3sgT3JkZXJfRGV0YWlsIDogXHUwMDIyRktfT3JkZXJEZXRhaWxfRW1wbG95ZWVcdTAwMjIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ==)
+
 ## OneToOne
 
 **Input:**

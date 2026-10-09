@@ -32,17 +32,29 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         // Copy positions back to entities
         CopyPositionsToModel(model, graphModel);
 
-        // Build SVG
-        var builder = new SvgBuilder();
-        builder.Size(layoutResult.Width, layoutResult.Height);
-        builder.Padding(options.Padding);
-
         // Index entities by name so relationship endpoint lookups are O(1), not O(R·E) via List.Find.
         var entitiesByName = new Dictionary<string, Entity>(StringComparer.Ordinal);
         foreach (var entity in model.Entities)
         {
             entitiesByName[entity.Name] = entity;
         }
+
+        // A self-relationship's loop and label hang off the entity's right side, outside anything the
+        // layout measured, so widen the canvas to take them in rather than clipping them at its edge.
+        var width = layoutResult.Width;
+        foreach (var relationship in model.Relationships)
+        {
+            if (relationship.FromEntity == relationship.ToEntity &&
+                entitiesByName.TryGetValue(relationship.FromEntity, out var entity))
+            {
+                width = Math.Max(width, SelfRelationshipRight(relationship, entity, options));
+            }
+        }
+
+        // Build SVG
+        var builder = new SvgBuilder();
+        builder.Size(width, layoutResult.Height);
+        builder.Padding(options.Padding);
 
         // Relationships render behind the entities. Each is paired with the edge Dagre routed for it (edges
         // are built in relationship order), so the curved path, the separation of parallel relationships and
@@ -110,7 +122,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
     static (double width, double height) CalculateEntitySize(Entity entity, RenderOptions options)
     {
         // Calculate width based on longest text
-        var maxTextWidth = MeasureText(entity.Name, options.FontSize, true);
+        var maxTextWidth = HeaderRuns(entity).Sum(_ => MeasureText(_.Text, options.FontSize, _.Bold));
 
         foreach (var attr in entity.Attributes)
         {
@@ -171,16 +183,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             stroke: "#9370DB",
             strokeWidth: 1);
 
-        builder.AddText(
-            centerX,
-            y + headerHeight / 2,
-            entity.Name,
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: options.FontSize,
-            fontFamily: options.FontFamily,
-            fontWeight: "bold",
-            fill: "#fff");
+        RenderHeader(builder, HeaderRuns(entity), centerX, y + headerHeight / 2, options);
 
         // Separator line
         if (entity.Attributes.Count > 0)
@@ -237,6 +240,115 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             attrY += lineHeight;
         }
     }
+
+    readonly record struct HeaderRun(string Text, bool Bold);
+
+    /// <summary>
+    /// The header text, split wherever its weight changes. A name, or an alias with no markup, is one bold
+    /// run — the header's own style. An alias that marks <c>**bold**</c> spans decides its weights itself,
+    /// so <c>**Employee**: staff</c> keeps the name bold and sets the rest in the regular weight.
+    /// </summary>
+    static List<HeaderRun> HeaderRuns(Entity entity)
+    {
+        if (string.IsNullOrWhiteSpace(entity.Alias))
+        {
+            return [new(entity.Name, true)];
+        }
+
+        const string marker = "**";
+        var parts = entity.Alias.Split(marker).ToList();
+        if (parts.Count == 1)
+        {
+            return [new(entity.Alias.Trim(), true)];
+        }
+
+        // An even number of parts means an odd number of markers: the last one opens nothing, so it is text.
+        if (parts.Count % 2 == 0)
+        {
+            var last = parts[^1];
+            parts.RemoveAt(parts.Count - 1);
+            parts[^1] += marker + last;
+        }
+
+        var runs = new List<HeaderRun>();
+        for (var index = 0; index < parts.Count; index++)
+        {
+            if (parts[index].Length > 0)
+            {
+                runs.Add(new(parts[index], index % 2 == 1));
+            }
+        }
+
+        runs[0] = runs[0] with { Text = runs[0].Text.TrimStart() };
+        runs[^1] = runs[^1] with { Text = runs[^1].Text.TrimEnd() };
+        runs.RemoveAll(_ => _.Text.Length == 0);
+
+        if (runs.Count == 0)
+        {
+            return [new(entity.Name, true)];
+        }
+
+        return runs;
+    }
+
+    static void RenderHeader(SvgBuilder builder, List<HeaderRun> runs, double centerX, double y, RenderOptions options)
+    {
+        if (runs.Count == 1)
+        {
+            AddHeaderText(builder, centerX, y, runs[0].Text, runs[0].Bold, "middle", options);
+            return;
+        }
+
+        // Each change of weight is a text element of its own, placed from estimated widths. Anchoring the
+        // first run by its end and the last by its start pushes the estimate's error out to the edges of
+        // the header, so neighbouring runs meet instead of gapping or overlapping.
+        var left = centerX - runs.Sum(_ => MeasureText(_.Text, options.FontSize, _.Bold)) / 2;
+        for (var index = 0; index < runs.Count; index++)
+        {
+            var run = runs[index];
+            var width = MeasureText(run.Text, options.FontSize, run.Bold);
+
+            // A space at the edge of a text element is collapsed away, which would close up the words
+            // either side of a weight change; a no-break space survives.
+            var text = run.Text;
+            if (text.StartsWith(' '))
+            {
+                text = ' ' + text[1..];
+            }
+
+            if (text.EndsWith(' '))
+            {
+                text = text[..^1] + ' ';
+            }
+
+            if (index == 0)
+            {
+                AddHeaderText(builder, left + width, y, text, run.Bold, "end", options);
+            }
+            else if (index == runs.Count - 1)
+            {
+                AddHeaderText(builder, left, y, text, run.Bold, "start", options);
+            }
+            else
+            {
+                AddHeaderText(builder, left + width / 2, y, text, run.Bold, "middle", options);
+            }
+
+            left += width;
+        }
+    }
+
+    static void AddHeaderText(SvgBuilder builder, double x, double y, string text, bool bold, string anchor, RenderOptions options) =>
+        builder.AddText(
+            x,
+            y,
+            text,
+            anchor: anchor,
+            baseline: "middle",
+            fontSize: options.FontSize,
+            fontFamily: options.FontFamily,
+            fontWeight: bold ? "bold" : null,
+            fill: "#fff");
 
     static void RenderRelationship(SvgBuilder builder, Relationship rel, Edge edge, Dictionary<string, Entity> entitiesByName, RenderOptions options)
     {
@@ -308,15 +420,32 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             fill: "#333");
     }
 
+    // How far a self-relationship's loop reaches out from the entity, and the gap before its label.
+    const double selfLoopExtent = 30;
+    const double selfLoopLabelGap = 4;
+
+    /// <summary>
+    /// The rightmost x a self-relationship draws to: the far side of its loop, or of its label if it has one.
+    /// </summary>
+    static double SelfRelationshipRight(Relationship rel, Entity entity, RenderOptions options)
+    {
+        var right = entity.Position.X + entity.Width / 2 + selfLoopExtent;
+        if (string.IsNullOrEmpty(rel.Label))
+        {
+            return right;
+        }
+
+        return right + selfLoopLabelGap + MeasureText(rel.Label, options.FontSize - 2) + 8;
+    }
+
     static void RenderSelfRelationship(SvgBuilder builder, Relationship rel, Entity entity, RenderOptions options)
     {
         var right = entity.Position.X + entity.Width / 2;
         var centerY = entity.Position.Y;
         const double verticalOffset = 14;
-        const double extent = 30;
         var topY = centerY - verticalOffset;
         var bottomY = centerY + verticalOffset;
-        var outX = right + extent;
+        var outX = right + selfLoopExtent;
         var dashArray = rel.Identifying ? null : "5,5";
 
         // Loop out from the top of the right edge, around, and back to the bottom of the right edge.
@@ -335,7 +464,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             var labelFontSize = options.FontSize - 2;
             var labelWidth = MeasureText(rel.Label, labelFontSize) + 8;
             var labelHeight = labelFontSize + 4;
-            var labelX = outX + labelWidth / 2 + 4;
+            var labelX = outX + labelWidth / 2 + selfLoopLabelGap;
             builder.AddEdgeLabel(
                 labelX,
                 centerY,

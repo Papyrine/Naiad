@@ -1,0 +1,94 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 305.6 180"
+  style="max-width: 305.6px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="0"
+      y="0"
+      width="265.6"
+      height="140"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="2" />
+    <rect
+      x="0"
+      y="0"
+      width="265.6"
+      height="30"
+      fill="#9370DB"
+      stroke="#9370DB" />
+    <text
+      x="132.8"
+      y="15"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#fff">PRODUCT</text>
+    <line
+      x1="0"
+      y1="30"
+      x2="265.6"
+      y2="30"
+      stroke="#9370DB" />
+    <text
+      x="10"
+      y="50"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">PK</text>
+    <text
+      x="40"
+      y="50"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">int id</text>
+    <text
+      x="40"
+      y="70"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">nvarchar(200) name</text>
+    <text
+      x="40"
+      y="90"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">decimal(18,2) price</text>
+    <text
+      x="40"
+      y="110"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">varchar(max)(nullable) notes</text>
+    <text
+      x="40"
+      y="130"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">string? sku</text>
+    <text
+      x="134.7"
+      y="130"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#888">Optional</text>
+  </g>
+</svg>
