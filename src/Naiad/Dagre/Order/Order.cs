@@ -18,17 +18,16 @@ static class Order
 
             layering = Util.BuildLayerMatrix(graph);
             var cc = CrossCount.Run(graph, layering);
+            // Only a strict improvement replaces the best ordering, as in the dagre Mermaid ships. Letting a
+            // sweep that merely ties take over hands the result to the last of the four tied sweeps, which
+            // is a right-biased one: it breaks equal barycenters in reverse, so siblings came out mirrored
+            // (`A --> B`, `A --> C`, `A --> D` drawn as D, C, B).
             if (cc < bestCC)
             {
                 lastBest = 0;
-                // shallow copy: inner layer lists are shared.
+                // shallow copy: BuildLayerMatrix builds fresh inner lists on every sweep.
                 best = new(layering);
                 bestCC = cc;
-            }
-            else if (cc == bestCC)
-            {
-                // deep clone of the layering.
-                best = layering.Select(layer => new List<string>(layer)).ToList();
             }
         }
 

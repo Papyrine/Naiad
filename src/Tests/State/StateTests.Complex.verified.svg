@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 1179.7 936"
-  style="max-width: 1179.7px;"
+  viewBox="0 0 1059.3 936"
+  style="max-width: 1059.3px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -24,25 +24,25 @@
   <g
     transform="translate(20,20)">
     <line
-      x1="382.05"
+      x1="251.65"
       y1="20"
-      x2="382.05"
+      x2="251.65"
       y2="100"
       stroke="#333" />
     <polygon
-      points="382.05,100 378.05,93.07 386.05,93.07"
+      points="251.65,100 247.65,93.07 255.65,93.07"
       fill="#333" />
     <line
-      x1="400.33"
+      x1="231.71"
       y1="140"
-      x2="473.43"
+      x2="151.94"
       y2="220"
       stroke="#333" />
     <polygon
-      points="473.43,220 465.8,217.58 471.7,212.19"
+      points="151.94,220 154,212.27 159.67,217.92"
       fill="#333" />
     <rect
-      x="414.88"
+      x="169.83"
       y="162"
       width="44"
       height="16"
@@ -50,77 +50,77 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="436.88"
+      x="191.83"
       y="170"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">start</text>
     <line
-      x1="491.7"
+      x1="132"
       y1="260"
-      x2="491.7"
+      x2="132"
       y2="340"
       stroke="#333" />
     <polygon
-      points="491.7,340 487.7,333.07 495.7,333.07"
+      points="132,340 128,333.07 136,333.07"
       fill="#333" />
     <line
-      x1="501.3"
+      x1="122.4"
       y1="348"
-      x2="569.24"
+      x2="54.46"
       y2="428"
       stroke="#333" />
     <polygon
-      points="569.24,428 561.7,425.31 567.8,420.13"
+      points="54.46,428 55.9,420.13 62,425.31"
       fill="#333" />
     <line
-      x1="482.1"
+      x1="141.6"
       y1="348"
-      x2="414.16"
+      x2="209.54"
       y2="428"
       stroke="#333" />
     <polygon
-      points="414.16,428 415.6,420.13 421.7,425.31"
+      points="209.54,428 202,425.31 208.1,420.13"
       fill="#333" />
     <line
-      x1="569.24"
+      x1="54.46"
       y1="468"
-      x2="501.3"
+      x2="122.4"
       y2="548"
       stroke="#333" />
     <polygon
-      points="501.3,548 502.74,540.13 508.83,545.31"
+      points="122.4,548 114.87,545.31 120.96,540.13"
       fill="#333" />
     <line
-      x1="414.16"
+      x1="209.54"
       y1="468"
-      x2="482.1"
+      x2="141.6"
       y2="548"
       stroke="#333" />
     <polygon
-      points="482.1,548 474.57,545.31 480.66,540.13"
+      points="141.6,548 143.04,540.13 149.13,545.31"
       fill="#333" />
     <line
-      x1="491.7"
+      x1="132"
       y1="556"
-      x2="491.7"
+      x2="132"
       y2="636"
       stroke="#333" />
     <polygon
-      points="491.7,636 487.7,629.07 495.7,629.07"
+      points="132,636 128,629.07 136,629.07"
       fill="#333" />
     <line
-      x1="483.94"
+      x1="139.76"
       y1="668.24"
-      x2="428.28"
+      x2="195.42"
       y2="756"
       stroke="#333" />
     <polygon
-      points="428.28,756 428.62,748.01 435.37,752.29"
+      points="195.42,756 188.33,752.29 195.08,748.01"
       fill="#333" />
     <rect
-      x="423.31"
+      x="134.79"
       y="714.12"
       width="65.6"
       height="16"
@@ -128,45 +128,45 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="456.11"
+      x="167.59"
       y="722.12"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">if valid</text>
     <line
-      x1="477.21"
-      y1="661.51"
-      x2="212.4"
-      y2="762.3"
+      x1="146.73"
+      y1="661.27"
+      x2="431.3"
+      y2="763.12"
       stroke="#333" />
     <polygon
-      points="212.4,762.3 217.45,756.1 220.3,763.57"
+      points="431.3,763.12 423.43,764.55 426.12,757.02"
       fill="#333" />
     <rect
-      x="304.81"
-      y="693.91"
+      x="249.01"
+      y="694.19"
       width="80"
       height="16"
       fill="rgba(232,232,232,0.8)"
       stroke="none"
       class="edgeLabel" />
     <text
-      x="344.81"
-      y="701.91"
+      x="289.01"
+      y="702.19"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">if invalid</text>
     <path
-      d="M 460 776 C 540 776, 723.7 696, 723.7 616 L 723.7 265 C 723.7 185, 493.85 105, 413.85 105"
+      d="M 252.5 776 C 332.5 776, 553.3 696, 553.3 616 L 553.3 280 C 553.3 200, 363.45 120, 283.45 120"
       fill="none"
       stroke="#333" />
     <polygon
-      points="413.85,105 420.78,101 420.78,109"
+      points="283.45,120 290.38,116 290.38,124"
       fill="#333" />
     <rect
-      x="701.7"
+      x="531.3"
       y="440"
       width="44"
       height="16"
@@ -174,7 +174,7 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="723.7"
+      x="553.3"
       y="448"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -182,14 +182,14 @@
       font-family="Arial, sans-serif"
       fill="#666">reset</text>
     <path
-      d="M 212.4 770 C 292.4 770, 673.7 690, 673.7 610 L 673.7 280 C 673.7 200, 493.85 120, 413.85 120"
+      d="M 503.3 776 C 553.3 776, 603.3 726, 603.3 676 L 603.3 205 C 603.3 155, 333.45 105, 283.45 105"
       fill="none"
       stroke="#333" />
     <polygon
-      points="413.85,120 420.78,116 420.78,124"
+      points="283.45,105 290.38,101 290.38,109"
       fill="#333" />
     <rect
-      x="651.7"
+      x="581.3"
       y="440"
       width="44"
       height="16"
@@ -197,7 +197,7 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="673.7"
+      x="603.3"
       y="448"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -205,16 +205,16 @@
       font-family="Arial, sans-serif"
       fill="#666">retry</text>
     <line
-      x1="415.6"
+      x1="208.1"
       y1="796"
-      x2="415.6"
+      x2="208.1"
       y2="876"
       stroke="#333" />
     <polygon
-      points="415.6,876 411.6,869.07 419.6,869.07"
+      points="208.1,876 204.1,869.07 212.1,869.07"
       fill="#333" />
     <rect
-      x="382.8"
+      x="175.3"
       y="831"
       width="65.6"
       height="16"
@@ -222,20 +222,20 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="415.6"
+      x="208.1"
       y="839"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">complete</text>
     <circle
-      cx="382.05"
+      cx="251.65"
       cy="10"
       r="10"
       fill="#333"
       stroke="#333" />
     <rect
-      x="350.25"
+      x="219.85"
       y="100"
       width="63.6"
       height="40"
@@ -244,14 +244,14 @@
       fill="#ECECFF"
       stroke="#9370DB" />
     <text
-      x="382.05"
+      x="251.65"
       y="120"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">Idle</text>
     <rect
-      x="409.5"
+      x="49.8"
       y="220"
       width="164.4"
       height="40"
@@ -260,32 +260,32 @@
       fill="#ECECFF"
       stroke="#9370DB" />
     <text
-      x="491.7"
+      x="132"
       y="240"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">Processing State</text>
     <rect
-      x="441.7"
+      x="82"
       y="340"
       width="100"
       height="8"
       fill="#333"
       stroke="#333" />
     <rect
-      x="441.7"
+      x="82"
       y="548"
       width="100"
       height="8"
       fill="#333"
       stroke="#333" />
     <path
-      d="M491.7,636 L511.7,656 L491.7,676 L471.7,656 Z"
+      d="M132,636 L152,656 L132,676 L112,656 Z"
       fill="#fff"
       stroke="#333" />
     <rect
-      x="551.7"
+      x="0"
       y="428"
       width="72"
       height="40"
@@ -294,14 +294,14 @@
       fill="#ECECFF"
       stroke="#9370DB" />
     <text
-      x="587.7"
+      x="36"
       y="448"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">TaskA</text>
     <rect
-      x="359.7"
+      x="192"
       y="428"
       width="72"
       height="40"
@@ -310,14 +310,14 @@
       fill="#ECECFF"
       stroke="#9370DB" />
     <text
-      x="395.7"
+      x="228"
       y="448"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">TaskB</text>
     <rect
-      x="371.2"
+      x="163.7"
       y="756"
       width="88.8"
       height="40"
@@ -326,14 +326,14 @@
       fill="#ECECFF"
       stroke="#9370DB" />
     <text
-      x="415.6"
+      x="208.1"
       y="776"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">Success</text>
     <rect
-      x="140.4"
+      x="431.3"
       y="756"
       width="72"
       height="40"
@@ -342,78 +342,78 @@
       fill="#ECECFF"
       stroke="#9370DB" />
     <text
-      x="176.4"
+      x="467.3"
       y="776"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">Error</text>
     <circle
-      cx="415.6"
+      cx="208.1"
       cy="886"
       r="10"
       fill="none"
       stroke="#333"
       stroke-width="2" />
     <circle
-      cx="415.6"
+      cx="208.1"
       cy="886"
       r="5"
       fill="#333"
       stroke="#333" />
     <path
-      d="M781.7,310 L973.7,310 L981.7,318 L981.7,350 L781.7,350 Z"
+      d="M661.3,310 L853.3,310 L861.3,318 L861.3,350 L661.3,350 Z"
       fill="#FFFFCC"
       stroke="#AAAA33" />
     <line
-      x1="973.7"
+      x1="853.3"
       y1="310"
-      x2="973.7"
+      x2="853.3"
       y2="318"
       stroke="#AAAA33" />
     <line
-      x1="973.7"
+      x1="853.3"
       y1="318"
-      x2="981.7"
+      x2="861.3"
       y2="318"
       stroke="#AAAA33" />
     <text
-      x="881.7"
+      x="761.3"
       y="330"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">This is a processing note</text>
     <path
-      d="M 573.9 258.97 Q 573.9 284.48, 795.03 310"
+      d="M 214.2 251.76 Q 214.2 283.73, 661.3 315.7"
       fill="none"
       stroke="#333"
       stroke-dasharray="5,5" />
     <path
-      d="M20,666 L132.8,666 L140.8,674 L140.8,706 L20,706 Z"
+      d="M310.9,639.19 L423.7,639.19 L431.7,647.19 L431.7,679.19 L310.9,679.19 Z"
       fill="#FFFFCC"
       stroke="#AAAA33" />
     <line
-      x1="132.8"
-      y1="666"
-      x2="132.8"
-      y2="674"
+      x1="423.7"
+      y1="639.19"
+      x2="423.7"
+      y2="647.19"
       stroke="#AAAA33" />
     <line
-      x1="132.8"
-      y1="674"
-      x2="140.8"
-      y2="674"
+      x1="423.7"
+      y1="647.19"
+      x2="431.7"
+      y2="647.19"
       stroke="#AAAA33" />
     <text
-      x="80.4"
-      y="686"
+      x="371.3"
+      y="659.19"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">Error handling</text>
     <path
-      d="M 155.07 756 Q 155.07 731, 101.73 706"
+      d="M 450.86 756 Q 450.86 717.6, 387.74 679.19"
       fill="none"
       stroke="#333"
       stroke-dasharray="5,5" />

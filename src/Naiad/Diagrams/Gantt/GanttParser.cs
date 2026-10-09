@@ -94,6 +94,9 @@ class GanttParser : IDiagramParser<GanttModel>
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd
             from content in contentItem.Many()
+            // Nothing may be left over: without this a line no rule matches ends the list quietly and the
+            // rest of the diagram is dropped instead of being reported.
+            from end in End
             select BuildModel(content);
     }
 

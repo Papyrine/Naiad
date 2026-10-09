@@ -140,4 +140,16 @@ static class StateSamples
             note right of Processing : This is a processing note
             note left of Error : Error handling
         """;
+
+    // `<br/>` breaks a state description, a transition label and a note over several lines.
+    public const string LineBreaks =
+        """
+        stateDiagram-v2
+            [*] --> A
+            A : First line<br/>second line
+            A --> B : go<br/>now
+            B --> C : plain
+            note right of B : Note one<br/>note two<br/>note three
+            C --> [*]
+        """;
 }

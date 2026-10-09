@@ -20,16 +20,6 @@
     <g
       transform="translate(0,50)">
       <path
-        d="M 300 98 L 300 151.5 L 242.59 205"
-        fill="none"
-        stroke="#666"
-        stroke-width="1.5"
-        stroke-dasharray="5,5" />
-      <path
-        d="M 242.59 205 L 244.93 197.35 L 250.38 203.2 Z"
-        fill="#666"
-        stroke="none" />
-      <path
         d="M 80 98 L 80 151.5 L 137.41 205"
         fill="none"
         stroke="#666"
@@ -39,40 +29,16 @@
         d="M 137.41 205 L 129.62 203.2 L 135.07 197.35 Z"
         fill="#666"
         stroke="none" />
-      <rect
-        x="220"
-        y="0"
-        width="160"
-        height="98"
-        rx="5"
-        ry="5"
-        fill="#85BBF0"
+      <path
+        d="M 300 98 L 300 151.5 L 242.59 205"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 242.59 205 L 244.93 197.35 L 250.38 203.2 Z"
+        fill="#666"
         stroke="none" />
-      <text
-        x="300"
-        y="31"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="13px"
-        font-family="Arial, sans-serif"
-        font-weight="bold"
-        fill="#FFFFFF">Auth Controller</text>
-      <text
-        x="300"
-        y="49"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#FFFFFF">[Express]</text>
-      <text
-        x="300"
-        y="67"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#FFFFFF">Handles authentication</text>
       <rect
         x="0"
         y="0"
@@ -90,7 +56,7 @@
         font-size="13px"
         font-family="Arial, sans-serif"
         font-weight="bold"
-        fill="#FFFFFF">User Controller</text>
+        fill="#FFFFFF">Auth Controller</text>
       <text
         x="80"
         y="49"
@@ -101,6 +67,40 @@
         fill="#FFFFFF">[Express]</text>
       <text
         x="80"
+        y="67"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Handles authentication</text>
+      <rect
+        x="220"
+        y="0"
+        width="160"
+        height="98"
+        rx="5"
+        ry="5"
+        fill="#85BBF0"
+        stroke="none" />
+      <text
+        x="300"
+        y="31"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">User Controller</text>
+      <text
+        x="300"
+        y="49"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Express]</text>
+      <text
+        x="300"
         y="67"
         text-anchor="middle"
         dominant-baseline="middle"
@@ -142,23 +142,6 @@
         font-family="Arial, sans-serif"
         fill="#FFFFFF">Business logic</text>
       <rect
-        x="282.8"
-        y="143"
-        width="34.4"
-        height="17"
-        rx="3"
-        ry="3"
-        fill="#FFFFFF"
-        stroke="none" />
-      <text
-        x="300"
-        y="151.5"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#666">Uses</text>
-      <rect
         x="62.8"
         y="143"
         width="34.4"
@@ -169,6 +152,23 @@
         stroke="none" />
       <text
         x="80"
+        y="151.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#666">Uses</text>
+      <rect
+        x="282.8"
+        y="143"
+        width="34.4"
+        height="17"
+        rx="3"
+        ry="3"
+        fill="#FFFFFF"
+        stroke="none" />
+      <text
+        x="300"
         y="151.5"
         text-anchor="middle"
         dominant-baseline="middle"

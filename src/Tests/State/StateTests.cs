@@ -35,4 +35,7 @@
 
     [Test]
     public Task Complex() => VerifySvg(StateSamples.Complex);
+
+    [Test]
+    public Task LineBreaks() => VerifySvg(StateSamples.LineBreaks);
 }

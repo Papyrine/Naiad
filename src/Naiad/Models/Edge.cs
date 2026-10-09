@@ -16,6 +16,10 @@ public class Edge
     public double LabelWidth { get; set; }
     public double LabelHeight { get; set; }
 
+    // The fewest ranks the edge may span. Mermaid's longer links (`--->`, `-..->`, `====`) ask for more
+    // than the default one.
+    public int MinLength { get; init; } = 1;
+
     // Layout properties (set by layout engine)
     public List<Position> Points { get; } = [];
 
@@ -51,15 +55,15 @@ public class Edge
             EdgeType.Arrow or
             EdgeType.DottedArrow or
             EdgeType.ThickArrow or
-            EdgeType.BiDirectional or
-            EdgeType.BiDirectionalCircle or
-            EdgeType.BiDirectionalCross;
+            EdgeType.BiDirectional;
 
-    public bool HasArrowTail => Type is
-        EdgeType.BiDirectional or
-        EdgeType.BiDirectionalCircle or
-        EdgeType.BiDirectionalCross;
+    // A two-headed edge carries the same head at its source as at its target: `<-->` an arrow, `o--o` a
+    // circle, `x--x` a cross.
+    public bool HasArrowTail => Type is EdgeType.BiDirectional;
 
     public bool HasCircleEnd => Type is EdgeType.CircleEnd or EdgeType.BiDirectionalCircle;
+    public bool HasCircleTail => Type is EdgeType.BiDirectionalCircle;
+
     public bool HasCrossEnd => Type is EdgeType.CrossEnd or EdgeType.BiDirectionalCross;
+    public bool HasCrossTail => Type is EdgeType.BiDirectionalCross;
 }

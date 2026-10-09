@@ -1,0 +1,218 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 930 475.88"
+  style="max-width: 930px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="timeline-arrow"
+      refX="20"
+      refY="8"
+      markerUnits="userSpaceOnUse"
+      markerWidth="24"
+      markerHeight="16"
+      orient="auto">
+      <path
+        d="M0,0 V16 L24,8 Z"
+        class="arrowMarkerPath"
+        fill="#000000" />
+    </marker>
+    <marker
+      id="timeline-connector-arrow"
+      refX="10"
+      refY="4"
+      markerUnits="userSpaceOnUse"
+      markerWidth="12"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M0,0 V8 L12,4 Z"
+        class="arrowMarkerPath"
+        fill="#000000" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <text
+      x="445"
+      y="21"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="28px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">History</text>
+    <path
+      d="M50 101.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H50 Z"
+      fill="#8686FF" />
+    <line
+      x1="50"
+      y1="106.36"
+      x2="240"
+      y2="106.36"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="145"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">2002</text>
+    <path
+      d="M 145 106.36 L 145 435.88"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M50 287 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H50 Z"
+      fill="#A1A1FF" />
+    <line
+      x1="50"
+      y1="292"
+      x2="240"
+      y2="292"
+      stroke="#FFFFB9"
+      stroke-width="3" />
+    <text
+      x="145"
+      y="266"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#FFFFFF">LinkedIn</text>
+    <path
+      d="M250 101.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H250 Z"
+      fill="#FFFF78" />
+    <line
+      x1="250"
+      y1="106.36"
+      x2="440"
+      y2="106.36"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2004</text>
+    <path
+      d="M 345 106.36 L 345 435.88"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M250 296.76 v-49.76 q0,-5,5,-5 h180 q5,0,5,5 v54.76 H250 Z"
+      fill="#FFFF90" />
+    <line
+      x1="250"
+      y1="301.76"
+      x2="440"
+      y2="301.76"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="266"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Facebook</text>
+    <text
+      x="345"
+      y="281.4"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Google</text>
+    <path
+      d="M250 366.52 v-49.76 q0,-5,5,-5 h180 q5,0,5,5 v54.76 H250 Z"
+      fill="#FFFF90" />
+    <line
+      x1="250"
+      y1="371.52"
+      x2="440"
+      y2="371.52"
+      stroke="#ABABFF"
+      stroke-width="3" />
+    <text
+      x="345"
+      y="335.76"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">Steam</text>
+    <text
+      x="345"
+      y="351.16"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">power</text>
+    <path
+      d="M450 101.36 v-54.36 q0,-5,5,-5 h180 q5,0,5,5 v59.36 H450 Z"
+      fill="#D7FF86" />
+    <line
+      x1="450"
+      y1="106.36"
+      x2="640"
+      y2="106.36"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">2005</text>
+    <path
+      d="M 545 106.36 L 545 435.88"
+      fill="none"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-dasharray="5,5"
+      marker-end="url(#timeline-connector-arrow)" />
+    <path
+      d="M450 287 v-40 q0,-5,5,-5 h180 q5,0,5,5 v45 H450 Z"
+      fill="#FFFFA1" />
+    <line
+      x1="450"
+      y1="292"
+      x2="640"
+      y2="292"
+      stroke="#D0B9FF"
+      stroke-width="3" />
+    <text
+      x="545"
+      y="266"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#000000">YouTube</text>
+    <path
+      d="M 0 156.36 L 890 156.36"
+      fill="none"
+      stroke="#000000"
+      stroke-width="4"
+      marker-end="url(#timeline-arrow)" />
+  </g>
+</svg>

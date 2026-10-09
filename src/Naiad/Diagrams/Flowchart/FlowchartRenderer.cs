@@ -58,6 +58,8 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             }
         }
 
+        SizeEmptySubgraphs(model.Subgraphs, options);
+
         // Reserve space for edge labels so the layout keeps a rank gap clear for them.
         foreach (var edge in model.Edges)
         {
@@ -119,6 +121,25 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         return builder.Build();
     }
 
+    // A subgraph takes its size from what it holds. One that holds nothing is drawn as a box around its
+    // title, sized the way a node is around its label.
+    static void SizeEmptySubgraphs(IEnumerable<Subgraph> subgraphs, RenderOptions options)
+    {
+        foreach (var subgraph in subgraphs)
+        {
+            if (subgraph.NodeIds.Count == 0 &&
+                subgraph.NestedSubgraphs.Count == 0)
+            {
+                var titleSize = MeasureText(LabelLines.Flatten(subgraph.Title ?? subgraph.Id), options.FontSize);
+                subgraph.Width = titleSize.Width + 30;
+                subgraph.Height = titleSize.Height + 27;
+                continue;
+            }
+
+            SizeEmptySubgraphs(subgraph.NestedSubgraphs, options);
+        }
+    }
+
     static void RenderSubgraphBoxes(SvgBuilder builder, IEnumerable<Subgraph> subgraphs)
     {
         foreach (var subgraph in subgraphs)
@@ -158,7 +179,8 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
     static void RenderSubgraphTitle(SvgBuilder builder, Subgraph graph, RenderOptions options)
     {
-        var title = graph.Title ?? graph.Id;
+        // The title band has room for one line, so a `<br/>` in it becomes a space.
+        var title = LabelLines.Flatten(graph.Title ?? graph.Id);
         if (string.IsNullOrEmpty(title))
         {
             return;
@@ -223,7 +245,8 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
     static void RenderEdge(SvgBuilder builder, Edge edge, double fontSize)
     {
-        if (edge.Points.Count < 2)
+        if (edge.Points.Count < 2 ||
+            edge.Type == EdgeType.Invisible)
         {
             return;
         }
@@ -246,7 +269,9 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             edge.HasCircleEnd ? "url(#naiad_flowchart-circleEnd)" :
             edge.HasCrossEnd ? "url(#naiad_flowchart-crossEnd)" : null;
 
-        var markerStart = edge.HasArrowTail ? "url(#naiad_flowchart-pointStart)" : null;
+        var markerStart = edge.HasArrowTail ? "url(#naiad_flowchart-pointStart)" :
+            edge.HasCircleTail ? "url(#naiad_flowchart-circleStart)" :
+            edge.HasCrossTail ? "url(#naiad_flowchart-crossStart)" : null;
 
         builder.AddPath(
             pathData,
@@ -273,7 +298,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
                 labelX - labelWidth / 2,
                 labelY - labelHeight / 2,
                 labelWidth, labelHeight,
-                $"<p>{WebUtility.HtmlEncode(edge.Label)}</p>",
+                $"<p>{EncodeLines(edge.Label)}</p>",
                 edge.Label,
                 className: "edgeLabel");
         }
@@ -290,6 +315,23 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             color is null
                 ? "<p>"
                 : $"<p style=\"color:{color}\">");
+        var lines = LabelLines.Split(text);
+        for (var i = 0; i < lines.Length; i++)
+        {
+            if (i > 0)
+            {
+                html.Append("<br/>");
+            }
+
+            AppendLineHtml(html, lines[i]);
+        }
+
+        html.Append("</p>");
+        return html.ToString();
+    }
+
+    static void AppendLineHtml(StringBuilder html, string text)
+    {
         var lastIndex = 0;
 
         foreach (Match match in iconPattern.Matches(text))
@@ -312,10 +354,11 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         {
             html.Append(WebUtility.HtmlEncode(text[lastIndex..]));
         }
-
-        html.Append("</p>");
-        return html.ToString();
     }
+
+    // HTML-encodes a label line by line, turning its `<br/>` breaks into real ones.
+    static string EncodeLines(string text) =>
+        string.Join("<br/>", LabelLines.Split(text).Select(WebUtility.HtmlEncode));
 
     // Removes recognised icon tokens from a label and counts them, for sizing.
     static (string text, int iconCount) AnalyzeLabel(string label)
@@ -375,10 +418,11 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             CultureInfo.InvariantCulture,
             $"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {icon.Width:0.##} {icon.Height:0.##}' style='width:1em;height:1em;vertical-align:-0.125em'>{icon.Body}</svg>");
 
-    static Size MeasureText(CharSpan text, double fontSize)
+    // A label is as wide as its longest line and one line pitch taller for each `<br/>` it holds.
+    static Size MeasureText(string text, double fontSize)
     {
-        var width = text.Trim().Length * fontSize * 0.55;
-        var height = fontSize * 1.5;
+        var width = LabelLines.WidestLength(text.Trim()) * fontSize * 0.55;
+        var height = fontSize * (1.5 + SvgBuilder.LineHeightFactor * (LabelLines.Count(text) - 1));
         return new(width, height);
     }
 }

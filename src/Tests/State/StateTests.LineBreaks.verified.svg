@@ -1,0 +1,216 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 247.2 536.8"
+  style="max-width: 247.2px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <line
+      x1="61.2"
+      y1="20"
+      x2="61.2"
+      y2="100"
+      stroke="#333" />
+    <polygon
+      points="61.2,100 57.2,93.07 65.2,93.07"
+      fill="#333" />
+    <line
+      x1="61.2"
+      y1="156.8"
+      x2="61.2"
+      y2="236.8"
+      stroke="#333" />
+    <polygon
+      points="61.2,236.8 57.2,229.87 65.2,229.87"
+      fill="#333" />
+    <rect
+      x="46.4"
+      y="183.6"
+      width="29.6"
+      height="30.4"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="61.2"
+      y="191.6"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">go</text>
+    <text
+      x="61.2"
+      y="206"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">now</text>
+    <line
+      x1="61.2"
+      y1="276.8"
+      x2="61.2"
+      y2="356.8"
+      stroke="#333" />
+    <polygon
+      points="61.2,356.8 57.2,349.87 65.2,349.87"
+      fill="#333" />
+    <rect
+      x="39.2"
+      y="298.8"
+      width="44"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="61.2"
+      y="306.8"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">plain</text>
+    <line
+      x1="61.2"
+      y1="396.8"
+      x2="61.2"
+      y2="476.8"
+      stroke="#333" />
+    <polygon
+      points="61.2,476.8 57.2,469.87 65.2,469.87"
+      fill="#333" />
+    <circle
+      cx="61.2"
+      cy="10"
+      r="10"
+      fill="#333"
+      stroke="#333" />
+    <rect
+      x="0"
+      y="100"
+      width="122.4"
+      height="56.8"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="61.2"
+      y="120"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">First line</text>
+    <text
+      x="61.2"
+      y="136.8"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">second line</text>
+    <rect
+      x="41.2"
+      y="236.8"
+      width="40"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="61.2"
+      y="256.8"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">B</text>
+    <rect
+      x="41.2"
+      y="356.8"
+      width="40"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="61.2"
+      y="376.8"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">C</text>
+    <circle
+      cx="61.2"
+      cy="486.8"
+      r="10"
+      fill="none"
+      stroke="#333"
+      stroke-width="2" />
+    <circle
+      cx="61.2"
+      cy="486.8"
+      r="5"
+      fill="#333"
+      stroke="#333" />
+    <path
+      d="M95.2,171.8 L179.2,171.8 L187.2,179.8 L187.2,240.6 L95.2,240.6 Z"
+      fill="#FFFFCC"
+      stroke="#AAAA33" />
+    <line
+      x1="179.2"
+      y1="171.8"
+      x2="179.2"
+      y2="179.8"
+      stroke="#AAAA33" />
+    <line
+      x1="179.2"
+      y1="179.8"
+      x2="187.2"
+      y2="179.8"
+      stroke="#AAAA33" />
+    <text
+      x="141.2"
+      y="191.8"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">Note one</text>
+    <text
+      x="141.2"
+      y="206.2"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">note two</text>
+    <text
+      x="141.2"
+      y="220.6"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">note three</text>
+    <path
+      d="M 81.2 244.15 Q 81.2 239.72, 95.2 235.3"
+      fill="none"
+      stroke="#333"
+      stroke-dasharray="5,5" />
+  </g>
+</svg>

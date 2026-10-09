@@ -246,7 +246,7 @@ public class SvgBuilder
             return;
         }
 
-        AddText(
+        AddTextLines(
             x + width / 2,
             y + height / 2,
             text,
@@ -288,7 +288,7 @@ public class SvgBuilder
         string? fill = null)
     {
         AddEdgeLabelBackground(centerX, centerY, width, height);
-        AddText(
+        AddTextLines(
             centerX,
             centerY,
             text,
@@ -511,6 +511,52 @@ public class SvgBuilder
             Style = style
         };
         AddElement(text);
+    }
+
+    /// <summary>Line pitch of stacked label lines, as a multiple of the font size.</summary>
+    public const double LineHeightFactor = 1.2;
+
+    /// <summary>
+    /// Adds a label that may hold <c>&lt;br/&gt;</c> line breaks, as one <c>&lt;text&gt;</c> per line. The
+    /// baseline says where the block sits relative to <paramref name="y"/>: <c>middle</c> centres it there,
+    /// <c>bottom</c> rests its last line there and grows upwards, and anything else starts the first line
+    /// there and grows downwards. A label without a break is exactly <see cref="AddText"/>.
+    /// </summary>
+    public void AddTextLines(
+        double x,
+        double y,
+        string content,
+        string? anchor = null,
+        string? baseline = null,
+        double? fontSize = null,
+        string? fontFamily = null,
+        string? fontWeight = null,
+        string? fill = null,
+        string? cssClass = null)
+    {
+        var lines = LabelLines.Split(content);
+        var lineHeight = (fontSize ?? labelFontSize) * LineHeightFactor;
+        var firstY = baseline switch
+        {
+            "middle" => y - (lines.Length - 1) * lineHeight / 2,
+            "bottom" => y - (lines.Length - 1) * lineHeight,
+            _ => y
+        };
+
+        for (var i = 0; i < lines.Length; i++)
+        {
+            AddText(
+                x,
+                firstY + i * lineHeight,
+                lines[i],
+                anchor: anchor,
+                baseline: baseline,
+                fontSize: fontSize,
+                fontFamily: fontFamily,
+                fontWeight: fontWeight,
+                fill: fill,
+                cssClass: cssClass);
+        }
     }
 
     void AddElement(SvgElement element)

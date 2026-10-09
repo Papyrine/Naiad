@@ -178,4 +178,26 @@ public class SequenceTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // `<br/>` breaks participant names, message labels and notes over several lines, and each makes room
+    // for the lines it holds.
+    [Test]
+    public Task LineBreaks()
+    {
+        const string input =
+            """
+            sequenceDiagram
+                participant A as Alice<br/>Johnson
+                actor B as Bob<br/>the Builder
+                participant C
+                A->>B: Hello Bob<br/>how are you?
+                B-->>A: Fine
+                Note over A,B: First line<br/>second line<br/>third line
+                A->>A: Think<br/>hard
+                B->>C: One<br/>two<br/>three
+                Note right of C: Single
+            """;
+
+        return VerifySvg(input);
+    }
 }

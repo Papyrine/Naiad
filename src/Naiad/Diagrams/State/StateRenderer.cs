@@ -72,7 +72,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     const double exitClearance = 5;
     const double exitStep = 6;
     const double noteMinWidth = 60;
-    const double noteHeight = 40;
+    const double singleLineNoteHeight = 40;
     const double notePadding = 20;
     const double noteHorizontalOffset = 60;
 
@@ -196,7 +196,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         var width = MeasureText(text, fontSize, bold);
-        var height = fontSize * 1.2; // Approximate line height
+        var height = fontSize * 1.2 * LabelLines.Count(text); // Approximate line height
 
         // Adjust x based on anchor
         var left = anchor switch
@@ -743,6 +743,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             }
 
             var noteWidth = Math.Max(noteMinWidth, MeasureText(note.Text, options.FontSize - 2) + notePadding);
+            var noteHeight = NoteHeight(note, options);
 
             // Check horizontal space needed - notes go outside the diagram, clear of any edge corridor
             var noteX = NoteX(model, note, state, noteWidth, stateMap);
@@ -947,7 +948,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var textWidth = MeasureText(label, options.FontSize);
         var width = Math.Max(stateMinWidth, textWidth + statePadding);
 
-        return (width, stateHeight);
+        return (width, stateHeight + ExtraLines(label, options.FontSize));
     }
 
     static void CopyPositionsToModel(StateModel model, GraphDiagramBase graph) =>
@@ -1265,7 +1266,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var label = state.Description ?? state.Id;
         if (state.Type == StateType.Normal)
         {
-            builder.AddText(
+            builder.AddTextLines(
                 state.Position.X,
                 state.Position.Y,
                 label,
@@ -1544,7 +1545,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             if (!string.IsNullOrEmpty(transition.Label))
             {
                 var labelWidth = MeasureText(transition.Label, options.FontSize - 2) + 8;
-                const double labelHeight = 16;
+                var labelHeight = TransitionLabelHeight(transition.Label, options);
 
                 // Position label centered on the vertical line segment
                 // Position at midpoint of the vertical segment
@@ -1618,7 +1619,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             if (!string.IsNullOrEmpty(transition.Label))
             {
                 var labelWidth = MeasureText(transition.Label, options.FontSize - 2) + 8;
-                const double labelHeight = 16;
+                var labelHeight = TransitionLabelHeight(transition.Label, options);
 
                 // Position label centered on this edge's vertical line
                 var labelY = (fromState.Position.Y + toState.Position.Y) / 2;
@@ -1807,7 +1808,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                     startX, startY, endX, endY, transition.Label, stateMap, options, toState.Type == StateType.End);
 
                 var labelWidth = MeasureText(transition.Label, options.FontSize - 2) + 8;
-                const double labelHeight = 16;
+                var labelHeight = TransitionLabelHeight(transition.Label, options);
 
                 // Register this label's position to prevent future overlaps
                 placedLabels.Add(new(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
@@ -1835,7 +1836,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         string label, Dictionary<string, State> stateMap, RenderOptions options, bool isToEnd)
     {
         var labelWidth = MeasureText(label, options.FontSize - 2) + 8;
-        const double labelHeight = 16;
+        var labelHeight = TransitionLabelHeight(label, options);
 
         // Estimate maximum bounds from states
         var maxStateX = stateMap.Values.Max(_ => _.Position.X + _.Width / 2);
@@ -2088,7 +2089,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 routeX, defaultY, routeX, obstacleTop - margin, horizontalY, transition.Label, stateMap, options);
 
             var labelWidth = MeasureText(transition.Label, options.FontSize - 2) + 8;
-            const double labelHeight = 16;
+            var labelHeight = TransitionLabelHeight(transition.Label, options);
 
             // Register this label's position to prevent future overlaps
             placedLabels.Add(new(labelX - labelWidth / 2, labelY - labelHeight / 2, labelWidth, labelHeight));
@@ -2110,7 +2111,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         string label, Dictionary<string, State> stateMap, RenderOptions options)
     {
         var labelWidth = MeasureText(label, options.FontSize - 2) + 8;
-        const double labelHeight = 16;
+        var labelHeight = TransitionLabelHeight(label, options);
 
         // Try positions along the vertical route segment
         double[] yPositions = [defaultY, (topY + bottomY) / 2, topY + 30, bottomY - 30, topY + 60, bottomY - 60];
@@ -2263,6 +2264,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             // Calculate note dimensions based on text content
             var noteWidth = Math.Max(noteMinWidth, MeasureText(note.Text, options.FontSize - 2) + notePadding);
+            var noteHeight = NoteHeight(note, options);
 
             // Determine vertical placement based on available space
             var spaceAbove = state.Position.Y;
@@ -2309,6 +2311,28 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 }
             }
 
+            // A transition label may already occupy the slot. The note box is opaque, so it would cover the
+            // label; step it past the label, further from its state, as long as that keeps it on the canvas.
+            foreach (var placed in placedLabels)
+            {
+                if (noteX >= placed.Left + placed.Width + minGap ||
+                    noteX + noteWidth <= placed.Left - minGap ||
+                    noteY >= placed.Top + placed.Height + minGap ||
+                    noteY + noteHeight <= placed.Top - minGap)
+                {
+                    continue;
+                }
+
+                var clearY = placeBelow
+                    ? placed.Top + placed.Height + minGap
+                    : placed.Top - noteHeight - minGap;
+                if (clearY >= 0 &&
+                    clearY + noteHeight <= svgHeight)
+                {
+                    noteY = clearY;
+                }
+            }
+
             // Note box with folded corner
             const int foldSize = 8;
             var path = string.Create(
@@ -2339,7 +2363,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 strokeWidth: 1);
 
             // Note text
-            builder.AddText(
+            builder.AddTextLines(
                 noteX + noteWidth / 2,
                 noteY + noteHeight / 2,
                 note.Text,
@@ -2360,7 +2384,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var dx = state.Position.X - noteCenterX;
             var dy = state.Position.Y - noteCenterY;
             var noteHalfW = noteWidth / 2;
-            const double noteHalfH = noteHeight / 2;
+            var noteHalfH = noteHeight / 2;
             var tX = Math.Abs(dx) > 0.001 ? noteHalfW / Math.Abs(dx) : double.MaxValue;
             var tY = Math.Abs(dy) > 0.001 ? noteHalfH / Math.Abs(dy) : double.MaxValue;
             var t = Math.Min(tX, tY);
@@ -2387,6 +2411,18 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
+    // A label with `<br/>` breaks is as wide as its longest line.
     static double MeasureText(string text, double fontSize, bool bold = false) =>
-        text.Length * fontSize * (bold ? 0.7 : 0.6);
+        LabelLines.WidestLength(text) * fontSize * (bold ? 0.7 : 0.6);
+
+    // The height a label's `<br/>` breaks add beyond its first line.
+    static double ExtraLines(string? text, double fontSize) =>
+        (LabelLines.Count(text) - 1) * fontSize * SvgBuilder.LineHeightFactor;
+
+    static double NoteHeight(StateNote note, RenderOptions options) =>
+        singleLineNoteHeight + ExtraLines(note.Text, options.FontSize - 2);
+
+    // The chip behind a transition label: one line is 16 tall, and each further line adds a line pitch.
+    static double TransitionLabelHeight(string label, RenderOptions options) =>
+        16 + ExtraLines(label, options.FontSize - 2);
 }

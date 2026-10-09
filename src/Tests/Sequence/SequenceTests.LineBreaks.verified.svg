@@ -1,0 +1,384 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 570 652.4"
+  style="max-width: 570px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="arrowhead-dotted"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="cross"
+      refX="4"
+      refY="4"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M1,1 L7,7 M7,1 L1,7"
+        class="arrowMarkerPath"
+        fill="none" />
+    </marker>
+  </defs>
+  <rect
+    x="20"
+    y="20"
+    width="100"
+    height="56.8"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="70"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Alice</text>
+  <text
+    x="70"
+    y="56.8"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Johnson</text>
+  <circle
+    cx="220"
+    cy="29"
+    r="9"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <line
+    x1="220"
+    y1="38"
+    x2="220"
+    y2="51"
+    stroke="#9370DB" />
+  <line
+    x1="210"
+    y1="42"
+    x2="230"
+    y2="42"
+    stroke="#9370DB" />
+  <line
+    x1="220"
+    y1="51"
+    x2="212"
+    y2="60"
+    stroke="#9370DB" />
+  <line
+    x1="220"
+    y1="51"
+    x2="228"
+    y2="60"
+    stroke="#9370DB" />
+  <text
+    x="220"
+    y="64"
+    text-anchor="middle"
+    dominant-baseline="top"
+    font-size="14px"
+    font-family="Arial, sans-serif">Bob</text>
+  <text
+    x="220"
+    y="80.8"
+    text-anchor="middle"
+    dominant-baseline="top"
+    font-size="14px"
+    font-family="Arial, sans-serif">the Builder</text>
+  <rect
+    x="320"
+    y="20"
+    width="100"
+    height="56.8"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="370"
+    y="48.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">C</text>
+  <line
+    x1="70"
+    y1="100.8"
+    x2="70"
+    y2="551.6"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="220"
+    y1="100.8"
+    x2="220"
+    y2="551.6"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="370"
+    y1="100.8"
+    x2="370"
+    y2="551.6"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="70"
+    y1="167.6"
+    x2="220"
+    y2="167.6"
+    stroke="#333" />
+  <polygon
+    points="220,167.6 212,163.6 212,171.6"
+    fill="#333" />
+  <text
+    x="145"
+    y="142.8"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">Hello Bob</text>
+  <text
+    x="145"
+    y="159.6"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">how are you?</text>
+  <line
+    x1="220"
+    y1="217.6"
+    x2="70"
+    y2="217.6"
+    stroke="#333"
+    stroke-dasharray="5,5" />
+  <polygon
+    points="70,217.6 78,213.6 78,221.6"
+    fill="#333" />
+  <text
+    x="145"
+    y="209.6"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">Fine</text>
+  <path
+    d="M20,267.6 L262,267.6 L270,275.6 L270,341.2 L20,341.2 Z"
+    fill="#FFFFCC"
+    stroke="#AAAA33" />
+  <line
+    x1="262"
+    y1="267.6"
+    x2="262"
+    y2="275.6"
+    stroke="#AAAA33" />
+  <line
+    x1="262"
+    y1="275.6"
+    x2="270"
+    y2="275.6"
+    stroke="#AAAA33" />
+  <text
+    x="145"
+    y="287.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">First line</text>
+  <text
+    x="145"
+    y="304.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">second line</text>
+  <text
+    x="145"
+    y="321.2"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">third line</text>
+  <path
+    d="M70,359.6 L110,359.6 L110,389.6 L70,389.6"
+    fill="none"
+    stroke="#333"
+    marker-end="url(#arrowhead)" />
+  <text
+    x="115"
+    y="366.2"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Think</text>
+  <text
+    x="115"
+    y="383"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">hard</text>
+  <line
+    x1="220"
+    y1="451.6"
+    x2="370"
+    y2="451.6"
+    stroke="#333" />
+  <polygon
+    points="370,451.6 362,447.6 362,455.6"
+    fill="#333" />
+  <text
+    x="295"
+    y="410"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">One</text>
+  <text
+    x="295"
+    y="426.8"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">two</text>
+  <text
+    x="295"
+    y="443.6"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">three</text>
+  <path
+    d="M430,501.6 L542,501.6 L550,509.6 L550,541.6 L430,541.6 Z"
+    fill="#FFFFCC"
+    stroke="#AAAA33" />
+  <line
+    x1="542"
+    y1="501.6"
+    x2="542"
+    y2="509.6"
+    stroke="#AAAA33" />
+  <line
+    x1="542"
+    y1="509.6"
+    x2="550"
+    y2="509.6"
+    stroke="#AAAA33" />
+  <text
+    x="490"
+    y="521.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Single</text>
+  <rect
+    x="20"
+    y="551.6"
+    width="100"
+    height="56.8"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="70"
+    y="571.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Alice</text>
+  <text
+    x="70"
+    y="588.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Johnson</text>
+  <circle
+    cx="220"
+    cy="560.6"
+    r="9"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <line
+    x1="220"
+    y1="569.6"
+    x2="220"
+    y2="582.6"
+    stroke="#9370DB" />
+  <line
+    x1="210"
+    y1="573.6"
+    x2="230"
+    y2="573.6"
+    stroke="#9370DB" />
+  <line
+    x1="220"
+    y1="582.6"
+    x2="212"
+    y2="591.6"
+    stroke="#9370DB" />
+  <line
+    x1="220"
+    y1="582.6"
+    x2="228"
+    y2="591.6"
+    stroke="#9370DB" />
+  <text
+    x="220"
+    y="595.6"
+    text-anchor="middle"
+    dominant-baseline="top"
+    font-size="14px"
+    font-family="Arial, sans-serif">Bob</text>
+  <text
+    x="220"
+    y="612.4"
+    text-anchor="middle"
+    dominant-baseline="top"
+    font-size="14px"
+    font-family="Arial, sans-serif">the Builder</text>
+  <rect
+    x="320"
+    y="551.6"
+    width="100"
+    height="56.8"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="370"
+    y="580"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">C</text>
+</svg>

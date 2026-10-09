@@ -35,14 +35,11 @@ public static class SvgRenderer
 
         foreach (var foreignObject in document.Descendants(svgNs + "foreignObject").ToList())
         {
-            var text = foreignObject.Descendants()
-                .FirstOrDefault(_ => _.Name.LocalName == "p")
-                ?.Value
-                .Trim();
+            var lines = ExtractLines(foreignObject);
 
             // foreignObjects without text are icon glyphs (e.g. font-awesome <i>),
             // which need a web font we do not embed. Drop them rather than render tofu.
-            if (string.IsNullOrEmpty(text))
+            if (lines.Count == 0)
             {
                 foreignObject.Remove();
                 continue;
@@ -53,20 +50,61 @@ public static class SvgRenderer
             var width = Double(foreignObject.Attribute("width"));
             var height = Double(foreignObject.Attribute("height"));
 
+            // One <text> per <br/>-separated line, the block centred in the box.
+            const double lineHeight = 16 * 1.2;
+            var firstY = y + height / 2 - (lines.Count - 1) * lineHeight / 2;
             foreignObject.ReplaceWith(
-                new XElement(
-                    svgNs + "text",
-                    new XAttribute("x", Format(x + width / 2)),
-                    new XAttribute("y", Format(y + height / 2)),
-                    new XAttribute("text-anchor", "middle"),
-                    new XAttribute("dominant-baseline", "middle"),
-                    new XAttribute("font-size", "16px"),
-                    new XAttribute("font-family", "trebuchet ms, verdana, arial, sans-serif"),
-                    new XAttribute("fill", "#333"),
-                    text));
+                lines.Select((line, index) =>
+                    new XElement(
+                        svgNs + "text",
+                        new XAttribute("x", Format(x + width / 2)),
+                        new XAttribute("y", Format(firstY + index * lineHeight)),
+                        new XAttribute("text-anchor", "middle"),
+                        new XAttribute("dominant-baseline", "middle"),
+                        new XAttribute("font-size", "16px"),
+                        new XAttribute("font-family", "trebuchet ms, verdana, arial, sans-serif"),
+                        new XAttribute("fill", "#333"),
+                        line)));
         }
 
         return document.ToString(SaveOptions.DisableFormatting);
+    }
+
+    // The label's text, split where its <p> holds a <br/>. A label that is all whitespace has no lines.
+    static List<string> ExtractLines(XElement foreignObject)
+    {
+        var lines = new List<string>();
+        var paragraph = foreignObject.Descendants().FirstOrDefault(_ => _.Name.LocalName == "p");
+        if (paragraph is null)
+        {
+            return lines;
+        }
+
+        var line = new StringBuilder();
+        foreach (var node in paragraph.Nodes())
+        {
+            switch (node)
+            {
+                case XElement {Name.LocalName: "br"}:
+                    lines.Add(line.ToString().Trim());
+                    line.Clear();
+                    break;
+                case XElement element:
+                    line.Append(element.Value);
+                    break;
+                case XText text:
+                    line.Append(text.Value);
+                    break;
+            }
+        }
+
+        lines.Add(line.ToString().Trim());
+        if (lines.All(string.IsNullOrWhiteSpace))
+        {
+            lines.Clear();
+        }
+
+        return lines;
     }
 
     static double Double(XAttribute? attribute) =>

@@ -72,19 +72,19 @@
   <g
     transform="translate(20,20)">
     <path
-      d="M160.77,50 L168.97,56.67 C177.18,63.33 193.59,76.67 201.79,90 C210,103.33 210,116.67 210,123.33 L210,130"
-      fill="none"
-      stroke="#333" />
-    <polygon
-      points="160.77,50 170.64,51.58 164.34,59.34"
-      fill="#fff"
-      stroke="#333" />
-    <path
       d="M99.23,50 L91.03,56.67 C82.82,63.33 66.41,76.67 58.21,90 C50,103.33 50,116.67 50,123.33 L50,130"
       fill="none"
       stroke="#333" />
     <polygon
       points="99.23,50 95.66,59.34 89.36,51.58"
+      fill="#fff"
+      stroke="#333" />
+    <path
+      d="M160.77,50 L168.97,56.67 C177.18,63.33 193.59,76.67 201.79,90 C210,103.33 210,116.67 210,123.33 L210,130"
+      fill="none"
+      stroke="#333" />
+    <polygon
+      points="160.77,50 170.64,51.58 164.34,59.34"
       fill="#fff"
       stroke="#333" />
     <rect
@@ -103,21 +103,6 @@
       font-family="Arial, sans-serif"
       font-weight="bold">Animal</text>
     <rect
-      x="160"
-      y="130"
-      width="100"
-      height="50"
-      fill="#FFFFDE"
-      stroke="#333" />
-    <text
-      x="210"
-      y="150"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="14px"
-      font-family="Arial, sans-serif"
-      font-weight="bold">Dog</text>
-    <rect
       x="0"
       y="130"
       width="100"
@@ -126,6 +111,21 @@
       stroke="#333" />
     <text
       x="50"
+      y="150"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Dog</text>
+    <rect
+      x="160"
+      y="130"
+      width="100"
+      height="50"
+      fill="#FFFFDE"
+      stroke="#333" />
+    <text
+      x="210"
       y="150"
       text-anchor="middle"
       dominant-baseline="middle"
