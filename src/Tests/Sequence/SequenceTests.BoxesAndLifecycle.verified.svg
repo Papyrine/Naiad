@@ -1,0 +1,377 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 610 544"
+  style="max-width: 610px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="arrowhead-dotted"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="cross"
+      refX="4"
+      refY="4"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M1,1 L7,7 M7,1 L1,7"
+        class="arrowMarkerPath"
+        fill="none" />
+    </marker>
+  </defs>
+  <rect
+    x="20"
+    y="20"
+    width="270"
+    height="514"
+    fill="Aqua"
+    stroke="#999" />
+  <text
+    x="155"
+    y="33"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Front end</text>
+  <rect
+    x="320"
+    y="20"
+    width="120"
+    height="514"
+    fill="none"
+    stroke="#999" />
+  <text
+    x="380"
+    y="33"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Services</text>
+  <circle
+    cx="80"
+    cy="55"
+    r="9"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <line
+    x1="80"
+    y1="64"
+    x2="80"
+    y2="77"
+    stroke="#9370DB" />
+  <line
+    x1="70"
+    y1="68"
+    x2="90"
+    y2="68"
+    stroke="#9370DB" />
+  <line
+    x1="80"
+    y1="77"
+    x2="72"
+    y2="86"
+    stroke="#9370DB" />
+  <line
+    x1="80"
+    y1="77"
+    x2="88"
+    y2="86"
+    stroke="#9370DB" />
+  <text
+    x="80"
+    y="90"
+    text-anchor="middle"
+    dominant-baseline="top"
+    font-size="14px"
+    font-family="Arial, sans-serif">User</text>
+  <rect
+    x="180"
+    y="46"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="230"
+    y="66"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Web App</text>
+  <rect
+    x="330"
+    y="46"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="380"
+    y="66"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">api</text>
+  <line
+    x1="80"
+    y1="110"
+    x2="80"
+    y2="460"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="230"
+    y1="110"
+    x2="230"
+    y2="460"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="380"
+    y1="110"
+    x2="380"
+    y2="460"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="530"
+    y1="280"
+    x2="530"
+    y2="360"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="80"
+    y1="160"
+    x2="230"
+    y2="160"
+    stroke="#333" />
+  <polygon
+    points="230,160 222,156 222,164"
+    fill="#333" />
+  <text
+    x="155"
+    y="152"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">10. Open page</text>
+  <line
+    x1="230"
+    y1="210"
+    x2="380"
+    y2="210"
+    stroke="#333" />
+  <polygon
+    points="380,210 372,206 372,214"
+    fill="#333" />
+  <polygon
+    points="230,210 238,206 238,214"
+    fill="#333" />
+  <text
+    x="305"
+    y="202"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">15. Handshake</text>
+  <line
+    x1="380"
+    y1="260"
+    x2="480"
+    y2="260"
+    stroke="#333" />
+  <polygon
+    points="480,260 472,256 472,264"
+    fill="#333" />
+  <text
+    x="430"
+    y="252"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">20. Start job</text>
+  <line
+    x1="530"
+    y1="310"
+    x2="380"
+    y2="310"
+    stroke="#333"
+    stroke-dasharray="5,5" />
+  <polygon
+    points="380,310 388,306 388,314"
+    fill="#333" />
+  <polygon
+    points="530,310 522,306 522,314"
+    fill="#333" />
+  <text
+    x="455"
+    y="302"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">25. Progress</text>
+  <line
+    x1="530"
+    y1="360"
+    x2="380"
+    y2="360"
+    stroke="#333"
+    stroke-dasharray="5,5" />
+  <polygon
+    points="380,360 388,356 388,364"
+    fill="#333" />
+  <text
+    x="455"
+    y="352"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">30. Done</text>
+  <line
+    x1="380"
+    y1="410"
+    x2="230"
+    y2="410"
+    stroke="#333"
+    stroke-dasharray="5,5" />
+  <polygon
+    points="230,410 238,406 238,414"
+    fill="#333" />
+  <text
+    x="305"
+    y="402"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">35. Result</text>
+  <rect
+    x="480"
+    y="240"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="530"
+    y="260"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Worker</text>
+  <line
+    x1="522"
+    y1="352"
+    x2="538"
+    y2="368"
+    stroke="#9370DB"
+    stroke-width="2" />
+  <line
+    x1="522"
+    y1="368"
+    x2="538"
+    y2="352"
+    stroke="#9370DB"
+    stroke-width="2" />
+  <circle
+    cx="80"
+    cy="469"
+    r="9"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <line
+    x1="80"
+    y1="478"
+    x2="80"
+    y2="491"
+    stroke="#9370DB" />
+  <line
+    x1="70"
+    y1="482"
+    x2="90"
+    y2="482"
+    stroke="#9370DB" />
+  <line
+    x1="80"
+    y1="491"
+    x2="72"
+    y2="500"
+    stroke="#9370DB" />
+  <line
+    x1="80"
+    y1="491"
+    x2="88"
+    y2="500"
+    stroke="#9370DB" />
+  <text
+    x="80"
+    y="504"
+    text-anchor="middle"
+    dominant-baseline="top"
+    font-size="14px"
+    font-family="Arial, sans-serif">User</text>
+  <rect
+    x="180"
+    y="460"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="230"
+    y="480"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Web App</text>
+  <rect
+    x="330"
+    y="460"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="380"
+    y="480"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">api</text>
+</svg>

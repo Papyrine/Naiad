@@ -7,15 +7,22 @@ class SequenceParser : IDiagramParser<SequenceModel>
 
     static SequenceParser()
     {
-        // Sequence diagram identifier (no dash to avoid conflicts with arrows)
+        // Sequence diagram identifier: letters, digits and underscores, plus a hyphen between two of them
+        // (`web-app`). A hyphen that starts an arrow is not part of the name - and, as in Mermaid, neither
+        // is one followed by `x`, which is how the `-x` arrow is spelled.
+        var idChar =
+            Token(_ => char.IsLetterOrDigit(_) || _ == '_');
+
         var seqIdentifier =
-            Token(_ => char.IsLetterOrDigit(_) || _ == '_')
-                .AtLeastOnceString()
+            idChar
+                .Then(idChar.Or(Try(Char('-').Before(Lookahead(Token(_ => (char.IsLetterOrDigit(_) || _ == '_') && _ != 'x'))))).SkipMany())
+                .Slice((span, _) => span.ToString())
                 .Labelled("identifier");
 
-        // Participant declaration: participant/actor Name as Alias
+        // Participant declaration: participant/actor Name as Alias, optionally introduced by `create`.
         var participantParser =
             from _ in CommonParsers.InlineWhitespace
+            from created in Try(String("create").Then(CommonParsers.RequiredWhitespace)).Optional()
             from type in OneOf(
                 Try(String("actor")).ThenReturn(ParticipantType.Actor),
                 String("participant").ThenReturn(ParticipantType.Participant)
@@ -32,13 +39,16 @@ class SequenceParser : IDiagramParser<SequenceModel>
             select new Participant
             {
                 Id = id,
-                Alias = alias.HasValue ? alias.Value : null,
-                Type = type
+                Alias = alias.HasValue ? Unquote(alias.Value.Trim()) : null,
+                Type = type,
+                IsCreated = created.HasValue
             };
 
         // Message arrows
         var messageArrowParser =
             OneOf(
+                Try(String("<<-->>")).ThenReturn(MessageType.DottedBiDirectional),
+                Try(String("<<->>")).ThenReturn(MessageType.BiDirectional),
                 Try(String("-->>")).ThenReturn(MessageType.DottedArrow),
                 Try(String("->>")).ThenReturn(MessageType.SolidArrow),
                 Try(String("--x")).ThenReturn(MessageType.DottedCross),
@@ -121,11 +131,47 @@ class SequenceParser : IDiagramParser<SequenceModel>
                 IsActivate = isActivate
             };
 
+        // autonumber, autonumber 10, autonumber 10 5, autonumber off
         var autoNumberParser =
-            CommonParsers.InlineWhitespace
-                .Then(String("autonumber"))
-                .Then(CommonParsers.LineEnd)
-                .ThenReturn(true);
+            from _ in CommonParsers.InlineWhitespace
+            from keyword in String("autonumber")
+            from arguments in Token(_ => _ != '\r' && _ != '\n').ManyString()
+            from __ in CommonParsers.LineEnd
+            select ParseAutoNumber(arguments);
+
+        // destroy Name
+        var destroyParser =
+            from _ in CommonParsers.InlineWhitespace
+            from keyword in String("destroy")
+            from __ in Token(_ => _ is ' ' or '\t').SkipAtLeastOnce()
+            from id in seqIdentifier
+            from ___ in CommonParsers.InlineWhitespace
+            from ____ in CommonParsers.LineEnd
+            select new DestroyItem(id);
+
+        // box, box Title, box Aqua Title, box rgb(33,66,99) Title
+        var boxParser =
+            from _ in CommonParsers.InlineWhitespace
+            from keyword in String("box")
+            from text in OneOf(
+                Token(_ => _ is ' ' or '\t').SkipAtLeastOnce()
+                    .Then(Token(_ => _ != '\r' && _ != '\n').ManyString()),
+                Lookahead(CommonParsers.LineEnd).ThenReturn(""))
+            from __ in CommonParsers.LineEnd
+            select ParseBox(text.Trim());
+
+        // Menus and tooltips attached to a participant; they have no place in a static rendering.
+        var ignoredParser =
+            from _ in CommonParsers.InlineWhitespace
+            from keyword in OneOf(
+                Try(String("links")),
+                Try(String("link")),
+                Try(String("properties")),
+                String("details"))
+            from __ in Token(_ => _ is ' ' or '\t').SkipAtLeastOnce()
+            from rest in Token(_ => _ != '\r' && _ != '\n').ManyString()
+            from ___ in CommonParsers.LineEnd
+            select Unit.Value;
 
         var titleParser =
             CommonParsers.InlineWhitespace
@@ -168,7 +214,10 @@ class SequenceParser : IDiagramParser<SequenceModel>
                 Try(messageParser.Select<ISequenceContent?>(_ => new MessageItem(_))),
                 Try(noteParser.Select<ISequenceContent?>(_ => new NoteItem(_))),
                 Try(activationParser.Select<ISequenceContent?>(_ => new ActivationItem(_))),
-                Try(autoNumberParser.Select<ISequenceContent?>(_ => new AutoNumberItem(_))),
+                Try(autoNumberParser.Select<ISequenceContent?>(_ => _)),
+                Try(destroyParser.Select<ISequenceContent?>(_ => _)),
+                Try(boxParser.Select<ISequenceContent?>(_ => _)),
+                Try(ignoredParser.ThenReturn<ISequenceContent?>(null)),
                 Try(titleParser.Select<ISequenceContent?>(_ => new TitleItem(_))),
                 Try(blockMarkerParser.Select<ISequenceContent?>(_ => _)),
                 skipLine.ThenReturn<ISequenceContent?>(null)
@@ -186,6 +235,80 @@ class SequenceParser : IDiagramParser<SequenceModel>
             select BuildModel(content);
     }
 
+    static string Unquote(string text)
+    {
+        if (text.Length >= 2 &&
+            text[0] == '"' &&
+            text[^1] == '"')
+        {
+            return text[1..^1];
+        }
+
+        return text;
+    }
+
+    static AutoNumberItem ParseAutoNumber(string arguments)
+    {
+        var parts = arguments.Split((char[]?) null, StringSplitOptions.RemoveEmptyEntries);
+        if (parts is ["off"])
+        {
+            return new(false, 1, 1);
+        }
+
+        var start = 1;
+        var step = 1;
+        if (parts.Length > 0 &&
+            int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var first))
+        {
+            start = first;
+        }
+
+        if (parts.Length > 1 &&
+            int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var second))
+        {
+            step = second;
+        }
+
+        return new(true, start, step);
+    }
+
+    // The text after `box`: an optional colour - a CSS colour name, `transparent`, or an rgb()/rgba()
+    // call - and then the title.
+    static BoxItem ParseBox(string text)
+    {
+        if (text.Length == 0)
+        {
+            return new(null, null);
+        }
+
+        var colorEnd = text.IndexOfAny([' ', '\t']);
+        var close = text.IndexOf(')');
+        if (close > 0 &&
+            text.StartsWith("rgb", StringComparison.OrdinalIgnoreCase))
+        {
+            colorEnd = close + 1;
+        }
+
+        if (colorEnd < 0)
+        {
+            colorEnd = text.Length;
+        }
+
+        var first = text[..colorEnd];
+        if (!CssColor.TryParse(first, out _))
+        {
+            return new(null, text);
+        }
+
+        var title = text[colorEnd..].Trim();
+        if (title.Length == 0)
+        {
+            return new(first, null);
+        }
+
+        return new(first, title);
+    }
+
     static SequenceModel BuildModel(IEnumerable<ISequenceContent?> content)
     {
         var model = new SequenceModel();
@@ -194,6 +317,9 @@ class SequenceParser : IDiagramParser<SequenceModel>
         // The blocks currently open, innermost last, each with the list its next element goes into: the
         // block's own body, or the branch its latest `else` / `and` / `option` began.
         var open = new Stack<(SequenceElement Block, List<SequenceElement> Target)>();
+
+        // The `box` whose participants are being declared, if any.
+        ParticipantBox? openBox = null;
 
         void Add(SequenceElement element)
         {
@@ -241,8 +367,37 @@ class SequenceParser : IDiagramParser<SequenceModel>
             {
                 case ParticipantItem participant:
                     var p = participant.Value;
-                    model.Participants.Add(p);
-                    participantIds.Add(p.Id);
+                    if (participantIds.Add(p.Id))
+                    {
+                        model.Participants.Add(p);
+                    }
+                    else
+                    {
+                        // Already known from an earlier message; the declaration fills in the details.
+                        var known = model.Participants.First(_ => _.Id == p.Id);
+                        known.Alias ??= p.Alias;
+                        known.Type = p.Type;
+                        known.IsCreated |= p.IsCreated;
+                    }
+
+                    openBox?.ParticipantIds.Add(p.Id);
+                    break;
+
+                case DestroyItem destroy:
+                    foreach (var destroyed in model.Participants.Where(_ => _.Id == destroy.Id))
+                    {
+                        destroyed.IsDestroyed = true;
+                    }
+
+                    break;
+
+                case BoxItem box:
+                    openBox = new()
+                    {
+                        Color = box.Color,
+                        Title = box.Title
+                    };
+                    model.Boxes.Add(openBox);
                     break;
 
                 case MessageItem message:
@@ -344,6 +499,14 @@ class SequenceParser : IDiagramParser<SequenceModel>
                             Branch("option", "critical", optionBranch);
                             break;
                         default:
+                            // `end` closes the innermost block, or failing that the participant box.
+                            if (open.Count == 0 &&
+                                openBox is not null)
+                            {
+                                openBox = null;
+                                break;
+                            }
+
                             if (!open.TryPop(out _))
                             {
                                 throw new MermaidParseException(
@@ -356,7 +519,9 @@ class SequenceParser : IDiagramParser<SequenceModel>
                     break;
 
                 case AutoNumberItem autoNumber:
-                    model.AutoNumber = autoNumber.Value;
+                    model.AutoNumber = autoNumber.Enabled;
+                    model.AutoNumberStart = autoNumber.Start;
+                    model.AutoNumberStep = autoNumber.Step;
                     break;
 
                 case TitleItem title:
@@ -365,7 +530,8 @@ class SequenceParser : IDiagramParser<SequenceModel>
             }
         }
 
-        if (open.Count > 0)
+        if (open.Count > 0 ||
+            openBox is not null)
         {
             throw new MermaidParseException(
                 "Failed to parse sequence diagram: a block is missing its closing 'end'");
@@ -381,7 +547,9 @@ class SequenceParser : IDiagramParser<SequenceModel>
     readonly record struct MessageItem(Message Value) : ISequenceContent;
     readonly record struct NoteItem(Note Value) : ISequenceContent;
     readonly record struct ActivationItem(Activation Value) : ISequenceContent;
-    readonly record struct AutoNumberItem(bool Value) : ISequenceContent;
+    readonly record struct AutoNumberItem(bool Enabled, int Start, int Step) : ISequenceContent;
+    readonly record struct DestroyItem(string Id) : ISequenceContent;
+    readonly record struct BoxItem(string? Color, string? Title) : ISequenceContent;
     readonly record struct TitleItem(string Value) : ISequenceContent;
     readonly record struct BlockMarkerItem(string Keyword, string Text) : ISequenceContent;
 }
