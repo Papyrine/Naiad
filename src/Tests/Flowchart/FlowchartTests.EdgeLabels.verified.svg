@@ -112,7 +112,7 @@
   <g
     transform="translate(20,20)">
     <path
-      d="M37.7,85.58 L46.79,91.65 C55.88,97.72 74.07,109.86 92.25,115.93 C110.43,122 128.62,122 137.71,122 L146.8,122"
+      d="M37.7,60.42 L46.79,54.35 C55.88,48.28 74.07,36.14 92.25,30.07 C110.43,24 128.62,24 137.71,24 L146.8,24"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -120,7 +120,7 @@
       class="flowchart-link" />
     <rect
       x="72.7"
-      y="107.5"
+      y="9.5"
       width="39.1"
       height="29"
       fill="rgba(232,232,232,0.8)"
@@ -128,7 +128,7 @@
       class="edgeLabel" />
     <foreignObject
       x="72.7"
-      y="107.5"
+      y="9.5"
       width="39.1"
       height="29"
       class="edgeLabel">
@@ -141,7 +141,7 @@
       </div>
     </foreignObject>
     <path
-      d="M37.7,60.42 L46.79,54.35 C55.88,48.28 74.07,36.14 92.25,30.07 C110.43,24 128.62,24 137.71,24 L146.8,24"
+      d="M37.7,85.58 L46.79,91.65 C55.88,97.72 74.07,109.86 92.25,115.93 C110.43,122 128.62,122 137.71,122 L146.8,122"
       fill="none"
       stroke="#333333"
       stroke-width="2"
@@ -149,7 +149,7 @@
       class="flowchart-link" />
     <rect
       x="76.55"
-      y="9.5"
+      y="107.5"
       width="31.4"
       height="29"
       fill="rgba(232,232,232,0.8)"
@@ -157,7 +157,7 @@
       class="edgeLabel" />
     <foreignObject
       x="76.55"
-      y="9.5"
+      y="107.5"
       width="31.4"
       height="29"
       class="edgeLabel">
@@ -188,12 +188,12 @@
       </div>
     </foreignObject>
     <path
-      d="M146.8,98 H184.5 V146 H146.8 Z"
+      d="M146.8,0 H184.5 V48 H146.8 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
       x="146.8"
-      y="98"
+      y="0"
       width="37.7"
       height="48"
       class="nodeLabel">
@@ -206,12 +206,12 @@
       </div>
     </foreignObject>
     <path
-      d="M146.8,0 H184.5 V48 H146.8 Z"
+      d="M146.8,98 H184.5 V146 H146.8 Z"
       fill="#ECECFF"
       stroke="#9370DB" />
     <foreignObject
       x="146.8"
-      y="0"
+      y="98"
       width="37.7"
       height="48"
       class="nodeLabel">

@@ -33,15 +33,6 @@
       points="140.4,100 136.4,93.07 144.4,93.07"
       fill="#333" />
     <line
-      x1="150.42"
-      y1="108"
-      x2="221.33"
-      y2="188"
-      stroke="#333" />
-    <polygon
-      points="221.33,188 213.74,185.47 219.73,180.16"
-      fill="#333" />
-    <line
       x1="130.38"
       y1="108"
       x2="59.47"
@@ -49,6 +40,15 @@
       stroke="#333" />
     <polygon
       points="59.47,188 61.07,180.16 67.06,185.47"
+      fill="#333" />
+    <line
+      x1="150.42"
+      y1="108"
+      x2="221.33"
+      y2="188"
+      stroke="#333" />
+    <polygon
+      points="221.33,188 213.74,185.47 219.73,180.16"
       fill="#333" />
     <rect
       x="90.4"
@@ -64,22 +64,6 @@
       fill="#333"
       stroke="#333" />
     <rect
-      x="200.4"
-      y="188"
-      width="80.4"
-      height="40"
-      rx="5"
-      ry="5"
-      fill="#ECECFF"
-      stroke="#9370DB" />
-    <text
-      x="240.6"
-      y="208"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="14px"
-      font-family="Arial, sans-serif">State2</text>
-    <rect
       x="0"
       y="188"
       width="80.4"
@@ -90,6 +74,22 @@
       stroke="#9370DB" />
     <text
       x="40.2"
+      y="208"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">State2</text>
+    <rect
+      x="200.4"
+      y="188"
+      width="80.4"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="240.6"
       y="208"
       text-anchor="middle"
       dominant-baseline="middle"

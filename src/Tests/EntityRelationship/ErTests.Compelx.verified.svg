@@ -178,62 +178,6 @@
       font-family="Arial, sans-serif"
       fill="#333">contains</text>
     <path
-      d="M589.63,496 L595.98,505.67 C602.34,515.33 615.06,534.67 620,554 C624.95,573.33 622.12,592.67 620.7,602.33 L619.29,612"
-      fill="none"
-      stroke="#333" />
-    <line
-      x1="596.22"
-      y1="506.03"
-      x2="589.63"
-      y2="496"
-      stroke="#333" />
-    <line
-      x1="596.22"
-      y1="506.03"
-      x2="585.45"
-      y2="498.75"
-      stroke="#333" />
-    <line
-      x1="596.22"
-      y1="506.03"
-      x2="593.8"
-      y2="493.25"
-      stroke="#333" />
-    <circle
-      cx="599.52"
-      cy="511.04"
-      r="4"
-      fill="#fff"
-      stroke="#333" />
-    <line
-      x1="615.35"
-      y1="604.35"
-      x2="625.25"
-      y2="605.8"
-      stroke="#333" />
-    <line
-      x1="616.22"
-      y1="598.41"
-      x2="626.12"
-      y2="599.86"
-      stroke="#333" />
-    <rect
-      x="597.38"
-      y="546"
-      width="60.8"
-      height="16"
-      fill="rgba(232,232,232,0.8)"
-      stroke="none"
-      class="edgeLabel" />
-    <text
-      x="627.78"
-      y="554"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="12px"
-      font-family="Arial, sans-serif"
-      fill="#333">ships to</text>
-    <path
       d="M523.85,496 L523.85,505.67 C523.85,515.33 523.85,534.67 528.79,554 C533.74,573.33 543.62,592.67 548.57,602.33 L553.51,612"
       fill="none"
       stroke="#333" />
@@ -283,6 +227,62 @@
       class="edgeLabel" />
     <text
       x="523.85"
+      y="554"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">ships to</text>
+    <path
+      d="M589.63,496 L595.98,505.67 C602.34,515.33 615.06,534.67 620,554 C624.95,573.33 622.12,592.67 620.7,602.33 L619.29,612"
+      fill="none"
+      stroke="#333" />
+    <line
+      x1="596.22"
+      y1="506.03"
+      x2="589.63"
+      y2="496"
+      stroke="#333" />
+    <line
+      x1="596.22"
+      y1="506.03"
+      x2="585.45"
+      y2="498.75"
+      stroke="#333" />
+    <line
+      x1="596.22"
+      y1="506.03"
+      x2="593.8"
+      y2="493.25"
+      stroke="#333" />
+    <circle
+      cx="599.52"
+      cy="511.04"
+      r="4"
+      fill="#fff"
+      stroke="#333" />
+    <line
+      x1="615.35"
+      y1="604.35"
+      x2="625.25"
+      y2="605.8"
+      stroke="#333" />
+    <line
+      x1="616.22"
+      y1="598.41"
+      x2="626.12"
+      y2="599.86"
+      stroke="#333" />
+    <rect
+      x="597.38"
+      y="546"
+      width="60.8"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="627.78"
       y="554"
       text-anchor="middle"
       dominant-baseline="middle"

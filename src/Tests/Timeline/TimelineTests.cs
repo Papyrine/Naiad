@@ -137,4 +137,21 @@ public class TimelineTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // A `<br>` forces a new line inside a period or event box.
+    [Test]
+    public Task LineBreaks()
+    {
+        const string input =
+            """
+            timeline
+                title History
+                2002 : LinkedIn
+                2004 : Facebook<br>Google
+                     : Steam <br/>power
+                2005 : YouTube
+            """;
+
+        return VerifySvg(input);
+    }
 }

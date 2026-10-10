@@ -324,4 +324,48 @@ public class FlowchartTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // A link may start or end on a subgraph rather than on a node inside it; the edge stops at the box.
+    [Test]
+    public Task EdgesToSubgraphs()
+    {
+        const string input =
+            """
+            flowchart TB
+                Client[Client] --> gateway
+                subgraph gateway [Gateway]
+                    Auth[Auth] --> Route[Router]
+                end
+                subgraph services [Services]
+                    Orders[Orders]
+                    Billing[Billing]
+                end
+                gateway --> services
+                services -->|writes| DB[(Database)]
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // Quoted labels lose their quotes and may hold the characters that would otherwise close the shape;
+    // `<br/>` breaks a node or edge label over several lines; and `o--o` / `x--x` carry their circle or
+    // cross at both ends.
+    [Test]
+    public Task QuotedLabelsAndLineBreaks()
+    {
+        const string input =
+            """
+            flowchart LR
+                A["Text (with) [brackets]"] --> B("Round {x}")
+                B --> C{"Is it?"}
+                C -->|"quoted pipe"| D[Line one<br/>Line two<br>Line three]
+                C -- "quoted inline" --> E(["Stadium<br/>two lines"])
+                D o--o F[["Sub"]]
+                E x--x F
+                F <--> G[(Database<br />server)]
+                G -->|first<br/>second| H{{"Hex"}}
+            """;
+
+        return VerifySvg(input);
+    }
 }

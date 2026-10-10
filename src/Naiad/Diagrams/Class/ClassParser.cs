@@ -122,67 +122,45 @@ class ClassParser : IDiagramParser<ClassModel>
                 .Before(CommonParsers.InlineWhitespace)
                 .Before(CommonParsers.LineEnd);
 
-        // Class body content: { ... }
-        Parser<char, (ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods)> parseClassBody;
-        {
-            var annotationLine = Try(annotationParser.Select<IClassBodyContent?>(_ => new AnnotationItem(_)));
-            var methodLine = Try(methodParser.Select<IClassBodyContent?>(_ => new MethodItem(_)));
-            var memberLine = Try(memberParser.Select<IClassBodyContent?>(_ => new MemberItem(_)));
+        // One line of a class body, in the spellings that are understood structurally. A line that fits
+        // none of them is still a member (see ParseLooseMember), so nothing in a body can fail the parse.
+        var bodyLine =
+            OneOf(
+                Try(annotationParser.Select<IClassBodyContent>(_ => new AnnotationItem(_))),
+                Try(methodParser.Select<IClassBodyContent>(_ => new MethodItem(_))),
+                Try(memberParser.Select<IClassBodyContent>(_ => new MemberItem(_))));
 
-            // Try, and a newline rather than LineEnd: the indent before the closing brace must be given
-            // back so the body ends cleanly, and a parser that can match at EOF without consuming would
-            // spin here forever.
-            var emptyLine = Try(
-                CommonParsers.InlineWhitespace
-                    .Then(CommonParsers.Newline)
-                    .ThenReturn<IClassBodyContent?>(null));
+        // Class body: { ... }. As in Mermaid everything up to the closing brace belongs to the body, one
+        // member per line, so the braces may share a line with the members (`class A { +x }`) and may be
+        // followed by trailing whitespace.
+        var classBody =
+            Char('{')
+                .Then(Token(_ => _ != '}').ManyString())
+                .Before(Char('}'))
+                .Select(text => ParseBody(text, bodyLine));
 
-            var contentLine = OneOf(annotationLine, methodLine, memberLine, emptyLine);
+        // Display label: class Animal["Animal with a label"]
+        var classLabel =
+            Char('[')
+                .Then(CommonParsers.DoubleQuotedString
+                    .Or(Token(_ => _ != ']' && _ != '\r' && _ != '\n').ManyString()))
+                .Before(Char(']'));
 
-            parseClassBody = contentLine.Many().Select(items =>
-            {
-                ClassAnnotation? annotation = null;
-                var members = new List<ClassMember>();
-                var methods = new List<ClassMethod>();
-
-                foreach (var item in items)
-                {
-                    switch (item)
-                    {
-                        case AnnotationItem a:
-                            annotation = a.Value;
-                            break;
-                        case MemberItem m:
-                            members.Add(m.Value);
-                            break;
-                        case MethodItem m:
-                            methods.Add(m.Value);
-                            break;
-                    }
-                }
-
-                return (annotation, members, methods);
-            });
-        }
-
-        // Class definition: class ClassName { ... } or class ClassName
+        // Class definition: class ClassName, class ClassName { ... }, class ClassName["Label"] or
+        // class ClassName:::cssClass. Styling is not applied to class diagrams, so the css class is read
+        // and dropped.
         var classDefinitionParser =
             from _ in CommonParsers.InlineWhitespace
             from keyword in String("class")
-            from __ in CommonParsers.RequiredWhitespace
+            from __ in inlineGap
             from name in className
+            from label in Try(CommonParsers.InlineWhitespace.Then(classLabel)).Optional()
+            from cssClass in Try(String(":::").Then(CommonParsers.Identifier)).Optional()
             from ___ in CommonParsers.InlineWhitespace
-            from body in Try(
-                from open in Char('{')
-                from ____ in CommonParsers.LineEnd
-                from content in parseClassBody
-                from _____ in CommonParsers.InlineWhitespace
-                from close in Char('}')
-                from ______ in CommonParsers.LineEnd
-                select content
-            ).Optional()
-            from _______ in CommonParsers.LineEnd.Optional()
-            select CreateClassDefinition(name, body);
+            from body in Try(classBody).Optional()
+            from ____ in CommonParsers.InlineWhitespace
+            from _____ in CommonParsers.LineEnd
+            select CreateClassDefinition(name, label, body);
 
         // A marker token on each side of the line, so `<|--`, `--|>`, `*--`, `--o` and two-sided forms
         // such as `<|--|>` each keep their glyph on the end the author wrote it on.
@@ -275,15 +253,20 @@ class ClassParser : IDiagramParser<ClassModel>
                 Try(classDefinitionParser.Select<IClassContent?>(_ => new ClassDefinitionItem(_))),
                 Try(relationshipParser.Select<IClassContent?>(_ => _)),
                 skipLine.ThenReturn<IClassContent?>(null)
-            ).Many();
+            );
+
+        // The statements must account for the whole input. Without the end-of-input check a line no rule
+        // matches would just end the list, and everything after it would be dropped without an error.
+        var endOfInput =
+            Try(CommonParsers.InlineWhitespace.Then(End));
 
         parser =
             from _ in CommonParsers.InlineWhitespace
             from keyword in String("classDiagram")
             from __ in CommonParsers.InlineWhitespace
             from ___ in CommonParsers.LineEnd
-            from content in parseContent
-            select BuildModel(content);
+            from content in parseContent.ManyThen(endOfInput)
+            select BuildModel(content.Item1);
     }
 
     /// <summary>
@@ -387,7 +370,7 @@ class ClassParser : IDiagramParser<ClassModel>
             return parameters;
         }
 
-        foreach (var param in paramStr.Split(','))
+        foreach (var param in SplitParameters(paramStr))
         {
             var text = param.Trim();
             if (text.Length == 0)
@@ -408,27 +391,213 @@ class ClassParser : IDiagramParser<ClassModel>
                 continue;
             }
 
-            var parts = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            var typed = parts.Length >= 2;
+            // `int age`: the name is the last word and what precedes it the type, which may itself hold
+            // spaces (`Map<string, int> index`).
+            var space = text.LastIndexOf(' ');
+            if (space < 0)
+            {
+                parameters.Add(
+                    new()
+                    {
+                        Name = NormalizeGenerics(text)
+                    });
+                continue;
+            }
+
             parameters.Add(
                 new()
                 {
-                    Name = NormalizeGenerics(typed ? parts[1] : parts[0]),
-                    Type = typed ? NormalizeGenerics(parts[0]) : null
+                    Name = NormalizeGenerics(text[(space + 1)..]),
+                    Type = NormalizeGenerics(text[..space].TrimEnd())
                 });
         }
 
         return parameters;
     }
 
+    static (ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods) ParseBody(
+        string text,
+        Parser<char, IClassBodyContent> bodyLine)
+    {
+        ClassAnnotation? annotation = null;
+        var members = new List<ClassMember>();
+        var methods = new List<ClassMethod>();
+
+        foreach (var range in text.AsSpan().Split('\n'))
+        {
+            var line = text.AsSpan(range).Trim();
+            if (line.IsEmpty ||
+                line.StartsWith("%%"))
+            {
+                continue;
+            }
+
+            var parsed = bodyLine.Parse(line.ToString());
+            var item = parsed.Success ? parsed.Value : ParseLooseMember(line);
+            switch (item)
+            {
+                case AnnotationItem a:
+                    annotation = a.Value;
+                    break;
+                case MemberItem m:
+                    members.Add(m.Value);
+                    break;
+                case MethodItem m:
+                    methods.Add(m.Value);
+                    break;
+            }
+        }
+
+        return (annotation, members, methods);
+    }
+
+    /// <summary>
+    /// Reads a body line the structured parsers could not, the way Mermaid does: every line is a member,
+    /// and one with parentheses is a method. Only the visibility prefix, the parameter list and the
+    /// classifier suffix are picked apart; the rest is kept as written, so a default value
+    /// (<c>+int count = 0</c>), a modifier (<c>+static create()</c>) or a type with spaces in it
+    /// (<c>-Dictionary&lt;string, int&gt; map</c>) is shown rather than failing the diagram.
+    /// </summary>
+    static IClassBodyContent ParseLooseMember(CharSpan line)
+    {
+        var visibility = Visibility.Public;
+        if (TryGetVisibility(line[0], out var marked))
+        {
+            visibility = marked;
+            line = line[1..].TrimStart();
+        }
+
+        var open = line.IndexOf('(');
+        var close = line.LastIndexOf(')');
+        if (open < 0 ||
+            close < open)
+        {
+            var isStatic = line.EndsWith("$");
+            if (isStatic)
+            {
+                line = line[..^1].TrimEnd();
+            }
+
+            return new MemberItem(
+                new()
+                {
+                    Name = NormalizeNestedGenerics(line),
+                    Visibility = visibility,
+                    IsStatic = isStatic
+                });
+        }
+
+        var suffix = line[(close + 1)..].TrimStart();
+        var classifier = suffix.IsEmpty ? '\0' : suffix[0];
+        if (classifier is '$' or '*')
+        {
+            suffix = suffix[1..];
+        }
+
+        var returnType = suffix.TrimStart().TrimStart(':').Trim();
+        var method = new ClassMethod
+        {
+            Name = NormalizeNestedGenerics(line[..open].TrimEnd()),
+            ReturnType = returnType.IsEmpty ? null : NormalizeNestedGenerics(returnType),
+            Visibility = visibility,
+            IsStatic = classifier == '$',
+            IsAbstract = classifier == '*'
+        };
+        method.Parameters.AddRange(ParseParameters(line[(open + 1)..close].ToString()));
+        return new MethodItem(method);
+    }
+
+    static bool TryGetVisibility(char ch, out Visibility visibility)
+    {
+        switch (ch)
+        {
+            case '+':
+                visibility = Visibility.Public;
+                return true;
+            case '-':
+                visibility = Visibility.Private;
+                return true;
+            case '#':
+                visibility = Visibility.Protected;
+                return true;
+            case '~':
+                visibility = Visibility.PackagePrivate;
+                return true;
+            default:
+                visibility = default;
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Rewrites tilde generics that may nest, such as <c>List~Map~String, int~~</c>. A tilde opens an
+    /// argument list when a name follows it and closes one otherwise, which is what tells the two
+    /// adjacent closing tildes there apart from an opening one.
+    /// </summary>
+    static string NormalizeNestedGenerics(CharSpan text)
+    {
+        if (!text.Contains('~'))
+        {
+            return text.ToString();
+        }
+
+        var builder = new StringBuilder(text.Length);
+        for (var i = 0; i < text.Length; i++)
+        {
+            if (text[i] != '~')
+            {
+                builder.Append(text[i]);
+                continue;
+            }
+
+            var opens = i + 1 < text.Length &&
+                        (char.IsLetterOrDigit(text[i + 1]) || text[i + 1] == '_');
+            builder.Append(opens ? '<' : '>');
+        }
+
+        return builder.ToString();
+    }
+
+    // Splits a parameter list on its top-level commas, leaving those inside <>, () and [] alone so a
+    // parameter typed `Map<string, int>` stays in one piece.
+    static List<string> SplitParameters(string text)
+    {
+        var parts = new List<string>();
+        var depth = 0;
+        var start = 0;
+        for (var i = 0; i < text.Length; i++)
+        {
+            switch (text[i])
+            {
+                case '<' or '(' or '[':
+                    depth++;
+                    break;
+                // The `>` of a `=>` arrow closes nothing.
+                case '>' when i > 0 && text[i - 1] == '=':
+                    break;
+                case '>' or ')' or ']' when depth > 0:
+                    depth--;
+                    break;
+                case ',' when depth == 0:
+                    parts.Add(text[start..i]);
+                    start = i + 1;
+                    break;
+            }
+        }
+
+        parts.Add(text[start..]);
+        return parts;
+    }
+
     static ClassDefinition CreateClassDefinition(
         ClassName name,
+        Maybe<string> label,
         Maybe<(ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods)> body)
     {
         var classDef = new ClassDefinition
         {
             Id = name.Id,
-            DisplayName = name.DisplayName
+            DisplayName = label.HasValue ? label.Value : name.DisplayName
         };
 
         if (body.HasValue)

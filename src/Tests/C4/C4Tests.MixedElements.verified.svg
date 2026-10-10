@@ -20,16 +20,6 @@
     <g
       transform="translate(0,50)">
       <path
-        d="M 300 94 L 300 147.5 L 237.06 201"
-        fill="none"
-        stroke="#666"
-        stroke-width="1.5"
-        stroke-dasharray="5,5" />
-      <path
-        d="M 237.06 201 L 239.75 193.47 L 244.93 199.56 Z"
-        fill="#666"
-        stroke="none" />
-      <path
         d="M 80 94 L 80 147.5 L 142.94 201"
         fill="none"
         stroke="#666"
@@ -40,13 +30,13 @@
         fill="#666"
         stroke="none" />
       <path
-        d="M 237.06 281 L 300 334.5 L 300 388"
+        d="M 300 94 L 300 147.5 L 237.06 201"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 300 388 L 296 381.07 L 304 381.07 Z"
+        d="M 237.06 201 L 239.75 193.47 L 244.93 199.56 Z"
         fill="#666"
         stroke="none" />
       <path
@@ -59,38 +49,16 @@
         d="M 80 388 L 76 381.07 L 84 381.07 Z"
         fill="#666"
         stroke="none" />
-      <rect
-        x="220"
-        y="28"
-        width="160"
-        height="66"
-        rx="8"
-        ry="8"
-        fill="#08427B"
+      <path
+        d="M 237.06 281 L 300 334.5 L 300 388"
+        fill="none"
+        stroke="#666"
+        stroke-width="1.5"
+        stroke-dasharray="5,5" />
+      <path
+        d="M 300 388 L 296 381.07 L 304 381.07 Z"
+        fill="#666"
         stroke="none" />
-      <circle
-        cx="300"
-        cy="20"
-        r="20"
-        fill="#08427B"
-        stroke="none" />
-      <text
-        x="300"
-        y="58"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="13px"
-        font-family="Arial, sans-serif"
-        font-weight="bold"
-        fill="#FFFFFF">Buyer</text>
-      <text
-        x="300"
-        y="76"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#FFFFFF">Online shopper</text>
       <rect
         x="0"
         y="28"
@@ -114,9 +82,41 @@
         font-size="13px"
         font-family="Arial, sans-serif"
         font-weight="bold"
-        fill="#FFFFFF">Seller</text>
+        fill="#FFFFFF">Buyer</text>
       <text
         x="80"
+        y="76"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">Online shopper</text>
+      <rect
+        x="220"
+        y="28"
+        width="160"
+        height="66"
+        rx="8"
+        ry="8"
+        fill="#08427B"
+        stroke="none" />
+      <circle
+        cx="300"
+        cy="20"
+        r="20"
+        fill="#08427B"
+        stroke="none" />
+      <text
+        x="300"
+        y="58"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Seller</text>
+      <text
+        x="300"
         y="76"
         text-anchor="middle"
         dominant-baseline="middle"
@@ -150,32 +150,6 @@
         font-family="Arial, sans-serif"
         fill="#FFFFFF">Online marketplace</text>
       <rect
-        x="220"
-        y="388"
-        width="160"
-        height="80"
-        rx="5"
-        ry="5"
-        fill="#999999"
-        stroke="none" />
-      <text
-        x="300"
-        y="419"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="13px"
-        font-family="Arial, sans-serif"
-        font-weight="bold"
-        fill="#FFFFFF">Payment Gateway</text>
-      <text
-        x="300"
-        y="437"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#FFFFFF">Processes payments</text>
-      <rect
         x="0"
         y="388"
         width="160"
@@ -192,7 +166,7 @@
         font-size="13px"
         font-family="Arial, sans-serif"
         font-weight="bold"
-        fill="#FFFFFF">Shipping Service</text>
+        fill="#FFFFFF">Payment Gateway</text>
       <text
         x="80"
         y="437"
@@ -200,9 +174,35 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
+        fill="#FFFFFF">Processes payments</text>
+      <rect
+        x="220"
+        y="388"
+        width="160"
+        height="80"
+        rx="5"
+        ry="5"
+        fill="#999999"
+        stroke="none" />
+      <text
+        x="300"
+        y="419"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="13px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#FFFFFF">Shipping Service</text>
+      <text
+        x="300"
+        y="437"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
         fill="#FFFFFF">Handles delivery</text>
       <rect
-        x="243.2"
+        x="23.2"
         y="139"
         width="113.6"
         height="17"
@@ -211,7 +211,7 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="300"
+        x="80"
         y="147.5"
         text-anchor="middle"
         dominant-baseline="middle"
@@ -219,7 +219,7 @@
         font-family="Arial, sans-serif"
         fill="#666">Browses and buys</text>
       <rect
-        x="29.8"
+        x="249.8"
         y="139"
         width="100.4"
         height="17"
@@ -228,7 +228,7 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="80"
+        x="300"
         y="147.5"
         text-anchor="middle"
         dominant-baseline="middle"
@@ -236,7 +236,7 @@
         font-family="Arial, sans-serif"
         fill="#666">Lists products</text>
       <rect
-        x="236.6"
+        x="16.6"
         y="326"
         width="126.8"
         height="17"
@@ -245,7 +245,7 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="300"
+        x="80"
         y="334.5"
         text-anchor="middle"
         dominant-baseline="middle"
@@ -253,7 +253,7 @@
         font-family="Arial, sans-serif"
         fill="#666">Processes payments</text>
       <rect
-        x="36.4"
+        x="256.4"
         y="326"
         width="87.2"
         height="17"
@@ -262,7 +262,7 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="80"
+        x="300"
         y="334.5"
         text-anchor="middle"
         dominant-baseline="middle"

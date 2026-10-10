@@ -64,7 +64,10 @@ public enum EdgeType
     CrossEnd,
     BiDirectional,
     BiDirectionalCircle,
-    BiDirectionalCross
+    BiDirectionalCross,
+
+    // `~~~`: takes part in layout like any other edge, but is not drawn.
+    Invisible
 }
 
 public enum EdgeStyle

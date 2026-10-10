@@ -8,7 +8,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     const double messageSpacing = 50;
     const double activationWidth = 10;
     const double noteMinWidth = 120;
-    const double noteHeight = 40;
+    const double singleLineNoteHeight = 40;
     const double notePadding = 10;
     const double noteGap = 10;
     const double selfMessageLoopWidth = 40;
@@ -24,7 +24,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     {
         var (participantPositions, width) = CalculateLayout(model, options);
         var (height, elementYPositions) = CalculateHeight(model, options);
-        var headerHeight = HeaderHeight(model);
+        var headerHeight = HeaderHeight(model, options);
 
         var builder = new SvgBuilder();
         builder.Size(width, height);
@@ -71,15 +71,42 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         return builder.Build();
     }
 
-    static double HeaderHeight(SequenceModel model)
+    // The header band is as tall as its tallest participant: a box grows with the lines of its name, and
+    // an actor's name hangs below the figure.
+    static double HeaderHeight(SequenceModel model, RenderOptions options)
     {
-        if (model.Participants.Any(_ => _.Type == ParticipantType.Actor))
+        var height = BoxHeight(model, options);
+        foreach (var participant in model.Participants)
         {
-            return participantHeight + actorLabelHeight;
+            if (participant.Type == ParticipantType.Actor)
+            {
+                height = Math.Max(
+                    height,
+                    participantHeight + actorLabelHeight + ExtraLines(participant.DisplayName, options));
+            }
         }
 
-        return participantHeight;
+        return height;
     }
+
+    // Every participant box shares one height, so a name broken over several lines grows all of them.
+    static double BoxHeight(SequenceModel model, RenderOptions options)
+    {
+        var height = participantHeight;
+        foreach (var participant in model.Participants)
+        {
+            if (participant.Type != ParticipantType.Actor)
+            {
+                height = Math.Max(height, participantHeight + ExtraLines(participant.DisplayName, options));
+            }
+        }
+
+        return height;
+    }
+
+    // The height a label's `<br/>` breaks add beyond its first line.
+    static double ExtraLines(string? text, RenderOptions options) =>
+        (LabelLines.Count(text) - 1) * options.FontSize * SvgBuilder.LineHeightFactor;
 
     /// <summary>
     /// Places the participants and sizes the canvas around everything that hangs off them — notes beside
@@ -140,25 +167,50 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         SequenceModel model, RenderOptions options)
     {
         var elementYPositions = new Dictionary<int, double>();
-        var headerHeight = HeaderHeight(model);
+        var headerHeight = HeaderHeight(model, options);
         var y = options.Padding + headerHeight + messageSpacing;
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : 30;
 
         for (var i = 0; i < model.Elements.Count; i++)
         {
+            var element = model.Elements[i];
+            y += LeadIn(element, options);
             elementYPositions[i] = y + titleOffset;
-            y += GetElementHeight(model.Elements[i]);
+            y += GetElementHeight(element, options);
         }
 
         var totalHeight = y + headerHeight + options.Padding + titleOffset;
         return (totalHeight, elementYPositions);
     }
 
-    static double GetElementHeight(SequenceElement element) =>
+    // Room needed above an element's own position. A message's label sits above its arrow and grows
+    // upwards with each extra line; beside a self-message's loop it is centred, so half its growth is above.
+    static double LeadIn(SequenceElement element, RenderOptions options)
+    {
+        if (element is not Message message)
+        {
+            return 0;
+        }
+
+        var extra = ExtraLines(message.Text, options);
+        if (message.FromId == message.ToId)
+        {
+            return extra / 2;
+        }
+
+        return extra;
+    }
+
+    static double NoteHeight(Note note, RenderOptions options) =>
+        singleLineNoteHeight + ExtraLines(note.Text, options);
+
+    static double GetElementHeight(SequenceElement element, RenderOptions options) =>
         element switch
         {
+            Message message when message.FromId == message.ToId =>
+                messageSpacing + ExtraLines(message.Text, options) / 2,
             Message => messageSpacing,
-            Note => noteHeight + 10,
+            Note note => NoteHeight(note, options) + 10,
             Activation => 0, // Activations don't add height
             _ => messageSpacing
         };
@@ -166,6 +218,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     static void DrawParticipants(SvgBuilder builder, SequenceModel model,
         Dictionary<string, double> positions, double y, RenderOptions options)
     {
+        var boxHeight = BoxHeight(model, options);
         foreach (var participant in model.Participants)
         {
             var x = positions[participant.Id];
@@ -176,27 +229,27 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             }
             else
             {
-                DrawParticipantBox(builder, x, y, participant.DisplayName, options);
+                DrawParticipantBox(builder, x, y, boxHeight, participant.DisplayName, options);
             }
         }
     }
 
-    static void DrawParticipantBox(SvgBuilder builder, double cx, double y,
+    static void DrawParticipantBox(SvgBuilder builder, double cx, double y, double height,
         string text, RenderOptions options)
     {
         builder.AddRect(
             cx - participantWidth / 2,
             y,
             participantWidth,
-            participantHeight,
+            height,
             rx: 3,
             fill: "#ECECFF",
             stroke: "#9370DB",
             strokeWidth: 1);
 
-        builder.AddText(
+        builder.AddTextLines(
             cx,
-            y + participantHeight / 2,
+            y + height / 2,
             text,
             anchor: "middle",
             baseline: "middle",
@@ -259,7 +312,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             strokeWidth: 1);
 
         // Label below
-        builder.AddText(
+        builder.AddTextLines(
             cx,
             legBottom + 4,
             text,
@@ -434,7 +487,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             if (!string.IsNullOrEmpty(msg.Text))
             {
                 var labelText = number.HasValue ? $"{number}. {msg.Text}" : msg.Text;
-                builder.AddText(
+                builder.AddTextLines(
                     fromX + selfMessageLoopWidth + 5,
                     y + loopHeight / 2,
                     labelText,
@@ -468,7 +521,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                         : msg.Text!;
 
                 var midX = (fromX + toX) / 2;
-                builder.AddText(
+                builder.AddTextLines(
                     midX,
                     y - 8,
                     labelText,
@@ -581,6 +634,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         Dictionary<string, double> positions, double y, RenderOptions options)
     {
         var (noteX, noteWidth) = NoteGeometry(note, positions, options);
+        var noteHeight = NoteHeight(note, options);
 
         // Note box (folded corner style)
         const int foldSize = 8;
@@ -607,7 +661,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             strokeWidth: 1);
 
         // Note text
-        builder.AddText(
+        builder.AddTextLines(
             noteX + noteWidth / 2,
             y + noteHeight / 2,
             note.Text,
@@ -639,6 +693,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
+    // A label with `<br/>` breaks is as wide as its longest line.
     static double MeasureText(string text, double fontSize) =>
-        text.Length * fontSize * 0.55;
+        LabelLines.WidestLength(text) * fontSize * 0.55;
 }

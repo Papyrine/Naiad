@@ -182,6 +182,9 @@ class StateParser : IDiagramParser<StateModel>
             from __ in CommonParsers.InlineWhitespace
             from ___ in CommonParsers.LineEnd
             from content in parseContentRecursive
+            // Nothing may be left over: without this a line no rule matches ends the list quietly and the
+            // rest of the diagram is dropped instead of being reported.
+            from end in End
             select BuildModel(content);
     }
 

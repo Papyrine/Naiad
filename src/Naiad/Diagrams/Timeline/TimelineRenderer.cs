@@ -292,7 +292,10 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
     static double NodeHeight(int lineCount, RenderOptions options) =>
         options.FontSize * (1.19 + lineHeight * (Math.Max(lineCount, 1) - 1) + lineHeight * 0.5) + nodePadding;
 
-    /// <summary>Greedy word wrap at the box's text width, as Mermaid's <c>wrap</c> does.</summary>
+    /// <summary>
+    /// Greedy word wrap at the box's text width, as Mermaid's <c>wrap</c> does. A <c>&lt;br&gt;</c> in the
+    /// text always starts a new line, and each of the pieces it separates is wrapped on its own.
+    /// </summary>
     static List<string> WrapLines(string? text, RenderOptions options)
     {
         var lines = new List<string>();
@@ -301,6 +304,16 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
             return lines;
         }
 
+        foreach (var piece in LabelLines.Split(text))
+        {
+            WrapInto(lines, piece, options);
+        }
+
+        return lines;
+    }
+
+    static void WrapInto(List<string> lines, string text, RenderOptions options)
+    {
         var line = new StringBuilder();
         foreach (var word in text.Split((char[]?) null, StringSplitOptions.RemoveEmptyEntries))
         {
@@ -321,7 +334,6 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         }
 
         lines.Add(line.ToString());
-        return lines;
     }
 
     static double MeasureText(string text, double fontSize) =>
