@@ -1,0 +1,341 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 615.45 684"
+  style="max-width: 615.45px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="arrowhead-open"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="inheritance"
+      refX="10"
+      refY="5"
+      markerWidth="12"
+      markerHeight="12"
+      orient="auto">
+      <path
+        d="M0,0 L10,5 L0,10 Z"
+        class="arrowMarkerPath"
+        fill="#fff" />
+    </marker>
+    <marker
+      id="composition"
+      refX="10"
+      refY="5"
+      markerWidth="12"
+      markerHeight="12"
+      orient="auto">
+      <path
+        d="M0,5 L5,0 L10,5 L5,10 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="aggregation"
+      refX="10"
+      refY="5"
+      markerWidth="12"
+      markerHeight="12"
+      orient="auto">
+      <path
+        d="M0,5 L5,0 L10,5 L5,10 Z"
+        class="arrowMarkerPath"
+        fill="#fff" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="366.25"
+      y="384"
+      width="209.2"
+      height="260"
+      fill="none"
+      stroke="#999" />
+    <path
+      d="M385.4,109.96 L367.65,120.3 C349.91,130.64 314.42,151.32 279.18,169.5 C243.95,187.67 208.98,203.34 191.49,211.18 L174,219.02"
+      fill="none"
+      stroke="#333" />
+    <polygon
+      points="385.4,109.96 380.43,118.64 375.4,110"
+      fill="#fff"
+      stroke="#333" />
+    <path
+      d="M467.08,132 L467.71,138.67 C468.33,145.33 469.59,158.67 470.22,172.08 C470.85,185.5 470.85,199 470.85,205.75 L470.85,212.5"
+      fill="none"
+      stroke="#333" />
+    <polygon
+      points="467.08,132 472.87,140.15 462.91,141.09"
+      fill="#fff"
+      stroke="#333" />
+    <path
+      d="M470.85,303.5 L470.85,310.25 C470.85,317 470.85,330.5 470.85,343.92 C470.85,357.33 470.85,370.67 470.85,384 C470.85,397.33 470.85,410.67 470.85,417.33 L470.85,424"
+      fill="none"
+      stroke="#333" />
+    <polygon
+      points="470.85,424 465.85,415.34 475.85,415.34"
+      fill="#333" />
+    <path
+      d="M470.85,474 L470.85,480.67 C470.85,487.33 470.85,500.67 470.85,514 C470.85,527.33 470.85,540.67 470.85,547.33 L470.85,554"
+      fill="none"
+      stroke="#333" />
+    <circle
+      cx="470.85"
+      cy="548"
+      r="6"
+      fill="#fff"
+      stroke="#333" />
+    <rect
+      x="437.55"
+      y="387"
+      width="66.6"
+      height="18"
+      fill="#fff"
+      stroke="none" />
+    <text
+      x="470.85"
+      y="396"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#666">Storage</text>
+    <rect
+      x="173.4"
+      y="48.8"
+      width="152"
+      height="34.4"
+      fill="#FFF5AD"
+      stroke="#AAAA33" />
+    <text
+      x="249.4"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">From Duck till Zebra</text>
+    <path
+      d="M77,97.6 L77,110 C77,122.4 77,147.2 77.78,166.27 C78.55,185.33 80.1,198.67 80.88,205.33 L81.65,212"
+      fill="none"
+      stroke="#AAAA33"
+      stroke-dasharray="3,3" />
+    <rect
+      x="40.6"
+      y="34.4"
+      width="72.8"
+      height="63.2"
+      fill="#FFF5AD"
+      stroke="#AAAA33" />
+    <text
+      x="77"
+      y="51.6"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">can fly</text>
+    <text
+      x="77"
+      y="66"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">can swim</text>
+    <text
+      x="77"
+      y="80.4"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">can dive</text>
+    <rect
+      x="385.4"
+      y="0"
+      width="150.9"
+      height="132"
+      fill="#FFF3E0"
+      stroke="#333" />
+    <text
+      x="460.85"
+      y="20"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">&lt;&lt;abstract&gt;&gt;</text>
+    <text
+      x="460.85"
+      y="40"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Animal</text>
+    <line
+      x1="385.4"
+      y1="60"
+      x2="536.3"
+      y2="60"
+      stroke="#333" />
+    <text
+      x="395.4"
+      y="71"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">+ age : int</text>
+    <text
+      x="395.4"
+      y="91"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">+ gender : String</text>
+    <line
+      x1="385.4"
+      y1="101"
+      x2="536.3"
+      y2="101"
+      stroke="#333" />
+    <text
+      x="395.4"
+      y="112"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">+ isMammal()</text>
+    <rect
+      x="0"
+      y="212"
+      width="174"
+      height="92"
+      fill="#FFFFDE"
+      stroke="#333" />
+    <text
+      x="87"
+      y="232"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Duck</text>
+    <line
+      x1="0"
+      y1="252"
+      x2="174"
+      y2="252"
+      stroke="#333" />
+    <text
+      x="10"
+      y="263"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">+ beakColor : String</text>
+    <line
+      x1="0"
+      y1="273"
+      x2="174"
+      y2="273"
+      stroke="#333" />
+    <text
+      x="10"
+      y="284"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">+ swim()</text>
+    <rect
+      x="391.55"
+      y="212.5"
+      width="158.6"
+      height="91"
+      fill="#FFFFDE"
+      stroke="#333" />
+    <text
+      x="470.85"
+      y="232.5"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">&lt;&lt;Entity&gt;&gt;</text>
+    <text
+      x="470.85"
+      y="252.5"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Fish</text>
+    <line
+      x1="391.55"
+      y1="272.5"
+      x2="550.15"
+      y2="272.5"
+      stroke="#333" />
+    <text
+      x="401.55"
+      y="283.5"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">- sizeInFeet : int</text>
+    <rect
+      x="419.9"
+      y="424"
+      width="101.9"
+      height="50"
+      fill="#FFFFDE"
+      stroke="#333" />
+    <text
+      x="470.85"
+      y="444"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Fish Tank</text>
+    <rect
+      x="406.25"
+      y="554"
+      width="129.2"
+      height="50"
+      fill="#FFFFDE"
+      stroke="#333" />
+    <text
+      x="470.85"
+      y="574"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Water-Filter</text>
+  </g>
+</svg>
