@@ -61,21 +61,38 @@ static class FeasibleTree
      */
     static int TightTree(Graph tree, Graph graph)
     {
-        void Dfs(string v)
+        // Depth-first on an explicit stack rather than by recursion, so a long tight path cannot overflow
+        // the thread's stack. Each edge is tested when the walk reaches it, after everything the earlier
+        // edges led to has joined the tree.
+        var pending = new Stack<(string V, List<EdgeKey> Edges, int Next)>();
+
+        void Enter(string v)
         {
-            var nodeEdges = graph.NodeEdges(v);
-            if (nodeEdges != null)
+            if (graph.NodeEdges(v) is { Count: > 0 } nodeEdges)
             {
-                foreach (var e in nodeEdges)
+                pending.Push((v, nodeEdges, 0));
+            }
+        }
+
+        void Dfs(string start)
+        {
+            Enter(start);
+            while (pending.Count > 0)
+            {
+                var (v, edges, next) = pending.Pop();
+                if (next + 1 < edges.Count)
                 {
-                    var edgeV = e.V;
-                    var w = v == edgeV ? e.W : edgeV;
-                    if (!tree.HasNode(w) && RankUtil.Slack(graph, e) == 0)
-                    {
-                        tree.SetNode(w, new());
-                        tree.SetEdge(v, w, new());
-                        Dfs(w);
-                    }
+                    pending.Push((v, edges, next + 1));
+                }
+
+                var e = edges[next];
+                var edgeV = e.V;
+                var w = v == edgeV ? e.W : edgeV;
+                if (!tree.HasNode(w) && RankUtil.Slack(graph, e) == 0)
+                {
+                    tree.SetNode(w, new());
+                    tree.SetEdge(v, w, new());
+                    Enter(w);
                 }
             }
         }

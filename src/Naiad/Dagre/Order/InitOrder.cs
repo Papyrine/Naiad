@@ -8,23 +8,36 @@ static class InitOrder
         var maxRank = (int) Util.ApplyMax(simpleNodesRanks);
         var layers = Util.Range(maxRank + 1).Select(_ => new List<string>()).ToList();
 
-        void Dfs(string visit)
+        // Depth-first, pre-order, on an explicit stack: the depth is the length of the longest path, and a
+        // few thousand nodes in a chain is enough for a recursive walk to overflow the thread's stack.
+        var pending = new Stack<(List<string> Successors, int Next)>();
+
+        void Visit(string v)
         {
-            if (visited.GetValueOrDefault(visit))
+            if (!visited.TryAdd(v, true))
             {
                 return;
             }
 
-            visited[visit] = true;
-            var node = graph.NodeLabel(visit);
-            layers[node.Rank!.Value].Add(visit);
-            var successors = graph.Successors(visit);
-            if (successors != null)
+            layers[graph.NodeLabel(v).Rank!.Value].Add(v);
+            if (graph.Successors(v) is { Count: > 0 } successors)
             {
-                foreach (var w in successors)
+                pending.Push((successors, 0));
+            }
+        }
+
+        void Dfs(string start)
+        {
+            Visit(start);
+            while (pending.Count > 0)
+            {
+                var (successors, next) = pending.Pop();
+                if (next + 1 < successors.Count)
                 {
-                    Dfs(w);
+                    pending.Push((successors, next + 1));
                 }
+
+                Visit(successors[next]);
             }
         }
 

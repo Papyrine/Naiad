@@ -37,8 +37,37 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
     const double groupIconReservedWidth = 34;
     const double groupIconBox = 28;
 
+    // Services and junctions are placed and connected by id, so two sharing one cannot both be drawn.
+    // Mermaid rejects such a diagram, and saying why is better than the dictionary's own complaint.
+    static void RejectDuplicateIds(ArchitectureModel model)
+    {
+        var kinds = new Dictionary<string, string>(StringComparer.Ordinal);
+
+        void Claim(string id, string kind)
+        {
+            if (kinds.TryGetValue(id, out var owner))
+            {
+                throw new MermaidException($"The {kind} id [{id}] is already in use by another {owner}");
+            }
+
+            kinds[id] = kind;
+        }
+
+        foreach (var service in model.Services)
+        {
+            Claim(service.Id, "service");
+        }
+
+        foreach (var junction in model.Junctions)
+        {
+            Claim(junction.Id, "junction");
+        }
+    }
+
     public SvgDocument Render(ArchitectureModel model, RenderOptions options)
     {
+        RejectDuplicateIds(model);
+
         if (model.Services.Count == 0 &&
             model.Groups.Count == 0)
         {

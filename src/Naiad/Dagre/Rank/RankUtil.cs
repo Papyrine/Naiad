@@ -1,5 +1,15 @@
 static class RankUtil
 {
+    // One node of LongestPath's walk: its out-edges, how many have been dealt with, and the lowest rank
+    // they allow so far.
+    sealed class LongestPathFrame(Graph graph, string v)
+    {
+        public readonly NodeLabel Label = graph.NodeLabel(v);
+        public readonly List<EdgeKey> OutEdges = [..graph.OutEdgesOf(v)];
+        public int Next;
+        public double Rank = double.PositiveInfinity;
+    }
+
     /*
      * Initializes ranks for the input graph using the longest path algorithm. This
      * algorithm scales well and is fast in practice, it yields rather poor
@@ -25,33 +35,48 @@ static class RankUtil
     {
         var visited = new Dictionary<string, bool>(StringComparer.Ordinal);
 
-        double Dfs(string v)
+        // Depth-first, post-order, on an explicit stack rather than by recursion: the depth is the length
+        // of the longest path, which for a long chain of nodes overflows the thread's stack.
+        var pending = new Stack<LongestPathFrame>();
+
+        void Dfs(string start)
         {
-            var label = graph.NodeLabel(v);
-            if (visited.ContainsKey(v))
+            if (!visited.TryAdd(start, true))
             {
-                return label.Rank!.Value;
+                return;
             }
 
-            visited[v] = true;
-
-            var rank = double.PositiveInfinity;
-            foreach (var e in graph.OutEdgesOf(v))
+            pending.Push(new(graph, start));
+            while (pending.Count > 0)
             {
-                var candidate = Dfs(e.W) - graph.FindEdgeLabel(e).Minlen!.Value;
-                if (candidate < rank)
+                var frame = pending.Peek();
+                if (frame.Next == frame.OutEdges.Count)
                 {
-                    rank = candidate;
+                    if (double.IsPositiveInfinity(frame.Rank))
+                    {
+                        frame.Rank = 0;
+                    }
+
+                    frame.Label.Rank = (int) frame.Rank;
+                    pending.Pop();
+                    continue;
+                }
+
+                // An unranked target is ranked first; the edge is looked at again once it has been.
+                var e = frame.OutEdges[frame.Next];
+                if (visited.TryAdd(e.W, true))
+                {
+                    pending.Push(new(graph, e.W));
+                    continue;
+                }
+
+                frame.Next++;
+                var candidate = (double) graph.NodeLabel(e.W).Rank!.Value - graph.FindEdgeLabel(e).Minlen!.Value;
+                if (candidate < frame.Rank)
+                {
+                    frame.Rank = candidate;
                 }
             }
-
-            if (double.IsPositiveInfinity(rank))
-            {
-                rank = 0;
-            }
-
-            label.Rank = (int) rank;
-            return label.Rank.Value;
         }
 
         foreach (var v in graph.Sources())

@@ -328,6 +328,12 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
     static double MeasureText(string text, double fontSize) =>
         text.Length * fontSize * 0.55;
 
+    /// <summary>
+    /// Works out when every task starts and ends. A task starts on its own date, or when the latest of the
+    /// tasks it comes <c>after</c> ends, or - given neither - when the task before it ends. As in Mermaid,
+    /// today stands in where there is nothing to go on: for the first task if it has no date, and for an
+    /// <c>after</c> that names no known task.
+    /// </summary>
     static List<GanttTask> ComputeTaskDates(GanttModel model)
     {
         var allTasks = model.Sections.SelectMany(_ => _.Tasks).ToList();
@@ -337,73 +343,109 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             .DistinctBy(_ => _.Id!)
             .ToDictionary(_ => _.Id!);
 
-        // Default start date if none specified
-        var defaultStart = DateTime.Today;
+        var today = DateTime.Today;
+        var placed = new HashSet<GanttTask>();
 
-        // First pass: compute tasks without dependencies
-        foreach (var task in allTasks)
+        // A task can come after one declared further down, so keep sweeping until a pass places nothing.
+        var progress = true;
+        while (progress && placed.Count < allTasks.Count)
         {
+            progress = false;
+            for (var i = 0; i < allTasks.Count; i++)
+            {
+                if (placed.Contains(allTasks[i]) ||
+                    !TryGetStart(i, out var start))
+                {
+                    continue;
+                }
+
+                Place(allTasks[i], start);
+                progress = true;
+            }
+        }
+
+        // What is left waits on itself, directly or through other tasks. Each starts today unless the
+        // tasks it waits on have been placed by now.
+        for (var i = 0; i < allTasks.Count; i++)
+        {
+            if (placed.Contains(allTasks[i]))
+            {
+                continue;
+            }
+
+            if (!TryGetStart(i, out var start))
+            {
+                start = today;
+            }
+
+            Place(allTasks[i], start);
+        }
+
+        return allTasks;
+
+        bool TryGetStart(int index, out DateTime start)
+        {
+            var task = allTasks[index];
             if (task.StartDate.HasValue)
             {
-                task.ComputedStart = task.StartDate.Value;
-            }
-            else if (string.IsNullOrEmpty(task.AfterTaskId))
-            {
-                task.ComputedStart = defaultStart;
+                start = task.StartDate.Value;
+                return true;
             }
 
+            if (!string.IsNullOrEmpty(task.AfterTaskId))
+            {
+                DateTime? latest = null;
+                foreach (var id in task.AfterTaskId.Split((char[]?) null, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (!taskMap.TryGetValue(id, out var dependsOn))
+                    {
+                        continue;
+                    }
+
+                    if (!placed.Contains(dependsOn))
+                    {
+                        start = default;
+                        return false;
+                    }
+
+                    if (latest is null || dependsOn.ComputedEnd > latest)
+                    {
+                        latest = dependsOn.ComputedEnd;
+                    }
+                }
+
+                start = latest ?? today;
+                return true;
+            }
+
+            if (index == 0)
+            {
+                start = today;
+                return true;
+            }
+
+            var previous = allTasks[index - 1];
+            start = previous.ComputedEnd;
+            return placed.Contains(previous);
+        }
+
+        void Place(GanttTask task, DateTime start)
+        {
+            task.ComputedStart = start;
             if (task.EndDate.HasValue)
             {
                 task.ComputedEnd = task.EndDate.Value;
             }
-            else if (task.Duration.HasValue)
+            else if (task.Duration.HasValue || task.DurationMonths != 0)
             {
-                task.ComputedEnd = task.ComputedStart.Add(task.Duration.Value);
+                task.ComputedEnd = start.AddMonths(task.DurationMonths).Add(task.Duration ?? TimeSpan.Zero);
             }
             else
             {
-                task.ComputedEnd = task.ComputedStart.AddDays(1);
+                task.ComputedEnd = start.AddDays(1);
             }
+
+            placed.Add(task);
         }
-
-        // Second pass: resolve dependencies
-        var changed = true;
-        var maxIterations = 100;
-        while (changed && maxIterations-- > 0)
-        {
-            changed = false;
-            foreach (var task in allTasks)
-            {
-                if (string.IsNullOrEmpty(task.AfterTaskId))
-                {
-                    continue;
-                }
-
-                if (!taskMap.TryGetValue(task.AfterTaskId, out var dependsOn))
-                {
-                    continue;
-                }
-
-                var newStart = dependsOn.ComputedEnd;
-                if (newStart == task.ComputedStart)
-                {
-                    continue;
-                }
-
-                task.ComputedStart = newStart;
-                if (task.Duration.HasValue)
-                {
-                    task.ComputedEnd = task.ComputedStart.Add(task.Duration.Value);
-                }
-                else if (!task.EndDate.HasValue)
-                {
-                    task.ComputedEnd = task.ComputedStart.AddDays(1);
-                }
-
-                changed = true;
-            }
-        }
-
-        return allTasks;
     }
 }
