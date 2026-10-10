@@ -27,5 +27,6 @@ public enum DiagramType
     Packet,
     Radar,
     Treemap,
-    ZenUML
+    ZenUML,
+    C4Dynamic
 }

@@ -64,6 +64,7 @@ public static class Mermaid
             DiagramType.C4Context or
                 DiagramType.C4Container or
                 DiagramType.C4Component or
+                DiagramType.C4Dynamic or
                 DiagramType.C4Deployment =>
                 Render(new C4Parser(), new C4Renderer(), "C4 diagram", input, title, options),
             DiagramType.Requirement =>
@@ -214,6 +215,10 @@ public static class Mermaid
         else if (firstLine.StartsWith("C4Deployment", StringComparison.OrdinalIgnoreCase))
         {
             type = DiagramType.C4Deployment;
+        }
+        else if (firstLine.StartsWith("C4Dynamic", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.C4Dynamic;
         }
         else if (firstLine.StartsWith("requirementDiagram", StringComparison.OrdinalIgnoreCase))
         {

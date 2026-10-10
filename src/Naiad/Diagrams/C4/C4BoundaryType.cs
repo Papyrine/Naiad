@@ -6,5 +6,8 @@ public enum C4BoundaryType
     Container,
     Enterprise,
     Deployment,
-    Node
+    Node,
+
+    /// <summary>A plain <c>Boundary(...)</c>, whose kind is whatever its type argument says.</summary>
+    Generic
 }

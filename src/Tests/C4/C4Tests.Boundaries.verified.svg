@@ -31,13 +31,13 @@
         stroke-width="2"
         style="stroke-dasharray: 8 4" />
       <path
-        d="M 288.43 80.23 L 151.57 255.99"
+        d="M 298 94 L 153 239"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 151.57 255.99 L 152.67 248.06 L 158.98 252.98 Z"
+        d="M 153 239 L 155.07 231.27 L 160.73 236.93 Z"
         fill="#666"
         stroke="none" />
       <path
@@ -276,8 +276,8 @@
         font-family="Arial, sans-serif"
         fill="#FFFFFF">customers</text>
       <rect
-        x="195"
-        y="144.11"
+        x="200.5"
+        y="142.5"
         width="50"
         height="32"
         rx="3"
@@ -285,16 +285,16 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="220"
-        y="153.61"
+        x="225.5"
+        y="152"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Uses</text>
       <text
-        x="220"
-        y="167.61"
+        x="225.5"
+        y="166"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"

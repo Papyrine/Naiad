@@ -7,4 +7,7 @@ public class C4Relationship
     public string? Label { get; set; }
     public string? Technology { get; set; }
     public C4RelationshipDirection Direction { get; set; } = C4RelationshipDirection.Default;
+
+    /// <summary>Set by <c>BiRel</c>: the relationship runs both ways and has an arrowhead at each end.</summary>
+    public bool IsBidirectional { get; set; }
 }

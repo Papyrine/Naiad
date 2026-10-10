@@ -11,5 +11,8 @@ public enum C4ElementType
     ContainerQueue,
     Node,
     NodeL,
-    NodeR
+    NodeR,
+    SystemQueue,
+    ComponentDb,
+    ComponentQueue
 }

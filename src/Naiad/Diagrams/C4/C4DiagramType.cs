@@ -5,5 +5,6 @@ public enum C4DiagramType
     Context,
     Container,
     Component,
-    Deployment
+    Deployment,
+    Dynamic
 }

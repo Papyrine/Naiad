@@ -417,6 +417,58 @@ public class C4Tests : TestBase
         return VerifySvg(input);
     }
 
+    // A plain Boundary with a type, queue and database elements at every level, a two-way relationship,
+    // the long spellings of the directional ones, and the tag and styling statements that are read but
+    // not drawn.
+    [Test]
+    public Task BoundariesQueuesAndTwoWayRelationships()
+    {
+        const string input =
+            """
+            C4Context
+                title Order handling
+                Person(customer, "Customer", $descr="Places orders", $tags="v1")
+                Boundary(shop, "Web shop", "Product team") {
+                    System(storefront, "Storefront", "Takes the orders")
+                    SystemQueue(orders, "Order queue", "Holds orders until they are picked up")
+                    ComponentDb(cache, "Basket cache", "Redis", "Keeps open baskets")
+                }
+                SystemQueue_Ext(courier, "Courier feed")
+                BiRel(customer, storefront, "Browses and buys")
+                Rel_Right(storefront, orders, "Queues")
+                Rel_Down(storefront, cache, "Reads", "RESP")
+                Rel(storefront, courier, "Hands over", $techn="AMQP")
+                UpdateElementStyle(customer, $fontColor="red", $bgColor="grey", $borderColor="red")
+                UpdateRelStyle(customer, storefront, $textColor="blue", $offsetY="-40")
+                UpdateBoundaryStyle(shop, $borderColor="blue")
+                UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // A dynamic diagram numbers its steps with RelIndex, and deployment nodes name their own type.
+    [Test]
+    public Task DynamicWithDeploymentNodes()
+    {
+        const string input =
+            """
+            C4Dynamic
+                title Sign in
+                Deployment_Node(browser, "Customer's computer", "Windows or macOS") {
+                    Container(spa, "Single-Page App", "JavaScript", "The banking front end")
+                }
+                Node(dc, "Data centre") {
+                    Container(api, "API", "", "Serves the front end")
+                    ContainerDb(db, "Database", "PostgreSQL")
+                }
+                RelIndex(1, spa, api, "Submits credentials", "JSON/HTTPS")
+                RelIndex(2, api, db, "Looks up")
+            """;
+
+        return VerifySvg(input);
+    }
+
     static bool Intersects(SvgRect a, SvgRect b)
     {
         const double tolerance = 1.0;
