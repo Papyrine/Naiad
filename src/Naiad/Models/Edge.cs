@@ -23,10 +23,24 @@ public class Edge
     // Layout properties (set by layout engine)
     public List<Position> Points { get; } = [];
 
+    // Where the layout put the label, when it reserved a place for one.
+    Position? laidOutLabelPosition;
+
+    /// <summary>
+    /// The centre of the edge label. A layout that reserves room for the label says where that room is,
+    /// and the label belongs there even if the route is adjusted afterwards; without that, it is the
+    /// midpoint of the route.
+    /// </summary>
     public Position LabelPosition
     {
+        set => laidOutLabelPosition = value;
         get
         {
+            if (laidOutLabelPosition is { } laidOut)
+            {
+                return laidOut;
+            }
+
             if (Points.Count == 0)
             {
                 return Position.Zero;
@@ -49,6 +63,9 @@ public class Edge
             return Points[midIndex];
         }
     }
+
+    internal void ClearLabelPosition() =>
+        laidOutLabelPosition = null;
 
     public bool HasArrowHead =>
         Type is
