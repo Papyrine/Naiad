@@ -26,6 +26,21 @@ static partial class HtmlText
         return lines;
     }
 
+    /// <summary>
+    /// The text colour a label sets on itself, as in <c>&lt;p style="color:#fff"&gt;</c> - what a flowchart
+    /// <c>style</c> or <c>classDef</c> with a <c>color</c> produces - or null when it sets none.
+    /// </summary>
+    public static string? InlineColor(string html)
+    {
+        var match = ColorRegex().Match(html);
+        if (match.Success)
+        {
+            return match.Groups[1].Value.Trim();
+        }
+
+        return null;
+    }
+
     static string Decode(string text)
     {
         if (!text.Contains('&'))
@@ -94,6 +109,10 @@ static partial class HtmlText
 
     [GeneratedRegex(@"<br\s*/?>", RegexOptions.IgnoreCase)]
     private static partial Regex BreakRegex();
+
+    // `color:` inside a style attribute, but not the tail of `background-color:`.
+    [GeneratedRegex("""style\s*=\s*["'][^"']*?(?<![-\w])color\s*:\s*([^;"']+)""", RegexOptions.IgnoreCase)]
+    private static partial Regex ColorRegex();
 
     [GeneratedRegex("<[^>]+>")]
     private static partial Regex TagRegex();

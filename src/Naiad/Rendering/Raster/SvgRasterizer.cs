@@ -186,6 +186,16 @@ static class SvgRasterizer
             }
 
             var color = ResolveColor(style.Fill, style) ?? new Rgba(0x33, 0x33, 0x33, 255);
+
+            // The label's own colour wins over the inherited fill, and is what `currentColor` means to any
+            // icon drawn inside it.
+            if (HtmlText.InlineColor(foreignObject.HtmlContent) is { } inlineColor &&
+                CssColor.TryParse(inlineColor, out var labelColor))
+            {
+                color = labelColor;
+                style.Color = inlineColor;
+            }
+
             var textStyle = TextStyleFrom(style, color, opacity)
                 with
                 {

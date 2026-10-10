@@ -11,6 +11,36 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
 {
     static ConcurrentDictionary<string, FontFamily> familyCache = new(StringComparer.OrdinalIgnoreCase);
 
+    // Families tried, in order, for a character the requested font lacks - CJK, symbols, emoji - so it is
+    // drawn rather than left as an empty box. ImageSharp has no system fallback of its own to ask, so this
+    // names the fonts that usually cover those ranges on Windows, macOS and Linux and keeps whichever of
+    // them are installed.
+    static readonly Lazy<IReadOnlyList<FontFamily>> fallbackFamilies = new(FindFallbackFamilies);
+
+    static readonly string[] fallbackNames =
+    [
+        "Segoe UI", "Segoe UI Symbol", "Microsoft YaHei", "Yu Gothic", "Meiryo", "Malgun Gothic", "SimSun",
+        "Segoe UI Emoji",
+        "PingFang SC", "Hiragino Sans", "Apple SD Gothic Neo", "Apple Symbols", "Apple Color Emoji",
+        "Noto Sans", "Noto Sans CJK SC", "Noto Sans CJK JP", "Noto Sans CJK KR", "Noto Sans Symbols",
+        "Noto Sans Symbols2", "Noto Color Emoji", "DejaVu Sans", "WenQuanYi Micro Hei", "Droid Sans Fallback",
+        "Arial Unicode MS"
+    ];
+
+    static IReadOnlyList<FontFamily> FindFallbackFamilies()
+    {
+        var families = new List<FontFamily>();
+        foreach (var name in fallbackNames)
+        {
+            if (SystemFonts.TryGet(name, out var family))
+            {
+                families.Add(family);
+            }
+        }
+
+        return families;
+    }
+
     Image<Rgba32> image = new(width, height, ToPixel(background));
 
     public void FillPath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, Paint paint, FillRule rule, float opacity)
@@ -39,7 +69,7 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
         var ascent = metrics.HorizontalMetrics.Ascender * unitScale;
         var descent = metrics.HorizontalMetrics.Descender * unitScale;
 
-        var advance = TextMeasurer.MeasureAdvance(text, new(font));
+        var advance = TextMeasurer.MeasureAdvance(text, new(font) { FallbackFontFamilies = fallbackFamilies.Value });
         var penX = style.Anchor switch
         {
             TextAnchorKind.Middle => x - advance.Width / 2,
@@ -61,6 +91,7 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
             Origin = new(penX, top),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
+            FallbackFontFamilies = fallbackFamilies.Value,
         };
         var brush = new SolidBrush(ToColor(style.Color.MultiplyAlpha(style.Opacity)));
         var options = Options(transform, FillRule.NonZero);

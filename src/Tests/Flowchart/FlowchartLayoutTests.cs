@@ -56,6 +56,46 @@ public class FlowchartLayoutTests
         await Assert.That(model.GetNode("B")!.Position.X).IsLessThan(model.GetNode("C")!.Position.X);
     }
 
+    // The layout keeps a slot clear for each edge label. The label used to be put at the midpoint of the
+    // route instead, which is the same place only until the route is adjusted.
+    [Test]
+    public async Task EdgeLabel_StaysInTheSlotTheLayoutReserved()
+    {
+        var model = Layout(
+            """
+            flowchart TD
+                A -->|first| B
+                A -->|second| C
+                B --> D
+                C -->|third| D
+            """);
+
+        foreach (var edge in model.Edges.Where(_ => _.Label is not null))
+        {
+            var reserved = edge.LabelPosition;
+            edge.Points.Insert(1, new(edge.Points[0].X + 500, edge.Points[0].Y));
+
+            await Assert.That(edge.LabelPosition).IsEqualTo(reserved);
+            await Assert.That(reserved.Y).IsBetween(edge.Points[0].Y, edge.Points[^1].Y);
+        }
+    }
+
+    [Test]
+    public async Task EdgeWithoutALabel_ReportsTheMiddleOfItsRoute()
+    {
+        var edge = new Edge
+        {
+            SourceId = "A",
+            TargetId = "B"
+        };
+        edge.Points.AddRange([new(0, 0), new(10, 0), new(10, 20)]);
+
+        await Assert.That(edge.LabelPosition).IsEqualTo(new Position(10, 0));
+
+        edge.LabelPosition = new(3, 4);
+        await Assert.That(edge.LabelPosition).IsEqualTo(new Position(3, 4));
+    }
+
     // Each of these used to throw KeyNotFoundException out of the layout: dagre cannot rank an edge that
     // ends on a cluster.
     [Test]

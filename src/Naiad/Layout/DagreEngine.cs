@@ -105,6 +105,15 @@ class DagreEngine : ILayoutEngine
             {
                 edge.Points.AddRange(label.Points);
             }
+
+            // Dagre keeps a slot clear for each label and reports its centre. Read it back rather than
+            // re-deriving the position from the route: the obstacle router below adds a corner to some
+            // routes, which moves their midpoint off the slot that was reserved.
+            edge.ClearLabelPosition();
+            if (label is { Width: > 0, X: { } labelX, Y: { } labelY })
+            {
+                edge.LabelPosition = new(labelX, labelY);
+            }
         }
 
         EdgeObstacleRouter.Route(diagram);

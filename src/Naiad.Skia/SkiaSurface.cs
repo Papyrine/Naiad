@@ -8,6 +8,9 @@ sealed class SkiaSurface : IRenderSurface
 {
     static ConcurrentDictionary<(string, bool, bool), SKTypeface> typefaceCache = new();
 
+    // The system's choice of typeface for a character the requested font lacks.
+    static ConcurrentDictionary<(int, bool, bool), SKTypeface> fallbackCache = new();
+
     SKBitmap bitmap;
     SKCanvas canvas;
     readonly PngCompression compression;
@@ -45,8 +48,12 @@ sealed class SkiaSurface : IRenderSurface
             IsAntialias = true,
             Style = SKPaintStyle.Stroke,
             StrokeWidth = width,
-            StrokeCap = SKStrokeCap.Round,
-            StrokeJoin = SKStrokeJoin.Round,
+            // SVG's initial values, which is what the markup asks for: Naiad sets neither property. A round
+            // cap adds half the stroke width to each end of every dash, which closed the gaps of a dotted
+            // edge and drew it as a nearly solid line.
+            StrokeCap = SKStrokeCap.Butt,
+            StrokeJoin = SKStrokeJoin.Miter,
+            StrokeMiter = 4,
             Color = ToColor(color.MultiplyAlpha(opacity)),
         };
 
@@ -72,7 +79,10 @@ sealed class SkiaSurface : IRenderSurface
             Color = ToColor(style.Color.MultiplyAlpha(style.Opacity)),
         };
 
-        var width = font.MeasureText(text);
+        // Text the font cannot fully draw is split into runs, each in a font that has its glyphs.
+        var runs = font.ContainsGlyphs(text) ? null : FallbackRuns(text, font, style);
+
+        var width = runs is null ? font.MeasureText(text) : MeasureRuns(runs, style.FontSize);
         var penX = style.Anchor switch
         {
             TextAnchorKind.Middle => x - width / 2,
@@ -91,9 +101,87 @@ sealed class SkiaSurface : IRenderSurface
         canvas.Save();
         canvas.SetMatrix(ToMatrix(transform));
         // penX already carries the anchor offset, so draw left-aligned from it.
-        canvas.DrawText(text, penX, baseline, SKTextAlign.Left, font, skPaint);
+        if (runs is null)
+        {
+            canvas.DrawText(text, penX, baseline, SKTextAlign.Left, font, skPaint);
+        }
+        else
+        {
+            foreach (var (runText, runTypeface) in runs)
+            {
+                using var runFont = new SKFont(runTypeface, style.FontSize);
+                canvas.DrawText(runText, penX, baseline, SKTextAlign.Left, runFont, skPaint);
+                penX += runFont.MeasureText(runText);
+            }
+        }
+
         canvas.Restore();
     }
+
+    static float MeasureRuns(List<(string Text, SKTypeface Typeface)> runs, float fontSize)
+    {
+        var width = 0f;
+        foreach (var (runText, runTypeface) in runs)
+        {
+            using var runFont = new SKFont(runTypeface, fontSize);
+            width += runFont.MeasureText(runText);
+        }
+
+        return width;
+    }
+
+    /// <summary>
+    /// Splits text into runs that share a typeface: the requested one wherever it has the glyph, and for
+    /// the rest whatever the system offers for that character (CJK, symbols, emoji). Without this a
+    /// character the font lacks is drawn as an empty box.
+    /// </summary>
+    static List<(string Text, SKTypeface Typeface)> FallbackRuns(string text, SKFont font, TextStyle style)
+    {
+        var runs = new List<(string Text, SKTypeface Typeface)>();
+        var run = new StringBuilder();
+        var primary = font.Typeface;
+        var runTypeface = primary;
+
+        foreach (var rune in text.EnumerateRunes())
+        {
+            var typeface = primary;
+            if (!font.ContainsGlyph(rune.Value))
+            {
+                // Join controls and variation selectors have no glyph of their own; keep them with the
+                // character they modify rather than hunting for a font.
+                typeface = Rune.GetUnicodeCategory(rune) is System.Globalization.UnicodeCategory.Format or System.Globalization.UnicodeCategory.NonSpacingMark
+                    ? runTypeface
+                    : FallbackFor(rune.Value, primary, style);
+            }
+
+            if (typeface != runTypeface &&
+                run.Length > 0)
+            {
+                runs.Add((run.ToString(), runTypeface));
+                run.Clear();
+            }
+
+            runTypeface = typeface;
+            run.Append(rune.ToString());
+        }
+
+        if (run.Length > 0)
+        {
+            runs.Add((run.ToString(), runTypeface));
+        }
+
+        return runs;
+    }
+
+    static SKTypeface FallbackFor(int codepoint, SKTypeface primary, TextStyle style) =>
+        fallbackCache.GetOrAdd(
+            (codepoint, style.Bold, style.Italic),
+            _ => SKFontManager.Default.MatchCharacter(
+                     primary.FamilyName,
+                     primary.FontStyle,
+                     null,
+                     codepoint) ??
+                 primary);
 
     public void Encode(Stream stream)
     {
