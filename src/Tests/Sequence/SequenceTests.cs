@@ -224,6 +224,35 @@ public class SequenceTests : TestBase
         return VerifySvg(input);
     }
 
+    // Participant boxes with and without a colour, a participant created and destroyed part-way through,
+    // two-headed arrows, hyphenated names, and numbering that starts at 10 and steps by 5.
+    [Test]
+    public Task BoxesAndLifecycle()
+    {
+        const string input =
+            """
+            sequenceDiagram
+                autonumber 10 5
+                box Aqua Front end
+                    actor User
+                    participant web-app as Web App
+                end
+                box Services
+                    participant api
+                end
+                User->>web-app: Open page
+                web-app<<->>api: Handshake
+                create participant Worker
+                api->>Worker: Start job
+                Worker<<-->>api: Progress
+                destroy Worker
+                Worker-->>api: Done
+                api-->>web-app: Result
+            """;
+
+        return VerifySvg(input);
+    }
+
     [Test]
     public Task NestedBlocks()
     {

@@ -11,5 +11,7 @@ public enum MessageType
     SolidCross,      // -x
     DottedCross,     // --x
     SolidAsync,      // -)
-    DottedAsync      // --)
+    DottedAsync,     // --)
+    BiDirectional,       // <<->>
+    DottedBiDirectional  // <<-->>
 }

@@ -24,6 +24,10 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     const double frameTabMinWidth = 50;
     const double frameNestingStep = 10;
     const string frameStroke = "#9370DB";
+
+    // `box` groups: the gap between a box and the participants inside it, and the band its title sits in.
+    const double boxMargin = 10;
+    const double boxTitleBand = 26;
     const double actorHeadRadius = 9;
     const double actorArmSpread = 10;
     const double actorLegSpread = 8;
@@ -62,18 +66,27 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                 fontWeight: "bold");
         }
 
-        var startY = options.Padding + titleOffset;
+        // Participant boxes run the height of the diagram behind everything, with their titles in a band
+        // above the participants.
+        var boxTop = options.Padding + titleOffset;
+        var startY = boxTop + BoxBand(model);
+        DrawBoxes(builder, model, participantPositions, boxTop, height - options.Padding / 2, options);
+
+        // A created participant is drawn where its first message arrives, and a destroyed one stops at its
+        // last, so neither gets the usual box at that end of the diagram.
+        var createdAt = LifeEvents(model, elements, elementYPositions, _ => _.IsCreated, first: true);
+        var destroyedAt = LifeEvents(model, elements, elementYPositions, _ => _.IsDestroyed, first: false);
 
         // `rect` backgrounds go down first, under the lifelines and everything else.
         DrawRectBackgrounds(builder, plan.Frames);
 
         // Draw participants (top)
-        DrawParticipants(builder, model, participantPositions, startY, options);
+        DrawParticipants(builder, model, participantPositions, startY, options, createdAt);
 
         // Draw lifelines
         var lifelineStartY = startY + headerHeight;
         var lifelineEndY = height - options.Padding - headerHeight;
-        DrawLifelines(builder, model, participantPositions, lifelineStartY, lifelineEndY);
+        DrawLifelines(builder, model, participantPositions, lifelineStartY, lifelineEndY, createdAt, destroyedAt, options);
 
         // Activation bars are backdrop for the conversation: they cover the lifeline but must sit under
         // the message arrows, labels and notes that cross them.
@@ -84,10 +97,11 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         DrawFrames(builder, plan.Frames, options);
 
         // Draw elements (messages, notes)
-        DrawElements(builder, elements, model.AutoNumber, participantPositions, elementYPositions, options);
+        DrawElements(builder, elements, model, participantPositions, elementYPositions, createdAt, options);
+        DrawLifeEvents(builder, model, participantPositions, createdAt, destroyedAt, options);
 
         // Draw participants (bottom) - optional, mimics Mermaid behavior
-        DrawParticipants(builder, model, participantPositions, lifelineEndY, options);
+        DrawParticipants(builder, model, participantPositions, lifelineEndY, options, destroyedAt);
 
         return builder.Build();
     }
@@ -151,6 +165,13 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         if (model.Participants.Count > 0)
         {
             maxX = positions[model.Participants[^1].Id] + participantWidth / 2;
+        }
+
+        // A `box` reaches a little beyond the participants it holds.
+        if (model.Boxes.Count > 0)
+        {
+            minX -= boxMargin;
+            maxX += boxMargin;
         }
 
         foreach (var element in plan.Elements)
@@ -268,7 +289,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     {
         var plan = new Plan();
         var headerHeight = HeaderHeight(model, options);
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : 30;
+        var titleOffset = (string.IsNullOrEmpty(model.Title) ? 0 : 30) + BoxBand(model);
         var y = options.Padding + headerHeight + messageSpacing + titleOffset;
 
         // The bottom edge of the lowest thing placed so far, which a frame edge must stay clear of.
@@ -578,12 +599,129 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             _ => messageSpacing
         };
 
-    static void DrawParticipants(SvgBuilder builder, SequenceModel model,
-        Dictionary<string, double> positions, double y, RenderOptions options)
+    // Room above the participants for the titles of `box` groups.
+    static double BoxBand(SequenceModel model)
+    {
+        if (model.Boxes.Any(_ => !string.IsNullOrEmpty(_.Title)))
+        {
+            return boxTitleBand;
+        }
+
+        if (model.Boxes.Count > 0)
+        {
+            return boxMargin;
+        }
+
+        return 0;
+    }
+
+    static void DrawBoxes(SvgBuilder builder, SequenceModel model, Dictionary<string, double> positions,
+        double top, double bottom, RenderOptions options)
+    {
+        foreach (var box in model.Boxes)
+        {
+            var xs = box.ParticipantIds.Where(positions.ContainsKey).Select(_ => positions[_]).ToList();
+            if (xs.Count == 0)
+            {
+                continue;
+            }
+
+            var left = xs.Min() - participantWidth / 2 - boxMargin;
+            var right = xs.Max() + participantWidth / 2 + boxMargin;
+            builder.AddRect(
+                left,
+                top,
+                right - left,
+                bottom - top,
+                fill: box.Color ?? "none",
+                stroke: "#999",
+                strokeWidth: 1);
+
+            if (!string.IsNullOrEmpty(box.Title))
+            {
+                builder.AddText(
+                    (left + right) / 2,
+                    top + boxTitleBand / 2,
+                    LabelLines.Flatten(box.Title),
+                    anchor: "middle",
+                    baseline: "middle",
+                    fontSize: options.FontSize,
+                    fontFamily: options.FontFamily);
+            }
+        }
+    }
+
+    // The y of the first (or last) message involving each participant that matches, which is where a
+    // created participant appears and a destroyed one ends.
+    static Dictionary<string, double> LifeEvents(SequenceModel model, List<SequenceElement> elements,
+        Dictionary<int, double> yPositions, Func<Participant, bool> match, bool first)
+    {
+        var events = new Dictionary<string, double>();
+        foreach (var participant in model.Participants)
+        {
+            if (!match(participant))
+            {
+                continue;
+            }
+
+            for (var i = 0; i < elements.Count; i++)
+            {
+                if (elements[i] is not Message message ||
+                    (message.FromId != participant.Id && message.ToId != participant.Id))
+                {
+                    continue;
+                }
+
+                events[participant.Id] = yPositions[i];
+                if (first)
+                {
+                    break;
+                }
+            }
+        }
+
+        return events;
+    }
+
+    static void DrawLifeEvents(SvgBuilder builder, SequenceModel model, Dictionary<string, double> positions,
+        Dictionary<string, double> createdAt, Dictionary<string, double> destroyedAt, RenderOptions options)
     {
         var boxHeight = BoxHeight(model, options);
         foreach (var participant in model.Participants)
         {
+            var x = positions[participant.Id];
+            if (createdAt.TryGetValue(participant.Id, out var createdY))
+            {
+                if (participant.Type == ParticipantType.Actor)
+                {
+                    DrawActor(builder, x, createdY - participantHeight / 2, participant.DisplayName, options);
+                }
+                else
+                {
+                    DrawParticipantBox(builder, x, createdY - boxHeight / 2, boxHeight, participant.DisplayName, options);
+                }
+            }
+
+            if (destroyedAt.TryGetValue(participant.Id, out var destroyedY))
+            {
+                const double arm = 8;
+                builder.AddLine(x - arm, destroyedY - arm, x + arm, destroyedY + arm, stroke: frameStroke, strokeWidth: 2);
+                builder.AddLine(x - arm, destroyedY + arm, x + arm, destroyedY - arm, stroke: frameStroke, strokeWidth: 2);
+            }
+        }
+    }
+
+    static void DrawParticipants(SvgBuilder builder, SequenceModel model,
+        Dictionary<string, double> positions, double y, RenderOptions options, Dictionary<string, double> skip)
+    {
+        var boxHeight = BoxHeight(model, options);
+        foreach (var participant in model.Participants)
+        {
+            if (skip.ContainsKey(participant.Id))
+            {
+                continue;
+            }
+
             var x = positions[participant.Id];
 
             if (participant.Type == ParticipantType.Actor)
@@ -686,11 +824,23 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     }
 
     static void DrawLifelines(SvgBuilder builder, SequenceModel model,
-        Dictionary<string, double> positions, double startY, double endY)
+        Dictionary<string, double> positions, double startY, double endY,
+        Dictionary<string, double> createdAt, Dictionary<string, double> destroyedAt, RenderOptions options)
     {
+        var defaultStart = startY;
+        var defaultEnd = endY;
         foreach (var participant in model.Participants)
         {
             var x = positions[participant.Id];
+
+            // A created participant's lifeline hangs from the box drawn where it was created.
+            startY = defaultStart;
+            if (createdAt.TryGetValue(participant.Id, out var createdY))
+            {
+                startY = createdY + CreatedHeight(model, participant, options) / 2;
+            }
+
+            endY = destroyedAt.GetValueOrDefault(participant.Id, defaultEnd);
             builder.AddLine(
                 x,
                 startY,
@@ -780,9 +930,21 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    static void DrawElements(SvgBuilder builder, List<SequenceElement> elements, bool autoNumber,
+    // How tall a participant is where it is drawn mid-diagram: its box, or the actor figure and its name.
+    static double CreatedHeight(SequenceModel model, Participant participant, RenderOptions options)
+    {
+        if (participant.Type == ParticipantType.Actor)
+        {
+            return participantHeight + (actorLabelHeight + ExtraLines(participant.DisplayName, options)) * 2;
+        }
+
+        return BoxHeight(model, options);
+    }
+
+    static void DrawElements(SvgBuilder builder, List<SequenceElement> elements, SequenceModel model,
         Dictionary<string, double> positions,
         Dictionary<int, double> yPositions,
+        Dictionary<string, double> createdAt,
         RenderOptions options)
     {
         var messageNumber = 0;
@@ -795,13 +957,23 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             {
                 case Message msg:
                     messageNumber++;
+                    // The message that creates a participant stops at the edge of its box.
+                    var inset = 0.0;
+                    if (createdAt.TryGetValue(msg.ToId, out var createdY) &&
+                        createdY == y &&
+                        msg.FromId != msg.ToId)
+                    {
+                        inset = participantWidth / 2;
+                    }
+
                     DrawMessage(
                         builder,
                         msg,
                         positions,
                         y,
                         options,
-                        autoNumber ? messageNumber : null);
+                        model.AutoNumber ? model.AutoNumberStart + (messageNumber - 1) * model.AutoNumberStep : null,
+                        inset);
                     break;
 
                 case Note note:
@@ -813,14 +985,16 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
     static void DrawMessage(SvgBuilder builder, Message msg,
         Dictionary<string, double> positions, double y,
-        RenderOptions options, int? number)
+        RenderOptions options, int? number, double targetInset = 0)
     {
         var fromX = positions[msg.FromId];
         var toX = positions[msg.ToId];
         var isSelfMessage = msg.FromId == msg.ToId;
+        toX -= Math.Sign(toX - fromX) * targetInset;
 
         var isDotted = msg.Type is MessageType.Dotted or MessageType.DottedArrow
-            or MessageType.DottedOpen or MessageType.DottedCross or MessageType.DottedAsync;
+            or MessageType.DottedOpen or MessageType.DottedCross or MessageType.DottedAsync
+            or MessageType.DottedBiDirectional;
 
         var markerEnd = msg.Type switch
         {
@@ -873,6 +1047,10 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
             // Draw arrowhead manually since line doesn't support marker
             DrawArrowhead(builder, fromX, toX, y, msg.Type);
+            if (msg.Type is MessageType.BiDirectional or MessageType.DottedBiDirectional)
+            {
+                DrawArrowhead(builder, toX, fromX, y, msg.Type);
+            }
 
             // Text above the line
             if (!string.IsNullOrEmpty(msg.Text) || number.HasValue)
@@ -909,6 +1087,8 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             case MessageType.Dotted:
             case MessageType.SolidAsync:
             case MessageType.DottedAsync:
+            case MessageType.BiDirectional:
+            case MessageType.DottedBiDirectional:
                 // Filled arrowhead
                 var backX = toX - direction * arrowSize;
                 builder.AddPolygon([
