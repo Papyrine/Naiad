@@ -40,6 +40,7 @@ public static class DiagramDocs
             DiagramType.C4Container => new("C4 Container", $"{baseUrl}c4.html"),
             DiagramType.C4Component => new("C4 Component", $"{baseUrl}c4.html"),
             DiagramType.C4Deployment => new("C4 Deployment", $"{baseUrl}c4.html"),
+            DiagramType.C4Dynamic => new("C4 Dynamic", $"{baseUrl}c4.html"),
             DiagramType.Block => new("Block", $"{baseUrl}block.html"),
             DiagramType.Kanban => new("Kanban", $"{baseUrl}kanban.html"),
             DiagramType.Quadrant => new("Quadrant", $"{baseUrl}quadrantChart.html"),

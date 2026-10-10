@@ -137,11 +137,10 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         // Resolve each edge's polyline and label point. Positional relationships
         // (Up/Left/Right/Neighbor) are drawn as straight border-to-border lines
         // between the placed nodes; other edges follow the engine-routed polyline.
-        var drawn = new List<(IReadOnlyList<Position> route, bool reversed, double labelX, double labelY, string? label, string? technology)>();
+        var drawn = new List<(IReadOnlyList<Position> route, ArrowEnds arrows, double labelX, double labelY, string? label, string? technology)>();
         foreach (var (edge, rel) in edgePairs)
         {
             IReadOnlyList<Position> route;
-            bool reversed;
             double labelX;
             double labelY;
 
@@ -152,18 +151,16 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
                 route = StraightRoute(
                     (fromNode.Position.X, fromNode.Position.Y, fromNode.Width, fromNode.Height),
                     (toNode.Position.X, toNode.Position.Y, toNode.Width, toNode.Height));
-                reversed = false;
                 (labelX, labelY) = PolylineLabelPoint(route);
             }
             else
             {
                 route = edge.Points;
-                reversed = rel.Direction == C4RelationshipDirection.Back;
                 labelX = edge.LabelPosition.X;
                 labelY = edge.LabelPosition.Y;
             }
 
-            drawn.Add((route, reversed, labelX, labelY, rel.Label, rel.Technology));
+            drawn.Add((route, Arrows(rel), labelX, labelY, rel.Label, rel.Technology));
         }
 
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
@@ -234,9 +231,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             CultureInfo.InvariantCulture, $"translate({bodyOffsetX:0.##},{bodyOffsetY:0.##})"));
 
         // Edge lines first so element boxes sit on top of them.
-        foreach (var (route, reversed, _, _, _, _) in drawn)
+        foreach (var (route, arrows, _, _, _, _) in drawn)
         {
-            DrawRoutedPolyline(builder, route, reversed);
+            DrawRoutedPolyline(builder, route, arrows);
         }
 
         // Element boxes.
@@ -297,7 +294,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         // for the label chips (a wide side label can extend past the boxes). Use
         // the engine-routed polyline when both ends sit in the same container (so
         // a skipping edge routes around its siblings), otherwise a straight line.
-        var edges = new List<(List<Position> route, bool reversed, string? label, string? technology)>();
+        var edges = new List<(List<Position> route, ArrowEnds arrows, string? label, string? technology)>();
         foreach (var rel in model.Relationships)
         {
             if (!elementAbs.TryGetValue(rel.From, out var from) ||
@@ -311,7 +308,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             var route = !IsPositional(rel.Direction) && TryGetRoutedPolyline(rel, out var routed)
                 ? routed
                 : StraightRoute(from, to);
-            edges.Add((route, rel.Direction == C4RelationshipDirection.Back, rel.Label, rel.Technology));
+            edges.Add((route, Arrows(rel), rel.Label, rel.Technology));
         }
 
         // Body bounding box over boundaries, elements and label chips.
@@ -399,9 +396,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         }
 
         var labels = new List<(double x, double y, string label, string? technology)>();
-        foreach (var (route, reversed, label, technology) in edges)
+        foreach (var (route, arrows, label, technology) in edges)
         {
-            var (mx, my) = DrawRoutedPolyline(builder, route, reversed);
+            var (mx, my) = DrawRoutedPolyline(builder, route, arrows);
             if (!string.IsNullOrEmpty(label))
             {
                 labels.Add((mx, my, label, technology));
@@ -674,13 +671,13 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
     /// <summary>
     /// Draws a dashed polyline through the routed layout points with a manual
     /// arrowhead, and returns the point where its label chip should sit. The
-    /// arrowhead is placed at the target end, or at the source end when
-    /// <paramref name="reversed"/> is set (a "back" relationship).
+    /// arrowhead is placed at the target end, at the source end for a "back"
+    /// relationship, or at both for a two-way one.
     /// </summary>
     static (double x, double y) DrawRoutedPolyline(
         SvgBuilder builder,
         IReadOnlyList<Position> points,
-        bool reversed)
+        ArrowEnds arrows)
     {
         if (points.Count < 2)
         {
@@ -701,8 +698,44 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             strokeWidth: 1.5,
             strokeDasharray: "5,5");
 
-        var tip = reversed ? points[0] : points[^1];
-        var prev = reversed ? points[1] : points[^2];
+        if (arrows != ArrowEnds.Source)
+        {
+            DrawArrowhead(builder, points[^1], points[^2]);
+        }
+
+        if (arrows != ArrowEnds.Target)
+        {
+            DrawArrowhead(builder, points[0], points[1]);
+        }
+
+        return PolylineLabelPoint(points);
+    }
+
+    enum ArrowEnds
+    {
+        Target,
+        Source,
+        Both
+    }
+
+    static ArrowEnds Arrows(C4Relationship rel)
+    {
+        if (rel.IsBidirectional)
+        {
+            return ArrowEnds.Both;
+        }
+
+        if (rel.Direction == C4RelationshipDirection.Back)
+        {
+            return ArrowEnds.Source;
+        }
+
+        return ArrowEnds.Target;
+    }
+
+    // An arrowhead with its point at tip, aimed along the line arriving from prev.
+    static void DrawArrowhead(SvgBuilder builder, Position tip, Position prev)
+    {
         var angle = Math.Atan2(tip.Y - prev.Y, tip.X - prev.X);
         const int arrowSize = 8;
         const double arrowAngle = Math.PI / 6;
@@ -715,8 +748,6 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             string.Create(CultureInfo.InvariantCulture, $"M {tip.X:0.##} {tip.Y:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
             fill: "#666",
             stroke: "none");
-
-        return PolylineLabelPoint(points);
     }
 
     /// <summary>Point on the polyline where its label chip should sit.</summary>
@@ -750,11 +781,25 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         (double x, double y, double w, double h) to)
     {
         var angle = Math.Atan2(to.y - from.y, to.x - from.x);
+        var cos = Math.Cos(angle);
+        var sin = Math.Sin(angle);
+        var fromReach = BorderDistance(from.w, from.h, cos, sin);
+        var toReach = BorderDistance(to.w, to.h, cos, sin);
         return
         [
-            new(from.x + Math.Cos(angle) * from.w / 2, from.y + Math.Sin(angle) * from.h / 2),
-            new(to.x - Math.Cos(angle) * to.w / 2, to.y - Math.Sin(angle) * to.h / 2)
+            new(from.x + cos * fromReach, from.y + sin * fromReach),
+            new(to.x - cos * toReach, to.y - sin * toReach)
         ];
+    }
+
+    // How far a box's border is from its centre along a direction. Scaling the half-width and
+    // half-height by the direction instead lands on the ellipse inside the box, which left a diagonal
+    // edge's arrowhead hidden under the box it points at.
+    static double BorderDistance(double width, double height, double cos, double sin)
+    {
+        var horizontal = Math.Abs(cos) < 1e-9 ? double.MaxValue : width / 2 / Math.Abs(cos);
+        var vertical = Math.Abs(sin) < 1e-9 ? double.MaxValue : height / 2 / Math.Abs(sin);
+        return Math.Min(horizontal, vertical);
     }
 
     /// <summary>
@@ -922,6 +967,10 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             C4BoundaryType.Node => "[Node]",
             _ => ""
         };
+        if (!string.IsNullOrEmpty(boundary.TypeLabel))
+        {
+            typeLabel = $"[{boundary.TypeLabel}]";
+        }
         if (!string.IsNullOrEmpty(typeLabel))
         {
             builder.AddText(
@@ -1127,6 +1176,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         }
         else if (element.Type is
                  C4ElementType.ContainerDb or
+                 C4ElementType.ComponentDb or
                  C4ElementType.SystemDb)
         {
             // Draw database shape (cylinder)
@@ -1250,10 +1300,13 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             C4ElementType.Person => personColor,
             C4ElementType.System => systemColor,
             C4ElementType.SystemDb => systemDbColor,
+            C4ElementType.SystemQueue => systemColor,
             C4ElementType.Container => containerColor,
             C4ElementType.ContainerDb => containerDbColor,
             C4ElementType.ContainerQueue => containerColor,
             C4ElementType.Component => componentColor,
+            C4ElementType.ComponentDb => componentColor,
+            C4ElementType.ComponentQueue => componentColor,
             _ => systemColor
         };
     }

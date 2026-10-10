@@ -2,11 +2,56 @@ class C4Parser : IDiagramParser<C4Model>
 {
     static Parser<char, C4Model> parser;
 
+    // Every element keyword, without the `_Ext` that marks an element as external.
+    static readonly Dictionary<string, C4ElementType> elementTypes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Person"] = C4ElementType.Person,
+        ["System"] = C4ElementType.System,
+        ["SystemDb"] = C4ElementType.SystemDb,
+        ["SystemQueue"] = C4ElementType.SystemQueue,
+        ["Container"] = C4ElementType.Container,
+        ["ContainerDb"] = C4ElementType.ContainerDb,
+        ["ContainerQueue"] = C4ElementType.ContainerQueue,
+        ["Component"] = C4ElementType.Component,
+        ["ComponentDb"] = C4ElementType.ComponentDb,
+        ["ComponentQueue"] = C4ElementType.ComponentQueue
+    };
+
+    static readonly Dictionary<string, C4BoundaryType> boundaryTypes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Boundary"] = C4BoundaryType.Generic,
+        ["Enterprise_Boundary"] = C4BoundaryType.Enterprise,
+        ["System_Boundary"] = C4BoundaryType.System,
+        ["Container_Boundary"] = C4BoundaryType.Container,
+        ["Deployment_Node"] = C4BoundaryType.Deployment,
+        ["Node"] = C4BoundaryType.Node,
+        ["Node_L"] = C4BoundaryType.Node,
+        ["Node_R"] = C4BoundaryType.Node
+    };
+
+    static readonly Dictionary<string, C4RelationshipDirection> relationshipTypes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Rel"] = C4RelationshipDirection.Default,
+        ["BiRel"] = C4RelationshipDirection.Default,
+        ["RelIndex"] = C4RelationshipDirection.Default,
+        ["Rel_U"] = C4RelationshipDirection.Up,
+        ["Rel_Up"] = C4RelationshipDirection.Up,
+        ["Rel_D"] = C4RelationshipDirection.Down,
+        ["Rel_Down"] = C4RelationshipDirection.Down,
+        ["Rel_L"] = C4RelationshipDirection.Left,
+        ["Rel_Left"] = C4RelationshipDirection.Left,
+        ["Rel_R"] = C4RelationshipDirection.Right,
+        ["Rel_Right"] = C4RelationshipDirection.Right,
+        ["Rel_Back"] = C4RelationshipDirection.Back,
+        ["Rel_Neighbor"] = C4RelationshipDirection.Neighbor
+    };
+
+    // Statements that are valid C4 but change nothing in what is drawn here: the Update*Style and
+    // UpdateLayoutConfig calls, tag definitions, and the layout and legend switches.
+    static readonly string[] ignoredPrefixes = ["Update", "Add", "LAYOUT_", "Lay_", "SHOW_", "HIDE_"];
+
     static C4Parser()
     {
-        var identifier =
-            Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
-
         var quotedString =
             Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
@@ -22,187 +67,83 @@ class C4Parser : IDiagramParser<C4Model>
             from ____ in CommonParsers.LineEnd
             select title.Trim();
 
-        // Person(id, "label", "description")
-        var personParser =
-            from _ in CommonParsers.InlineWhitespace
-            from type in OneOf(Try(CIString("Person_Ext")), CIString("Person"))
-            from __ in Char('(')
-            from id in identifier
-            from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
-            from label in quotedString
-            from desc in Try(
-                CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
-                .Then(quotedString)
-            ).Optional()
-            from ____ in Char(')')
-            from _____ in CommonParsers.InlineWhitespace
-            from ______ in CommonParsers.LineEnd
-            select new C4Element
-            {
-                Id = id,
-                Label = label,
-                Description = desc.GetValueOrDefault(),
-                Type = C4ElementType.Person,
-                IsExternal = type.Contains("Ext", StringComparison.OrdinalIgnoreCase)
-            };
+        // An argument's value: a quoted string, or bare text up to the next comma or the closing bracket.
+        var argumentValue =
+            quotedString.Or(
+                Token(_ => _ is not (',' or ')' or '"' or '\r' or '\n'))
+                    .ManyString()
+                    .Select(_ => _.Trim()));
 
-        // System(id, "label", "description") or System_Ext
-        var systemParser =
+        // `$tags="v1"` names the argument it sets, wherever it comes in the list.
+        var namedArgument =
+            from dollar in Char('$')
+            from name in Token(char.IsLetterOrDigit).AtLeastOnceString()
             from _ in CommonParsers.InlineWhitespace
-            from type in OneOf(Try(CIString("System_Ext")), CIString("System"))
-            from __ in Char('(')
-            from id in identifier
-            from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
-            from label in quotedString
-            from desc in Try(
-                CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
-                .Then(quotedString)
-            ).Optional()
-            from ____ in Char(')')
-            from _____ in CommonParsers.InlineWhitespace
-            from ______ in CommonParsers.LineEnd
-            select new C4Element
-            {
-                Id = id,
-                Label = label,
-                Description = desc.GetValueOrDefault(),
-                Type = C4ElementType.System,
-                IsExternal = type.Contains("Ext", StringComparison.OrdinalIgnoreCase)
-            };
+            from assign in Char('=')
+            from __ in CommonParsers.InlineWhitespace
+            from value in argumentValue
+            select new Argument(name, value);
 
-        // Optional quoted string with comma prefix
-        var optionalQuotedArg =
-            CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
-                .Then(quotedString);
+        var argument =
+            CommonParsers.InlineWhitespace
+                .Then(Try(namedArgument).Or(argumentValue.Select(_ => new Argument(null, _))))
+                .Before(CommonParsers.InlineWhitespace);
 
-        // SystemDb(id, "label", "description") or SystemDb_Ext
-        var systemDbParser =
+        // Every C4 statement is a call: Keyword(argument, argument, ...)
+        var call =
             from _ in CommonParsers.InlineWhitespace
-            from type in OneOf(Try(CIString("SystemDb_Ext")), CIString("SystemDb"))
-            from __ in Char('(')
-            from id in identifier
-            from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
-            from label in quotedString
-            from desc in Try(optionalQuotedArg).Optional()
-            from ____ in Char(')')
-            from _____ in CommonParsers.InlineWhitespace
-            from ______ in CommonParsers.LineEnd
-            select new C4Element
-            {
-                Id = id,
-                Label = label,
-                Description = desc.GetValueOrDefault(),
-                Type = C4ElementType.SystemDb,
-                IsExternal = type.Contains("Ext", StringComparison.OrdinalIgnoreCase)
-            };
+            from keyword in Token(_ => char.IsLetterOrDigit(_) || _ == '_').AtLeastOnceString()
+            from __ in CommonParsers.InlineWhitespace
+            from open in Char('(')
+            from arguments in argument.Separated(Char(','))
+            from close in Char(')')
+            from ___ in CommonParsers.InlineWhitespace
+            select new Call(keyword, arguments.ToList());
 
-        // Container(id, "label", "tech", "description") or Container_Ext
-        var containerParser =
-            from _ in CommonParsers.InlineWhitespace
-            from type in OneOf(
-                Try(CIString("Container_Ext")),
-                Try(CIString("ContainerDb_Ext")),
-                Try(CIString("ContainerQueue_Ext")),
-                Try(CIString("ContainerDb")),
-                Try(CIString("ContainerQueue")),
-                CIString("Container"))
-            from __ in Char('(')
-            from id in identifier
-            from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
-            from label in quotedString
-            from tech in Try(optionalQuotedArg).Optional()
-            from desc in Try(optionalQuotedArg).Optional()
-            from ____ in Char(')')
-            from _____ in CommonParsers.InlineWhitespace
-            from ______ in CommonParsers.LineEnd
-            select new C4Element
-            {
-                Id = id,
-                Label = label,
-                Technology = tech.GetValueOrDefault(),
-                Description = desc.GetValueOrDefault(),
-                Type = type.Contains("Db", StringComparison.OrdinalIgnoreCase) ? C4ElementType.ContainerDb :
-                       type.Contains("Queue", StringComparison.OrdinalIgnoreCase) ? C4ElementType.ContainerQueue :
-                       C4ElementType.Container,
-                IsExternal = type.Contains("Ext", StringComparison.OrdinalIgnoreCase)
-            };
+        // An element, a relationship, or a call that is read and ignored.
+        var statement =
+            call
+                .Assert(IsStatement, _ => $"Unknown C4 statement '{_.Keyword}'")
+                .Before(CommonParsers.LineEnd)
+                .Select(ToContent);
 
-        // Component(id, "label", "tech", "description")
-        var componentParser =
+        // The accessibility title and description, which are not drawn.
+        var accessibilityLine =
             from _ in CommonParsers.InlineWhitespace
-            from type in OneOf(Try(CIString("Component_Ext")), CIString("Component"))
-            from __ in Char('(')
-            from id in identifier
-            from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
-            from label in quotedString
-            from tech in Try(optionalQuotedArg).Optional()
-            from desc in Try(optionalQuotedArg).Optional()
-            from ____ in Char(')')
-            from _____ in CommonParsers.InlineWhitespace
-            from ______ in CommonParsers.LineEnd
-            select new C4Element
-            {
-                Id = id,
-                Label = label,
-                Technology = tech.GetValueOrDefault(),
-                Description = desc.GetValueOrDefault(),
-                Type = C4ElementType.Component,
-                IsExternal = type.Contains("Ext", StringComparison.OrdinalIgnoreCase)
-            };
+            from keyword in Try(String("accTitle")).Or(String("accDescr"))
+            from boundary in Lookahead(Token(_ => _ is ' ' or '\t' or ':'))
+            from rest in restOfLine
+            from lineEnd in CommonParsers.LineEnd
+            select Unit.Value;
 
-        // Rel(from, to, "label", "tech")
-        var relParser =
+        // `accDescr { ... }` may run over several lines.
+        var multiLineDescription =
             from _ in CommonParsers.InlineWhitespace
-            from keyword in OneOf(
-                Try(CIString("Rel_D")), Try(CIString("Rel_U")),
-                Try(CIString("Rel_L")), Try(CIString("Rel_R")),
-                Try(CIString("Rel_Back")), Try(CIString("Rel_Neighbor")),
-                CIString("Rel"))
-            from ___ in Char('(')
-            from fromId in identifier
-            from ____ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
-            from toId in identifier
-            from label in Try(optionalQuotedArg).Optional()
-            from tech in Try(optionalQuotedArg).Optional()
-            from _____ in Char(')')
-            from ______ in CommonParsers.InlineWhitespace
-            from _______ in CommonParsers.LineEnd
-            select new C4Relationship
-            {
-                From = fromId,
-                To = toId,
-                Label = label.GetValueOrDefault(),
-                Technology = tech.GetValueOrDefault(),
-                Direction = MapRelationshipDirection(keyword)
-            };
+            from keyword in String("accDescr")
+            from __ in CommonParsers.InlineWhitespace
+            from open in Char('{')
+            from text in Token(_ => _ != '}').SkipMany()
+            from close in Char('}')
+            from ___ in CommonParsers.InlineWhitespace
+            from lineEnd in CommonParsers.LineEnd
+            select Unit.Value;
 
         // Skip line (comments, empty lines)
         var skipLine =
-            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+            OneOf(
+                Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment)),
+                Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)),
+                Try(multiLineDescription),
+                Try(accessibilityLine));
 
         // Boundary opening: Type_Boundary(id, "label") {
         var boundaryOpen =
-            from _ in CommonParsers.InlineWhitespace
-            from boundaryType in OneOf(
-                Try(CIString("Container_Boundary")).ThenReturn(C4BoundaryType.Container),
-                Try(CIString("System_Boundary")).ThenReturn(C4BoundaryType.System),
-                Try(CIString("Enterprise_Boundary")).ThenReturn(C4BoundaryType.Enterprise),
-                Try(CIString("Deployment_Node")).ThenReturn(C4BoundaryType.Deployment),
-                Try(CIString("Node_L")).ThenReturn(C4BoundaryType.Node),
-                Try(CIString("Node_R")).ThenReturn(C4BoundaryType.Node),
-                CIString("Node").ThenReturn(C4BoundaryType.Node))
-            from __ in Char('(')
-            from id in identifier
-            from ___ in CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)
-            from label in quotedString
-            from desc in Try(optionalQuotedArg).Optional() // Optional description for nodes
-            from ____ in Char(')')
-            from _____ in CommonParsers.InlineWhitespace
-            from ______ in Char('{')
-            from _______ in CommonParsers.InlineWhitespace
-            from ________ in CommonParsers.LineEnd.Optional()
-            select (id, label, type: boundaryType);
+            from opening in call.Assert(_ => boundaryTypes.ContainsKey(_.Keyword), _ => $"Unknown C4 boundary '{_.Keyword}'")
+            // The brace may sit on the line after the call.
+            from _ in SkipWhitespaces.Then(Char('{'))
+            from __ in CommonParsers.InlineWhitespace
+            from ___ in CommonParsers.LineEnd.Optional()
+            select opening;
 
         // Boundary closing: }
         var boundaryClose =
@@ -211,18 +152,6 @@ class C4Parser : IDiagramParser<C4Model>
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd.Optional()
             select Unit.Value;
-
-        // Element inside boundary (sets BoundaryId later)
-        var boundaryContentItem =
-            OneOf(
-                Try(personParser.Select<IC4Content?>(_ => new ElementItem(_))),
-                Try(systemDbParser.Select<IC4Content?>(_ => new ElementItem(_))),
-                Try(systemParser.Select<IC4Content?>(_ => new ElementItem(_))),
-                Try(containerParser.Select<IC4Content?>(_ => new ElementItem(_))),
-                Try(componentParser.Select<IC4Content?>(_ => new ElementItem(_))),
-                Try(relParser.Select<IC4Content?>(_ => new RelItem(_))),
-                skipLine.ThenReturn<IC4Content?>(null)
-            );
 
         // Assigned just below; boundaryParser captures the variable and only dereferences it at
         // parse time, by which point the real parser is in place.
@@ -233,21 +162,14 @@ class C4Parser : IDiagramParser<C4Model>
             from open in boundaryOpen
             from content in boundaryContentOrNestedBoundary.Until(Lookahead(Try(boundaryClose)))
             from close in boundaryClose
-            select new BoundaryItem(
-                new()
-                {
-                    Id = open.id,
-                    Label = open.label,
-                    Type = open.type
-                },
-                content.ToList()
-            );
+            select new BoundaryItem(ToBoundary(open), content.ToList());
 
         // Content inside boundary: either nested boundary or regular element
         boundaryContentOrNestedBoundary =
             OneOf(
                 Try(boundaryParser.Select<IC4Content?>(_ => _)),
-                boundaryContentItem
+                Try(statement),
+                skipLine.ThenReturn<IC4Content?>(null)
             );
 
         // Content item (top level)
@@ -255,12 +177,7 @@ class C4Parser : IDiagramParser<C4Model>
             OneOf(
                 Try(titleParser.Select<IC4Content?>(_ => new TitleItem(_))),
                 Try(boundaryParser.Select<IC4Content?>(_ => _)),
-                Try(personParser.Select<IC4Content?>(_ => new ElementItem(_))),
-                Try(systemDbParser.Select<IC4Content?>(_ => new ElementItem(_))),
-                Try(systemParser.Select<IC4Content?>(_ => new ElementItem(_))),
-                Try(containerParser.Select<IC4Content?>(_ => new ElementItem(_))),
-                Try(componentParser.Select<IC4Content?>(_ => new ElementItem(_))),
-                Try(relParser.Select<IC4Content?>(_ => new RelItem(_))),
+                Try(statement),
                 skipLine.ThenReturn<IC4Content?>(null)
             );
 
@@ -270,6 +187,7 @@ class C4Parser : IDiagramParser<C4Model>
                 Try(CIString("C4Context")).ThenReturn(C4DiagramType.Context),
                 Try(CIString("C4Container")).ThenReturn(C4DiagramType.Container),
                 Try(CIString("C4Component")).ThenReturn(C4DiagramType.Component),
+                Try(CIString("C4Dynamic")).ThenReturn(C4DiagramType.Dynamic),
                 Try(CIString("C4Deployment")).ThenReturn(C4DiagramType.Deployment)
             );
 
@@ -282,17 +200,123 @@ class C4Parser : IDiagramParser<C4Model>
             select BuildModel(type, result.Item1);
     }
 
-    static C4RelationshipDirection MapRelationshipDirection(string keyword) =>
-        keyword.ToUpperInvariant() switch
+    static bool IsExternal(string keyword) =>
+        keyword.EndsWith("_Ext", StringComparison.OrdinalIgnoreCase);
+
+    static bool TryGetElementType(string keyword, out C4ElementType type)
+    {
+        if (IsExternal(keyword))
         {
-            "REL_U" => C4RelationshipDirection.Up,
-            "REL_D" => C4RelationshipDirection.Down,
-            "REL_L" => C4RelationshipDirection.Left,
-            "REL_R" => C4RelationshipDirection.Right,
-            "REL_BACK" => C4RelationshipDirection.Back,
-            "REL_NEIGHBOR" => C4RelationshipDirection.Neighbor,
-            _ => C4RelationshipDirection.Default
+            keyword = keyword[..^4];
+        }
+
+        return elementTypes.TryGetValue(keyword, out type);
+    }
+
+    static bool IsIgnored(string keyword)
+    {
+        foreach (var prefix in ignoredPrefixes)
+        {
+            if (keyword.StartsWith(prefix, StringComparison.Ordinal))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    static bool IsStatement(Call call) =>
+        TryGetElementType(call.Keyword, out _) ||
+        relationshipTypes.ContainsKey(call.Keyword) ||
+        IsIgnored(call.Keyword);
+
+    static IC4Content? ToContent(Call call)
+    {
+        if (TryGetElementType(call.Keyword, out var elementType))
+        {
+            return new ElementItem(ToElement(call, elementType));
+        }
+
+        if (relationshipTypes.TryGetValue(call.Keyword, out var direction))
+        {
+            return new RelItem(ToRelationship(call, direction));
+        }
+
+        return null;
+    }
+
+    // Person and System take (id, label, description); Container and Component put the technology
+    // between the label and the description.
+    static C4Element ToElement(Call call, C4ElementType type)
+    {
+        var id = call.Positional(0) ?? "";
+        var hasTechnology = type is not (C4ElementType.Person
+            or C4ElementType.System
+            or C4ElementType.SystemDb
+            or C4ElementType.SystemQueue);
+
+        var element = new C4Element
+        {
+            Id = id,
+            Label = call.Positional(1) ?? id,
+            Type = type,
+            IsExternal = IsExternal(call.Keyword)
         };
+
+        if (hasTechnology)
+        {
+            element.Technology = call.Positional(2) ?? call.Named("techn");
+            element.Description = call.Positional(3) ?? call.Named("descr");
+        }
+        else
+        {
+            element.Description = call.Positional(2) ?? call.Named("descr");
+        }
+
+        return element;
+    }
+
+    // Rel(from, to, label, technology). RelIndex puts the step number first, which is read and dropped.
+    static C4Relationship ToRelationship(Call call, C4RelationshipDirection direction)
+    {
+        var first = 0;
+        if (call.Keyword.Equals("RelIndex", StringComparison.OrdinalIgnoreCase))
+        {
+            first = 1;
+        }
+
+        return new()
+        {
+            From = call.Positional(first) ?? "",
+            To = call.Positional(first + 1) ?? "",
+            Label = call.Positional(first + 2),
+            Technology = call.Positional(first + 3) ?? call.Named("techn"),
+            Direction = direction,
+            IsBidirectional = call.Keyword.Equals("BiRel", StringComparison.OrdinalIgnoreCase)
+        };
+    }
+
+    // Boundary, Deployment_Node and Node take a type after the label, shown in the caption in place of
+    // the default. The other boundaries' kind is already in their keyword.
+    static C4Boundary ToBoundary(Call call)
+    {
+        var id = call.Positional(0) ?? "";
+        var type = boundaryTypes[call.Keyword];
+        var boundary = new C4Boundary
+        {
+            Id = id,
+            Label = call.Positional(1) ?? id,
+            Type = type
+        };
+
+        if (type is C4BoundaryType.Generic or C4BoundaryType.Deployment or C4BoundaryType.Node)
+        {
+            boundary.TypeLabel = call.Positional(2) ?? call.Named("type");
+        }
+
+        return boundary;
+    }
 
     static C4Model BuildModel(C4DiagramType type, IEnumerable<IC4Content?> content)
     {
@@ -347,6 +371,56 @@ class C4Parser : IDiagramParser<C4Model>
     }
 
     public Result<char, C4Model> Parse(string input) => parser.Parse(input);
+
+    readonly record struct Argument(string? Name, string Value);
+
+    sealed record Call(string Keyword, List<Argument> Arguments)
+    {
+        // The value in the given place among the unnamed arguments. A place left empty, as in
+        // `Container(api, "API", "", "Serves the app")`, counts as not given.
+        public string? Positional(int index)
+        {
+            foreach (var argument in Arguments)
+            {
+                if (argument.Name != null)
+                {
+                    continue;
+                }
+
+                if (index == 0)
+                {
+                    return NullIfEmpty(argument.Value);
+                }
+
+                index--;
+            }
+
+            return null;
+        }
+
+        public string? Named(string name)
+        {
+            foreach (var argument in Arguments)
+            {
+                if (name.Equals(argument.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return NullIfEmpty(argument.Value);
+                }
+            }
+
+            return null;
+        }
+
+        static string? NullIfEmpty(string value)
+        {
+            if (value.Length == 0)
+            {
+                return null;
+            }
+
+            return value;
+        }
+    }
 
     internal interface IC4Content;
     internal readonly record struct TitleItem(string Value) : IC4Content;
