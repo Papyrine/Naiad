@@ -1,0 +1,344 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 630 578"
+  style="max-width: 630px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="arrowhead-dotted"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="cross"
+      refX="4"
+      refY="4"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M1,1 L7,7 M7,1 L1,7"
+        class="arrowMarkerPath"
+        fill="none" />
+    </marker>
+  </defs>
+  <rect
+    x="50"
+    y="20"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="100"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Alice</text>
+  <rect
+    x="200"
+    y="20"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="250"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Bob</text>
+  <rect
+    x="350"
+    y="20"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="400"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">John</text>
+  <line
+    x1="100"
+    y1="60"
+    x2="100"
+    y2="518"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="250"
+    y1="60"
+    x2="250"
+    y2="518"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="400"
+    y1="60"
+    x2="400"
+    y2="518"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <rect
+    x="20"
+    y="82"
+    width="590"
+    height="358"
+    fill="none"
+    stroke="#9370DB" />
+  <path
+    d="M20,82 H70.8 V95 L63.8,102 H20 Z"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="41.9"
+    y="92"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">loop</text>
+  <text
+    x="340.4"
+    y="92"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[Outer]</text>
+  <rect
+    x="180"
+    y="162"
+    width="420"
+    height="270"
+    fill="none"
+    stroke="#9370DB" />
+  <path
+    d="M180,162 H230 V175 L223,182 H180 Z"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="201.5"
+    y="172"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">alt</text>
+  <text
+    x="415"
+    y="172"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[A]</text>
+  <line
+    x1="180"
+    y1="242"
+    x2="600"
+    y2="242"
+    stroke="#9370DB"
+    stroke-dasharray="3,3" />
+  <text
+    x="390"
+    y="255"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[B]</text>
+  <rect
+    x="190"
+    y="268"
+    width="400"
+    height="156"
+    fill="none"
+    stroke="#9370DB" />
+  <path
+    d="M190,268 H240.8 V281 L233.8,288 H190 Z"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="211.9"
+    y="278"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">loop</text>
+  <text
+    x="415.4"
+    y="278"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[Inner]</text>
+  <line
+    x1="100"
+    y1="140"
+    x2="250"
+    y2="140"
+    stroke="#333" />
+  <polygon
+    points="250,140 242,136 242,144"
+    fill="#333" />
+  <text
+    x="175"
+    y="132"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">before</text>
+  <line
+    x1="250"
+    y1="220"
+    x2="400"
+    y2="220"
+    stroke="#333" />
+  <polygon
+    points="400,220 392,216 392,224"
+    fill="#333" />
+  <text
+    x="325"
+    y="212"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">one</text>
+  <line
+    x1="400"
+    y1="326"
+    x2="250"
+    y2="326"
+    stroke="#333" />
+  <polygon
+    points="250,326 258,322 258,330"
+    fill="#333" />
+  <text
+    x="325"
+    y="318"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">two</text>
+  <path
+    d="M460,376 L572,376 L580,384 L580,416 L460,416 Z"
+    fill="#FFFFCC"
+    stroke="#AAAA33" />
+  <line
+    x1="572"
+    y1="376"
+    x2="572"
+    y2="384"
+    stroke="#AAAA33" />
+  <line
+    x1="572"
+    y1="384"
+    x2="580"
+    y2="384"
+    stroke="#AAAA33" />
+  <text
+    x="520"
+    y="396"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Inside both</text>
+  <line
+    x1="100"
+    y1="468"
+    x2="400"
+    y2="468"
+    stroke="#333" />
+  <polygon
+    points="400,468 392,464 392,472"
+    fill="#333" />
+  <text
+    x="250"
+    y="460"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">after</text>
+  <rect
+    x="50"
+    y="518"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="100"
+    y="538"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Alice</text>
+  <rect
+    x="200"
+    y="518"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="250"
+    y="538"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Bob</text>
+  <rect
+    x="350"
+    y="518"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="400"
+    y="538"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">John</text>
+</svg>

@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 570 652.4"
+  viewBox="0 0 570 664.4"
   style="max-width: 570px;"
   role="graphics-document document">
   <style
@@ -132,21 +132,21 @@
     x1="70"
     y1="100.8"
     x2="70"
-    y2="551.6"
+    y2="563.6"
     stroke="#999"
     stroke-dasharray="5,5" />
   <line
     x1="220"
     y1="100.8"
     x2="220"
-    y2="551.6"
+    y2="563.6"
     stroke="#999"
     stroke-dasharray="5,5" />
   <line
     x1="370"
     y1="100.8"
     x2="370"
-    y2="551.6"
+    y2="563.6"
     stroke="#999"
     stroke-dasharray="5,5" />
   <line
@@ -247,60 +247,60 @@
     font-family="Arial, sans-serif">hard</text>
   <line
     x1="220"
-    y1="451.6"
+    y1="463.6"
     x2="370"
-    y2="451.6"
+    y2="463.6"
     stroke="#333" />
   <polygon
-    points="370,451.6 362,447.6 362,455.6"
+    points="370,463.6 362,459.6 362,467.6"
     fill="#333" />
   <text
     x="295"
-    y="410"
+    y="422"
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
     font-family="Arial, sans-serif">One</text>
   <text
     x="295"
-    y="426.8"
+    y="438.8"
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
     font-family="Arial, sans-serif">two</text>
   <text
     x="295"
-    y="443.6"
+    y="455.6"
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
     font-family="Arial, sans-serif">three</text>
   <path
-    d="M430,501.6 L542,501.6 L550,509.6 L550,541.6 L430,541.6 Z"
+    d="M430,513.6 L542,513.6 L550,521.6 L550,553.6 L430,553.6 Z"
     fill="#FFFFCC"
     stroke="#AAAA33" />
   <line
     x1="542"
-    y1="501.6"
+    y1="513.6"
     x2="542"
-    y2="509.6"
+    y2="521.6"
     stroke="#AAAA33" />
   <line
     x1="542"
-    y1="509.6"
+    y1="521.6"
     x2="550"
-    y2="509.6"
+    y2="521.6"
     stroke="#AAAA33" />
   <text
     x="490"
-    y="521.6"
+    y="533.6"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Single</text>
   <rect
     x="20"
-    y="551.6"
+    y="563.6"
     width="100"
     height="56.8"
     rx="3"
@@ -309,65 +309,65 @@
     stroke="#9370DB" />
   <text
     x="70"
-    y="571.6"
+    y="583.6"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Alice</text>
   <text
     x="70"
-    y="588.4"
+    y="600.4"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Johnson</text>
   <circle
     cx="220"
-    cy="560.6"
+    cy="572.6"
     r="9"
     fill="#ECECFF"
     stroke="#9370DB" />
   <line
     x1="220"
-    y1="569.6"
+    y1="581.6"
     x2="220"
-    y2="582.6"
+    y2="594.6"
     stroke="#9370DB" />
   <line
     x1="210"
-    y1="573.6"
+    y1="585.6"
     x2="230"
-    y2="573.6"
+    y2="585.6"
     stroke="#9370DB" />
   <line
     x1="220"
-    y1="582.6"
+    y1="594.6"
     x2="212"
-    y2="591.6"
+    y2="603.6"
     stroke="#9370DB" />
   <line
     x1="220"
-    y1="582.6"
+    y1="594.6"
     x2="228"
-    y2="591.6"
+    y2="603.6"
     stroke="#9370DB" />
   <text
     x="220"
-    y="595.6"
+    y="607.6"
     text-anchor="middle"
     dominant-baseline="top"
     font-size="14px"
     font-family="Arial, sans-serif">Bob</text>
   <text
     x="220"
-    y="612.4"
+    y="624.4"
     text-anchor="middle"
     dominant-baseline="top"
     font-size="14px"
     font-family="Arial, sans-serif">the Builder</text>
   <rect
     x="320"
-    y="551.6"
+    y="563.6"
     width="100"
     height="56.8"
     rx="3"
@@ -376,7 +376,7 @@
     stroke="#9370DB" />
   <text
     x="370"
-    y="580"
+    y="592"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"

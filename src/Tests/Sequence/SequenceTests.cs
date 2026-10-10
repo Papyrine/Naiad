@@ -179,6 +179,74 @@ public class SequenceTests : TestBase
         return VerifySvg(input);
     }
 
+    // Every kind of block: a frame with its name in the corner and its condition alongside, a dashed
+    // divider for each `else` / `and` / `option`, nesting, and a `rect` background.
+    [Test]
+    public Task Blocks()
+    {
+        const string input =
+            """
+            sequenceDiagram
+                participant Alice
+                participant Bob
+                participant John
+                Alice->>Bob: Hello
+                loop Every minute
+                    Bob->>Alice: ping
+                end
+                alt is sick
+                    Bob->>Alice: Not so good
+                else is well
+                    Bob->>Alice: Feeling fresh
+                end
+                opt Extra response
+                    Bob->>Alice: Thanks
+                end
+                par Alice to Bob
+                    Alice->>Bob: Hello Bob
+                and Alice to John
+                    Alice->>John: Hello John
+                end
+                critical Establish a connection
+                    Alice->>Bob: connect
+                option Network timeout
+                    Alice->>Alice: Log error
+                end
+                break when it fails
+                    Alice->>Bob: failed
+                end
+                rect rgb(191, 223, 255)
+                    Note over Alice,Bob: Highlighted
+                    Alice->>John: Bye
+                end
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task NestedBlocks()
+    {
+        const string input =
+            """
+            sequenceDiagram
+                loop Outer
+                    Alice->>Bob: before
+                    alt A
+                        Bob->>John: one
+                    else B
+                        loop Inner
+                            John->>Bob: two
+                            Note right of John: Inside both
+                        end
+                    end
+                end
+                Alice->>John: after
+            """;
+
+        return VerifySvg(input);
+    }
+
     // `<br/>` breaks participant names, message labels and notes over several lines, and each makes room
     // for the lines it holds.
     [Test]
