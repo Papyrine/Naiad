@@ -20,24 +20,43 @@ static class Alg
         return acc;
     }
 
-    static T DoReduce<T>(string v, bool postorder, HashSet<string> visited, Func<string, List<string>> navigation, Func<T, string, T> fn, T acc)
+    // Depth-first on an explicit stack rather than by recursion, so a long path cannot overflow the
+    // thread's stack.
+    static T DoReduce<T>(string start, bool postorder, HashSet<string> visited, Func<string, List<string>> navigation, Func<T, string, T> fn, T acc)
     {
-        if (visited.Add(v))
+        var pending = new Stack<(string V, List<string> Next, int Index)>();
+
+        void Enter(string v)
         {
+            if (!visited.Add(v))
+            {
+                return;
+            }
+
             if (!postorder)
             {
                 acc = fn(acc, v);
             }
 
-            foreach (var w in navigation(v))
+            pending.Push((v, navigation(v), 0));
+        }
+
+        Enter(start);
+        while (pending.Count > 0)
+        {
+            var (v, next, index) = pending.Pop();
+            if (index == next.Count)
             {
-                acc = DoReduce(w, postorder, visited, navigation, fn, acc);
+                if (postorder)
+                {
+                    acc = fn(acc, v);
+                }
+
+                continue;
             }
 
-            if (postorder)
-            {
-                acc = fn(acc, v);
-            }
+            pending.Push((v, next, index + 1));
+            Enter(next[index]);
         }
 
         return acc;

@@ -147,8 +147,8 @@ public class GanttTests : TestBase
     [Test]
     public async Task DuplicateIdsDoesNotThrow()
     {
-        // Exact repro from issue #20: bare year tokens become duplicate ids ("2025").
-        // Output dates default to today (non-deterministic), so assert it renders rather than snapshot.
+        // Exact repro from issue #20. The bare years were once taken for ids, and duplicate ones at that;
+        // under `dateFormat YYYY` they are the tasks' dates (see GanttDateTests.DateFormat_YearOnly).
         const string input =
             """
             gantt

@@ -82,6 +82,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     public SvgDocument Render(StateModel model, RenderOptions options)
     {
+        // Nothing to lay out: the measuring below takes the extremes of the states and has none to take.
+        if (model.States.Count == 0)
+        {
+            var emptyBuilder = new SvgBuilder();
+            emptyBuilder.Size(0, 0);
+            emptyBuilder.Padding(options.Padding);
+            return emptyBuilder.Build();
+        }
+
         placedLabels.Clear();
         textBounds.Clear();
         lineBounds.Clear();

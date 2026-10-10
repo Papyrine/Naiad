@@ -215,8 +215,48 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         return nodes;
     }
 
+    // A Sankey diagram flows one way, so its links must not lead back to where they started. The column
+    // assignment below pushes a node right of everything that feeds it, and on a cycle it would do that
+    // forever. Mermaid refuses such a diagram too.
+    static void RejectCircularLinks(Dictionary<string, SankeyNode> nodes, List<SankeyLink> links)
+    {
+        var incoming = nodes.Keys.ToDictionary(_ => _, _ => 0);
+        var outgoing = nodes.Keys.ToDictionary(_ => _, _ => new List<string>());
+        foreach (var link in links)
+        {
+            incoming[link.Target]++;
+            outgoing[link.Source].Add(link.Target);
+        }
+
+        // Peel off nodes nothing flows into, and then whatever that frees up. On a cycle some remain.
+        var ready = new Queue<string>(incoming.Where(_ => _.Value == 0).Select(_ => _.Key));
+        var remaining = nodes.Count;
+        while (ready.Count > 0)
+        {
+            remaining--;
+            foreach (var target in outgoing[ready.Dequeue()])
+            {
+                incoming[target]--;
+                if (incoming[target] == 0)
+                {
+                    ready.Enqueue(target);
+                }
+            }
+        }
+
+        if (remaining == 0)
+        {
+            return;
+        }
+
+        var stuck = string.Join(", ", incoming.Where(_ => _.Value > 0).Select(_ => _.Key));
+        throw new MermaidException($"Sankey diagram has a circular link among: {stuck}");
+    }
+
     static void AssignColumns(Dictionary<string, SankeyNode> nodes, SankeyModel model)
     {
+        RejectCircularLinks(nodes, model.Links);
+
         // Find source nodes (no incoming links)
         var links = model.Links;
         var targets = links.Select(_ => _.Target).ToHashSet();

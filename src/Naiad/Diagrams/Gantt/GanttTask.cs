@@ -7,6 +7,9 @@ public class GanttTask
     public DateTime? StartDate { get; set; }
     public string? AfterTaskId { get; set; }
     public TimeSpan? Duration { get; set; }
+
+    // The calendar part of a duration (`2M`, `1y`), which has no fixed length and so cannot be a TimeSpan.
+    public int DurationMonths { get; set; }
     public DateTime? EndDate { get; set; }
     public GanttTaskStatus Status { get; set; } = GanttTaskStatus.None;
     public bool IsCritical { get; set; }

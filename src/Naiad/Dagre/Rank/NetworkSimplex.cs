@@ -109,27 +109,39 @@ static class NetworkSimplex
     public static void InitLowLimValues(Graph tree, string root) =>
         DfsAssignLowLim(tree, new(StringComparer.Ordinal), 1, root, null);
 
+    // Depth-first, post-order, on an explicit stack rather than by recursion: the tree is as deep as the
+    // graph's longest path, and a long chain of nodes overflows the thread's stack.
     public static int DfsAssignLowLim(Graph tree, Dictionary<string, bool> visited, int nextLim, string v, string? parent)
     {
-        var low = nextLim;
-        var label = tree.NodeLabel(v);
+        var pending = new Stack<(string V, string? Parent, int Low, List<string>? Neighbors, int Next)>();
 
-        visited[v] = true;
-        var neighbors = tree.Neighbors(v);
-        if (neighbors != null)
+        void Enter(string node, string? nodeParent)
         {
-            foreach (var w in neighbors)
-            {
-                if (!visited.ContainsKey(w))
-                {
-                    nextLim = DfsAssignLowLim(tree, visited, nextLim, w, v);
-                }
-            }
+            visited[node] = true;
+            pending.Push((node, nodeParent, nextLim, tree.Neighbors(node), 0));
         }
 
-        label.Low = low;
-        label.Lim = nextLim++;
-        label.Parent = parent;
+        Enter(v, parent);
+        while (pending.Count > 0)
+        {
+            var frame = pending.Pop();
+            if (frame.Neighbors is null ||
+                frame.Next == frame.Neighbors.Count)
+            {
+                var label = tree.NodeLabel(frame.V);
+                label.Low = frame.Low;
+                label.Lim = nextLim++;
+                label.Parent = frame.Parent;
+                continue;
+            }
+
+            pending.Push(frame with { Next = frame.Next + 1 });
+            var w = frame.Neighbors[frame.Next];
+            if (!visited.ContainsKey(w))
+            {
+                Enter(w, frame.V);
+            }
+        }
 
         return nextLim;
     }

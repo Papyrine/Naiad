@@ -24,7 +24,11 @@ static class Acyclic
         var stack = new Dictionary<string, bool>(StringComparer.Ordinal);
         var visited = new Dictionary<string, bool>(StringComparer.Ordinal);
 
-        void Dfs(string v)
+        // Depth-first on an explicit stack rather than by recursion, so a long path cannot overflow the
+        // thread's stack. `stack` holds the nodes on the current path; an edge back onto it closes a cycle.
+        var pending = new Stack<(string V, List<EdgeKey> OutEdges, int Next)>();
+
+        void Enter(string v)
         {
             if (!visited.TryAdd(v, true))
             {
@@ -32,19 +36,32 @@ static class Acyclic
             }
 
             stack[v] = true;
-            foreach (var e in graph.OutEdgesOf(v))
+            pending.Push((v, [..graph.OutEdgesOf(v)], 0));
+        }
+
+        void Dfs(string start)
+        {
+            Enter(start);
+            while (pending.Count > 0)
             {
+                var (v, outEdges, next) = pending.Pop();
+                if (next == outEdges.Count)
+                {
+                    stack.Remove(v);
+                    continue;
+                }
+
+                pending.Push((v, outEdges, next + 1));
+                var e = outEdges[next];
                 if (stack.ContainsKey(e.W))
                 {
                     fas.Add(e);
                 }
                 else
                 {
-                    Dfs(e.W);
+                    Enter(e.W);
                 }
             }
-
-            stack.Remove(v);
         }
 
         foreach (var v in graph.Nodes())
