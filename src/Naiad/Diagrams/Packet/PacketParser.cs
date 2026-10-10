@@ -55,7 +55,7 @@ class PacketParser : IDiagramParser<PacketModel>
 
         parser =
             from _ in CommonParsers.InlineWhitespace
-            from __ in OneOf(CIString("packet-beta"), CIString("packet"))
+            from __ in CommonParsers.BetaKeyword("packet")
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd
             from result in contentItem.ManyThen(End)

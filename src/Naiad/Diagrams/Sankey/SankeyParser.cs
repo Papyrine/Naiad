@@ -50,7 +50,7 @@ class SankeyParser : IDiagramParser<SankeyModel>
 
         parser =
             from _ in CommonParsers.InlineWhitespace
-            from __ in OneOf(CIString("sankey-beta"), CIString("sankey"))
+            from __ in CommonParsers.BetaKeyword("sankey")
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd
             from result in contentItem.ManyThen(End)

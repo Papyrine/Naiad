@@ -42,6 +42,15 @@ public static class CommonParsers
     // Indentation for hierarchical diagrams (mindmap, timeline)
     public static readonly Parser<char, int> Indentation;
 
+    /// <summary>
+    /// The opening keyword of a diagram that Mermaid introduced with a <c>-beta</c> suffix, accepted with
+    /// or without it (<c>packet-beta</c> and <c>packet</c>). The suffixed spelling has to be tried first
+    /// and given back whole when it does not match: left to consume the shared prefix and then fail, it
+    /// takes the plain spelling down with it.
+    /// </summary>
+    internal static Parser<char, string> BetaKeyword(string keyword) =>
+        Try(CIString($"{keyword}-beta")).Or(CIString(keyword));
+
     static CommonParsers()
     {
         RequiredWhitespace =
