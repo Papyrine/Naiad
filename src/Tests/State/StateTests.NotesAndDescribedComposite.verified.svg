@@ -1,0 +1,279 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 447.6 590"
+  style="max-width: 447.6px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="0"
+      y="220"
+      width="407.6"
+      height="110"
+      rx="5"
+      ry="5"
+      fill="#F4F4F4"
+      stroke="#666"
+      stroke-width="2" />
+    <text
+      x="203.8"
+      y="235"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Handling the order</text>
+    <line
+      x1="0"
+      y1="250"
+      x2="407.6"
+      y2="250"
+      stroke="#666" />
+    <line
+      x1="203.8"
+      y1="20"
+      x2="203.8"
+      y2="100"
+      stroke="#333" />
+    <polygon
+      points="203.8,100 199.8,93.07 207.8,93.07"
+      fill="#333" />
+    <line
+      x1="203.8"
+      y1="140"
+      x2="203.8"
+      y2="220"
+      stroke="#333" />
+    <polygon
+      points="203.8,220 199.8,213.07 207.8,213.07"
+      fill="#333" />
+    <line
+      x1="203.8"
+      y1="330"
+      x2="203.8"
+      y2="410"
+      stroke="#333" />
+    <polygon
+      points="203.8,410 199.8,403.07 207.8,403.07"
+      fill="#333" />
+    <line
+      x1="203.8"
+      y1="450"
+      x2="203.8"
+      y2="530"
+      stroke="#333" />
+    <polygon
+      points="203.8,530 199.8,523.07 207.8,523.07"
+      fill="#333" />
+    <line
+      x1="40"
+      y1="290"
+      x2="90"
+      y2="290"
+      stroke="#333" />
+    <polygon
+      points="90,290 83.07,294 83.07,286"
+      fill="#333" />
+    <line
+      x1="178.8"
+      y1="290"
+      x2="228.8"
+      y2="290"
+      stroke="#333" />
+    <polygon
+      points="228.8,290 221.87,294 221.87,286"
+      fill="#333" />
+    <line
+      x1="317.6"
+      y1="290"
+      x2="367.6"
+      y2="290"
+      stroke="#333" />
+    <polygon
+      points="367.6,290 360.67,294 360.67,286"
+      fill="#333" />
+    <circle
+      cx="203.8"
+      cy="10"
+      r="10"
+      fill="#333"
+      stroke="#333" />
+    <rect
+      x="155.2"
+      y="100"
+      width="97.2"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="203.8"
+      y="120"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">Received</text>
+    <circle
+      cx="30"
+      cy="290"
+      r="10"
+      fill="#333"
+      stroke="#333" />
+    <rect
+      x="90"
+      y="270"
+      width="88.8"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="134.4"
+      y="290"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">Picking</text>
+    <rect
+      x="228.8"
+      y="270"
+      width="88.8"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="273.2"
+      y="290"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">Packing</text>
+    <circle
+      cx="377.6"
+      cy="290"
+      r="10"
+      fill="none"
+      stroke="#333"
+      stroke-width="2" />
+    <circle
+      cx="377.6"
+      cy="290"
+      r="5"
+      fill="#333"
+      stroke="#333" />
+    <rect
+      x="159.4"
+      y="410"
+      width="88.8"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="203.8"
+      y="430"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">Shipped</text>
+    <circle
+      cx="203.8"
+      cy="540"
+      r="10"
+      fill="none"
+      stroke="#333"
+      stroke-width="2" />
+    <circle
+      cx="203.8"
+      cy="540"
+      r="5"
+      fill="#333"
+      stroke="#333" />
+    <path
+      d="M248.4,150.6 L368.4,150.6 L376.4,158.6 L376.4,205 L248.4,205 Z"
+      fill="#FFFFCC"
+      stroke="#AAAA33" />
+    <line
+      x1="368.4"
+      y1="150.6"
+      x2="368.4"
+      y2="158.6"
+      stroke="#AAAA33" />
+    <line
+      x1="368.4"
+      y1="158.6"
+      x2="376.4"
+      y2="158.6"
+      stroke="#AAAA33" />
+    <text
+      x="312.4"
+      y="170.6"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">Arrives by post</text>
+    <text
+      x="312.4"
+      y="185"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">or by phone</text>
+    <path
+      d="M 241.38 140 Q 241.38 145.3, 261.29 150.6"
+      fill="none"
+      stroke="#333"
+      stroke-dasharray="5,5" />
+    <path
+      d="M64.2,345 L126.6,345 L134.6,353 L134.6,385 L64.2,385 Z"
+      fill="#FFFFCC"
+      stroke="#AAAA33" />
+    <line
+      x1="126.6"
+      y1="345"
+      x2="126.6"
+      y2="353"
+      stroke="#AAAA33" />
+    <line
+      x1="126.6"
+      y1="353"
+      x2="134.6"
+      y2="353"
+      stroke="#AAAA33" />
+    <text
+      x="99.4"
+      y="365"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">Tracked</text>
+    <path
+      d="M 171.68 410 Q 171.68 397.5, 131.52 385"
+      fill="none"
+      stroke="#333"
+      stroke-dasharray="5,5" />
+  </g>
+</svg>

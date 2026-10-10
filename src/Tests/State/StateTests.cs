@@ -38,4 +38,10 @@
 
     [Test]
     public Task LineBreaks() => VerifySvg(StateSamples.LineBreaks);
+
+    [Test]
+    public Task Concurrency() => VerifySvg(StateSamples.Concurrency);
+
+    [Test]
+    public Task NotesAndDescribedComposite() => VerifySvg(StateSamples.NotesAndDescribedComposite);
 }

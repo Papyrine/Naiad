@@ -1,0 +1,337 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 940.8 550"
+  style="max-width: 940.8px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="0"
+      y="100"
+      width="900.8"
+      height="310"
+      rx="5"
+      ry="5"
+      fill="#F4F4F4"
+      stroke="#666"
+      stroke-width="2" />
+    <text
+      x="450.4"
+      y="115"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Active</text>
+    <line
+      x1="0"
+      y1="130"
+      x2="900.8"
+      y2="130"
+      stroke="#666" />
+    <path
+      d="M20,150 L419.2,150 L419.2,390 L20,390 Z"
+      fill="none"
+      stroke="#666"
+      stroke-dasharray="5,5" />
+    <path
+      d="M479.2,150 L641.6,150 L641.6,390 L479.2,390 Z"
+      fill="none"
+      stroke="#666"
+      stroke-dasharray="5,5" />
+    <path
+      d="M701.6,150 L880.8,150 L880.8,390 L701.6,390 Z"
+      fill="none"
+      stroke="#666"
+      stroke-dasharray="5,5" />
+    <line
+      x1="450.4"
+      y1="20"
+      x2="450.4"
+      y2="100"
+      stroke="#333" />
+    <polygon
+      points="450.4,100 446.4,93.07 454.4,93.07"
+      fill="#333" />
+    <line
+      x1="450.4"
+      y1="410"
+      x2="450.4"
+      y2="490"
+      stroke="#333" />
+    <polygon
+      points="450.4,490 446.4,483.07 454.4,483.07"
+      fill="#333" />
+    <line
+      x1="214.6"
+      y1="190"
+      x2="214.6"
+      y2="240"
+      stroke="#333" />
+    <polygon
+      points="214.6,240 210.6,233.07 218.6,233.07"
+      fill="#333" />
+    <path
+      d="M 157.6 260 C 135.1 260, 107.6 282.5, 107.6 305 L 107.6 305 C 107.6 327.5, 139.3 350, 161.8 350"
+      fill="none"
+      stroke="#333" />
+    <polygon
+      points="161.8,350 154.87,354 154.87,346"
+      fill="#333" />
+    <rect
+      x="46"
+      y="297"
+      width="123.2"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="107.6"
+      y="305"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">EvNumLockPressed</text>
+    <path
+      d="M 267.4 350 C 289.9 350, 321.6 327.5, 321.6 305 L 321.6 305 C 321.6 282.5, 294.1 260, 271.6 260"
+      fill="none"
+      stroke="#333" />
+    <polygon
+      points="271.6,260 278.53,256 278.53,264"
+      fill="#333" />
+    <rect
+      x="260"
+      y="297"
+      width="123.2"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="321.6"
+      y="305"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">EvNumLockPressed</text>
+    <line
+      x1="560.4"
+      y1="190"
+      x2="560.4"
+      y2="240"
+      stroke="#333" />
+    <polygon
+      points="560.4,240 556.4,233.07 564.4,233.07"
+      fill="#333" />
+    <line
+      x1="560.4"
+      y1="280"
+      x2="560.4"
+      y2="330"
+      stroke="#333" />
+    <polygon
+      points="560.4,330 556.4,323.07 564.4,323.07"
+      fill="#333" />
+    <rect
+      x="495.2"
+      y="287"
+      width="130.4"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="560.4"
+      y="295"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">EvCapsLockPressed</text>
+    <line
+      x1="791.2"
+      y1="190"
+      x2="791.2"
+      y2="240"
+      stroke="#333" />
+    <polygon
+      points="791.2,240 787.2,233.07 795.2,233.07"
+      fill="#333" />
+    <line
+      x1="791.2"
+      y1="280"
+      x2="791.2"
+      y2="330"
+      stroke="#333" />
+    <polygon
+      points="791.2,330 787.2,323.07 795.2,323.07"
+      fill="#333" />
+    <rect
+      x="718.8"
+      y="287"
+      width="144.8"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="791.2"
+      y="295"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">EvScrollLockPressed</text>
+    <circle
+      cx="450.4"
+      cy="10"
+      r="10"
+      fill="#333"
+      stroke="#333" />
+    <circle
+      cx="214.6"
+      cy="180"
+      r="10"
+      fill="#333"
+      stroke="#333" />
+    <rect
+      x="157.6"
+      y="240"
+      width="114"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="214.6"
+      y="260"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">NumLockOff</text>
+    <rect
+      x="161.8"
+      y="330"
+      width="105.6"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="214.6"
+      y="350"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">NumLockOn</text>
+    <circle
+      cx="560.4"
+      cy="180"
+      r="10"
+      fill="#333"
+      stroke="#333" />
+    <rect
+      x="499.2"
+      y="240"
+      width="122.4"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="560.4"
+      y="260"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">CapsLockOff</text>
+    <rect
+      x="503.4"
+      y="330"
+      width="114"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="560.4"
+      y="350"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">CapsLockOn</text>
+    <circle
+      cx="791.2"
+      cy="180"
+      r="10"
+      fill="#333"
+      stroke="#333" />
+    <rect
+      x="721.6"
+      y="240"
+      width="139.2"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="791.2"
+      y="260"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">ScrollLockOff</text>
+    <rect
+      x="725.8"
+      y="330"
+      width="130.8"
+      height="40"
+      rx="5"
+      ry="5"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="791.2"
+      y="350"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">ScrollLockOn</text>
+    <circle
+      cx="450.4"
+      cy="500"
+      r="10"
+      fill="none"
+      stroke="#333"
+      stroke-width="2" />
+    <circle
+      cx="450.4"
+      cy="500"
+      r="5"
+      fill="#333"
+      stroke="#333" />
+  </g>
+</svg>
