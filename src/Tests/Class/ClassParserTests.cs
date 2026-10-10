@@ -1,3 +1,5 @@
+using Naiad.Diagrams.Class;
+
 public class ClassParserTests
 {
     // Each of these member lines used to end the class body early: the rest of the body, and every
@@ -148,5 +150,178 @@ public class ClassParserTests
             """;
 
         await Assert.That(new ClassParser().Parse(input).Success).IsFalse();
+    }
+
+    [Test]
+    public async Task MemberStatements_AddToTheClass()
+    {
+        var model = new ClassParser().Parse(
+            """
+            classDiagram
+                Animal <|-- Duck
+                Animal : +int age
+                Animal: +isMammal() bool
+                Cat : -String name
+            """).Value;
+
+        var animal = model.Classes.Single(_ => _.Id == "Animal");
+        await Assert.That(animal.Members.Single().Name).IsEqualTo("age");
+        await Assert.That(animal.Members.Single().Type).IsEqualTo("int");
+        await Assert.That(animal.Methods.Single().Name).IsEqualTo("isMammal");
+        await Assert.That(animal.Methods.Single().ReturnType).IsEqualTo("bool");
+
+        // A class first mentioned by a member statement is created by it.
+        var cat = model.Classes.Single(_ => _.Id == "Cat");
+        await Assert.That(cat.Members.Single().Name).IsEqualTo("name");
+        await Assert.That(model.Relationships.Count).IsEqualTo(1);
+    }
+
+    [Test]
+    public async Task Annotations_InABodyOrOnTheirOwnLine()
+    {
+        var model = new ClassParser().Parse(
+            """
+            classDiagram
+                class Shape
+                <<interface>> Shape
+                class Order {
+                    <<Entity>>
+                    +int id
+                }
+                class Color {
+                    <<Enumeration>>
+                    RED
+                }
+                <<Aggregate Root>> Basket
+            """).Value;
+
+        var shape = model.Classes.Single(_ => _.Id == "Shape");
+        await Assert.That(shape.Annotation).IsEqualTo(ClassAnnotation.Interface);
+        await Assert.That(shape.AnnotationText).IsNull();
+
+        var order = model.Classes.Single(_ => _.Id == "Order");
+        await Assert.That(order.Annotation).IsNull();
+        await Assert.That(order.AnnotationText).IsEqualTo("Entity");
+        await Assert.That(order.Members.Single().Name).IsEqualTo("id");
+
+        await Assert.That(model.Classes.Single(_ => _.Id == "Color").Annotation)
+            .IsEqualTo(ClassAnnotation.Enumeration);
+        await Assert.That(model.Classes.Single(_ => _.Id == "Basket").AnnotationText)
+            .IsEqualTo("Aggregate Root");
+
+        var svg = Mermaid.Render("classDiagram\n    class Order {\n        <<Entity>>\n    }");
+        await Assert.That(svg).Contains("&lt;&lt;Entity&gt;&gt;");
+    }
+
+    [Test]
+    public async Task Notes_ForTheDiagramAndForAClass()
+    {
+        const string input =
+            """
+            classDiagram
+                class Duck
+                note "General note"
+                note for Duck "can fly\ncan swim"
+                note for Goose "honks"
+            """;
+
+        var model = new ClassParser().Parse(input).Value;
+
+        await Assert.That(model.Notes.Count).IsEqualTo(3);
+        await Assert.That(model.Notes[0].ForClassId).IsNull();
+        await Assert.That(model.Notes[1].ForClassId).IsEqualTo("Duck");
+        await Assert.That(model.Notes[1].Text).IsEqualTo("can fly<br/>can swim");
+        await Assert.That(model.Classes.Any(_ => _.Id == "Goose")).IsTrue();
+
+        var svg = Mermaid.Render(input);
+        await Assert.That(svg).Contains(">General note<");
+        await Assert.That(svg).Contains(">can fly<");
+        await Assert.That(svg).Contains(">can swim<");
+    }
+
+    [Test]
+    public async Task Namespace_GroupsItsClasses()
+    {
+        const string input =
+            """
+            classDiagram
+                namespace BaseShapes {
+                    class Triangle
+                    class Rectangle {
+                        double width
+                    }
+                }
+                class Circle
+                Triangle --> Circle
+            """;
+
+        var model = new ClassParser().Parse(input).Value;
+
+        await Assert.That(string.Join(",", model.Classes.Select(_ => $"{_.Id}:{_.Namespace}")))
+            .IsEqualTo("Triangle:BaseShapes,Rectangle:BaseShapes,Circle:");
+        await Assert.That(model.Classes[1].Members.Single().Name).IsEqualTo("width");
+        await Assert.That(Mermaid.Render(input)).Contains(">BaseShapes<");
+    }
+
+    [Test]
+    [Arguments("classDiagram\n    namespace A {\n    class X")]
+    [Arguments("classDiagram\n    class X\n    }")]
+    [Arguments("classDiagram\n    namespace A {\n    namespace B {\n    }\n    }")]
+    public async Task UnbalancedNamespace_FailsTheParse(string input) =>
+        await Assert.That(() => Mermaid.Render(input)).Throws<MermaidParseException>();
+
+    [Test]
+    public async Task Lollipop_MarksTheEndItIsWrittenOn()
+    {
+        var model = new ClassParser().Parse(
+            """
+            classDiagram
+                bar ()-- foo
+                foo --() baz
+            """).Value;
+
+        await Assert.That(model.Relationships[0].FromMarker).IsEqualTo(RelationshipMarker.Lollipop);
+        await Assert.That(model.Relationships[0].ToMarker).IsEqualTo(RelationshipMarker.None);
+        await Assert.That(model.Relationships[1].ToMarker).IsEqualTo(RelationshipMarker.Lollipop);
+        await Assert.That(Regex.Matches(Mermaid.Render("classDiagram\n    bar ()-- foo"), "<circle").Count).IsEqualTo(1);
+    }
+
+    [Test]
+    public async Task BacktickAndHyphenatedNames_AreClassNames()
+    {
+        var model = new ClassParser().Parse(
+            """
+            classDiagram
+                class `Animal Class!`
+                class Order-Line {
+                    +int qty
+                }
+                `Animal Class!` --> Order-Line : has
+                Order-Line<|--Special-Line
+            """).Value;
+
+        await Assert.That(string.Join("|", model.Classes.Select(_ => _.Name)))
+            .IsEqualTo("Animal Class!|Order-Line|Special-Line");
+        await Assert.That(model.Relationships[0].FromId).IsEqualTo("Animal Class!");
+        await Assert.That(model.Relationships[1].FromMarker).IsEqualTo(RelationshipMarker.Triangle);
+    }
+
+    [Test]
+    public async Task StylingAndInteraction_AreIgnored()
+    {
+        var model = new ClassParser().Parse(
+            """
+            classDiagram
+                class Animal
+                classDef someclass fill:#f96
+                cssClass "Animal" someclass
+                style Animal fill:#f9f,stroke:#333
+                click Animal href "https://example.com"
+                link Animal "https://example.com"
+                callback Animal "callbackFunction"
+                class Dog
+            """).Value;
+
+        await Assert.That(string.Join(",", model.Classes.Select(_ => _.Id))).IsEqualTo("Animal,Dog");
     }
 }

@@ -15,5 +15,7 @@ public enum RelationshipMarker
     /// <summary>Hollow diamond, on the "whole" end of an aggregation.</summary>
     HollowDiamond,
     /// <summary>Open arrowhead: association (solid line) or dependency (dashed line).</summary>
-    Arrow
+    Arrow,
+    /// <summary>Circle on a stalk: the interface a class provides, written <c>()--</c> or <c>--()</c>.</summary>
+    Lollipop
 }

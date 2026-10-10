@@ -7,6 +7,7 @@ public class ClassRenderer :
     const double lineHeight = 20;
     const double minWidth = 100;
     const double separatorHeight = 1;
+    const double notePadding = 10;
 
     // Far enough along the edge to clear both the class border and the relationship marker.
     const double cardinalityDistance = 22;
@@ -37,12 +38,40 @@ public class ClassRenderer :
         // Add relationship markers
         AddRelationshipMarkers(builder);
 
+        // Namespace boxes sit behind everything.
+        foreach (var subgraph in graphModel.Subgraphs)
+        {
+            RenderNamespace(builder, subgraph, options);
+        }
+
         // Render edges first (behind nodes). Each relationship is paired with the edge Dagre routed for it
         // (edges are built in relationship order), so edges curve, parallel relationships separate, and the
         // routing comes from the shared layout rather than straight lines computed here.
         for (var index = 0; index < model.Relationships.Count; index++)
         {
             RenderRelationship(builder, model.Relationships[index], graphModel.Edges[index], options);
+        }
+
+        foreach (var subgraph in graphModel.Subgraphs)
+        {
+            RenderNamespaceTitle(builder, subgraph, options);
+        }
+
+        // Notes, each `note for` joined to its class by the dashed edge laid out after the relationships.
+        var noteEdge = model.Relationships.Count;
+        for (var index = 0; index < model.Notes.Count; index++)
+        {
+            var note = model.Notes[index];
+            if (note.ForClassId is not null)
+            {
+                RenderNoteConnector(builder, graphModel.Edges[noteEdge]);
+                noteEdge++;
+            }
+
+            if (graphModel.GetNode(NoteId(index)) is { } noteNode)
+            {
+                RenderNote(builder, note, noteNode, options);
+            }
         }
 
         // Render class boxes
@@ -79,6 +108,31 @@ public class ClassRenderer :
             graph.AddNode(node);
         }
 
+        // A node for each note, sized to its lines.
+        for (var index = 0; index < model.Notes.Count; index++)
+        {
+            var text = model.Notes[index].Text;
+            graph.AddNode(
+                new()
+                {
+                    Id = NoteId(index),
+                    Width = MeasureText(LabelLines.Split(text).MaxBy(_ => _.Length)!, options.FontSize - 2) + notePadding * 2,
+                    Height = LabelLines.Count(text) * (options.FontSize - 2) * SvgBuilder.LineHeightFactor + notePadding * 2
+                });
+        }
+
+        // A cluster for each namespace, holding the classes declared in it.
+        foreach (var group in model.Classes.Where(_ => _.Namespace is not null).GroupBy(_ => _.Namespace!))
+        {
+            var subgraph = new Subgraph
+            {
+                Id = $"namespace:{group.Key}",
+                Title = group.Key
+            };
+            subgraph.NodeIds.AddRange(group.Select(_ => _.Id));
+            graph.Subgraphs.Add(subgraph);
+        }
+
         // Create edges for each relationship
         foreach (var rel in model.Relationships)
         {
@@ -92,7 +146,118 @@ public class ClassRenderer :
             graph.AddEdge(edge);
         }
 
+        // Then one from each attached note to its class. Render pairs them up in this same order.
+        for (var index = 0; index < model.Notes.Count; index++)
+        {
+            if (model.Notes[index].ForClassId is { } classId)
+            {
+                graph.AddEdge(
+                    new()
+                    {
+                        SourceId = NoteId(index),
+                        TargetId = classId,
+                        Type = EdgeType.Open
+                    });
+            }
+        }
+
         return graph;
+    }
+
+    static string NoteId(int index) =>
+        string.Create(CultureInfo.InvariantCulture, $"note:{index}");
+
+    // `<<interface>>`, `<<Entity>>` ... or null for a class with no annotation.
+    static string? AnnotationLabel(ClassDefinition classDef)
+    {
+        if (classDef.AnnotationText is not null)
+        {
+            return $"<<{classDef.AnnotationText}>>";
+        }
+
+        if (classDef.Annotation is { } annotation)
+        {
+            return $"<<{annotation.ToString().ToLower()}>>";
+        }
+
+        return null;
+    }
+
+    static void RenderNamespace(SvgBuilder builder, Subgraph subgraph, RenderOptions options)
+    {
+        var bounds = subgraph.Bounds;
+        builder.AddRect(
+            bounds.X,
+            bounds.Y,
+            bounds.Width,
+            bounds.Height,
+            rx: 0,
+            fill: "none",
+            stroke: "#999",
+            strokeWidth: 1);
+    }
+
+    // Drawn after the edges, on a patch of background, so an edge entering the namespace from above does
+    // not run through its name.
+    static void RenderNamespaceTitle(SvgBuilder builder, Subgraph subgraph, RenderOptions options)
+    {
+        var bounds = subgraph.Bounds;
+        var title = subgraph.Title ?? "";
+        var width = MeasureText(title, options.FontSize - 2, true) + 12;
+        builder.AddRect(
+            bounds.X + bounds.Width / 2 - width / 2,
+            bounds.Y + 3,
+            width,
+            18,
+            rx: 0,
+            fill: "#fff",
+            stroke: "none");
+        builder.AddText(
+            bounds.X + bounds.Width / 2,
+            bounds.Y + 12,
+            title,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize - 2,
+            fontFamily: options.FontFamily,
+            fontWeight: "bold",
+            fill: "#666");
+    }
+
+    static void RenderNote(SvgBuilder builder, ClassNote note, Node node, RenderOptions options)
+    {
+        builder.AddRect(
+            node.Position.X - node.Width / 2,
+            node.Position.Y - node.Height / 2,
+            node.Width,
+            node.Height,
+            rx: 0,
+            fill: "#FFF5AD",
+            stroke: "#AAAA33",
+            strokeWidth: 1);
+        builder.AddTextLines(
+            node.Position.X,
+            node.Position.Y,
+            note.Text,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: options.FontSize - 2,
+            fontFamily: options.FontFamily);
+    }
+
+    static void RenderNoteConnector(SvgBuilder builder, Edge edge)
+    {
+        if (edge.Points.Count < 2)
+        {
+            return;
+        }
+
+        builder.AddPath(
+            EdgePath.Build(edge.Points),
+            fill: "none",
+            stroke: "#AAAA33",
+            strokeWidth: 1,
+            strokeDasharray: "3,3");
     }
 
     static (double width, double height) CalculateClassSize(ClassDefinition classDef, RenderOptions options)
@@ -100,10 +265,9 @@ public class ClassRenderer :
         // Calculate width based on longest text
         var maxTextWidth = MeasureText(classDef.Name, options.FontSize, true);
 
-        if (classDef.Annotation.HasValue)
+        if (AnnotationLabel(classDef) is { } annotationLabel)
         {
-            var annotationText = $"<<{classDef.Annotation.Value.ToString().ToLower()}>>";
-            maxTextWidth = Math.Max(maxTextWidth, MeasureText(annotationText, options.FontSize - 2));
+            maxTextWidth = Math.Max(maxTextWidth, MeasureText(annotationLabel, options.FontSize - 2));
         }
 
         foreach (var member in classDef.Members)
@@ -122,7 +286,7 @@ public class ClassRenderer :
 
         // Calculate height
         var height = classPadding; // Top padding
-        if (classDef.Annotation.HasValue)
+        if (AnnotationLabel(classDef) is not null)
         {
             height += lineHeight;
         }
@@ -176,9 +340,8 @@ public class ClassRenderer :
         var centerX = node.Position.X;
 
         // Annotation
-        if (classDef.Annotation.HasValue)
+        if (AnnotationLabel(classDef) is { } annotationText)
         {
-            var annotationText = $"<<{classDef.Annotation.Value.ToString().ToLower()}>>";
             builder.AddText(
                 centerX,
                 currentY + lineHeight / 2,
@@ -362,6 +525,18 @@ public class ClassRenderer :
             case RelationshipMarker.Arrow:
                 var arrowPoints = GetArrowPoints(x, y, angle, markerSize);
                 builder.AddPolygon(arrowPoints, fill: "#333");
+                break;
+
+            case RelationshipMarker.Lollipop:
+                // A ring sitting on the end of the line, just clear of the class border.
+                const double radius = 6;
+                builder.AddCircle(
+                    x - radius * Math.Cos(angle),
+                    y - radius * Math.Sin(angle),
+                    radius,
+                    fill: "#fff",
+                    stroke: "#333",
+                    strokeWidth: 1);
                 break;
         }
     }

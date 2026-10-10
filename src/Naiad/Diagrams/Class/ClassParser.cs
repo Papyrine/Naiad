@@ -2,6 +2,9 @@ class ClassParser : IDiagramParser<ClassModel>
 {
     static Parser<char, ClassModel> parser;
 
+    // One member line, as written in a class body or after `ClassName :`.
+    static Parser<char, IClassBodyContent> memberLine;
+
     static ClassParser()
     {
         // Spaces and tabs only. Whitespace that may span a newline would let a member's type bind to the
@@ -9,10 +12,22 @@ class ClassParser : IDiagramParser<ClassModel>
         var inlineGap =
             Token(_ => _ is ' ' or '\t').SkipAtLeastOnce();
 
+        // Letters, digits and underscores, plus a hyphen between two of them (`Order-Line`). A hyphen that
+        // starts a relationship line is not part of the name.
+        var idChar =
+            Token(_ => char.IsLetterOrDigit(_) || _ == '_');
+
         var identifier =
-            Token(_ => char.IsLetterOrDigit(_) || _ == '_')
-                .AtLeastOnceString()
+            idChar
+                .Then(idChar.Or(Try(Char('-').Before(Lookahead(idChar)))).SkipMany())
+                .Slice((span, _) => span.ToString())
                 .Labelled("class identifier");
+
+        // A name in backticks may hold anything, spaces and punctuation included.
+        var backtickName =
+            Char('`')
+                .Then(Token(_ => _ != '`' && _ != '\r' && _ != '\n').AtLeastOnceString())
+                .Before(Char('`'));
 
         // Mermaid spells generics ~T~. The tilde form is display only, so a class is keyed on its bare
         // name and `IRepository~T~` in a relationship resolves to the `class IRepository~T~` declaration.
@@ -22,9 +37,11 @@ class ClassParser : IDiagramParser<ClassModel>
                 .Before(Char('~'));
 
         var className =
-            from id in identifier
-            from generic in Try(genericArgument).Optional()
-            select new ClassName(id, generic.HasValue ? $"{id}<{generic.Value}>" : null);
+            backtickName.Select(_ => new ClassName(_, null))
+                .Or(
+                    from id in identifier
+                    from generic in Try(genericArgument).Optional()
+                    select new ClassName(id, generic.HasValue ? $"{id}<{generic.Value}>" : null));
 
         var visibilityParser =
             OneOf(
@@ -108,23 +125,21 @@ class ClassParser : IDiagramParser<ClassModel>
                 visibility.HasValue ? visibility.Value : Visibility.Public,
                 suffix);
 
-        // Class annotation: <<interface>>, <<abstract>>, etc.
+        // Class annotation: <<interface>>, <<abstract>>, or any other text, such as <<Entity>>.
+        var annotationText =
+            String("<<")
+                .Then(Token(_ => _ != '>' && _ != '\r' && _ != '\n').AtLeastOnceString())
+                .Before(String(">>"));
+
         var annotationParser =
             CommonParsers.InlineWhitespace
-                .Then(String("<<"))
-                .Then(OneOf(
-                    Try(String("interface")).ThenReturn(ClassAnnotation.Interface),
-                    Try(String("abstract")).ThenReturn(ClassAnnotation.Abstract),
-                    Try(String("service")).ThenReturn(ClassAnnotation.Service),
-                    String("enumeration").ThenReturn(ClassAnnotation.Enumeration)
-                ))
-                .Before(String(">>"))
+                .Then(annotationText)
                 .Before(CommonParsers.InlineWhitespace)
                 .Before(CommonParsers.LineEnd);
 
         // One line of a class body, in the spellings that are understood structurally. A line that fits
         // none of them is still a member (see ParseLooseMember), so nothing in a body can fail the parse.
-        var bodyLine =
+        memberLine =
             OneOf(
                 Try(annotationParser.Select<IClassBodyContent>(_ => new AnnotationItem(_))),
                 Try(methodParser.Select<IClassBodyContent>(_ => new MethodItem(_))),
@@ -137,7 +152,7 @@ class ClassParser : IDiagramParser<ClassModel>
             Char('{')
                 .Then(Token(_ => _ != '}').ManyString())
                 .Before(Char('}'))
-                .Select(text => ParseBody(text, bodyLine));
+                .Select(text => ParseBody(text, memberLine));
 
         // Display label: class Animal["Animal with a label"]
         var classLabel =
@@ -167,6 +182,7 @@ class ClassParser : IDiagramParser<ClassModel>
         var fromMarker =
             OneOf(
                 Try(String("<|")).ThenReturn(RelationshipMarker.Triangle),
+                Try(String("()")).ThenReturn(RelationshipMarker.Lollipop),
                 Try(String("*")).ThenReturn(RelationshipMarker.FilledDiamond),
                 Try(String("o")).ThenReturn(RelationshipMarker.HollowDiamond),
                 Try(String("<")).ThenReturn(RelationshipMarker.Arrow)
@@ -175,6 +191,7 @@ class ClassParser : IDiagramParser<ClassModel>
         var toMarker =
             OneOf(
                 Try(String("|>")).ThenReturn(RelationshipMarker.Triangle),
+                Try(String("()")).ThenReturn(RelationshipMarker.Lollipop),
                 Try(String("*")).ThenReturn(RelationshipMarker.FilledDiamond),
                 Try(String("o")).ThenReturn(RelationshipMarker.HollowDiamond),
                 Try(String(">")).ThenReturn(RelationshipMarker.Arrow)
@@ -242,6 +259,74 @@ class ClassParser : IDiagramParser<ClassModel>
                 .Then(CommonParsers.DirectionParser)
                 .Before(CommonParsers.LineEnd);
 
+        var restOfLine =
+            Token(_ => _ != '\r' && _ != '\n').ManyString();
+
+        // Member added from outside the class body: `Animal : +int age`, `Animal: +isMammal()`
+        var memberStatementParser =
+            from _ in CommonParsers.InlineWhitespace
+            from owner in className
+            from __ in CommonParsers.InlineWhitespace
+            from colon in Char(':')
+            from text in restOfLine
+            from ___ in CommonParsers.LineEnd
+            select new MemberStatementItem(owner, text);
+
+        // Annotation given on its own line: `<<interface>> Shape`
+        var annotationStatementParser =
+            from _ in CommonParsers.InlineWhitespace
+            from text in annotationText
+            from __ in CommonParsers.InlineWhitespace
+            from owner in className
+            from ___ in CommonParsers.InlineWhitespace
+            from ____ in CommonParsers.LineEnd
+            select new AnnotationStatementItem(owner, text);
+
+        // note "text" or note for ClassName "text"
+        var noteParser =
+            from _ in CommonParsers.InlineWhitespace
+            from keyword in String("note")
+            from __ in inlineGap
+            from owner in Try(String("for").Then(inlineGap).Then(className).Before(inlineGap)).Optional()
+            from text in CommonParsers.DoubleQuotedString
+            from ___ in CommonParsers.InlineWhitespace
+            from ____ in CommonParsers.LineEnd
+            select new NoteItem(owner.HasValue ? owner.Value : (ClassName?) null, text);
+
+        // namespace Name { ... } groups the classes declared inside it.
+        var namespaceStartParser =
+            from _ in CommonParsers.InlineWhitespace
+            from keyword in String("namespace")
+            from __ in inlineGap
+            from name in Token(_ => char.IsLetterOrDigit(_) || _ is '_' or '.' or '-').AtLeastOnceString()
+            from ___ in CommonParsers.InlineWhitespace
+            from open in Char('{')
+            from ____ in CommonParsers.InlineWhitespace
+            from _____ in CommonParsers.LineEnd
+            select new NamespaceStartItem(name);
+
+        var namespaceEndParser =
+            from _ in CommonParsers.InlineWhitespace
+            from close in Char('}')
+            from __ in CommonParsers.InlineWhitespace
+            from ___ in CommonParsers.LineEnd
+            select new NamespaceEndItem();
+
+        // Styling and interaction, neither of which a class diagram here acts on.
+        var ignoredParser =
+            from _ in CommonParsers.InlineWhitespace
+            from keyword in OneOf(
+                Try(String("classDef")),
+                Try(String("cssClass")),
+                Try(String("style")),
+                Try(String("click")),
+                Try(String("link")),
+                String("callback"))
+            from __ in inlineGap
+            from rest in restOfLine
+            from ___ in CommonParsers.LineEnd
+            select Unit.Value;
+
         // Skip line (comments, empty lines)
         var skipLine =
             CommonParsers.InlineWhitespace
@@ -252,6 +337,12 @@ class ClassParser : IDiagramParser<ClassModel>
                 Try(directionDirectiveParser.Select<IClassContent?>(_ => new DirectionItem(_))),
                 Try(classDefinitionParser.Select<IClassContent?>(_ => new ClassDefinitionItem(_))),
                 Try(relationshipParser.Select<IClassContent?>(_ => _)),
+                Try(noteParser.Select<IClassContent?>(_ => _)),
+                Try(namespaceStartParser.Select<IClassContent?>(_ => _)),
+                Try(namespaceEndParser.Select<IClassContent?>(_ => _)),
+                Try(annotationStatementParser.Select<IClassContent?>(_ => _)),
+                Try(ignoredParser.ThenReturn<IClassContent?>(null)),
+                Try(memberStatementParser.Select<IClassContent?>(_ => _)),
                 skipLine.ThenReturn<IClassContent?>(null)
             );
 
@@ -415,11 +506,11 @@ class ClassParser : IDiagramParser<ClassModel>
         return parameters;
     }
 
-    static (ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods) ParseBody(
+    static (string? annotation, List<ClassMember> members, List<ClassMethod> methods) ParseBody(
         string text,
         Parser<char, IClassBodyContent> bodyLine)
     {
-        ClassAnnotation? annotation = null;
+        string? annotation = null;
         var members = new List<ClassMember>();
         var methods = new List<ClassMethod>();
 
@@ -592,7 +683,7 @@ class ClassParser : IDiagramParser<ClassModel>
     static ClassDefinition CreateClassDefinition(
         ClassName name,
         Maybe<string> label,
-        Maybe<(ClassAnnotation? annotation, List<ClassMember> members, List<ClassMethod> methods)> body)
+        Maybe<(string? annotation, List<ClassMember> members, List<ClassMethod> methods)> body)
     {
         var classDef = new ClassDefinition
         {
@@ -602,8 +693,11 @@ class ClassParser : IDiagramParser<ClassModel>
 
         if (body.HasValue)
         {
-            if (body.Value.annotation.HasValue)
-                classDef.Annotation = body.Value.annotation;
+            if (body.Value.annotation is { } annotation)
+            {
+                SetAnnotation(classDef, annotation);
+            }
+
             classDef.Members.AddRange(body.Value.members);
             classDef.Methods.AddRange(body.Value.methods);
         }
@@ -611,10 +705,35 @@ class ClassParser : IDiagramParser<ClassModel>
         return classDef;
     }
 
+    // The built-in annotations are kept as their enum value, which is what picks the box colour; anything
+    // else is kept as written.
+    static void SetAnnotation(ClassDefinition classDef, string text)
+    {
+        var trimmed = text.Trim();
+        if (trimmed.Length > 0 &&
+            char.IsLetter(trimmed[0]) &&
+            System.Enum.TryParse<ClassAnnotation>(trimmed, true, out var known))
+        {
+            classDef.Annotation = known;
+            classDef.AnnotationText = null;
+            return;
+        }
+
+        classDef.Annotation = null;
+        classDef.AnnotationText = trimmed;
+    }
+
     static ClassModel BuildModel(IEnumerable<IClassContent?> content)
     {
         var model = new ClassModel();
         var classIds = new Dictionary<string, ClassDefinition>();
+        string? currentNamespace = null;
+
+        ClassDefinition Class(ClassName name)
+        {
+            AddPlaceholder(name);
+            return classIds[name.Id];
+        }
 
         foreach (var item in content)
         {
@@ -631,16 +750,70 @@ class ClassParser : IDiagramParser<ClassModel>
                         // A class referenced by an earlier relationship is a placeholder; the later
                         // declaration is what carries the members, so fill the placeholder in.
                         existing.DisplayName ??= c.DisplayName;
-                        existing.Annotation ??= c.Annotation;
+                        if (existing.Annotation is null &&
+                            existing.AnnotationText is null)
+                        {
+                            existing.Annotation = c.Annotation;
+                            existing.AnnotationText = c.AnnotationText;
+                        }
+
+                        existing.Namespace ??= currentNamespace;
                         existing.Members.AddRange(c.Members);
                         existing.Methods.AddRange(c.Methods);
                     }
                     else
                     {
+                        c.Namespace = currentNamespace;
                         model.Classes.Add(c);
                         classIds.Add(c.Id, c);
                     }
 
+                    break;
+
+                case MemberStatementItem member:
+                    var body = ParseBody(member.Text, memberLine);
+                    var owner = Class(member.Owner);
+                    if (body.annotation is { } memberAnnotation)
+                    {
+                        SetAnnotation(owner, memberAnnotation);
+                    }
+
+                    owner.Members.AddRange(body.members);
+                    owner.Methods.AddRange(body.methods);
+                    break;
+
+                case AnnotationStatementItem annotation:
+                    SetAnnotation(Class(annotation.Owner), annotation.Text);
+                    break;
+
+                case NoteItem note:
+                    model.Notes.Add(
+                        new()
+                        {
+                            // Mermaid writes a line break in a note as a literal backslash-n.
+                            Text = note.Text.Replace("\\n", "<br/>"),
+                            ForClassId = note.Owner is { } noteOwner ? Class(noteOwner).Id : null
+                        });
+                    break;
+
+                case NamespaceStartItem start:
+                    if (currentNamespace is not null)
+                    {
+                        throw new MermaidParseException(
+                            "Failed to parse class diagram: a namespace cannot be declared inside another");
+                    }
+
+                    currentNamespace = start.Name;
+                    break;
+
+                case NamespaceEndItem:
+                    if (currentNamespace is null)
+                    {
+                        throw new MermaidParseException(
+                            "Failed to parse class diagram: '}' without a namespace to close");
+                    }
+
+                    currentNamespace = null;
                     break;
 
                 case RelationshipItem rel:
@@ -650,6 +823,12 @@ class ClassParser : IDiagramParser<ClassModel>
                     model.Relationships.Add(rel.Value);
                     break;
             }
+        }
+
+        if (currentNamespace is not null)
+        {
+            throw new MermaidParseException(
+                $"Failed to parse class diagram: namespace '{currentNamespace}' is missing its closing '}}'");
         }
 
         return model;
@@ -679,7 +858,7 @@ class ClassParser : IDiagramParser<ClassModel>
 
     interface IClassBodyContent;
 
-    readonly record struct AnnotationItem(ClassAnnotation Value) : IClassBodyContent;
+    readonly record struct AnnotationItem(string Value) : IClassBodyContent;
 
     readonly record struct MemberItem(ClassMember Value) : IClassBodyContent;
 
@@ -688,6 +867,16 @@ class ClassParser : IDiagramParser<ClassModel>
     internal interface IClassContent;
 
     readonly record struct DirectionItem(Direction Value) : IClassContent;
+
+    readonly record struct MemberStatementItem(ClassName Owner, string Text) : IClassContent;
+
+    readonly record struct AnnotationStatementItem(ClassName Owner, string Text) : IClassContent;
+
+    readonly record struct NoteItem(ClassName? Owner, string Text) : IClassContent;
+
+    readonly record struct NamespaceStartItem(string Name) : IClassContent;
+
+    readonly record struct NamespaceEndItem : IClassContent;
 
     readonly record struct ClassDefinitionItem(ClassDefinition Value) : IClassContent;
 

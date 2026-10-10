@@ -216,4 +216,40 @@ public class ClassTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // Members added with `Class : member`, a note on the diagram and one attached to a class, a
+    // namespace, annotations given in a body, on their own line and outside the built-in set, a lollipop
+    // interface, and names in backticks or with a hyphen.
+    [Test]
+    public Task NotesNamespacesAndAnnotations()
+    {
+        const string input =
+            """
+            classDiagram
+                note "From Duck till Zebra"
+                Animal <|-- Duck
+                note for Duck "can fly\ncan swim\ncan dive"
+                Animal <|-- Fish
+                Animal : +int age
+                Animal : +String gender
+                Animal: +isMammal()
+                <<abstract>> Animal
+                class Duck{
+                    +String beakColor
+                    +swim()
+                }
+                class Fish{
+                    <<Entity>>
+                    -int sizeInFeet
+                }
+                namespace Storage {
+                    class `Fish Tank`
+                    class Water-Filter
+                }
+                Fish --> `Fish Tank`
+                `Fish Tank` --() Water-Filter
+            """;
+
+        return VerifySvg(input);
+    }
 }
