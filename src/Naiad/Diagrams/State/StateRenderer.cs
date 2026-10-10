@@ -16,6 +16,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     // the drawing working as intended, not an overlap.
     Dictionary<string, HashSet<string>> compositeContents = new(StringComparer.Ordinal);
 
+    // The composites that are regions, which have no title band above their contents.
+    HashSet<string> regionIds = new(StringComparer.Ordinal);
+
     void CollectCompositeContents(List<State> states)
     {
         foreach (var state in states)
@@ -28,6 +31,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             var contents = new HashSet<string>(StringComparer.Ordinal);
             AddDescendants(state, contents);
             compositeContents[state.Id] = contents;
+            if (state.Type == StateType.Region)
+            {
+                regionIds.Add(state.Id);
+            }
             CollectCompositeContents(state.NestedStates);
         }
     }
@@ -96,6 +103,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         lineBounds.Clear();
         nodeBounds.Clear();
         compositeContents.Clear();
+        regionIds.Clear();
         if (ValidateLayout)
         {
             CollectCompositeContents(model.States);
@@ -151,13 +159,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         // Shift all positions right if notes or curves extend past left edge
         if (totalExtraLeft > 0)
         {
-            foreach (var state in model.States)
-            {
-                state.Position = state.Position with
-                {
-                    X = state.Position.X + totalExtraLeft
-                };
-            }
+            ShiftRight(model.States, totalExtraLeft);
         }
 
         // Ensure end nodes don't overlap with other states (run after position shift)
@@ -195,6 +197,19 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         return builder.Build();
+    }
+
+    // Nested states are already at their final places, so they move with the composite that holds them.
+    static void ShiftRight(List<State> states, double distance)
+    {
+        foreach (var state in states)
+        {
+            state.Position = state.Position with
+            {
+                X = state.Position.X + distance
+            };
+            ShiftRight(state.NestedStates, distance);
+        }
     }
 
     void TrackText(double x, double y, string text, string anchor, double fontSize, bool bold = false)
@@ -437,7 +452,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         const double tolerance = 1;
-        var contentTop = container.Y + compositeTitleHeight;
+        var titleHeight = regionIds.Contains(container.Id) ? 0 : compositeTitleHeight;
+        var contentTop = container.Y + titleHeight;
         var fullyInside = child.X >= container.X - tolerance &&
                           child.Y >= contentTop - tolerance &&
                           child.X + child.Width <= container.X + container.Width + tolerance &&
@@ -446,7 +462,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         if (!fullyInside)
         {
             throw new InvalidOperationException(
-                $"Node escapes its composite: \"{child.Label}\" at ({child.X:F1},{child.Y:F1},{child.Width:F1}x{child.Height:F1}) is not fully inside \"{container.Label}\"'s content region ({container.X:F1},{contentTop:F1},{container.Width:F1}x{container.Height - compositeTitleHeight:F1})");
+                $"Node escapes its composite: \"{child.Label}\" at ({child.X:F1},{child.Y:F1},{child.Width:F1}x{child.Height:F1}) is not fully inside \"{container.Label}\"'s content region ({container.X:F1},{contentTop:F1},{container.Width:F1}x{container.Height - titleHeight:F1})");
         }
 
         return true;
@@ -539,19 +555,22 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         return false;
     }
 
-    static double CalculateCurveExtraLeft(StateModel model, Dictionary<string, State> stateMap)
+    static double CalculateCurveExtraLeft(StateModel model, Dictionary<string, State> stateMap) =>
+        CalculateCurveExtraLeft(model.States, model.Transitions, stateMap);
+
+    static double CalculateCurveExtraLeft(List<State> states, List<StateTransition> transitions, Dictionary<string, State> stateMap)
     {
         // Check if any bidirectional forward edges will curve left
-        var bidirectionalPairs = FindBidirectionalPairs(model.Transitions);
+        var bidirectionalPairs = FindBidirectionalPairs(transitions);
         if (bidirectionalPairs.Count == 0)
         {
             return 0;
         }
 
-        var leftEdge = model.States.Min(_ => _.Position.X - _.Width / 2);
+        var leftEdge = states.Min(_ => _.Position.X - _.Width / 2);
         double maxExtraNeeded = 0;
 
-        foreach (var transition in model.Transitions)
+        foreach (var transition in transitions)
         {
             var pairKey = GetPairKey(transition.FromId, transition.ToId);
             if (!bidirectionalPairs.Contains(pairKey))
@@ -590,12 +609,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         return 0; // Add margin
     }
 
-    static double CalculateCurveExtraRight(StateModel model, Dictionary<string, State> stateMap)
+    static double CalculateCurveExtraRight(StateModel model, Dictionary<string, State> stateMap) =>
+        CalculateCurveExtraRight(model.States, model.Transitions, stateMap);
+
+    static double CalculateCurveExtraRight(List<State> states, List<StateTransition> transitions, Dictionary<string, State> stateMap)
     {
-        var rightEdge = model.States.Max(_ => _.Position.X + _.Width / 2);
+        var rightEdge = states.Max(_ => _.Position.X + _.Width / 2);
 
         // Get all back-edges with their indices for position calculation
-        var backEdges = model.Transitions
+        var backEdges = transitions
             .Where(_ => IsBackEdge(_, stateMap))
             .OrderBy(_ =>
             {
@@ -805,12 +827,15 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 continue;
             }
 
+            // A composite that declares no direction of its own follows the one around it.
+            var interiorDirection = state.Direction ?? direction;
+
             // Depth first, so a nested composite is already sized when its parent lays out.
-            LayoutCompositeInteriors(state.NestedStates, direction, options);
+            LayoutCompositeInteriors(state.NestedStates, interiorDirection, options);
 
             var interior = new StateLayoutGraph
             {
-                Direction = direction
+                Direction = interiorDirection
             };
 
             foreach (var nested in state.NestedStates)
@@ -840,7 +865,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
             var result = layoutEngine.BuildLayout(interior, new()
             {
-                Direction = direction,
+                Direction = interiorDirection,
                 NodeSeparation = 60,
                 RankSeparation = 50
             });
@@ -859,9 +884,49 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 }
             }
 
-            state.Width = result.Width + compositePadding * 2;
-            state.Height = result.Height + compositePadding * 2 + compositeTitleHeight;
+            // A back-edge or one of a two-way pair runs down a corridor beside the states. That corridor
+            // belongs inside the box, so the box grows to hold it and the contents move over to clear the
+            // one on the left.
+            var nestedMap = BuildStateMap(state.NestedStates);
+            var corridorLeft = CalculateCurveExtraLeft(state.NestedStates, state.NestedTransitions, nestedMap);
+            var corridorRight = CalculateCurveExtraRight(state.NestedStates, state.NestedTransitions, nestedMap);
+            if (corridorLeft > 0)
+            {
+                foreach (var nested in state.NestedStates)
+                {
+                    nested.Position = nested.Position with
+                    {
+                        X = nested.Position.X + corridorLeft
+                    };
+                }
+            }
+
+            // The box is at least as wide as its title; the contents are centred in whatever that adds.
+            state.InteriorWidth = result.Width + corridorLeft + corridorRight;
+            state.Width = Math.Max(state.InteriorWidth + compositePadding * 2, TitleWidth(state, options));
+            state.Height = result.Height + compositePadding * 2 + TitleHeight(state);
         }
+    }
+
+    // A region is an untitled part of the composite it divides; every other composite has a title band.
+    static double TitleHeight(State state)
+    {
+        if (state.Type == StateType.Region)
+        {
+            return 0;
+        }
+
+        return compositeTitleHeight;
+    }
+
+    static double TitleWidth(State state, RenderOptions options)
+    {
+        if (state.Type == StateType.Region)
+        {
+            return 0;
+        }
+
+        return MeasureText(LabelLines.Flatten(state.Description ?? state.Id), options.FontSize, bold: true) + statePadding;
     }
 
     /// <summary>
@@ -877,8 +942,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 continue;
             }
 
-            var originX = state.Position.X - state.Width / 2 + compositePadding;
-            var originY = state.Position.Y - state.Height / 2 + compositeTitleHeight + compositePadding;
+            var originX = state.Position.X - state.InteriorWidth / 2;
+            var originY = state.Position.Y - state.Height / 2 + TitleHeight(state) + compositePadding;
 
             foreach (var nested in state.NestedStates)
             {
@@ -1294,6 +1359,16 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var x = state.Position.X - state.Width / 2;
         var y = state.Position.Y - state.Height / 2;
 
+        if (state.Type == StateType.Region)
+        {
+            // A dashed outline and nothing else: the region is part of the composite it sits in.
+            var outline = string.Create(
+                CultureInfo.InvariantCulture,
+                $"M{x:0.##},{y:0.##} L{x + state.Width:0.##},{y:0.##} L{x + state.Width:0.##},{y + state.Height:0.##} L{x:0.##},{y + state.Height:0.##} Z");
+            builder.AddPath(outline, fill: "none", stroke: "#666", strokeWidth: 1, strokeDasharray: "5,5");
+            return;
+        }
+
         builder.AddRect(
             x,
             y,
@@ -1305,16 +1380,17 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             strokeWidth: 2);
 
         // Title
+        var title = LabelLines.Flatten(state.Description ?? state.Id);
         builder.AddText(
             state.Position.X,
             y + 15,
-            state.Id,
+            title,
             anchor: "middle",
             baseline: "middle",
             fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold");
-        TrackText(state.Position.X, y + 15, state.Id, "middle", options.FontSize, bold: true);
+        TrackText(state.Position.X, y + 15, title, "middle", options.FontSize, bold: true);
 
         // Separator line
         builder.AddLine(
@@ -1362,13 +1438,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             {
                 // Bidirectional pair - use curves (forward curves left, back curves right)
                 var isBackEdge = IsBackEdge(transition, stateMap);
-                RenderCurvedTransition(builder, transition, stateMap, isBackEdge, model, 0, options);
+                RenderCurvedTransition(builder, transition, stateMap, isBackEdge, model.States, 0, options);
             }
             else if (IsBackEdge(transition, stateMap))
             {
                 // Single back-edge (no forward counterpart) - curve to the right with offset
                 var backEdgeIndex = backEdgeIndices.GetValueOrDefault(transition, -1);
-                RenderCurvedTransition(builder, transition, stateMap, isBackEdge: true, model, backEdgeIndex, options);
+                RenderCurvedTransition(builder, transition, stateMap, isBackEdge: true, model.States, backEdgeIndex, options);
             }
             else
             {
@@ -1426,12 +1502,12 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 if (nestedBidirectional.Contains(pairKey))
                 {
                     var isBackEdge = IsBackEdge(transition, nestedMap);
-                    RenderCurvedTransition(builder, transition, nestedMap, isBackEdge, model, 0, options);
+                    RenderCurvedTransition(builder, transition, nestedMap, isBackEdge, state.NestedStates, 0, options);
                 }
                 else if (IsBackEdge(transition, nestedMap))
                 {
                     var backEdgeIndex = nestedBackEdges.IndexOf(transition);
-                    RenderCurvedTransition(builder, transition, nestedMap, isBackEdge: true, model, backEdgeIndex, options);
+                    RenderCurvedTransition(builder, transition, nestedMap, isBackEdge: true, state.NestedStates, backEdgeIndex, options);
                 }
                 else
                 {
@@ -1487,7 +1563,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     }
 
     void RenderCurvedTransition(SvgBuilder builder, StateTransition transition,
-        Dictionary<string, State> stateMap, bool isBackEdge, StateModel model, int backEdgeIndex, RenderOptions options)
+        Dictionary<string, State> stateMap, bool isBackEdge, List<State> siblings, int backEdgeIndex, RenderOptions options)
     {
         if (!stateMap.TryGetValue(transition.FromId, out var fromState) ||
             !stateMap.TryGetValue(transition.ToId, out var toState))
@@ -1500,7 +1576,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             // Route back-edges around the right side of the diagram
             // Space lines apart enough for labels to be centered on each line without overlap
             // Exclude special states (Start/End) from edge calculation since they may be repositioned
-            var normalStates = model.States.Where(_ => _.Type == StateType.Normal).ToList();
+            var normalStates = siblings.Where(_ => _.Type == StateType.Normal).ToList();
             var baseRightEdge = (normalStates.Count > 0 ? normalStates.Max(_ => _.Position.X + _.Width / 2) : 100) + 50;
 
             // Use spacing of 50px between lines - enough for typical labels
@@ -1515,7 +1591,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             const double entrySpacing = 15.0;
             var endY = toState.Position.Y - backEdgeIndex * entrySpacing;
             // Exit from the right side of the source, clear of anything parked beside it
-            var startY = ClearExitY(model, fromState, toState, startX, rightEdge, endY);
+            var startY = ClearExitY(siblings, fromState, toState, startX, rightEdge, endY);
 
             // Radius for the quarter-circle curves at corners
             var curveRadius = CurveRadius(rightEdge - startX, startY - endY);
@@ -1580,7 +1656,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             // Forward edge (mirror of back-edge) - curves to the LEFT
             // Route around the left side of the diagram
             // Exclude special states (Start/End) from edge calculation
-            var normalStates = model.States.Where(_ => _.Type == StateType.Normal).ToList();
+            var normalStates = siblings.Where(_ => _.Type == StateType.Normal).ToList();
             var baseLeftEdge = (normalStates.Count > 0 ? normalStates.Min(_ => _.Position.X - _.Width / 2) : 0) - 50;
 
             // Use same spacing as back-edges
@@ -1593,7 +1669,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             const double entrySpacing = 15.0;
             var endY = toState.Position.Y + backEdgeIndex * entrySpacing;
             // Exit from the left side of the source, clear of anything parked beside it
-            var startY = ClearExitY(model, fromState, toState, startX, leftEdge, endY);
+            var startY = ClearExitY(siblings, fromState, toState, startX, leftEdge, endY);
 
             // Radius for the quarter-circle curves at corners (mirror of back-edge)
             var curveRadius = CurveRadius(startX - leftEdge, endY - startY);
@@ -1656,13 +1732,13 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     /// the exit along the source's border, nearest the centre first, until the curve it produces is clear.
     /// Keeps the centre when nothing clears, rather than pushing the exit off the border.
     /// </summary>
-    static double ClearExitY(StateModel model, State from, State to, double startX, double corridorX, double endY)
+    static double ClearExitY(List<State> siblings, State from, State to, double startX, double corridorX, double endY)
     {
         var left = Math.Min(startX, corridorX);
         var right = Math.Max(startX, corridorX);
 
         var blockers = new List<(double Left, double Top, double Right, double Bottom)>();
-        foreach (var state in model.States)
+        foreach (var state in siblings)
         {
             if (state.Id == from.Id || state.Id == to.Id)
             {

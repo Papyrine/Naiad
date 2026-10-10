@@ -152,4 +152,52 @@ static class StateSamples
             note right of B : Note one<br/>note two<br/>note three
             C --> [*]
         """;
+
+    // `--` splits a composite into regions that run side by side, each with its own start marker.
+    public const string Concurrency =
+        """
+        stateDiagram-v2
+            [*] --> Active
+            state Active {
+                [*] --> NumLockOff
+                NumLockOff --> NumLockOn : EvNumLockPressed
+                NumLockOn --> NumLockOff : EvNumLockPressed
+                --
+                [*] --> CapsLockOff
+                CapsLockOff --> CapsLockOn : EvCapsLockPressed
+                --
+                [*] --> ScrollLockOff
+                ScrollLockOff --> ScrollLockOn : EvScrollLockPressed
+            }
+            Active --> [*]
+        """;
+
+    // A note written as a block, a composite given a description, a composite laid out in its own
+    // direction, and the styling and accessibility lines that are read but not drawn.
+    public const string NotesAndDescribedComposite =
+        """
+        stateDiagram-v2
+            accTitle: Order handling
+            accDescr {
+                How an order moves
+                through the system
+            }
+            classDef urgent fill:#f00,color:white
+            [*] --> Received
+            Received --> Handling:::urgent
+            state "Handling the order" as Handling {
+                direction LR
+                [*] --> Picking
+                Picking --> Packing
+                Packing --> [*]
+            }
+            Handling --> Shipped
+            Shipped --> [*]
+            note right of Received
+                Arrives by post
+                or by phone
+            end note
+            note left of Shipped : Tracked
+            class Shipped urgent
+        """;
 }

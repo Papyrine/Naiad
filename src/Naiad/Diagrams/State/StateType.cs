@@ -7,5 +7,6 @@ public enum StateType
     End,        // [*] as target
     Fork,       // <<fork>>
     Join,       // <<join>>
-    Choice      // <<choice>>
+    Choice,     // <<choice>>
+    Region      // one of the concurrent parts a `--` divides a composite into
 }

@@ -18,6 +18,8 @@ public partial class StateOverlapTests
     [Arguments(StateSamples.StateWithNote)]
     [Arguments(StateSamples.StateDiagramV1)]
     [Arguments(StateSamples.Complex)]
+    [Arguments(StateSamples.Concurrency)]
+    [Arguments(StateSamples.NotesAndDescribedComposite)]
     public async Task NoLayoutOverlaps(string input)
     {
         var result = new StateParser().Parse(input);
