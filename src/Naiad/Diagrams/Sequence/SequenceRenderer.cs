@@ -12,6 +12,18 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     const double notePadding = 10;
     const double noteGap = 10;
     const double selfMessageLoopWidth = 40;
+    const double selfMessageLoopHeight = 30;
+
+    // Block frames (loop, alt, opt, par, critical, break). The lead-in is how far above a message's arrow
+    // the space for its label begins, so an edge placed there clears the label of what follows.
+    const double frameLeadIn = 28;
+    const double frameGap = 8;
+    const double frameHeaderHeight = 30;
+    const double frameDividerHeight = 26;
+    const double frameTabHeight = 20;
+    const double frameTabMinWidth = 50;
+    const double frameNestingStep = 10;
+    const string frameStroke = "#9370DB";
     const double actorHeadRadius = 9;
     const double actorArmSpread = 10;
     const double actorLegSpread = 8;
@@ -22,8 +34,11 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
     public SvgDocument Render(SequenceModel model, RenderOptions options)
     {
-        var (participantPositions, width) = CalculateLayout(model, options);
-        var (height, elementYPositions) = CalculateHeight(model, options);
+        var plan = PlanRows(model, options);
+        var elements = plan.Elements;
+        var elementYPositions = plan.Ys;
+        var height = plan.Height;
+        var (participantPositions, width) = CalculateLayout(model, plan, options);
         var headerHeight = HeaderHeight(model, options);
 
         var builder = new SvgBuilder();
@@ -49,6 +64,9 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
         var startY = options.Padding + titleOffset;
 
+        // `rect` backgrounds go down first, under the lifelines and everything else.
+        DrawRectBackgrounds(builder, plan.Frames);
+
         // Draw participants (top)
         DrawParticipants(builder, model, participantPositions, startY, options);
 
@@ -59,11 +77,14 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
         // Activation bars are backdrop for the conversation: they cover the lifeline but must sit under
         // the message arrows, labels and notes that cross them.
-        var activations = CalculateActivations(model, elementYPositions);
+        var activations = CalculateActivations(elements, elementYPositions);
         DrawActivations(builder, activations, participantPositions);
 
+        // Block frames sit over the lifelines and under the messages and notes they enclose.
+        DrawFrames(builder, plan.Frames, options);
+
         // Draw elements (messages, notes)
-        DrawElements(builder, model, participantPositions, elementYPositions, options);
+        DrawElements(builder, elements, model.AutoNumber, participantPositions, elementYPositions, options);
 
         // Draw participants (bottom) - optional, mimics Mermaid behavior
         DrawParticipants(builder, model, participantPositions, lifelineEndY, options);
@@ -114,7 +135,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     /// whole diagram right instead of being clipped at the canvas edge.
     /// </summary>
     static (Dictionary<string, double> positions, double width) CalculateLayout(
-        SequenceModel model, RenderOptions options)
+        SequenceModel model, Plan plan, RenderOptions options)
     {
         var positions = new Dictionary<string, double>();
         var x = options.Padding + participantWidth / 2;
@@ -132,7 +153,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             maxX = positions[model.Participants[^1].Id] + participantWidth / 2;
         }
 
-        foreach (var element in model.Elements)
+        foreach (var element in plan.Elements)
         {
             switch (element)
             {
@@ -151,6 +172,13 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             }
         }
 
+        foreach (var frame in plan.Frames)
+        {
+            SpanFrame(frame, plan.Elements, model, positions, options);
+            minX = Math.Min(minX, frame.Left);
+            maxX = Math.Max(maxX, frame.Right);
+        }
+
         var shift = Math.Max(0, options.Padding - minX);
         if (shift > 0)
         {
@@ -158,29 +186,364 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             {
                 positions[id] += shift;
             }
+
+            foreach (var frame in plan.Frames)
+            {
+                frame.Left += shift;
+                frame.Right += shift;
+            }
         }
 
         return (positions, maxX + shift + options.Padding);
     }
 
-    static (double height, Dictionary<int, double> elementYPositions) CalculateHeight(
-        SequenceModel model, RenderOptions options)
+    // The vertical plan of the diagram: the messages, notes and activations in drawing order with the
+    // y each is drawn at, and the frames of the blocks around them.
+    sealed class Plan
     {
-        var elementYPositions = new Dictionary<int, double>();
-        var headerHeight = HeaderHeight(model, options);
-        var y = options.Padding + headerHeight + messageSpacing;
-        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : 30;
+        public List<SequenceElement> Elements { get; } = [];
+        public Dictionary<int, double> Ys { get; } = [];
+        public List<Frame> Frames { get; } = [];
+        public double Height { get; set; }
+    }
 
-        for (var i = 0; i < model.Elements.Count; i++)
+    // A block drawn around part of the conversation. Kind is the word shown in its corner tab (`loop`,
+    // `alt`, ...); a `rect` has none and is just a filled background.
+    sealed class Frame
+    {
+        public string? Kind { get; init; }
+        public string? Title { get; init; }
+        public string? Fill { get; init; }
+        public List<(double Y, string? Label)> Dividers { get; } = [];
+        public int FirstElement { get; init; }
+        public int EndElement { get; set; }
+
+        // How many levels of block are nested inside this one; each makes it a little wider.
+        public int InnerDepth { get; set; }
+        public double Top { get; set; }
+        public double Bottom { get; set; }
+        public double Left { get; set; }
+        public double Right { get; set; }
+    }
+
+    // The sections of a block element: its body, then one per `else` / `and` / `option`. Null for
+    // anything that is not a block.
+    static (string? Kind, string? Fill, List<(string? Label, List<SequenceElement> Elements)> Sections)? AsBlock(
+        SequenceElement element)
+    {
+        List<(string? Label, List<SequenceElement> Elements)> sections;
+        switch (element)
         {
-            var element = model.Elements[i];
-            y += LeadIn(element, options);
-            elementYPositions[i] = y + titleOffset;
-            y += GetElementHeight(element, options);
+            case Loop loop:
+                return ("loop", null, [(loop.Label, loop.Elements)]);
+            case Opt opt:
+                return ("opt", null, [(opt.Condition, opt.Elements)]);
+            case Break breakBlock:
+                return ("break", null, [(breakBlock.Label, breakBlock.Elements)]);
+            case Rect rect:
+                return (null, rect.Color ?? "#EDF2AE", [(null, rect.Elements)]);
+            case Alt alt:
+                sections = [(alt.Condition, alt.Elements)];
+                sections.AddRange(alt.ElseBranches.Select(_ => (_.Condition, _.Elements)));
+                return ("alt", null, sections);
+            case Par par:
+                sections = [(par.Label, par.Elements)];
+                sections.AddRange(par.AndBranches.Select(_ => (_.Label, _.Elements)));
+                return ("par", null, sections);
+            case Critical critical:
+                sections = [(critical.Label, critical.Elements)];
+                sections.AddRange(critical.OptionBranches.Select(_ => (_.Label, _.Elements)));
+                return ("critical", null, sections);
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>
+    /// Walks the conversation top to bottom, giving every message, note and activation its y and every
+    /// block a frame. A frame opens just above its first element with room for its header, gets a divider
+    /// where each <c>else</c> / <c>and</c> / <c>option</c> begins, and closes under the lowest thing inside it.
+    /// </summary>
+    static Plan PlanRows(SequenceModel model, RenderOptions options)
+    {
+        var plan = new Plan();
+        var headerHeight = HeaderHeight(model, options);
+        var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : 30;
+        var y = options.Padding + headerHeight + messageSpacing + titleOffset;
+
+        // The bottom edge of the lowest thing placed so far, which a frame edge must stay clear of.
+        var lastBottom = double.NegativeInfinity;
+
+        Walk(model.Elements);
+        plan.Height = y + headerHeight + options.Padding;
+        return plan;
+
+        // Returns how many levels of block the elements hold.
+        int Walk(List<SequenceElement> elements)
+        {
+            var depth = 0;
+            foreach (var element in elements)
+            {
+                if (AsBlock(element) is not (var kind, var fill, var sections))
+                {
+                    Place(element);
+                    continue;
+                }
+
+                var frame = new Frame
+                {
+                    Kind = kind,
+                    Fill = fill,
+                    Title = sections[0].Label,
+                    FirstElement = plan.Elements.Count,
+                    Top = Math.Max(y - frameLeadIn, lastBottom + frameGap)
+                };
+                plan.Frames.Add(frame);
+
+                // A `rect` has no header to make room for.
+                var header = kind is null ? frameGap : frameHeaderHeight;
+                y = frame.Top + frameLeadIn + header;
+                lastBottom = frame.Top + header - frameGap;
+
+                var inner = 0;
+                for (var i = 0; i < sections.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        var dividerY = Math.Max(y - frameLeadIn, lastBottom + frameGap);
+                        frame.Dividers.Add((dividerY, sections[i].Label));
+                        y = dividerY + frameLeadIn + frameDividerHeight;
+                        lastBottom = dividerY + frameDividerHeight - frameGap;
+                    }
+
+                    inner = Math.Max(inner, Walk(sections[i].Elements));
+                }
+
+                frame.EndElement = plan.Elements.Count;
+                frame.InnerDepth = inner;
+                frame.Bottom = lastBottom + frameGap;
+                lastBottom = frame.Bottom;
+                y = Math.Max(y, frame.Bottom + frameLeadIn);
+                depth = Math.Max(depth, inner + 1);
+            }
+
+            return depth;
         }
 
-        var totalHeight = y + headerHeight + options.Padding + titleOffset;
-        return (totalHeight, elementYPositions);
+        void Place(SequenceElement element)
+        {
+            y += LeadIn(element, options);
+
+            // A message's label sits above its arrow. After a note - which is taller than the step a
+            // message takes - the arrow has to drop far enough for the label to clear the note.
+            if (element is Message labelled &&
+                labelled.FromId != labelled.ToId &&
+                !string.IsNullOrEmpty(labelled.Text))
+            {
+                y = Math.Max(y, lastBottom + frameLeadIn + ExtraLines(labelled.Text, options));
+            }
+
+            plan.Ys[plan.Elements.Count] = y;
+            plan.Elements.Add(element);
+
+            switch (element)
+            {
+                case Message message when message.FromId == message.ToId:
+                    lastBottom = Math.Max(lastBottom, y + selfMessageLoopHeight + ExtraLines(message.Text, options) / 2 + 4);
+                    break;
+                case Message:
+                    lastBottom = Math.Max(lastBottom, y + 12);
+                    break;
+                case Note note:
+                    lastBottom = Math.Max(lastBottom, y + NoteHeight(note, options));
+                    break;
+            }
+
+            y += GetElementHeight(element, options);
+        }
+    }
+
+    // A frame reaches from the leftmost to the rightmost thing it encloses, a step wider for each level of
+    // block nested inside it, and at least wide enough for its own header.
+    static void SpanFrame(Frame frame, List<SequenceElement> elements, SequenceModel model,
+        Dictionary<string, double> positions, RenderOptions options)
+    {
+        var left = double.PositiveInfinity;
+        var right = double.NegativeInfinity;
+
+        void Include(double from, double to)
+        {
+            left = Math.Min(left, from);
+            right = Math.Max(right, to);
+        }
+
+        for (var i = frame.FirstElement; i < frame.EndElement; i++)
+        {
+            switch (elements[i])
+            {
+                case Message message
+                    when positions.TryGetValue(message.FromId, out var fromX) &&
+                         positions.TryGetValue(message.ToId, out var toX):
+                    Include(Math.Min(fromX, toX) - participantWidth / 2, Math.Max(fromX, toX) + participantWidth / 2);
+                    if (message.FromId == message.ToId &&
+                        message.Text is not null)
+                    {
+                        Include(fromX, fromX + selfMessageLoopWidth + 5 + MeasureText(message.Text, options.FontSize));
+                    }
+
+                    break;
+
+                case Note note when positions.ContainsKey(note.ParticipantId):
+                    var (noteX, noteWidth) = NoteGeometry(note, positions, options);
+                    Include(noteX, noteX + noteWidth);
+                    break;
+            }
+        }
+
+        // A block with nothing in it spans the whole conversation.
+        if (double.IsInfinity(left))
+        {
+            foreach (var participant in model.Participants)
+            {
+                var x = positions[participant.Id];
+                Include(x - participantWidth / 2, x + participantWidth / 2);
+            }
+        }
+
+        if (double.IsInfinity(left))
+        {
+            Include(options.Padding, options.Padding + participantWidth);
+        }
+
+        var margin = frameNestingStep * (frame.InnerDepth + 1);
+        frame.Left = left - margin;
+        frame.Right = Math.Max(right + margin, frame.Left + FrameHeaderWidth(frame, options));
+    }
+
+    static double FrameTabWidth(Frame frame, RenderOptions options) =>
+        Math.Max(frameTabMinWidth, MeasureText(frame.Kind ?? "", options.FontSize) + 20);
+
+    static string? FrameLabel(string? label)
+    {
+        if (string.IsNullOrWhiteSpace(label))
+        {
+            return null;
+        }
+
+        return $"[{LabelLines.Flatten(label)}]";
+    }
+
+    static double FrameHeaderWidth(Frame frame, RenderOptions options)
+    {
+        if (frame.Kind is null)
+        {
+            return 0;
+        }
+
+        var width = FrameTabWidth(frame, options) + 20;
+        if (FrameLabel(frame.Title) is { } title)
+        {
+            width += MeasureText(title, options.FontSize);
+        }
+
+        foreach (var (_, label) in frame.Dividers)
+        {
+            if (FrameLabel(label) is { } dividerLabel)
+            {
+                width = Math.Max(width, MeasureText(dividerLabel, options.FontSize) + 20);
+            }
+        }
+
+        return width;
+    }
+
+    static void DrawRectBackgrounds(SvgBuilder builder, List<Frame> frames)
+    {
+        foreach (var frame in frames)
+        {
+            if (frame.Kind is null)
+            {
+                builder.AddRect(
+                    frame.Left,
+                    frame.Top,
+                    frame.Right - frame.Left,
+                    frame.Bottom - frame.Top,
+                    fill: frame.Fill,
+                    stroke: "none");
+            }
+        }
+    }
+
+    static void DrawFrames(SvgBuilder builder, List<Frame> frames, RenderOptions options)
+    {
+        foreach (var frame in frames)
+        {
+            if (frame.Kind is null)
+            {
+                continue;
+            }
+
+            builder.AddRect(
+                frame.Left,
+                frame.Top,
+                frame.Right - frame.Left,
+                frame.Bottom - frame.Top,
+                fill: "none",
+                stroke: frameStroke,
+                strokeWidth: 1);
+
+            // Corner tab naming the block, its lower right corner cut off.
+            var tabWidth = FrameTabWidth(frame, options);
+            var tab = string.Create(
+                CultureInfo.InvariantCulture,
+                $"M{frame.Left:0.##},{frame.Top:0.##} H{frame.Left + tabWidth:0.##} V{frame.Top + frameTabHeight - 7:0.##} L{frame.Left + tabWidth - 7:0.##},{frame.Top + frameTabHeight:0.##} H{frame.Left:0.##} Z");
+            builder.AddPath(tab, fill: "#ECECFF", stroke: frameStroke, strokeWidth: 1);
+            builder.AddText(
+                frame.Left + (tabWidth - 7) / 2,
+                frame.Top + frameTabHeight / 2,
+                frame.Kind,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily,
+                fontWeight: "bold");
+
+            if (FrameLabel(frame.Title) is { } title)
+            {
+                builder.AddText(
+                    (frame.Left + tabWidth + frame.Right) / 2,
+                    frame.Top + frameTabHeight / 2,
+                    title,
+                    anchor: "middle",
+                    baseline: "middle",
+                    fontSize: options.FontSize,
+                    fontFamily: options.FontFamily);
+            }
+
+            foreach (var (dividerY, label) in frame.Dividers)
+            {
+                builder.AddLine(
+                    frame.Left,
+                    dividerY,
+                    frame.Right,
+                    dividerY,
+                    stroke: frameStroke,
+                    strokeWidth: 1,
+                    strokeDasharray: "3,3");
+
+                if (FrameLabel(label) is { } dividerLabel)
+                {
+                    builder.AddText(
+                        (frame.Left + frame.Right) / 2,
+                        dividerY + frameDividerHeight / 2,
+                        dividerLabel,
+                        anchor: "middle",
+                        baseline: "middle",
+                        fontSize: options.FontSize,
+                        fontFamily: options.FontFamily);
+                }
+            }
+        }
     }
 
     // Room needed above an element's own position. A message's label sits above its arrow and grows
@@ -344,17 +707,17 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
     /// its <c>-</c> deactivates the message's <em>sender</em>, so <c>Bob--&gt;&gt;-Alice</c> closes Bob's bar.
     /// </summary>
     static Dictionary<string, List<(double startY, double endY)>> CalculateActivations(
-        SequenceModel model, Dictionary<int, double> yPositions)
+        List<SequenceElement> elements, Dictionary<int, double> yPositions)
     {
         var activations = new Dictionary<string, List<(double startY, double endY)>>();
         var activeLifelines = new Dictionary<string, double>();
         double? lastMessageY = null;
 
-        for (var i = 0; i < model.Elements.Count; i++)
+        for (var i = 0; i < elements.Count; i++)
         {
             var y = yPositions[i];
 
-            switch (model.Elements[i])
+            switch (elements[i])
             {
                 case Message msg:
                     lastMessageY = y;
@@ -417,18 +780,18 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         }
     }
 
-    static void DrawElements(SvgBuilder builder, SequenceModel model,
+    static void DrawElements(SvgBuilder builder, List<SequenceElement> elements, bool autoNumber,
         Dictionary<string, double> positions,
         Dictionary<int, double> yPositions,
         RenderOptions options)
     {
         var messageNumber = 0;
 
-        for (var i = 0; i < model.Elements.Count; i++)
+        for (var i = 0; i < elements.Count; i++)
         {
             var y = yPositions[i];
 
-            switch (model.Elements[i])
+            switch (elements[i])
             {
                 case Message msg:
                     messageNumber++;
@@ -438,7 +801,7 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                         positions,
                         y,
                         options,
-                        model.AutoNumber ? messageNumber : null);
+                        autoNumber ? messageNumber : null);
                     break;
 
                 case Note note:

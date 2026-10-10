@@ -1,0 +1,565 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 460 1112"
+  style="max-width: 460px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="arrowhead-dotted"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="cross"
+      refX="4"
+      refY="4"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M1,1 L7,7 M7,1 L1,7"
+        class="arrowMarkerPath"
+        fill="none" />
+    </marker>
+  </defs>
+  <rect
+    x="20"
+    y="898"
+    width="420"
+    height="124"
+    fill="rgb(191, 223, 255)"
+    stroke="none" />
+  <rect
+    x="30"
+    y="20"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="80"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Alice</text>
+  <rect
+    x="180"
+    y="20"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="230"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Bob</text>
+  <rect
+    x="330"
+    y="20"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="380"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">John</text>
+  <line
+    x1="80"
+    y1="60"
+    x2="80"
+    y2="1052"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="230"
+    y1="60"
+    x2="230"
+    y2="1052"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="380"
+    y1="60"
+    x2="380"
+    y2="1052"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <rect
+    x="20"
+    y="132"
+    width="270"
+    height="78"
+    fill="none"
+    stroke="#9370DB" />
+  <path
+    d="M20,132 H70.8 V145 L63.8,152 H20 Z"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="41.9"
+    y="142"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">loop</text>
+  <text
+    x="180.4"
+    y="142"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[Every minute]</text>
+  <rect
+    x="20"
+    y="218"
+    width="270"
+    height="154"
+    fill="none"
+    stroke="#9370DB" />
+  <path
+    d="M20,218 H70 V231 L63,238 H20 Z"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="41.5"
+    y="228"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">alt</text>
+  <text
+    x="180"
+    y="228"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[is sick]</text>
+  <line
+    x1="20"
+    y1="298"
+    x2="290"
+    y2="298"
+    stroke="#9370DB"
+    stroke-dasharray="3,3" />
+  <text
+    x="155"
+    y="311"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[is well]</text>
+  <rect
+    x="20"
+    y="380"
+    width="270"
+    height="78"
+    fill="none"
+    stroke="#9370DB" />
+  <path
+    d="M20,380 H70 V393 L63,400 H20 Z"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="41.5"
+    y="390"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">opt</text>
+  <text
+    x="180"
+    y="390"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[Extra response]</text>
+  <rect
+    x="20"
+    y="466"
+    width="420"
+    height="154"
+    fill="none"
+    stroke="#9370DB" />
+  <path
+    d="M20,466 H70 V479 L63,486 H20 Z"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="41.5"
+    y="476"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">par</text>
+  <text
+    x="255"
+    y="476"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[Alice to Bob]</text>
+  <line
+    x1="20"
+    y1="546"
+    x2="440"
+    y2="546"
+    stroke="#9370DB"
+    stroke-dasharray="3,3" />
+  <text
+    x="230"
+    y="559"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[Alice to John]</text>
+  <rect
+    x="20"
+    y="628"
+    width="286.4"
+    height="176"
+    fill="none"
+    stroke="#9370DB" />
+  <path
+    d="M20,628 H101.6 V641 L94.6,648 H20 Z"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="57.3"
+    y="638"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">critical</text>
+  <text
+    x="204"
+    y="638"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[Establish a connection]</text>
+  <line
+    x1="20"
+    y1="708"
+    x2="306.4"
+    y2="708"
+    stroke="#9370DB"
+    stroke-dasharray="3,3" />
+  <text
+    x="163.2"
+    y="721"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[Network timeout]</text>
+  <rect
+    x="20"
+    y="812"
+    width="270"
+    height="78"
+    fill="none"
+    stroke="#9370DB" />
+  <path
+    d="M20,812 H78.5 V825 L71.5,832 H20 Z"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="45.75"
+    y="822"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">break</text>
+  <text
+    x="184.25"
+    y="822"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[when it fails]</text>
+  <line
+    x1="80"
+    y1="110"
+    x2="230"
+    y2="110"
+    stroke="#333" />
+  <polygon
+    points="230,110 222,106 222,114"
+    fill="#333" />
+  <text
+    x="155"
+    y="102"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">Hello</text>
+  <line
+    x1="230"
+    y1="190"
+    x2="80"
+    y2="190"
+    stroke="#333" />
+  <polygon
+    points="80,190 88,186 88,194"
+    fill="#333" />
+  <text
+    x="155"
+    y="182"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">ping</text>
+  <line
+    x1="230"
+    y1="276"
+    x2="80"
+    y2="276"
+    stroke="#333" />
+  <polygon
+    points="80,276 88,272 88,280"
+    fill="#333" />
+  <text
+    x="155"
+    y="268"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">Not so good</text>
+  <line
+    x1="230"
+    y1="352"
+    x2="80"
+    y2="352"
+    stroke="#333" />
+  <polygon
+    points="80,352 88,348 88,356"
+    fill="#333" />
+  <text
+    x="155"
+    y="344"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">Feeling fresh</text>
+  <line
+    x1="230"
+    y1="438"
+    x2="80"
+    y2="438"
+    stroke="#333" />
+  <polygon
+    points="80,438 88,434 88,442"
+    fill="#333" />
+  <text
+    x="155"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">Thanks</text>
+  <line
+    x1="80"
+    y1="524"
+    x2="230"
+    y2="524"
+    stroke="#333" />
+  <polygon
+    points="230,524 222,520 222,528"
+    fill="#333" />
+  <text
+    x="155"
+    y="516"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">Hello Bob</text>
+  <line
+    x1="80"
+    y1="600"
+    x2="380"
+    y2="600"
+    stroke="#333" />
+  <polygon
+    points="380,600 372,596 372,604"
+    fill="#333" />
+  <text
+    x="230"
+    y="592"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">Hello John</text>
+  <line
+    x1="80"
+    y1="686"
+    x2="230"
+    y2="686"
+    stroke="#333" />
+  <polygon
+    points="230,686 222,682 222,690"
+    fill="#333" />
+  <text
+    x="155"
+    y="678"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">connect</text>
+  <path
+    d="M80,762 L120,762 L120,792 L80,792"
+    fill="none"
+    stroke="#333"
+    marker-end="url(#arrowhead)" />
+  <text
+    x="125"
+    y="777"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Log error</text>
+  <line
+    x1="80"
+    y1="870"
+    x2="230"
+    y2="870"
+    stroke="#333" />
+  <polygon
+    points="230,870 222,866 222,874"
+    fill="#333" />
+  <text
+    x="155"
+    y="862"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">failed</text>
+  <path
+    d="M30,934 L272,934 L280,942 L280,974 L30,974 Z"
+    fill="#FFFFCC"
+    stroke="#AAAA33" />
+  <line
+    x1="272"
+    y1="934"
+    x2="272"
+    y2="942"
+    stroke="#AAAA33" />
+  <line
+    x1="272"
+    y1="942"
+    x2="280"
+    y2="942"
+    stroke="#AAAA33" />
+  <text
+    x="155"
+    y="954"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Highlighted</text>
+  <line
+    x1="80"
+    y1="1002"
+    x2="380"
+    y2="1002"
+    stroke="#333" />
+  <polygon
+    points="380,1002 372,998 372,1006"
+    fill="#333" />
+  <text
+    x="230"
+    y="994"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">Bye</text>
+  <rect
+    x="30"
+    y="1052"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="80"
+    y="1072"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Alice</text>
+  <rect
+    x="180"
+    y="1052"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="230"
+    y="1072"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Bob</text>
+  <rect
+    x="330"
+    y="1052"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="380"
+    y="1072"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">John</text>
+</svg>

@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 420 370"
+  viewBox="0 0 420 388"
   style="max-width: 420px;"
   role="graphics-document document">
   <style
@@ -81,14 +81,14 @@
     x1="70"
     y1="60"
     x2="70"
-    y2="310"
+    y2="328"
     stroke="#999"
     stroke-dasharray="5,5" />
   <line
     x1="220"
     y1="60"
     x2="220"
-    y2="310"
+    y2="328"
     stroke="#999"
     stroke-dasharray="5,5" />
   <line
@@ -132,47 +132,47 @@
     font-family="Arial, sans-serif">Bob thinks</text>
   <line
     x1="220"
-    y1="210"
+    y1="228"
     x2="70"
-    y2="210"
+    y2="228"
     stroke="#333"
     stroke-dasharray="5,5" />
   <polygon
-    points="70,210 78,206 78,214"
+    points="70,228 78,224 78,232"
     fill="#333" />
   <text
     x="145"
-    y="202"
+    y="220"
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
     font-family="Arial, sans-serif">Hi</text>
   <path
-    d="M20,260 L262,260 L270,268 L270,300 L20,300 Z"
+    d="M20,278 L262,278 L270,286 L270,318 L20,318 Z"
     fill="#FFFFCC"
     stroke="#AAAA33" />
   <line
     x1="262"
-    y1="260"
+    y1="278"
     x2="262"
-    y2="268"
+    y2="286"
     stroke="#AAAA33" />
   <line
     x1="262"
-    y1="268"
+    y1="286"
     x2="270"
-    y2="268"
+    y2="286"
     stroke="#AAAA33" />
   <text
     x="145"
-    y="280"
+    y="298"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Conversation</text>
   <rect
     x="20"
-    y="310"
+    y="328"
     width="100"
     height="40"
     rx="3"
@@ -181,14 +181,14 @@
     stroke="#9370DB" />
   <text
     x="70"
-    y="330"
+    y="348"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"
     font-family="Arial, sans-serif">Alice</text>
   <rect
     x="170"
-    y="310"
+    y="328"
     width="100"
     height="40"
     rx="3"
@@ -197,7 +197,7 @@
     stroke="#9370DB" />
   <text
     x="220"
-    y="330"
+    y="348"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="14px"

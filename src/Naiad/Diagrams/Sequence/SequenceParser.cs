@@ -1,4 +1,5 @@
 using NotePosition = Naiad.Diagrams.Sequence.NotePosition;
+using Rect = Naiad.Diagrams.Sequence.Rect;
 
 class SequenceParser : IDiagramParser<SequenceModel>
 {
@@ -133,9 +134,10 @@ class SequenceParser : IDiagramParser<SequenceModel>
                 .Then(Token(_ => _ != '\r' && _ != '\n').ManyString())
                 .Before(CommonParsers.LineEnd);
 
-        // Block markers (alt/else/end, loop, par/and, opt, critical, break, rect)
-        // These are skipped for now - content renders without visual grouping
-        var blockStartParser =
+        // Block markers: `loop`, `alt`/`else`, `opt`, `par`/`and`, `critical`/`option`, `break` and `rect`
+        // open or continue a block, and `end` closes one. The keyword has to stand alone as a word, so a
+        // line that merely starts with one (`participant`, `android->>B`) is not taken for a marker.
+        var blockMarkerParser =
             from _ in CommonParsers.InlineWhitespace
             from keyword in OneOf(
                 Try(String("alt")),
@@ -143,21 +145,22 @@ class SequenceParser : IDiagramParser<SequenceModel>
                 Try(String("loop")),
                 Try(String("par")),
                 Try(String("and")),
+                Try(String("option")),
                 Try(String("opt")),
                 Try(String("critical")),
                 Try(String("break")),
                 Try(String("rect")),
                 String("end")
             )
-            from __ in Token(_ => _ != '\r' && _ != '\n').ManyString()
+            from text in OneOf(
+                Token(_ => _ is ' ' or '\t').SkipAtLeastOnce()
+                    .Then(Token(_ => _ != '\r' && _ != '\n').ManyString()),
+                Lookahead(CommonParsers.LineEnd).ThenReturn(""))
             from ___ in CommonParsers.LineEnd
-            select Unit.Value;
+            select new BlockMarkerItem(keyword, text.Trim());
 
         var skipLine =
-            OneOf(
-                Try(blockStartParser),
-                CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))
-            );
+            CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
 
         var parseContent =
             OneOf(
@@ -167,6 +170,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
                 Try(activationParser.Select<ISequenceContent?>(_ => new ActivationItem(_))),
                 Try(autoNumberParser.Select<ISequenceContent?>(_ => new AutoNumberItem(_))),
                 Try(titleParser.Select<ISequenceContent?>(_ => new TitleItem(_))),
+                Try(blockMarkerParser.Select<ISequenceContent?>(_ => _)),
                 skipLine.ThenReturn<ISequenceContent?>(null)
             ).Many();
 
@@ -186,6 +190,50 @@ class SequenceParser : IDiagramParser<SequenceModel>
     {
         var model = new SequenceModel();
         var participantIds = new HashSet<string>();
+
+        // The blocks currently open, innermost last, each with the list its next element goes into: the
+        // block's own body, or the branch its latest `else` / `and` / `option` began.
+        var open = new Stack<(SequenceElement Block, List<SequenceElement> Target)>();
+
+        void Add(SequenceElement element)
+        {
+            if (open.TryPeek(out var top))
+            {
+                top.Target.Add(element);
+                return;
+            }
+
+            model.Elements.Add(element);
+        }
+
+        void Open(SequenceElement block, List<SequenceElement> body)
+        {
+            Add(block);
+            open.Push((block, body));
+        }
+
+        // `else`, `and` and `option` each continue one kind of block, which has to be the innermost.
+        void Branch(string keyword, string owner, List<SequenceElement>? branch)
+        {
+            if (branch is null)
+            {
+                throw new MermaidParseException(
+                    $"Failed to parse sequence diagram: '{keyword}' is only valid inside a '{owner}' block");
+            }
+
+            var (block, _) = open.Pop();
+            open.Push((block, branch));
+        }
+
+        static string? TextOrNull(string text)
+        {
+            if (text.Length == 0)
+            {
+                return null;
+            }
+
+            return text;
+        }
 
         foreach (var item in content)
         {
@@ -218,15 +266,93 @@ class SequenceParser : IDiagramParser<SequenceModel>
                             });
                         participantIds.Add(m.ToId);
                     }
-                    model.Elements.Add(m);
+                    Add(m);
                     break;
 
                 case NoteItem note:
-                    model.Elements.Add(note.Value);
+                    Add(note.Value);
                     break;
 
                 case ActivationItem activation:
-                    model.Elements.Add(activation.Value);
+                    Add(activation.Value);
+                    break;
+
+                case BlockMarkerItem marker:
+                    var text = TextOrNull(marker.Text);
+                    var innermost = open.TryPeek(out var current) ? current.Block : null;
+                    switch (marker.Keyword)
+                    {
+                        case "loop":
+                            var loop = new Loop { Label = text };
+                            Open(loop, loop.Elements);
+                            break;
+                        case "alt":
+                            var alt = new Alt { Condition = text };
+                            Open(alt, alt.Elements);
+                            break;
+                        case "opt":
+                            var opt = new Opt { Condition = text };
+                            Open(opt, opt.Elements);
+                            break;
+                        case "par":
+                            var par = new Par { Label = text };
+                            Open(par, par.Elements);
+                            break;
+                        case "critical":
+                            var critical = new Critical { Label = text };
+                            Open(critical, critical.Elements);
+                            break;
+                        case "break":
+                            var breakBlock = new Break { Label = text };
+                            Open(breakBlock, breakBlock.Elements);
+                            break;
+                        case "rect":
+                            var rect = new Rect { Color = text };
+                            Open(rect, rect.Elements);
+                            break;
+                        case "else":
+                            List<SequenceElement>? elseBranch = null;
+                            if (innermost is Alt owningAlt)
+                            {
+                                var branch = new AltElse { Condition = text };
+                                owningAlt.ElseBranches.Add(branch);
+                                elseBranch = branch.Elements;
+                            }
+
+                            Branch("else", "alt", elseBranch);
+                            break;
+                        case "and":
+                            List<SequenceElement>? andBranch = null;
+                            if (innermost is Par owningPar)
+                            {
+                                var branch = new ParAnd { Label = text };
+                                owningPar.AndBranches.Add(branch);
+                                andBranch = branch.Elements;
+                            }
+
+                            Branch("and", "par", andBranch);
+                            break;
+                        case "option":
+                            List<SequenceElement>? optionBranch = null;
+                            if (innermost is Critical owningCritical)
+                            {
+                                var branch = new CriticalOption { Label = text };
+                                owningCritical.OptionBranches.Add(branch);
+                                optionBranch = branch.Elements;
+                            }
+
+                            Branch("option", "critical", optionBranch);
+                            break;
+                        default:
+                            if (!open.TryPop(out _))
+                            {
+                                throw new MermaidParseException(
+                                    "Failed to parse sequence diagram: 'end' without a block to close");
+                            }
+
+                            break;
+                    }
+
                     break;
 
                 case AutoNumberItem autoNumber:
@@ -237,6 +363,12 @@ class SequenceParser : IDiagramParser<SequenceModel>
                     model.Title = title.Value;
                     break;
             }
+        }
+
+        if (open.Count > 0)
+        {
+            throw new MermaidParseException(
+                "Failed to parse sequence diagram: a block is missing its closing 'end'");
         }
 
         return model;
@@ -251,4 +383,5 @@ class SequenceParser : IDiagramParser<SequenceModel>
     readonly record struct ActivationItem(Activation Value) : ISequenceContent;
     readonly record struct AutoNumberItem(bool Value) : ISequenceContent;
     readonly record struct TitleItem(string Value) : ISequenceContent;
+    readonly record struct BlockMarkerItem(string Keyword, string Text) : ISequenceContent;
 }
