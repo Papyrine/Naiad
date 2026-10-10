@@ -17,47 +17,73 @@ public static class Mermaid
     internal static SvgDocument RenderToSvgDocument(string input, RenderOptions? options = null)
     {
         IconPackRegistry.MarkRendered();
-        input = input.Trim();
         options ??= RenderOptions.Default;
-        input = StripInitBlock(input);
-        var diagramType = DetectDiagramType(input);
+        input = StripPreamble(input.Trim(), out var title);
+
+        if (!TryMatchType(input, out var diagramType))
+        {
+            throw new MermaidException($"Unknown diagram type in: {input.Split('\n')[0]}");
+        }
 
         return diagramType switch
         {
-            DiagramType.Pie => RenderPie(input, options),
-            DiagramType.Flowchart => RenderFlowchart(input, options),
-            DiagramType.Sequence => RenderSequence(input, options),
-            DiagramType.Class => RenderClass(input, options),
-            DiagramType.State => RenderState(input, options),
-            DiagramType.EntityRelationship => RenderEntityRelationship(input, options),
-            DiagramType.GitGraph => RenderGitGraph(input, options),
-            DiagramType.Gantt => RenderGantt(input, options),
-            DiagramType.Mindmap => RenderMindmap(input, options),
-            DiagramType.Timeline => RenderTimeline(input, options),
-            DiagramType.UserJourney => RenderUserJourney(input, options),
-            DiagramType.Quadrant => RenderQuadrant(input, options),
-            DiagramType.XYChart => RenderXYChart(input, options),
-            DiagramType.Sankey => RenderSankey(input, options),
-            DiagramType.Block => RenderBlock(input, options),
-            DiagramType.Kanban => RenderKanban(input, options),
-            DiagramType.Packet => RenderPacket(input, options),
-            DiagramType.C4Context => RenderC4(input, options),
-            DiagramType.C4Container => RenderC4(input, options),
-            DiagramType.C4Component => RenderC4(input, options),
-            DiagramType.C4Deployment => RenderC4(input, options),
-            DiagramType.Requirement => RenderRequirement(input, options),
-            DiagramType.Architecture => RenderArchitecture(input, options),
-            DiagramType.Radar => RenderRadar(input, options),
-            DiagramType.Treemap => RenderTreemap(input, options),
+            DiagramType.Pie =>
+                Render(new PieParser(), new PieRenderer(), "pie chart", input, title, options),
+            DiagramType.Flowchart =>
+                Render(new FlowchartParser(), new FlowchartRenderer(), "flowchart", input, title, options),
+            DiagramType.Sequence =>
+                Render(new SequenceParser(), new SequenceRenderer(), "sequence diagram", input, title, options),
+            DiagramType.Class =>
+                Render(new ClassParser(), new ClassRenderer(), "class diagram", input, title, options),
+            DiagramType.State =>
+                Render(new StateParser(), new StateRenderer(), "state diagram", input, title, options),
+            DiagramType.EntityRelationship =>
+                Render(new ERParser(), new ERRenderer(), "ER diagram", input, title, options),
+            DiagramType.GitGraph =>
+                Render(new GitGraphParser(), new GitGraphRenderer(), "git graph", input, title, options),
+            DiagramType.Gantt =>
+                Render(new GanttParser(), new GanttRenderer(), "gantt chart", input, title, options),
+            DiagramType.Mindmap =>
+                Render(new MindmapParser(), new MindmapRenderer(), "mindmap", input, title, options),
+            DiagramType.Timeline =>
+                Render(new TimelineParser(), new TimelineRenderer(), "timeline", input, title, options),
+            DiagramType.UserJourney =>
+                Render(new UserJourneyParser(), new UserJourneyRenderer(), "user journey", input, title, options),
+            DiagramType.Quadrant =>
+                Render(new QuadrantParser(), new QuadrantRenderer(), "quadrant chart", input, title, options),
+            DiagramType.XYChart =>
+                Render(new XYChartParser(), new XYChartRenderer(), "XY chart", input, title, options),
+            DiagramType.Sankey =>
+                Render(new SankeyParser(), new SankeyRenderer(), "Sankey diagram", input, title, options),
+            DiagramType.Block =>
+                Render(new BlockParser(), new BlockRenderer(), "block diagram", input, title, options),
+            DiagramType.Kanban =>
+                Render(new KanbanParser(), new KanbanRenderer(), "kanban board", input, title, options),
+            DiagramType.Packet =>
+                Render(new PacketParser(), new PacketRenderer(), "packet diagram", input, title, options),
+            DiagramType.C4Context or
+                DiagramType.C4Container or
+                DiagramType.C4Component or
+                DiagramType.C4Deployment =>
+                Render(new C4Parser(), new C4Renderer(), "C4 diagram", input, title, options),
+            DiagramType.Requirement =>
+                Render(new RequirementParser(), new RequirementRenderer(), "requirement diagram", input, title, options),
+            DiagramType.Architecture =>
+                Render(new ArchitectureParser(), new ArchitectureRenderer(), "architecture diagram", input, title, options),
+            DiagramType.Radar =>
+                Render(new RadarParser(), new RadarRenderer(), "radar diagram", input, title, options),
+            DiagramType.Treemap =>
+                Render(new TreemapParser(), new TreemapRenderer(), "treemap diagram", input, title, options),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
 
     /// <summary>
     /// Detects the <see cref="DiagramType"/> from the opening keyword of Mermaid <paramref name="input"/>,
-    /// skipping any leading <c>%%{init:...}%%</c> configuration blocks. Unlike rendering this never throws:
-    /// it returns <see langword="false"/> for empty input or markup whose first line names no known diagram,
-    /// so callers such as the live editor can label whatever is currently being typed.
+    /// skipping whatever may precede it: YAML front matter, <c>%%{init:...}%%</c> configuration blocks and
+    /// <c>%%</c> comment lines. Unlike rendering this never throws: it returns <see langword="false"/> for
+    /// empty input or markup whose first line names no known diagram, so callers such as the live editor
+    /// can label whatever is currently being typed.
     /// </summary>
     public static bool TryDetectType(string? input, out DiagramType type)
     {
@@ -67,35 +93,34 @@ public static class Mermaid
             return false;
         }
 
-        return TryMatchType(StripInitBlock(input.Trim()), out type);
+        return TryMatchType(StripPreamble(input.Trim(), out _), out type);
     }
 
-    static DiagramType DetectDiagramType(string input)
+    static SvgDocument Render<TModel>(
+        IDiagramParser<TModel> parser,
+        IDiagramRenderer<TModel> renderer,
+        string description,
+        string input,
+        string? frontMatterTitle,
+        RenderOptions options)
+        where TModel : DiagramBase
     {
-        var firstLine = input.TrimStart();
+        var result = parser.Parse(input);
 
-        // Skip %%{init:...}%% configuration blocks
-        while (firstLine.StartsWith("%%{", StringComparison.Ordinal))
+        if (!result.Success)
         {
-            // Find end of init block and move to next line
-            var endIndex = firstLine.IndexOf("}%%", StringComparison.Ordinal);
-            if (endIndex < 0)
-                break;
-
-            firstLine = firstLine[(endIndex + 3)..].TrimStart();
-
-            // Skip past any newline
-            var newlineIndex = firstLine.IndexOfAny(['\r', '\n']);
-            if (newlineIndex >= 0)
-            {
-                firstLine = firstLine[(newlineIndex + 1)..].TrimStart();
-            }
+            throw new MermaidParseException($"Failed to parse {description}: {result.Error}");
         }
 
-        if (TryMatchType(firstLine, out var type))
-            return type;
+        // A title given in front matter stands in when the diagram text sets none of its own.
+        var model = result.Value;
+        if (frontMatterTitle is not null &&
+            string.IsNullOrEmpty(model.Title))
+        {
+            model.Title = frontMatterTitle;
+        }
 
-        throw new MermaidException($"Unknown diagram type in: {firstLine.Split('\n')[0]}");
+        return renderer.Render(model, options);
     }
 
     static bool TryMatchType(string firstLine, out DiagramType type)
@@ -214,22 +239,110 @@ public static class Mermaid
     }
 
     /// <summary>
-    /// Strips %%{init:...}%% configuration blocks from the beginning of input.
+    /// Removes what Mermaid allows ahead of the diagram's opening keyword: a YAML front matter block (which
+    /// must come first), then any mix of <c>%%{init:...}%%</c> configuration blocks and <c>%%</c> comment
+    /// lines. What is left starts at the keyword, which is where every diagram parser expects to begin.
     /// </summary>
-    static string StripInitBlock(string input)
+    static string StripPreamble(string input, out string? title)
     {
-        var result = input.TrimStart();
+        var rest = StripFrontMatter(input.AsSpan().TrimStart(), out title);
 
-        while (result.StartsWith("%%{", StringComparison.Ordinal))
+        while (rest.StartsWith("%%"))
         {
-            var endIndex = result.IndexOf("}%%", StringComparison.Ordinal);
-            if (endIndex < 0)
-                break;
+            if (rest.StartsWith("%%{"))
+            {
+                var close = rest.IndexOf("}%%");
+                if (close < 0)
+                {
+                    break;
+                }
 
-            result = result[(endIndex + 3)..].TrimStart();
+                rest = rest[(close + 3)..].TrimStart();
+                continue;
+            }
+
+            var lineEnd = rest.IndexOfAny('\r', '\n');
+            if (lineEnd < 0)
+            {
+                // Nothing but a comment.
+                rest = [];
+                break;
+            }
+
+            rest = rest[lineEnd..].TrimStart();
         }
 
-        return result;
+        if (rest.Length == input.Length)
+        {
+            return input;
+        }
+
+        return rest.ToString();
+    }
+
+    /// <summary>
+    /// Skips a front matter block: a line of three dashes, YAML, and a closing line of three dashes. Its
+    /// top-level <c>title</c>, if it has one, is handed back; the rest (such as <c>config</c>) is not used.
+    /// Input that opens with dashes but never closes the block is left alone.
+    /// </summary>
+    static CharSpan StripFrontMatter(CharSpan input, out string? title)
+    {
+        title = null;
+        if (!IsFence(FirstLine(input, out var body)))
+        {
+            return input;
+        }
+
+        var remaining = body;
+        while (!remaining.IsEmpty)
+        {
+            var line = FirstLine(remaining, out var next);
+            if (IsFence(line))
+            {
+                return next.TrimStart();
+            }
+
+            // Top-level keys only: an indented `title:` belongs to some nested mapping.
+            if (title is null &&
+                line.StartsWith("title:"))
+            {
+                title = Unquote(line["title:".Length..].Trim()).ToString();
+            }
+
+            remaining = next;
+        }
+
+        title = null;
+        return input;
+    }
+
+    // Splits off the first line, without its line ending.
+    static CharSpan FirstLine(CharSpan text, out CharSpan rest)
+    {
+        var lineEnd = text.IndexOf('\n');
+        if (lineEnd < 0)
+        {
+            rest = [];
+            return text;
+        }
+
+        rest = text[(lineEnd + 1)..];
+        return text[..lineEnd].TrimEnd('\r');
+    }
+
+    static bool IsFence(CharSpan line) =>
+        line.TrimEnd() is "---";
+
+    static CharSpan Unquote(CharSpan value)
+    {
+        if (value.Length >= 2 &&
+            value[0] == value[^1] &&
+            value[0] is '"' or '\'')
+        {
+            return value[1..^1];
+        }
+
+        return value;
     }
 
     static string ToXml(SvgDocument svg, RenderOptions options)
@@ -244,313 +357,5 @@ public static class Mermaid
         var builder = new StringBuilder();
         svg.ToXml(builder);
         return builder.ToString();
-    }
-
-    static SvgDocument RenderPie(string input, RenderOptions options)
-    {
-        var parser = new PieParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse pie chart: {result.Error}");
-        }
-
-        var renderer = new PieRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderFlowchart(string input, RenderOptions options)
-    {
-        var parser = new FlowchartParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse flowchart: {result.Error}");
-        }
-
-        var renderer = new FlowchartRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderSequence(string input, RenderOptions options)
-    {
-        var parser = new SequenceParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse sequence diagram: {result.Error}");
-        }
-
-        var renderer = new SequenceRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderClass(string input, RenderOptions options)
-    {
-        var parser = new ClassParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse class diagram: {result.Error}");
-        }
-
-        var renderer = new ClassRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderState(string input, RenderOptions options)
-    {
-        var parser = new StateParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse state diagram: {result.Error}");
-        }
-
-        var renderer = new StateRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderEntityRelationship(string input, RenderOptions options)
-    {
-        var parser = new ERParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse ER diagram: {result.Error}");
-        }
-
-        var renderer = new ERRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderGitGraph(string input, RenderOptions options)
-    {
-        var parser = new GitGraphParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse git graph: {result.Error}");
-        }
-
-        var renderer = new GitGraphRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderGantt(string input, RenderOptions options)
-    {
-        var parser = new GanttParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse gantt chart: {result.Error}");
-        }
-
-        var renderer = new GanttRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderMindmap(string input, RenderOptions options)
-    {
-        var parser = new MindmapParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse mindmap: {result.Error}");
-        }
-
-        var renderer = new MindmapRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderTimeline(string input, RenderOptions options)
-    {
-        var parser = new TimelineParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse timeline: {result.Error}");
-        }
-
-        var renderer = new TimelineRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderUserJourney(string input, RenderOptions options)
-    {
-        var parser = new UserJourneyParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse user journey: {result.Error}");
-        }
-
-        var renderer = new UserJourneyRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderQuadrant(string input, RenderOptions options)
-    {
-        var parser = new QuadrantParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse quadrant chart: {result.Error}");
-        }
-
-        var renderer = new QuadrantRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderXYChart(string input, RenderOptions options)
-    {
-        var parser = new XYChartParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse XY chart: {result.Error}");
-        }
-
-        var renderer = new XYChartRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderSankey(string input, RenderOptions options)
-    {
-        var parser = new SankeyParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse Sankey diagram: {result.Error}");
-        }
-
-        var renderer = new SankeyRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderBlock(string input, RenderOptions options)
-    {
-        var parser = new BlockParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse block diagram: {result.Error}");
-        }
-
-        var renderer = new BlockRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderKanban(string input, RenderOptions options)
-    {
-        var parser = new KanbanParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse kanban board: {result.Error}");
-        }
-
-        var renderer = new KanbanRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderPacket(string input, RenderOptions options)
-    {
-        var parser = new PacketParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse packet diagram: {result.Error}");
-        }
-
-        var renderer = new PacketRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderC4(string input, RenderOptions options)
-    {
-        var parser = new C4Parser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse C4 diagram: {result.Error}");
-        }
-
-        var renderer = new C4Renderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderRequirement(string input, RenderOptions options)
-    {
-        var parser = new RequirementParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse requirement diagram: {result.Error}");
-        }
-
-        var renderer = new RequirementRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderArchitecture(string input, RenderOptions options)
-    {
-        var parser = new ArchitectureParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse architecture diagram: {result.Error}");
-        }
-
-        var renderer = new ArchitectureRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderRadar(string input, RenderOptions options)
-    {
-        var parser = new RadarParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse radar diagram: {result.Error}");
-        }
-
-        var renderer = new RadarRenderer();
-        return renderer.Render(result.Value, options);
-    }
-
-    static SvgDocument RenderTreemap(string input, RenderOptions options)
-    {
-        var parser = new TreemapParser();
-        var result = parser.Parse(input);
-
-        if (!result.Success)
-        {
-            throw new MermaidParseException($"Failed to parse treemap diagram: {result.Error}");
-        }
-
-        var renderer = new TreemapRenderer();
-        return renderer.Render(result.Value, options);
     }
 }

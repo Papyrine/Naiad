@@ -118,7 +118,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
 
         parser =
             from _ in CommonParsers.InlineWhitespace
-            from __ in OneOf(CIString("xychart-beta"), CIString("xychart"))
+            from __ in CommonParsers.BetaKeyword("xychart")
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd
             from result in contentItem.ManyThen(End)

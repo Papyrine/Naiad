@@ -119,7 +119,7 @@ class BlockParser : IDiagramParser<BlockModel>
 
         parser =
             from _ in CommonParsers.InlineWhitespace
-            from __ in OneOf(CIString("block-beta"), CIString("block"))
+            from __ in CommonParsers.BetaKeyword("block")
             from ___ in CommonParsers.InlineWhitespace
             from ____ in CommonParsers.LineEnd
             from result in contentItem.ManyThen(End)

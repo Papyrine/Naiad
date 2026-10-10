@@ -49,7 +49,7 @@ class TreemapParser : IDiagramParser<TreemapModel>
 
         parser =
             from whitespance in CommonParsers.InlineWhitespace
-            from ciString in CIString("treemap-beta")
+            from ciString in CommonParsers.BetaKeyword("treemap")
             from innerWhitespace in CommonParsers.InlineWhitespace
             from lineEnd in CommonParsers.LineEnd
             from lines in contentItem.ManyThen(End)

@@ -132,7 +132,7 @@ class ArchitectureParser : IDiagramParser<ArchitectureModel>
 
         parser =
             from inlineWhitespace in CommonParsers.InlineWhitespace
-            from architecture in CIString("architecture-beta")
+            from architecture in CommonParsers.BetaKeyword("architecture")
             from innerInlineWhitespace in CommonParsers.InlineWhitespace
             from lineEnd in CommonParsers.LineEnd
             from result in contentItem.ManyThen(End)
