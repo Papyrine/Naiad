@@ -1,0 +1,386 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1013.8 210"
+  style="max-width: 1013.8px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M463.2,30 L475.5,30 C487.8,30 512.4,30 537,32.65 C561.6,35.3 586.2,40.6 598.5,43.25 L610.8,45.9"
+      fill="none"
+      stroke="#333" />
+    <line
+      x1="470.2"
+      y1="25"
+      x2="470.2"
+      y2="35"
+      stroke="#333" />
+    <line
+      x1="476.2"
+      y1="25"
+      x2="476.2"
+      y2="35"
+      stroke="#333" />
+    <line
+      x1="599.07"
+      y1="43.37"
+      x2="610.8"
+      y2="45.9"
+      stroke="#333" />
+    <line
+      x1="599.07"
+      y1="43.37"
+      x2="611.85"
+      y2="41.01"
+      stroke="#333" />
+    <line
+      x1="599.07"
+      y1="43.37"
+      x2="609.75"
+      y2="50.79"
+      stroke="#333" />
+    <circle
+      cx="593.2"
+      cy="42.11"
+      r="4"
+      fill="#fff"
+      stroke="#333" />
+    <rect
+      x="513.2"
+      y="22"
+      width="47.6"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="537"
+      y="30"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">allows</text>
+    <path
+      d="M463.2,140 L475.5,140 C487.8,140 512.4,140 537,137.35 C561.6,134.7 586.2,129.4 598.5,126.75 L610.8,124.1"
+      fill="none"
+      stroke="#333"
+      stroke-dasharray="5,5" />
+    <line
+      x1="475.2"
+      y1="140"
+      x2="463.2"
+      y2="140"
+      stroke="#333" />
+    <line
+      x1="475.2"
+      y1="140"
+      x2="463.2"
+      y2="145"
+      stroke="#333" />
+    <line
+      x1="475.2"
+      y1="140"
+      x2="463.2"
+      y2="135"
+      stroke="#333" />
+    <circle
+      cx="481.2"
+      cy="140"
+      r="4"
+      fill="#fff"
+      stroke="#333" />
+    <line
+      x1="599.07"
+      y1="126.63"
+      x2="610.8"
+      y2="124.1"
+      stroke="#333" />
+    <line
+      x1="599.07"
+      y1="126.63"
+      x2="609.75"
+      y2="119.21"
+      stroke="#333" />
+    <line
+      x1="599.07"
+      y1="126.63"
+      x2="611.85"
+      y2="128.99"
+      stroke="#333" />
+    <circle
+      cx="593.2"
+      cy="127.89"
+      r="4"
+      fill="#fff"
+      stroke="#333" />
+    <rect
+      x="526.4"
+      y="132"
+      width="21.2"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="537"
+      y="140"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">is</text>
+    <path
+      d="M195.6,30 L207.9,30 C220.2,30 244.8,30 269.4,30 C294,30 318.6,30 330.9,30 L343.2,30"
+      fill="none"
+      stroke="#333" />
+    <line
+      x1="202.6"
+      y1="25"
+      x2="202.6"
+      y2="35"
+      stroke="#333" />
+    <line
+      x1="208.6"
+      y1="25"
+      x2="208.6"
+      y2="35"
+      stroke="#333" />
+    <line
+      x1="331.2"
+      y1="30"
+      x2="343.2"
+      y2="30"
+      stroke="#333" />
+    <line
+      x1="331.2"
+      y1="30"
+      x2="343.2"
+      y2="25"
+      stroke="#333" />
+    <line
+      x1="331.2"
+      y1="30"
+      x2="343.2"
+      y2="35"
+      stroke="#333" />
+    <line
+      x1="326.2"
+      y1="35"
+      x2="326.2"
+      y2="25"
+      stroke="#333" />
+    <rect
+      x="245.6"
+      y="22"
+      width="47.6"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="269.4"
+      y="30"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">covers</text>
+    <rect
+      x="343.2"
+      y="15"
+      width="120"
+      height="30"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="2" />
+    <rect
+      x="343.2"
+      y="15"
+      width="120"
+      height="30"
+      fill="#9370DB"
+      stroke="#9370DB" />
+    <text
+      x="403.2"
+      y="30"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#fff">CAR</text>
+    <rect
+      x="610.8"
+      y="35"
+      width="363"
+      height="100"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="2" />
+    <rect
+      x="610.8"
+      y="35"
+      width="363"
+      height="30"
+      fill="#9370DB"
+      stroke="#9370DB" />
+    <text
+      x="792.3"
+      y="50"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#fff">NAMED-DRIVER</text>
+    <line
+      x1="610.8"
+      y1="65"
+      x2="973.8"
+      y2="65"
+      stroke="#9370DB" />
+    <text
+      x="620.8"
+      y="85"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">PK,FK</text>
+    <text
+      x="667.8"
+      y="85"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">string carRegistration</text>
+    <text
+      x="620.8"
+      y="105"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">PK,FK</text>
+    <text
+      x="667.8"
+      y="105"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">string driverLicence</text>
+    <text
+      x="831.8"
+      y="105"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#888">also the person's id</text>
+    <text
+      x="667.8"
+      y="125"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">date since</text>
+    <rect
+      x="343.2"
+      y="125"
+      width="120"
+      height="30"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="2" />
+    <rect
+      x="343.2"
+      y="125"
+      width="120"
+      height="30"
+      fill="#9370DB"
+      stroke="#9370DB" />
+    <text
+      x="403.2"
+      y="140"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#fff">PERSON</text>
+    <rect
+      x="0"
+      y="0"
+      width="195.6"
+      height="60"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="2" />
+    <rect
+      x="0"
+      y="0"
+      width="195.6"
+      height="30"
+      fill="#9370DB"
+      stroke="#9370DB" />
+    <text
+      x="97.8"
+      y="15"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#fff">Insurance Policy</text>
+    <line
+      x1="0"
+      y1="30"
+      x2="195.6"
+      y2="30"
+      stroke="#9370DB" />
+    <text
+      x="10"
+      y="50"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#666">PK</text>
+    <text
+      x="40"
+      y="50"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif">string number</text>
+    <rect
+      x="31.85"
+      y="140"
+      width="131.9"
+      height="30"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      stroke-width="2" />
+    <rect
+      x="31.85"
+      y="140"
+      width="131.9"
+      height="30"
+      fill="#9370DB"
+      stroke="#9370DB" />
+    <text
+      x="97.8"
+      y="155"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#fff">AUDIT-LOG</text>
+  </g>
+</svg>

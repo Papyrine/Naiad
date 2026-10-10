@@ -11,7 +11,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
     const double attributeIndent = 10;
     const double commentGap = 10;
 
-    // The gutter the PK/FK/UK indicator sits in, left of the attribute text.
+    // The gutter the PK/FK/UK indicator sits in, left of the attribute text, when one key is all it holds.
     const double keyColumnWidth = 20;
     const double headerHeight = 30;
 
@@ -132,7 +132,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         // Must match where the attribute text is actually drawn, or the longest row overflows the box.
         var width = Math.Max(
             minEntityWidth,
-            maxTextWidth + entityPadding * 2 + attributeIndent + keyColumnWidth);
+            maxTextWidth + entityPadding * 2 + attributeIndent + KeyColumnWidth(entity, options));
 
         // Calculate height
         var height = headerHeight; // Entity name header
@@ -199,10 +199,11 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
         // Attributes
         var attrY = y + headerHeight + entityPadding;
+        var keyColumn = KeyColumnWidth(entity, options);
         foreach (var attr in entity.Attributes)
         {
             var attrText = FormatAttribute(attr);
-            var keyIndicator = GetKeyIndicator(attr.KeyType);
+            var keyIndicator = GetKeyIndicator(attr);
 
             if (!string.IsNullOrEmpty(keyIndicator))
             {
@@ -216,7 +217,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
                     fill: "#666");
             }
 
-            var attrX = x + entityPadding + attributeIndent + keyColumnWidth;
+            var attrX = x + entityPadding + attributeIndent + keyColumn;
             builder.AddText(
                 attrX,
                 attrY + lineHeight / 2, attrText,
@@ -595,6 +596,32 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
         if (!string.IsNullOrEmpty(attr.Comment))
         {
             width += commentGap + MeasureText(attr.Comment, options.FontSize - 2);
+        }
+
+        return width;
+    }
+
+    // Several keys are listed together, in the order they were written: PK,FK
+    static string GetKeyIndicator(EntityAttribute attr)
+    {
+        if (attr.KeyTypes.Count > 1)
+        {
+            return string.Join(",", attr.KeyTypes.Select(GetKeyIndicator));
+        }
+
+        return GetKeyIndicator(attr.KeyType);
+    }
+
+    // The key gutter is as wide as the entity's longest indicator needs, and never narrower than one key.
+    static double KeyColumnWidth(Entity entity, RenderOptions options)
+    {
+        var width = keyColumnWidth;
+        foreach (var attr in entity.Attributes)
+        {
+            if (attr.KeyTypes.Count > 1)
+            {
+                width = Math.Max(width, MeasureText(GetKeyIndicator(attr), options.FontSize - 2) + 4);
+            }
         }
 
         return width;

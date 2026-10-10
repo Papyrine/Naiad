@@ -290,4 +290,31 @@ public class ErTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // Entities named on a line of their own or in quotes, an attribute with two keys, cardinalities and
+    // line styles written out in words, a comment inside a body, and a left-to-right direction.
+    [Test]
+    public Task WordsKeysAndStandaloneEntities()
+    {
+        const string input =
+            """
+            erDiagram
+                direction LR
+                CAR 1 to zero or more NAMED-DRIVER : allows
+                PERSON many(0) optionally to 0+ NAMED-DRIVER : is
+                "Insurance Policy" only one to one or more CAR : covers
+                AUDIT-LOG
+                NAMED-DRIVER {
+                    %% the two keys make the row's key column wider
+                    string carRegistration PK, FK
+                    string driverLicence PK, FK "also the person's id"
+                    date since
+                }
+                "Insurance Policy" {
+                    string number PK
+                }
+            """;
+
+        return VerifySvg(input);
+    }
 }
