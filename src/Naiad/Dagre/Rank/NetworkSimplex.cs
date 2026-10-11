@@ -21,13 +21,91 @@ static class NetworkSimplex
         RankUtil.LongestPath(graph);
 
         var t = FeasibleTree.Run(graph);
-        InitLowLimValues(t);
-        InitCutValues(t, graph);
+        var scratch = new Scratch();
+        InitLowLimAndCutValues(t, graph, scratch);
 
         while (LeaveEdge(t) is { } e)
         {
             var f = EnterEdge(t, graph, e);
-            ExchangeEdges(t, graph, e, f);
+            ExchangeEdges(t, graph, e, f, scratch);
+        }
+    }
+
+    // Working storage for the walk each pivot makes over the tree, kept from one pivot to the next.
+    sealed class Scratch
+    {
+        public readonly HashSet<string> Visited = new(StringComparer.Ordinal);
+        public readonly List<string> Neighbors = [];
+        public readonly List<string> Postorder = [];
+        public readonly Stack<(string V, string? Parent, int Low, int Next, int End)> Pending = new();
+    }
+
+    /// <summary>
+    /// <see cref="InitLowLimValues(Graph)"/> followed by <see cref="InitCutValues"/> in one walk. Both
+    /// visit the tree depth-first from its first node, taking each node's neighbours in the same order,
+    /// so the post-order the cut values are assigned in is the order the lim numbers are handed out in.
+    /// The walk keeps that order, and its neighbour lists sit end to end in one buffer rather than a new
+    /// list for every node.
+    /// </summary>
+    static void InitLowLimAndCutValues(Graph tree, Graph graph, Scratch scratch)
+    {
+        var visited = scratch.Visited;
+        var neighbors = scratch.Neighbors;
+        var postorder = scratch.Postorder;
+        var pending = scratch.Pending;
+        visited.Clear();
+        neighbors.Clear();
+        postorder.Clear();
+        pending.Clear();
+
+        var nextLim = 1;
+
+        void Enter(string node, string? parent)
+        {
+            visited.Add(node);
+            var start = neighbors.Count;
+
+            // The tree has one edge at most between two nodes, so a node's predecessors and successors
+            // never overlap and together are its neighbours in the order Graph.Neighbors gives them.
+            foreach (var predecessor in tree.PredecessorsOf(node))
+            {
+                neighbors.Add(predecessor);
+            }
+
+            foreach (var successor in tree.SuccessorsOf(node))
+            {
+                neighbors.Add(successor);
+            }
+
+            pending.Push((node, parent, nextLim, start, neighbors.Count));
+        }
+
+        Enter(tree.Nodes()[0], null);
+        while (pending.Count > 0)
+        {
+            var frame = pending.Pop();
+            if (frame.Next == frame.End)
+            {
+                var label = tree.NodeLabel(frame.V);
+                label.Low = frame.Low;
+                label.Lim = nextLim++;
+                label.Parent = frame.Parent;
+                postorder.Add(frame.V);
+                continue;
+            }
+
+            pending.Push(frame with { Next = frame.Next + 1 });
+            var w = neighbors[frame.Next];
+            if (!visited.Contains(w))
+            {
+                Enter(w, frame.V);
+            }
+        }
+
+        // Every node but the root, which is the last one finished and has no parent edge to value.
+        for (var i = 0; i < postorder.Count - 1; i++)
+        {
+            AssignCutValue(tree, graph, postorder[i]);
         }
     }
 
@@ -72,35 +150,52 @@ static class NetworkSimplex
         // The accumulated cut value for the edge between this node and its parent
         var cutValue = graphEdge.Weight!.Value;
 
-        var nodeEdges = graph.NodeEdges(child);
-        if (nodeEdges != null)
+        if (!graph.HasNode(child))
         {
-            foreach (var edge in nodeEdges)
+            return cutValue;
+        }
+
+        // The edges into the child and then the edges out of it, read where they are kept rather than
+        // gathered into a list of their own first.
+        foreach (var edge in graph.InEdgesOf(child))
+        {
+            cutValue += EdgeCutValue(tree, graph, edge, child, parent, childIsTail);
+        }
+
+        foreach (var edge in graph.OutEdgesOf(child))
+        {
+            // A self-loop is among the edges in as well, and has been counted there.
+            if (edge.V != edge.W)
             {
-                var isOutEdge = edge.V == child;
-                var other = isOutEdge ? edge.W : edge.V;
-
-                if (other == parent)
-                {
-                    continue;
-                }
-
-                var pointsToHead = isOutEdge == childIsTail;
-                var otherWeight = graph.FindEdgeLabel(edge).Weight!.Value;
-
-                cutValue += pointsToHead ? otherWeight : -otherWeight;
-                if (!IsTreeEdge(tree, child, other))
-                {
-                    continue;
-                }
-
-                var treeEdge = tree.FindEdgeLabel(child, other);
-                var otherCutValue = treeEdge.Cutvalue!.Value;
-                cutValue += pointsToHead ? -otherCutValue : otherCutValue;
+                cutValue += EdgeCutValue(tree, graph, edge, child, parent, childIsTail);
             }
         }
 
         return cutValue;
+    }
+
+    // What one edge at the child, other than the one to its parent, adds to the child's cut value.
+    static double EdgeCutValue(Graph tree, Graph graph, EdgeKey edge, string child, string parent, bool childIsTail)
+    {
+        var isOutEdge = edge.V == child;
+        var other = isOutEdge ? edge.W : edge.V;
+
+        if (other == parent)
+        {
+            return 0;
+        }
+
+        var pointsToHead = isOutEdge == childIsTail;
+        var otherWeight = graph.FindEdgeLabel(edge).Weight!.Value;
+
+        var value = pointsToHead ? otherWeight : -otherWeight;
+        if (!tree.TryGetEdgeLabel(child, other, out var treeEdge))
+        {
+            return value;
+        }
+
+        var otherCutValue = treeEdge.Cutvalue!.Value;
+        return value + (pointsToHead ? -otherCutValue : otherCutValue);
     }
 
     public static void InitLowLimValues(Graph tree) =>
@@ -207,15 +302,25 @@ static class NetworkSimplex
         return acc!;
     }
 
-    public static void ExchangeEdges(Graph t, Graph graph, EdgeKey e, EdgeKey f)
+    public static void ExchangeEdges(Graph t, Graph graph, EdgeKey e, EdgeKey f) =>
+        ExchangeEdges(t, graph, e, f, new());
+
+    static void ExchangeEdges(Graph t, Graph graph, EdgeKey e, EdgeKey f, Scratch scratch)
     {
         var v = e.V;
         var w = e.W;
         t.RemoveEdge(v, w);
         t.SetEdge(f.V, f.W, new());
-        InitLowLimValues(t);
-        InitCutValues(t, graph);
-        UpdateRanks(t, graph);
+        InitLowLimAndCutValues(t, graph, scratch);
+
+        // A node's rank is set from its parent's, so parents go first. The walk finished every node
+        // after its children, which makes its order backwards the one wanted; the root comes first there
+        // and keeps the rank it has.
+        var postorder = scratch.Postorder;
+        for (var i = postorder.Count - 2; i >= 0; i--)
+        {
+            UpdateRank(t, graph, postorder[i]);
+        }
     }
 
     public static void UpdateRanks(Graph t, Graph graph)
@@ -234,24 +339,23 @@ static class NetworkSimplex
         vs = vs.GetRange(1, vs.Count - 1);
         foreach (var v in vs)
         {
-            var treeNode = t.NodeLabel(v);
-            var parent = treeNode.Parent!;
-            var flipped = false;
-            if (!graph.TryGetEdgeLabel(v, parent, out var edge))
-            {
-                edge = graph.FindEdgeLabel(parent, v);
-                flipped = true;
-            }
-
-            graph.NodeLabel(v).Rank = graph.NodeLabel(parent).Rank!.Value + (flipped ? edge.Minlen!.Value : -edge.Minlen!.Value);
+            UpdateRank(t, graph, v);
         }
     }
 
-    /*
-     * Returns true if the edge is in the tree.
-     */
-    static bool IsTreeEdge(Graph tree, string u, string v) =>
-        tree.HasEdge(u, v);
+    static void UpdateRank(Graph t, Graph graph, string v)
+    {
+        var treeNode = t.NodeLabel(v);
+        var parent = treeNode.Parent!;
+        var flipped = false;
+        if (!graph.TryGetEdgeLabel(v, parent, out var edge))
+        {
+            edge = graph.FindEdgeLabel(parent, v);
+            flipped = true;
+        }
+
+        graph.NodeLabel(v).Rank = graph.NodeLabel(parent).Rank!.Value + (flipped ? edge.Minlen!.Value : -edge.Minlen!.Value);
+    }
 
     /*
      * Returns true if the specified node is descendant of the root node per the

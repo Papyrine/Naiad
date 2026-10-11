@@ -192,9 +192,16 @@ sealed class SkiaSurface : IRenderSurface
             _ => 6,
         };
 
+        // Trying every row filter is most of what encoding costs, and on a diagram's flat fills it buys
+        // little: skipping it roughly halves the time, for a file a few percent either side of the same
+        // size. Only the setting that asks for the smallest file still pays for it.
+        var filters = compression == PngCompression.Small
+            ? SKPngEncoderFilterFlags.AllFilters
+            : SKPngEncoderFilterFlags.None;
+
         using var pixmap = bitmap.PeekPixels();
         using var wstream = new SKManagedWStream(stream);
-        pixmap.Encode(wstream, new SKPngEncoderOptions(SKPngEncoderFilterFlags.AllFilters, zlibLevel));
+        pixmap.Encode(wstream, new SKPngEncoderOptions(filters, zlibLevel));
     }
 
     static void ApplyPaint(SKPaint skPaint, Paint paint, float opacity)

@@ -43,12 +43,23 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
 
     Image<Rgba32> image = new(width, height, ToPixel(background));
 
+    // One canvas for the whole drawing, opened at the first primitive and closed before encoding. Going
+    // through image.Mutate for each primitive opened and composited a canvas of its own every time, which
+    // cost several times what the drawing itself did.
+    DrawingCanvas? canvas;
+
+    DrawingCanvas Canvas =>
+        canvas ??= image.Frames.RootFrame.CreateCanvas(image.Configuration, new DrawingOptions());
+
     public void FillPath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, Paint paint, FillRule rule, float opacity)
     {
         var path = ToPath(subpaths);
         var brush = ToBrush(paint, opacity);
         var options = Options(transform, rule);
-        image.Mutate(context => context.Paint(options, inner => inner.Fill(brush, path)));
+        var target = Canvas;
+        target.Save(options);
+        target.Fill(brush, path);
+        target.Restore();
     }
 
     public void StrokePath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, Rgba color, float width, IReadOnlyList<float>? dash, float opacity)
@@ -58,7 +69,10 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
         // outline along with the geometry, so scaling the width here too would apply it twice.
         var pen = ToPen(ToColor(color.MultiplyAlpha(opacity)), width, dash);
         var options = Options(transform, FillRule.NonZero);
-        image.Mutate(context => context.Paint(options, inner => inner.Draw(pen, path)));
+        var target = Canvas;
+        target.Save(options);
+        target.Draw(pen, path);
+        target.Restore();
     }
 
     public void DrawText(string text, float x, float y, Matrix3x2 transform, TextStyle style)
@@ -95,10 +109,17 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
         };
         var brush = new SolidBrush(ToColor(style.Color.MultiplyAlpha(style.Opacity)));
         var options = Options(transform, FillRule.NonZero);
-        image.Mutate(context => context.Paint(options, inner => inner.DrawText(textOptions, text, brush, null)));
+        var target = Canvas;
+        target.Save(options);
+        target.DrawText(textOptions, text, brush, null);
+        target.Restore();
     }
 
-    public void Encode(Stream stream) =>
+    public void Encode(Stream stream)
+    {
+        // A canvas records what is drawn and plays it into the image when it is disposed.
+        canvas?.Dispose();
+        canvas = null;
         image.SaveAsPng(
             stream,
             new()
@@ -110,6 +131,7 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
                     _ => PngCompressionLevel.Level6,
                 }
             });
+    }
 
     static DrawingOptions Options(Matrix3x2 transform, FillRule rule) =>
         new()
@@ -234,6 +256,9 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
     static Rgba32 ToPixel(Rgba color) =>
         new(color.R, color.G, color.B, color.A);
 
-    public void Dispose() =>
+    public void Dispose()
+    {
+        canvas?.Dispose();
         image.Dispose();
+    }
 }

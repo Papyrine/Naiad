@@ -24,41 +24,45 @@ static class EdgeObstacleRouter
             return;
         }
 
-        var boxes = new Dictionary<string, Rect>(diagram.Nodes.Count);
-        foreach (var node in diagram.Nodes)
+        // Every node's box once, and the same box grown by the clearance, which is what a route is tested
+        // against. An edge's blockers are all of them but its own two ends, so the ends are passed along
+        // to be skipped rather than a list of the rest being built for every edge.
+        var count = diagram.Nodes.Count;
+        var boxes = new Rect[count];
+        var grown = new Rect[count];
+        var indexById = new Dictionary<string, int>(count, StringComparer.Ordinal);
+        for (var i = 0; i < count; i++)
         {
-            boxes[node.Id] = Rect.Around(node);
+            var node = diagram.Nodes[i];
+            boxes[i] = Rect.Around(node);
+            grown[i] = boxes[i].Grow(clearance);
+            indexById[node.Id] = i;
         }
 
         foreach (var edge in diagram.Edges)
         {
             if (edge.Points.Count < 2 ||
-                !boxes.TryGetValue(edge.TargetId, out var target) ||
-                !boxes.TryGetValue(edge.SourceId, out var source))
+                !indexById.TryGetValue(edge.TargetId, out var target) ||
+                !indexById.TryGetValue(edge.SourceId, out var source))
             {
                 continue;
             }
 
-            var blockers = new List<Rect>();
-            foreach (var node in diagram.Nodes)
-            {
-                if (node.Id != edge.SourceId && node.Id != edge.TargetId)
-                {
-                    blockers.Add(boxes[node.Id]);
-                }
-            }
-
-            ReAimEnd(edge.Points, target, blockers, atEnd: true);
-            ReAimEnd(edge.Points, source, blockers, atEnd: false);
+            var blockers = new Blockers(grown, source, target);
+            ReAimEnd(edge.Points, boxes[target], blockers, atEnd: true);
+            ReAimEnd(edge.Points, boxes[source], blockers, atEnd: false);
         }
     }
+
+    // The grown boxes of every node except the two an edge joins.
+    readonly record struct Blockers(Rect[] Grown, int Source, int Target);
 
     /// <summary>
     /// Replaces the segment joining <paramref name="node"/> to the rest of the route with an L when the
     /// straight version crosses a blocker. <paramref name="atEnd"/> picks which end of the polyline is
     /// being re-aimed; the geometry is identical either way, only the indices differ.
     /// </summary>
-    static void ReAimEnd(List<Position> points, Rect node, List<Rect> blockers, bool atEnd)
+    static void ReAimEnd(List<Position> points, Rect node, Blockers blockers, bool atEnd)
     {
         var terminal = atEnd ? points.Count - 1 : 0;
         var neighbour = atEnd ? points.Count - 2 : 1;
@@ -90,11 +94,34 @@ static class EdgeObstacleRouter
         points.Insert(atEnd ? terminal : 1, corner);
     }
 
-    static bool Blocked(Position a, Position b, List<Rect> blockers)
+    static bool Blocked(Position a, Position b, Blockers blockers)
     {
-        foreach (var blocker in blockers)
+        // The box around the segment: a blocker that lies wholly to one side of it cannot be crossed, and
+        // saying so takes four comparisons where the clipping test takes a good deal more.
+        var left = Math.Min(a.X, b.X);
+        var right = Math.Max(a.X, b.X);
+        var top = Math.Min(a.Y, b.Y);
+        var bottom = Math.Max(a.Y, b.Y);
+
+        var grown = blockers.Grown;
+        for (var i = 0; i < grown.Length; i++)
         {
-            if (blocker.Grow(clearance).Crosses(a, b))
+            if (i == blockers.Source ||
+                i == blockers.Target)
+            {
+                continue;
+            }
+
+            ref readonly var blocker = ref grown[i];
+            if (blocker.Left > right ||
+                blocker.Right < left ||
+                blocker.Top > bottom ||
+                blocker.Bottom < top)
+            {
+                continue;
+            }
+
+            if (blocker.Crosses(a, b))
             {
                 return true;
             }
