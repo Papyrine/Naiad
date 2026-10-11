@@ -60,3 +60,7 @@ Tests use TUnit + Svg.Skia + Verify (snapshot testing). Each diagram type has a 
 - File-scoped namespaces, expression-bodied members, `var` everywhere
 - LF line endings, UTF-8, 4-space indent for C#
 - Central package management via `src/Directory.Packages.props`
+
+## Maintenance log
+
+- 2026-10-11: full performance and bug scan done (parsers, renderers, dagre layout, PNG backends). The findings were fixed in Papyrine/Naiad PRs #44 to #58.

@@ -6,9 +6,10 @@ static class Positioning
     /// <summary>
     /// <paramref name="inPlaceWhenPossible"/> lets the graph be positioned as it stands when the copy
     /// dagre takes of it would hold the same thing. Turning it off always takes the copy, which is what
-    /// the tests use to hold the two to the same answer.
+    /// the tests use to hold the two to the same answer. <paramref name="indexedWhenPossible"/> does the
+    /// same for <see cref="IndexedBK"/> against <see cref="BK"/>.
     /// </summary>
-    internal static void Run(Graph graph, bool inPlaceWhenPossible)
+    internal static void Run(Graph graph, bool inPlaceWhenPossible, bool indexedWhenPossible = true)
     {
         if (!inPlaceWhenPossible ||
             !IsPlain(graph))
@@ -18,6 +19,12 @@ static class Positioning
 
         var layering = Util.BuildLayerMatrix(graph);
         PositionY(graph, layering);
+        if (indexedWhenPossible &&
+            IndexedBK.TryPositionX(graph, layering))
+        {
+            return;
+        }
+
         foreach (var (v, x) in BK.PositionX(graph, layering))
         {
             graph.NodeLabel(v).X = x;
