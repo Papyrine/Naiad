@@ -247,14 +247,28 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             from ___ in statementEnd
             select new DirectionStatement(dir);
 
-        // Directives that are valid Mermaid but change nothing in what is drawn here: interaction (`click`),
-        // per-link styling (`linkStyle`) and the accessibility title/description. Naming them keeps them
+        // Link style: `linkStyle 0 stroke:#f00`, `linkStyle 1,2 ...` or `linkStyle default ...`. Links are
+        // numbered in the order they are written, from zero.
+        var linkStyleDirective =
+            from _ in CommonParsers.InlineWhitespace
+            from __ in String("linkStyle")
+            from ___ in CommonParsers.RequiredWhitespace
+            from targets in Try(String("default"))
+                .Or(Digit.AtLeastOnceString())
+                .SeparatedAtLeastOnce(
+                    Try(CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)))
+            from ____ in CommonParsers.RequiredWhitespace
+            from props in restOfLine
+            from lineEnd in CommonParsers.LineEnd
+            select new LinkStyleStatement(targets.ToList(), props);
+
+        // Directives that are valid Mermaid but change nothing in what is drawn here: interaction (`click`)
+        // and the accessibility title/description. Naming them keeps them
         // from failing the parse. Any other line that matches no rule is an error rather than something to
         // skip, so a statement the parser cannot read is reported instead of vanishing from the diagram.
         var ignoredKeyword =
             OneOf(
                 Try(String("click")),
-                Try(String("linkStyle")),
                 Try(String("accTitle")),
                 String("accDescr"));
 
@@ -300,6 +314,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             Try(classDefDirective.Select<FlowStatement?>(_ =>  _)),
             Try(classDirective.Select<FlowStatement?>(_ => _)),
             Try(styleDirective.Select<FlowStatement?>(_ => _)),
+            Try(linkStyleDirective.Select<FlowStatement?>(_ => _)),
             Try(nodeStatement.Select<FlowStatement?>(_ => _)),
             skipLine.Select<FlowStatement?>(_ => null));
 
@@ -611,6 +626,11 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         var classAssignments = new List<(string Id, string ClassName)>();
         var subgraphById = new Dictionary<string, Subgraph>(StringComparer.Ordinal);
         var subgraphCount = 0;
+        var linkStyles = new List<LinkStyleStatement>();
+
+        // The subgraphs given a `direction` of their own. The rest follow whatever is around them, which
+        // is only known once the whole chart has been read.
+        var directed = new HashSet<Subgraph>();
 
         // An id used in a link may name a subgraph (`A --> two`, `one --> two`), and the subgraph may be
         // declared after the link. Such an id must not also become a node, so the declared ids are
@@ -662,6 +682,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                     if (subgraphStack.Count > 0)
                     {
                         subgraphStack.Peek().Direction = dirStatement.Direction;
+                        directed.Add(subgraphStack.Peek());
                     }
                     else
                     {
@@ -690,6 +711,10 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
 
                     break;
 
+                case LinkStyleStatement linkStyle:
+                    linkStyles.Add(linkStyle);
+                    break;
+
                 case StyleStatement styleStatement:
                     var inline = ParseStyleProps(styleStatement.Props);
                     inlineStyles[styleStatement.Id] = inlineStyles.TryGetValue(styleStatement.Id, out var existingInline)
@@ -715,6 +740,9 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                     break;
             }
         }
+
+        InheritDirections(model.Subgraphs, model.Direction, directed);
+        ApplyLinkStyles(model.Edges, linkStyles);
 
         // Apply deferred class assignments to nodes (preferred) or subgraphs of the same id.
         foreach (var (id, className) in classAssignments)
@@ -849,6 +877,74 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         raw.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
     // Parses a Mermaid style property list, e.g. `fill:#f9f,stroke:#333,stroke-width:2px`.
+    static void InheritDirections(List<Subgraph> subgraphs, Direction enclosing, HashSet<Subgraph> directed)
+    {
+        foreach (var subgraph in subgraphs)
+        {
+            if (!directed.Contains(subgraph))
+            {
+                subgraph.Direction = enclosing;
+            }
+
+            InheritDirections(subgraph.NestedSubgraphs, subgraph.Direction, directed);
+        }
+    }
+
+    // `default` styles every link and a number styles the one written in that place, whichever order the
+    // directives come in. A number past the last link styles nothing.
+    static void ApplyLinkStyles(List<Edge> edges, List<LinkStyleStatement> statements)
+    {
+        foreach (var pass in new[] { true, false })
+        {
+            foreach (var statement in statements)
+            {
+                var style = ParseStyleProps(WithoutInterpolation(statement.Props));
+                foreach (var target in statement.Targets)
+                {
+                    var isDefault = target == "default";
+                    if (isDefault != pass)
+                    {
+                        continue;
+                    }
+
+                    if (isDefault)
+                    {
+                        foreach (var edge in edges)
+                        {
+                            edge.Style = edge.Style?.MergedWith(style) ?? style;
+                        }
+                    }
+                    else if (int.TryParse(target, NumberStyles.None, CultureInfo.InvariantCulture, out var index) &&
+                             index < edges.Count)
+                    {
+                        edges[index].Style = edges[index].Style?.MergedWith(style) ?? style;
+                    }
+                }
+            }
+        }
+    }
+
+    // `linkStyle 0 interpolate basis stroke:red` names a curve before the styles. Every link is drawn
+    // with the same curve here, so the name is dropped.
+    static string WithoutInterpolation(string props)
+    {
+        var text = props.TrimStart();
+        const string keyword = "interpolate";
+        if (!text.StartsWith(keyword, StringComparison.Ordinal))
+        {
+            return props;
+        }
+
+        var rest = text[keyword.Length..].TrimStart();
+        var end = rest.IndexOfAny([' ', '\t']);
+        if (end < 0)
+        {
+            return "";
+        }
+
+        return rest[end..];
+    }
+
     static NodeStyle ParseStyleProps(string raw)
     {
         var style = new NodeStyle();
@@ -927,4 +1023,6 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
     sealed record ClassAssignStatement(string Ids, string ClassName) : FlowStatement;
 
     sealed record StyleStatement(string Id, string Props) : FlowStatement;
+
+    sealed record LinkStyleStatement(List<string> Targets, string Props) : FlowStatement;
 }

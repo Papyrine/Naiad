@@ -26,7 +26,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         // Calculate node sizes based on text
         foreach (var node in model.Nodes)
         {
-            var label = node.Label ?? node.Id;
+            var label = DisplayText(node.Label ?? node.Id);
             var (textForMeasure, iconCount) = AnalyzeLabel(label);
             var textSize = MeasureText(textForMeasure, options.FontSize);
             node.Width = textSize.Width + 30 + iconCount * 20;
@@ -68,7 +68,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
                 continue;
             }
 
-            var labelSize = MeasureText(edge.Label, options.FontSize);
+            var labelSize = MeasureText(DisplayText(edge.Label), options.FontSize);
             edge.LabelWidth = labelSize.Width + 16;
             edge.LabelHeight = labelSize.Height + 8;
         }
@@ -78,9 +78,12 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         {
             Direction = model.Direction,
             NodeSeparation = 50,
-            RankSeparation = 70
+            RankSeparation = 70,
+            SubgraphDirections = true
         };
         var layoutResult = layoutEngine.BuildLayout(model, layoutOptions);
+
+        ClipEdgesToShapes(model);
 
         // Build SVG
         var builder = new SvgBuilder();
@@ -96,6 +99,19 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             builder.AddMermaidCrossMarker();
         }
 
+        // One more set of heads for each colour a `linkStyle` gives a link, keyed by that colour.
+        var coloredMarkers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var edge in model.Edges)
+        {
+            if (edge.Style?.Stroke is { } stroke &&
+                !coloredMarkers.ContainsKey(stroke))
+            {
+                var suffix = "-c" + coloredMarkers.Count.ToString(CultureInfo.InvariantCulture);
+                coloredMarkers[stroke] = suffix;
+                builder.AddMermaidColoredMarkers(stroke, suffix);
+            }
+        }
+
         // Add Mermaid CSS styles
         builder.AddStyles(MermaidStyles.FlowchartStyles);
 
@@ -105,7 +121,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         // Render edges first (behind nodes)
         foreach (var edge in model.Edges)
         {
-            RenderEdge(builder, edge, options.FontSize);
+            RenderEdge(builder, edge, options.FontSize, coloredMarkers);
         }
 
         // Render nodes
@@ -121,6 +137,92 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         return builder.Build();
     }
 
+    /// <summary>
+    /// The layout routes every edge to the box around a node. For a shape that does not fill its box that
+    /// leaves the edge stopping in mid-air beside it, so each end is pulled in along its own line to where
+    /// it meets the shape.
+    /// </summary>
+    static void ClipEdgesToShapes(FlowchartModel model)
+    {
+        foreach (var edge in model.Edges)
+        {
+            var points = edge.Points;
+            if (points.Count < 2)
+            {
+                continue;
+            }
+
+            if (model.GetNode(edge.SourceId) is { } source)
+            {
+                points[0] = ClipToShape(source, points[1], points[0]);
+            }
+
+            if (model.GetNode(edge.TargetId) is { } target)
+            {
+                points[^1] = ClipToShape(target, points[^2], points[^1]);
+            }
+        }
+    }
+
+    // Where the line from the node's centre towards a point leaves the node's shape, or the end the layout
+    // gave when the shape fills its box (or the point is already inside it).
+    static Position ClipToShape(Node node, Position toward, Position current)
+    {
+        var dx = toward.X - node.Position.X;
+        var dy = toward.Y - node.Position.Y;
+        var length = Math.Sqrt(dx * dx + dy * dy);
+        if (length < 1e-6)
+        {
+            return current;
+        }
+
+        var halfWidth = node.Width / 2;
+        var halfHeight = node.Height / 2;
+
+        double reach;
+        switch (node.Shape)
+        {
+            case NodeShape.Diamond:
+                reach = 1 / (Math.Abs(dx) / halfWidth + Math.Abs(dy) / halfHeight);
+                break;
+
+            case NodeShape.Circle:
+            case NodeShape.DoubleCircle:
+                reach = Math.Min(halfWidth, halfHeight) / length;
+                break;
+
+            case NodeShape.Hexagon:
+                // Flat top and bottom, and a slanted side from each end of them to the point at mid-height.
+                var slanted = 1 / (Math.Abs(dx) / halfWidth + Math.Abs(dy) / (halfHeight * 2));
+                var flat = Math.Abs(dy) < 1e-9 ? double.MaxValue : halfHeight / Math.Abs(dy);
+                reach = Math.Min(slanted, flat);
+                break;
+
+            default:
+                return current;
+        }
+
+        if (reach >= 1)
+        {
+            return current;
+        }
+
+        return new(node.Position.X + dx * reach, node.Position.Y + dy * reach);
+    }
+
+    // A markdown string is measured, and falls back to plain text, without its markers.
+    [return: NotNullIfNotNull(nameof(label))]
+    static string? DisplayText(string? label)
+    {
+        if (label is not null &&
+            MarkdownLabel.IsMarkdown(label))
+        {
+            return MarkdownLabel.Plain(label);
+        }
+
+        return label;
+    }
+
     // A subgraph takes its size from what it holds. One that holds nothing is drawn as a box around its
     // title, sized the way a node is around its label.
     static void SizeEmptySubgraphs(IEnumerable<Subgraph> subgraphs, RenderOptions options)
@@ -130,7 +232,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             if (subgraph.NodeIds.Count == 0 &&
                 subgraph.NestedSubgraphs.Count == 0)
             {
-                var titleSize = MeasureText(LabelLines.Flatten(subgraph.Title ?? subgraph.Id), options.FontSize);
+                var titleSize = MeasureText(LabelLines.Flatten(DisplayText(subgraph.Title ?? subgraph.Id)), options.FontSize);
                 subgraph.Width = titleSize.Width + 30;
                 subgraph.Height = titleSize.Height + 27;
                 continue;
@@ -180,7 +282,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     static void RenderSubgraphTitle(SvgBuilder builder, Subgraph graph, RenderOptions options)
     {
         // The title band has room for one line, so a `<br/>` in it becomes a space.
-        var title = LabelLines.Flatten(graph.Title ?? graph.Id);
+        var title = LabelLines.Flatten(DisplayText(graph.Title ?? graph.Id));
         if (string.IsNullOrEmpty(title))
         {
             return;
@@ -231,8 +333,18 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
         // Render label with icon support
         var label = node.Label ?? node.Id;
-        var htmlLabel = ConvertIconsToHtml(label, style?.Color);
-        var (plainText, _) = AnalyzeLabel(label);
+        string htmlLabel;
+        string plainText;
+        if (MarkdownLabel.IsMarkdown(label))
+        {
+            htmlLabel = Paragraph(MarkdownLabel.Html(label), style?.Color);
+            plainText = MarkdownLabel.Plain(label);
+        }
+        else
+        {
+            htmlLabel = ConvertIconsToHtml(label, style?.Color);
+            (plainText, _) = AnalyzeLabel(label);
+        }
 
         builder.AddLabel(
             x, y,
@@ -243,7 +355,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             className: "nodeLabel");
     }
 
-    static void RenderEdge(SvgBuilder builder, Edge edge, double fontSize)
+    static void RenderEdge(SvgBuilder builder, Edge edge, double fontSize, Dictionary<string, string> coloredMarkers)
     {
         if (edge.Points.Count < 2 ||
             edge.Type == EdgeType.Invisible)
@@ -253,53 +365,71 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
         var pathData = EdgePath.Build(edge.Points);
 
-        var strokeDasharray = edge.LineStyle switch
+        // A `linkStyle` wins over what the link's own spelling asks for.
+        var style = edge.Style;
+
+        var strokeDasharray = style?.StrokeDasharray ?? edge.LineStyle switch
         {
             EdgeStyle.Dotted => "2",
             _ => null
         };
 
-        var strokeWidth = edge.LineStyle switch
+        var strokeWidth = style?.StrokeWidth ?? edge.LineStyle switch
         {
             EdgeStyle.Thick => 3.5,
             _ => 2.0
         };
 
-        var markerEnd = edge.HasArrowHead ? "url(#naiad_flowchart-pointEnd)" :
-            edge.HasCircleEnd ? "url(#naiad_flowchart-circleEnd)" :
+        // Arrow and circle heads follow the link's own colour when it has one. The cross is drawn with a
+        // stroke the stylesheet supplies, so it keeps the shared marker.
+        var colored = "";
+        if (style?.Stroke is { } stroke)
+        {
+            colored = coloredMarkers.GetValueOrDefault(stroke, "");
+        }
+
+        var markerEnd = edge.HasArrowHead ? $"url(#naiad_flowchart-pointEnd{colored})" :
+            edge.HasCircleEnd ? $"url(#naiad_flowchart-circleEnd{colored})" :
             edge.HasCrossEnd ? "url(#naiad_flowchart-crossEnd)" : null;
 
-        var markerStart = edge.HasArrowTail ? "url(#naiad_flowchart-pointStart)" :
-            edge.HasCircleTail ? "url(#naiad_flowchart-circleStart)" :
+        var markerStart = edge.HasArrowTail ? $"url(#naiad_flowchart-pointStart{colored})" :
+            edge.HasCircleTail ? $"url(#naiad_flowchart-circleStart{colored})" :
             edge.HasCrossTail ? "url(#naiad_flowchart-crossStart)" : null;
 
         builder.AddPath(
             pathData,
             fill: "none",
-            stroke: edgeStroke,
+            stroke: style?.Stroke ?? edgeStroke,
             strokeWidth: strokeWidth,
             strokeDasharray: strokeDasharray,
             markerEnd: markerEnd,
             markerStart: markerStart,
-            cssClass: "flowchart-link");
+            // The class's stylesheet rule sets the stroke, and a rule beats an attribute, so a link with a
+            // stroke of its own goes without the class.
+            cssClass: style?.Stroke is null ? "flowchart-link" : null);
 
         // Render edge label if present
         if (!string.IsNullOrEmpty(edge.Label))
         {
             var labelX = edge.LabelPosition.X;
             var labelY = edge.LabelPosition.Y;
-            var labelSize = MeasureText(edge.Label, fontSize);
+            var plainLabel = DisplayText(edge.Label);
+            var labelSize = MeasureText(plainLabel, fontSize);
             var labelWidth = labelSize.Width + 16;
             var labelHeight = labelSize.Height + 8;
 
             builder.AddEdgeLabelBackground(labelX, labelY, labelWidth, labelHeight);
 
+            var labelHtml = MarkdownLabel.IsMarkdown(edge.Label)
+                ? MarkdownLabel.Html(edge.Label)
+                : EncodeLines(edge.Label);
+
             builder.AddLabel(
                 labelX - labelWidth / 2,
                 labelY - labelHeight / 2,
                 labelWidth, labelHeight,
-                $"<p>{EncodeLines(edge.Label)}</p>",
-                edge.Label,
+                Paragraph(labelHtml, style?.Color),
+                plainLabel,
                 className: "edgeLabel");
         }
     }
@@ -328,6 +458,17 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
         html.Append("</p>");
         return html.ToString();
+    }
+
+    // A label's paragraph, carrying its text colour when it has one of its own.
+    static string Paragraph(string innerHtml, string? color)
+    {
+        if (color is null)
+        {
+            return $"<p>{innerHtml}</p>";
+        }
+
+        return $"<p style=\"color:{color}\">{innerHtml}</p>";
     }
 
     static void AppendLineHtml(StringBuilder html, string text)

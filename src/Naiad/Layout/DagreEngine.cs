@@ -16,6 +16,12 @@
 /// </remarks>
 class DagreEngine : ILayoutEngine
 {
+    // Room kept between a subgraph laid out on its own and its box: the title band above, a margin elsewhere.
+    const double independentPadding = 20;
+    const double independentTitleBand = 40;
+
+    static readonly HashSet<Subgraph> noneCollapsed = [];
+
     public LayoutResult BuildLayout(GraphDiagramBase diagram, LayoutOptions options)
     {
         if (diagram.Nodes.Count == 0 &&
@@ -24,6 +30,178 @@ class DagreEngine : ILayoutEngine
             return new() { Width = 0, Height = 0 };
         }
 
+        if (!options.SubgraphDirections)
+        {
+            return LayOut(diagram, options, noneCollapsed);
+        }
+
+        var independent = new List<(Subgraph Subgraph, HashSet<string> Members)>();
+        FindIndependent(diagram, diagram.Subgraphs, options.Direction, independent);
+        if (independent.Count == 0)
+        {
+            return LayOut(diagram, options, noneCollapsed);
+        }
+
+        // Each independent subgraph is a diagram of its own, laid out in its own direction. It then takes
+        // part in the layout around it as a single box of the size that came to, and its contents are
+        // moved into the box once the box has a place.
+        var inside = new HashSet<string>(StringComparer.Ordinal);
+        var collapsed = new HashSet<Subgraph>();
+        var parts = new List<(Subgraph Subgraph, PartialGraph Part)>();
+        foreach (var (subgraph, members) in independent)
+        {
+            var part = new PartialGraph();
+            foreach (var node in diagram.Nodes)
+            {
+                if (members.Contains(node.Id))
+                {
+                    part.AddNode(node);
+                }
+            }
+
+            foreach (var edge in diagram.Edges)
+            {
+                if (members.Contains(edge.SourceId) &&
+                    members.Contains(edge.TargetId))
+                {
+                    part.Edges.Add(edge);
+                }
+            }
+
+            part.Subgraphs.AddRange(subgraph.NestedSubgraphs);
+
+            var size = BuildLayout(
+                part,
+                new()
+                {
+                    Direction = subgraph.Direction,
+                    NodeSeparation = options.NodeSeparation,
+                    RankSeparation = options.RankSeparation,
+                    SubgraphDirections = true
+                });
+
+            subgraph.Width = size.Width + independentPadding * 2;
+            subgraph.Height = size.Height + independentTitleBand + independentPadding;
+
+            inside.UnionWith(members);
+            collapsed.Add(subgraph);
+            parts.Add((subgraph, part));
+        }
+
+        var outer = new PartialGraph();
+        foreach (var node in diagram.Nodes)
+        {
+            if (!inside.Contains(node.Id))
+            {
+                outer.AddNode(node);
+            }
+        }
+
+        foreach (var edge in diagram.Edges)
+        {
+            if (!inside.Contains(edge.SourceId))
+            {
+                outer.Edges.Add(edge);
+            }
+        }
+
+        outer.Subgraphs.AddRange(diagram.Subgraphs);
+
+        var result = LayOut(outer, options, collapsed);
+
+        foreach (var (subgraph, part) in parts)
+        {
+            var dx = subgraph.Bounds.X + independentPadding;
+            var dy = subgraph.Bounds.Y + independentTitleBand;
+
+            foreach (var node in part.Nodes)
+            {
+                node.Position = new(node.Position.X + dx, node.Position.Y + dy);
+            }
+
+            foreach (var edge in part.Edges)
+            {
+                edge.Offset(dx, dy);
+            }
+
+            OffsetSubgraphs(part.Subgraphs, dx, dy);
+        }
+
+        return result;
+    }
+
+    sealed class PartialGraph : GraphDiagramBase;
+
+    static void OffsetSubgraphs(List<Subgraph> subgraphs, double dx, double dy)
+    {
+        foreach (var subgraph in subgraphs)
+        {
+            subgraph.Position = new(subgraph.Position.X + dx, subgraph.Position.Y + dy);
+            OffsetSubgraphs(subgraph.NestedSubgraphs, dx, dy);
+        }
+    }
+
+    /// <summary>
+    /// Finds the subgraphs to lay out on their own: those that ask for a direction other than the one
+    /// around them and have no link between a member and anything outside. A subgraph that qualifies is
+    /// not searched further - laying it out finds any inside it - and one that does not passes the
+    /// direction around it on to the subgraphs it holds.
+    /// </summary>
+    static void FindIndependent(
+        GraphDiagramBase diagram,
+        List<Subgraph> subgraphs,
+        Direction enclosing,
+        List<(Subgraph, HashSet<string>)> found)
+    {
+        foreach (var subgraph in subgraphs)
+        {
+            if (subgraph.Direction != enclosing)
+            {
+                var members = new HashSet<string>(StringComparer.Ordinal);
+                AddMembers(subgraph, members);
+                if (members.Count > 0 &&
+                    IsSelfContained(diagram, members))
+                {
+                    found.Add((subgraph, members));
+                    continue;
+                }
+            }
+
+            FindIndependent(diagram, subgraph.NestedSubgraphs, enclosing, found);
+        }
+    }
+
+    static void AddMembers(Subgraph subgraph, HashSet<string> members)
+    {
+        foreach (var nodeId in subgraph.NodeIds)
+        {
+            members.Add(nodeId);
+        }
+
+        foreach (var nested in subgraph.NestedSubgraphs)
+        {
+            members.Add(nested.Id);
+            AddMembers(nested, members);
+        }
+    }
+
+    static bool IsSelfContained(GraphDiagramBase diagram, HashSet<string> members)
+    {
+        foreach (var edge in diagram.Edges)
+        {
+            if (members.Contains(edge.SourceId) != members.Contains(edge.TargetId))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Lays out one graph in one direction. A collapsed subgraph takes part as a box of the size it
+    // already has, and nothing inside it is looked at.
+    static LayoutResult LayOut(GraphDiagramBase diagram, LayoutOptions options, HashSet<Subgraph> collapsed)
+    {
         var graph = new Graph(directed: true, multigraph: true, compound: true);
         graph.SetGraph(new()
         {
@@ -48,7 +226,7 @@ class DagreEngine : ILayoutEngine
         var subgraphLabels = new List<(Subgraph Subgraph, NodeLabel Label)>();
         foreach (var subgraph in diagram.Subgraphs)
         {
-            AddSubgraph(graph, subgraph, subgraphLabels);
+            AddSubgraph(graph, subgraph, subgraphLabels, collapsed);
         }
 
         var clusters = new Dictionary<string, Subgraph>(subgraphLabels.Count, StringComparer.Ordinal);
@@ -76,8 +254,8 @@ class DagreEngine : ILayoutEngine
 
             // Dagre cannot rank an edge that ends on a cluster, so an edge to or from a subgraph is laid out
             // against one of the nodes inside it and cut back to the subgraph's border afterwards.
-            var source = ClusterAnchor(clusters, edge.SourceId, edge.TargetId);
-            var target = ClusterAnchor(clusters, edge.TargetId, edge.SourceId);
+            var source = ClusterAnchor(clusters, edge.SourceId, edge.TargetId, collapsed);
+            var target = ClusterAnchor(clusters, edge.TargetId, edge.SourceId, collapsed);
 
             // A unique per-edge name keeps parallel edges (same source/target) distinct in the multigraph.
             graph.SetEdge(source, target, label, "e" + i.ToString(CultureInfo.InvariantCulture));
@@ -148,18 +326,28 @@ class DagreEngine : ILayoutEngine
     /// subgraph and one of its own members does not collapse into a self-loop. An empty subgraph has no
     /// node to stand in for it, and being a leaf as far as dagre is concerned it needs none.
     /// </summary>
-    static string ClusterAnchor(Dictionary<string, Subgraph> clusters, string id, string otherEnd)
+    static string ClusterAnchor(
+        Dictionary<string, Subgraph> clusters,
+        string id,
+        string otherEnd,
+        HashSet<Subgraph> collapsed)
     {
         if (!clusters.TryGetValue(id, out var cluster))
         {
             return id;
         }
 
-        return FirstLeaf(cluster, otherEnd) ?? FirstLeaf(cluster, null) ?? id;
+        return FirstLeaf(cluster, otherEnd, collapsed) ?? FirstLeaf(cluster, null, collapsed) ?? id;
     }
 
-    static string? FirstLeaf(Subgraph subgraph, string? except)
+    // A collapsed subgraph is a leaf itself: the nodes inside it are not in this layout.
+    static string? FirstLeaf(Subgraph subgraph, string? except, HashSet<Subgraph> collapsed)
     {
+        if (collapsed.Contains(subgraph))
+        {
+            return subgraph.Id;
+        }
+
         foreach (var nodeId in subgraph.NodeIds)
         {
             if (nodeId != except)
@@ -170,7 +358,7 @@ class DagreEngine : ILayoutEngine
 
         foreach (var nested in subgraph.NestedSubgraphs)
         {
-            if (FirstLeaf(nested, except) is { } leaf)
+            if (FirstLeaf(nested, except, collapsed) is { } leaf)
             {
                 return leaf;
             }
@@ -247,13 +435,20 @@ class DagreEngine : ILayoutEngine
         return new(outside.X + dx * enter, outside.Y + dy * enter);
     }
 
-    static void AddSubgraph(Graph graph, Subgraph subgraph, List<(Subgraph, NodeLabel)> collected)
+    static void AddSubgraph(
+        Graph graph,
+        Subgraph subgraph,
+        List<(Subgraph, NodeLabel)> collected,
+        HashSet<Subgraph> collapsed)
     {
         // A subgraph with nothing in it is a leaf to dagre, which sizes a cluster from its children and so
-        // would leave this one a point. It keeps whatever size its renderer gave it instead.
+        // would leave this one a point. It keeps whatever size its renderer gave it instead. So does one
+        // that has been laid out on its own, whose contents take no part here.
         var label = new NodeLabel();
-        if (subgraph.NodeIds.Count == 0 &&
-            subgraph.NestedSubgraphs.Count == 0)
+        var isCollapsed = collapsed.Contains(subgraph);
+        if (isCollapsed ||
+            (subgraph.NodeIds.Count == 0 &&
+             subgraph.NestedSubgraphs.Count == 0))
         {
             label.Width = subgraph.Width;
             label.Height = subgraph.Height;
@@ -262,6 +457,11 @@ class DagreEngine : ILayoutEngine
         graph.SetNode(subgraph.Id, label);
         collected.Add((subgraph, label));
 
+        if (isCollapsed)
+        {
+            return;
+        }
+
         foreach (var nodeId in subgraph.NodeIds)
         {
             graph.SetParent(nodeId, subgraph.Id);
@@ -269,7 +469,7 @@ class DagreEngine : ILayoutEngine
 
         foreach (var nested in subgraph.NestedSubgraphs)
         {
-            AddSubgraph(graph, nested, collected);
+            AddSubgraph(graph, nested, collected, collapsed);
             graph.SetParent(nested.Id, subgraph.Id);
         }
     }
