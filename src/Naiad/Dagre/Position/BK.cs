@@ -715,58 +715,59 @@ static class BK
     }
 
     internal static Func<Graph, string, string, double> Sep(double nodeSep, double edgeSep, bool reverseSep) =>
-        (graph, v, w) =>
+        (graph, v, w) => Separation(graph.NodeLabel(v), graph.NodeLabel(w), nodeSep, edgeSep, reverseSep);
+
+    // The room two neighbours in a layer need between their centres.
+    internal static double Separation(NodeLabel vLabel, NodeLabel wLabel, double nodeSep, double edgeSep, bool reverseSep)
+    {
+        double sum = 0;
+        double? delta = null;
+
+        sum += vLabel.Width / 2;
+        if (vLabel.Labelpos != null)
         {
-            var vLabel = graph.NodeLabel(v);
-            var wLabel = graph.NodeLabel(w);
-            double sum = 0;
-            double? delta = null;
-
-            sum += vLabel.Width / 2;
-            if (vLabel.Labelpos != null)
+            switch (vLabel.Labelpos)
             {
-                switch (vLabel.Labelpos)
-                {
-                    case LabelPosition.Left:
-                        delta = -vLabel.Width / 2;
-                        break;
-                    case LabelPosition.Right:
-                        delta = vLabel.Width / 2;
-                        break;
-                }
+                case LabelPosition.Left:
+                    delta = -vLabel.Width / 2;
+                    break;
+                case LabelPosition.Right:
+                    delta = vLabel.Width / 2;
+                    break;
             }
+        }
 
-            if (delta is { } d1 && d1 != 0)
+        if (delta is { } d1 && d1 != 0)
+        {
+            sum += reverseSep ? d1 : -d1;
+        }
+
+        delta = null;
+
+        sum += (vLabel.Dummy != null ? edgeSep : nodeSep) / 2;
+        sum += (wLabel.Dummy != null ? edgeSep : nodeSep) / 2;
+
+        sum += wLabel.Width / 2;
+        if (wLabel.Labelpos != null)
+        {
+            switch (wLabel.Labelpos)
             {
-                sum += reverseSep ? d1 : -d1;
+                case LabelPosition.Left:
+                    delta = wLabel.Width / 2;
+                    break;
+                case LabelPosition.Right:
+                    delta = -wLabel.Width / 2;
+                    break;
             }
+        }
 
-            delta = null;
+        if (delta is { } d2 && d2 != 0)
+        {
+            sum += reverseSep ? d2 : -d2;
+        }
 
-            sum += (vLabel.Dummy != null ? edgeSep : nodeSep) / 2;
-            sum += (wLabel.Dummy != null ? edgeSep : nodeSep) / 2;
-
-            sum += wLabel.Width / 2;
-            if (wLabel.Labelpos != null)
-            {
-                switch (wLabel.Labelpos)
-                {
-                    case LabelPosition.Left:
-                        delta = wLabel.Width / 2;
-                        break;
-                    case LabelPosition.Right:
-                        delta = -wLabel.Width / 2;
-                        break;
-                }
-            }
-
-            if (delta is { } d2 && d2 != 0)
-            {
-                sum += reverseSep ? d2 : -d2;
-            }
-
-            return sum;
-        };
+        return sum;
+    }
 
     internal static double Width(Graph graph, string v) => graph.NodeLabel(v).Width;
 }

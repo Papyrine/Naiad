@@ -412,4 +412,118 @@ public class OrderPositionEquivalenceTests
         graph.SetNode("mid", new() { Rank = 2 });
         await Assert.That(Util.MaxRank(graph)).IsEqualTo(3);
     }
+
+    // A generated graph dressed as positioning meets one: ordered, with dummies, borders of either side
+    // and labels set to one side scattered through it, so that conflicts of both types, border blocks
+    // and every branch of the separation between neighbours all occur.
+    static Graph DressedGraph(int seed)
+    {
+        var random = new Random(seed * 7919 + 13);
+        var graph = LayeredGraph(seed, compound: false);
+        Order.Run(graph);
+
+        foreach (var (_, label) in graph.NodeEntries())
+        {
+            switch (random.Next(6))
+            {
+                case 0:
+                    label.Dummy = DummyKind.Edge;
+                    break;
+                case 1:
+                    label.Dummy = DummyKind.Border;
+                    label.BorderType = random.Next(2) == 0 ? BorderKind.Left : BorderKind.Right;
+                    break;
+                case 2:
+                    label.Dummy = DummyKind.EdgeLabel;
+                    label.Labelpos = random.Next(3) switch
+                    {
+                        0 => LabelPosition.Left,
+                        1 => LabelPosition.Right,
+                        _ => LabelPosition.Center
+                    };
+                    break;
+            }
+        }
+
+        return graph;
+    }
+
+    // Positioning over node numbers and arrays puts every node exactly where positioning over names and
+    // dictionaries puts it.
+    [Test]
+    public async Task IndexedPositioning_MatchesTheDictionaryVersion()
+    {
+        var withConflicts = 0;
+        for (var seed = 0; seed < 400; seed++)
+        {
+            var indexed = DressedGraph(seed);
+            var reference = DressedGraph(seed);
+            var layering = Util.BuildLayerMatrix(indexed);
+
+            var expected = BK.PositionX(reference);
+            await Assert.That(IndexedBK.TryPositionX(indexed, layering)).IsTrue();
+
+            await Assert.That(expected.Count).IsEqualTo(indexed.NodeCount).Because($"seed {seed}");
+            foreach (var (v, x) in expected)
+            {
+                await Assert.That(indexed.NodeLabel(v).X).IsEqualTo(x).Because($"seed {seed}, node {v}");
+            }
+
+            if (BK.FindType1Conflicts(reference, layering).Count > 0 &&
+                BK.FindType2Conflicts(reference, layering).Count > 0)
+            {
+                withConflicts++;
+            }
+        }
+
+        // Enough of the graphs carry conflicts of both types for the merge of the two to be exercised.
+        await Assert.That(withConflicts).IsGreaterThan(50);
+    }
+
+    [Test]
+    public async Task PositioningRun_IsTheSameIndexedOrNot()
+    {
+        for (var seed = 0; seed < 100; seed++)
+        {
+            var indexed = DressedGraph(seed);
+            var reference = DressedGraph(seed);
+
+            Positioning.Run(indexed, inPlaceWhenPossible: true, indexedWhenPossible: true);
+            Positioning.Run(reference, inPlaceWhenPossible: true, indexedWhenPossible: false);
+
+            await Assert.That(Coordinates(indexed)).IsEqualTo(Coordinates(reference)).Because($"seed {seed}");
+        }
+    }
+
+    [Test]
+    public async Task IndexedPositioning_OfAnEmptyGraph_DoesNothing() =>
+        await Assert.That(IndexedBK.TryPositionX(new Graph(), [])).IsTrue();
+
+    // A layering it cannot number is declined, with nothing positioned, and left to the dictionary version.
+    [Test]
+    public async Task IndexedPositioning_DeclinesALayeringWithAGap()
+    {
+        var graph = DressedGraph(3);
+        var layering = Util.BuildLayerMatrix(graph);
+        layering[0].Add(null!);
+
+        await Assert.That(IndexedBK.TryPositionX(graph, layering)).IsFalse();
+        await Assert.That(graph.NodeLabels().All(_ => _.X is null)).IsTrue();
+    }
+
+    [Test]
+    public async Task IndexedPositioning_DeclinesAnEdgeToANodeOutsideTheLayering()
+    {
+        var graph = new Graph();
+        graph.SetGraph(new() { NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50 });
+        graph.SetDefaultEdgeLabel(new EdgeLabel());
+        graph.SetNode("a", new() { Rank = 0, Order = 0, Width = 10 });
+        graph.SetNode("b", new() { Rank = 1, Order = 0, Width = 10 });
+        graph.SetNode("unranked", new() { Width = 10 });
+        graph.SetEdge("a", "b");
+        graph.SetEdge("unranked", "b");
+
+        await Assert.That(IndexedBK.TryPositionX(graph, Util.BuildLayerMatrix(graph))).IsFalse();
+        await Assert.That(graph.NodeLabel("a").X).IsNull();
+    }
 }
