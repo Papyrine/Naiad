@@ -2,28 +2,45 @@ static class InitOrder
 {
     public static List<List<string>> Run(Graph graph)
     {
-        var visited = new Dictionary<string, bool>(StringComparer.Ordinal);
-        var simpleNodes = graph.Nodes().Where(_ => graph.ChildCount(_) == 0).ToList();
-        var simpleNodesRanks = simpleNodes.Select(_ => (double) graph.NodeLabel(_).Rank!.Value).ToList();
-        var maxRank = (int) Util.ApplyMax(simpleNodesRanks);
-        var layers = Util.Range(maxRank + 1).Select(_ => new List<string>()).ToList();
+        var nodes = graph.Nodes();
+        var visited = new HashSet<string>(nodes.Count, StringComparer.Ordinal);
+
+        // The nodes that are not subgraphs, and the greatest rank among them - negative infinity when
+        // there are none, which leaves no layers.
+        var simpleNodes = new List<string>(nodes.Count);
+        var greatest = double.NegativeInfinity;
+        foreach (var v in nodes)
+        {
+            if (graph.ChildCount(v) != 0)
+            {
+                continue;
+            }
+
+            simpleNodes.Add(v);
+            greatest = Math.Max(greatest, graph.NodeLabel(v).Rank!.Value);
+        }
+
+        var maxRank = (int) greatest;
+        var layers = new List<List<string>>();
+        for (var rank = 0; rank < maxRank + 1; rank++)
+        {
+            layers.Add([]);
+        }
 
         // Depth-first, pre-order, on an explicit stack: the depth is the length of the longest path, and a
-        // few thousand nodes in a chain is enough for a recursive walk to overflow the thread's stack.
-        var pending = new Stack<(List<string> Successors, int Next)>();
+        // few thousand nodes in a chain is enough for a recursive walk to overflow the thread's stack. A
+        // frame is the walk along one node's successors, read where the graph keeps them.
+        var pending = new Stack<OrderedMap<int>.KeyEnumerable.Enumerator>();
 
         void Visit(string v)
         {
-            if (!visited.TryAdd(v, true))
+            if (!visited.Add(v))
             {
                 return;
             }
 
             layers[graph.NodeLabel(v).Rank!.Value].Add(v);
-            if (graph.Successors(v) is { Count: > 0 } successors)
-            {
-                pending.Push((successors, 0));
-            }
+            pending.Push(graph.SuccessorsOf(v).GetEnumerator());
         }
 
         void Dfs(string start)
@@ -31,13 +48,16 @@ static class InitOrder
             Visit(start);
             while (pending.Count > 0)
             {
-                var (successors, next) = pending.Pop();
-                if (next + 1 < successors.Count)
+                var successors = pending.Pop();
+                if (!successors.MoveNext())
                 {
-                    pending.Push((successors, next + 1));
+                    continue;
                 }
 
-                Visit(successors[next]);
+                // The rest of this node's successors wait under whatever the next one leads to.
+                var next = successors.Current;
+                pending.Push(successors);
+                Visit(next);
             }
         }
 
