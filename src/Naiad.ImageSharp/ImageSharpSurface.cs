@@ -49,7 +49,7 @@ sealed class ImageSharpSurface(int width, int height, Rgba background, PngCompre
     DrawingCanvas? canvas;
 
     DrawingCanvas Canvas =>
-        canvas ??= image.Frames.RootFrame.CreateCanvas(image.Configuration, new DrawingOptions());
+        canvas ??= image.Frames.RootFrame.CreateCanvas(image.Configuration, new());
 
     public void FillPath(IReadOnlyList<SubPath> subpaths, Matrix3x2 transform, Paint paint, FillRule rule, float opacity)
     {
