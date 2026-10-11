@@ -213,11 +213,15 @@ static class Util
 
     public static double MaxRank(Graph graph)
     {
-        var nodeRanks = graph
-            .NodeLabels()
-            .Select(_ => _.Rank ?? double.Epsilon)
-            .ToList();
-        return ApplyMax(nodeRanks);
+        // The greatest rank, counting a node without one as double.Epsilon, and negative infinity for a
+        // graph with no nodes at all - as taking the maximum of a list of them gives.
+        var max = double.NegativeInfinity;
+        foreach (var label in graph.NodeLabels())
+        {
+            max = Math.Max(max, label.Rank ?? double.Epsilon);
+        }
+
+        return max;
     }
 
     public static (List<T> Lhs, List<T> Rhs) Partition<T>(IEnumerable<T> collection, Func<T, bool> fn)

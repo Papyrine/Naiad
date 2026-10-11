@@ -237,9 +237,17 @@ static class BK
         Dictionary<string, Dictionary<string, bool>> conflicts,
         Func<string, OrderedMap<int>.KeyEnumerable> neighborFn)
     {
-        var root = new Dictionary<string, string>(StringComparer.Ordinal);
-        var align = new Dictionary<string, string>(StringComparer.Ordinal);
-        var pos = new Dictionary<string, int>(StringComparer.Ordinal);
+        // Every node gets an entry in each of these, so they are made the size they will reach: grown
+        // a step at a time they throw away as much again as they end up holding.
+        var nodeCount = 0;
+        foreach (var layer in layering)
+        {
+            nodeCount += layer.Count;
+        }
+
+        var root = new Dictionary<string, string>(nodeCount, StringComparer.Ordinal);
+        var align = new Dictionary<string, string>(nodeCount, StringComparer.Ordinal);
+        var pos = new Dictionary<string, int>(nodeCount, StringComparer.Ordinal);
 
         // We cache the position here based on the layering because the graph and
         // layering may be out of sync. The layering matrix is manipulated to
@@ -658,10 +666,11 @@ static class BK
         return balanced;
     }
 
-    internal static Dictionary<string, double> PositionX(Graph graph)
-    {
-        var layering = Util.BuildLayerMatrix(graph);
+    internal static Dictionary<string, double> PositionX(Graph graph) =>
+        PositionX(graph, Util.BuildLayerMatrix(graph));
 
+    internal static Dictionary<string, double> PositionX(Graph graph, List<List<string>> layering)
+    {
         var conflicts = FindType1Conflicts(graph, layering);
         var type2 = FindType2Conflicts(graph, layering);
         foreach (var (k, v) in type2)
