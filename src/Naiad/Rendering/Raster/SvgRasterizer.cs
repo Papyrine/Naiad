@@ -233,10 +233,66 @@ static class SvgRasterizer
 
             var lineHeight = textStyle.FontSize * 1.2f;
             var top = centerY - (lines.Count - 1) * lineHeight / 2;
+
+            // A label that marks some of its text bold or italic is drawn a run at a time, each run placed
+            // after the one before it from estimated widths, since a surface cannot be asked to measure.
+            if (HtmlText.HasEmphasis(foreignObject.HtmlContent))
+            {
+                var runLines = HtmlText.ExtractRuns(foreignObject.HtmlContent);
+                top = centerY - (runLines.Count - 1) * lineHeight / 2;
+                for (var i = 0; i < runLines.Count; i++)
+                {
+                    var x = centerX - runLines[i].Sum(_ => RunWidth(_, textStyle.FontSize)) / 2;
+                    foreach (var run in runLines[i])
+                    {
+                        surface.DrawText(
+                            run.Text,
+                            x,
+                            top + i * lineHeight,
+                            ctm,
+                            textStyle with
+                            {
+                                Anchor = TextAnchorKind.Start,
+                                Bold = textStyle.Bold || run.Bold,
+                                Italic = textStyle.Italic || run.Italic
+                            });
+                        x += RunWidth(run, textStyle.FontSize);
+                    }
+                }
+
+                return;
+            }
+
             for (var i = 0; i < lines.Count; i++)
             {
                 surface.DrawText(lines[i], centerX, top + i * lineHeight, ctm, textStyle);
             }
+        }
+
+        // A rough advance for a run, a character at a time: a flat per-character figure is far enough out
+        // on a short run of narrow letters or a trailing space to open a visible gap before the next run.
+        static float RunWidth(HtmlText.Run run, float fontSize)
+        {
+            var ems = 0f;
+            foreach (var character in run.Text)
+            {
+                ems += character switch
+                {
+                    ' ' => 0.3f,
+                    'i' or 'j' or 'l' or 'I' or '.' or ',' or ':' or ';' or '\'' or '!' or '|' => 0.28f,
+                    'f' or 't' or 'r' => 0.37f,
+                    'm' or 'w' or 'M' or 'W' => 0.8f,
+                    >= 'A' and <= 'Z' => 0.62f,
+                    _ => 0.52f
+                };
+            }
+
+            if (run.Bold)
+            {
+                ems *= 1.08f;
+            }
+
+            return ems * fontSize;
         }
 
         // Scales the icon's viewBox into a size×size box at (x, y) in user space, then renders its body

@@ -108,6 +108,66 @@
         class="arrowMarkerPath"
         style="stroke-width: 2;" />
     </marker>
+    <marker
+      id="naiad_flowchart-pointEnd-c0"
+      viewBox="0 0 10 10"
+      refX="10"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M 0 0 L 10 5 L 0 10 z"
+        class="arrowMarkerPath"
+        fill="#94a3b8" />
+    </marker>
+    <marker
+      id="naiad_flowchart-pointStart-c0"
+      viewBox="0 0 10 10"
+      refX="0"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M 0 5 L 10 10 L 10 0 z"
+        class="arrowMarkerPath"
+        fill="#94a3b8" />
+    </marker>
+    <marker
+      id="naiad_flowchart-circleEnd-c0"
+      viewBox="0 0 10 10"
+      refX="11"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <circle
+        cx="5"
+        cy="5"
+        r="5"
+        class="arrowMarkerPath"
+        fill="#94a3b8" />
+    </marker>
+    <marker
+      id="naiad_flowchart-circleStart-c0"
+      viewBox="0 0 10 10"
+      refX="-1"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <circle
+        cx="5"
+        cy="5"
+        r="5"
+        class="arrowMarkerPath"
+        fill="#94a3b8" />
+    </marker>
   </defs>
   <g
     transform="translate(20,20)">
@@ -124,10 +184,9 @@
     <path
       d="M167.8,48 L167.8,56.25 C167.8,64.5 167.8,81 167.8,97.5 C167.8,114 167.8,130.5 167.8,138.75 L167.8,147"
       fill="none"
-      stroke="#333333"
-      stroke-width="2"
-      marker-end="url(#naiad_flowchart-pointEnd)"
-      class="flowchart-link" />
+      stroke="#94a3b8"
+      stroke-width="1.5"
+      marker-end="url(#naiad_flowchart-pointEnd-c0)" />
     <rect
       x="136.7"
       y="83"
@@ -151,12 +210,11 @@
       </div>
     </foreignObject>
     <path
-      d="M134.16,214.2 L125.9,222.45 C117.64,230.7 101.12,247.2 92.86,263.7 C84.6,280.2 84.6,296.7 84.6,304.95 L84.6,313.2"
+      d="M142.86,205.51 L133.15,215.21 C123.44,224.91 104.02,244.3 94.31,262.25 C84.6,280.2 84.6,296.7 84.6,304.95 L84.6,313.2"
       fill="none"
-      stroke="#333333"
-      stroke-width="2"
-      marker-end="url(#naiad_flowchart-pointEnd)"
-      class="flowchart-link" />
+      stroke="#94a3b8"
+      stroke-width="1.5"
+      marker-end="url(#naiad_flowchart-pointEnd-c0)" />
     <rect
       x="68.9"
       y="249.2"
@@ -180,12 +238,11 @@
       </div>
     </foreignObject>
     <path
-      d="M219.55,214.2 L232.26,222.45 C244.97,230.7 270.38,247.2 283.09,263.7 C295.8,280.2 295.8,296.7 295.8,304.95 L295.8,313.2"
+      d="M201.48,202.47 L217.2,212.67 C232.92,222.88 264.36,243.29 280.08,261.74 C295.8,280.2 295.8,296.7 295.8,304.95 L295.8,313.2"
       fill="none"
-      stroke="#333333"
-      stroke-width="2"
-      marker-end="url(#naiad_flowchart-pointEnd)"
-      class="flowchart-link" />
+      stroke="#94a3b8"
+      stroke-width="1.5"
+      marker-end="url(#naiad_flowchart-pointEnd-c0)" />
     <rect
       x="276.25"
       y="249.2"
@@ -211,10 +268,9 @@
     <path
       d="M295.8,361.2 L295.8,369.45 C295.8,377.7 295.8,394.2 295.8,410.7 C295.8,427.2 295.8,443.7 295.8,457.78 C295.8,471.87 295.8,483.53 295.8,489.37 L295.8,495.2"
       fill="none"
-      stroke="#333333"
-      stroke-width="3.5"
-      marker-end="url(#naiad_flowchart-pointEnd)"
-      class="flowchart-link" />
+      stroke="#94a3b8"
+      stroke-width="1.5"
+      marker-end="url(#naiad_flowchart-pointEnd-c0)" />
     <rect
       x="260.85"
       y="396.2"
@@ -240,11 +296,10 @@
     <path
       d="M311.56,543.2 L316.97,551.45 C322.39,559.7 333.22,576.2 352.98,594.36 C372.75,612.52 401.45,632.33 415.8,642.24 L430.15,652.15"
       fill="none"
-      stroke="#333333"
-      stroke-width="2"
+      stroke="#94a3b8"
+      stroke-width="1.5"
       stroke-dasharray="2"
-      marker-end="url(#naiad_flowchart-pointEnd)"
-      class="flowchart-link" />
+      marker-end="url(#naiad_flowchart-pointEnd-c0)" />
     <rect
       x="312.95"
       y="578.2"
@@ -268,19 +323,17 @@
       </div>
     </foreignObject>
     <path
-      d="M270.87,543.2 L262.3,551.45 C253.73,559.7 236.59,576.2 231.42,592.7 C226.24,609.2 233.02,625.7 236.42,633.95 L239.81,642.2"
+      d="M270.87,543.2 L262.3,551.45 C253.73,559.7 236.59,576.2 231.89,593.85 C227.19,611.5 234.92,630.31 238.79,639.71 L242.65,649.11"
       fill="none"
-      stroke="#333333"
-      stroke-width="2"
-      marker-end="url(#naiad_flowchart-pointEnd)"
-      class="flowchart-link" />
+      stroke="#94a3b8"
+      stroke-width="1.5"
+      marker-end="url(#naiad_flowchart-pointEnd-c0)" />
     <path
-      d="M261.62,642.2 L263.58,633.95 C265.55,625.7 269.47,609.2 273.95,592.7 C278.43,576.2 283.46,559.7 285.97,551.45 L288.49,543.2"
+      d="M260.58,646.58 L262.72,637.6 C264.85,628.62 269.13,610.66 273.78,593.43 C278.43,576.2 283.46,559.7 285.97,551.45 L288.49,543.2"
       fill="none"
-      stroke="#333333"
-      stroke-width="2"
-      marker-end="url(#naiad_flowchart-pointEnd)"
-      class="flowchart-link" />
+      stroke="#94a3b8"
+      stroke-width="1.5"
+      marker-end="url(#naiad_flowchart-pointEnd-c0)" />
     <rect
       x="253.85"
       y="578.2"
@@ -306,10 +359,9 @@
     <path
       d="M253.63,709.4 L253.63,717.65 C253.63,725.9 253.63,742.4 253.63,758.9 C253.63,775.4 253.63,791.9 253.63,800.15 L253.63,808.4"
       fill="none"
-      stroke="#333333"
-      stroke-width="2"
-      marker-end="url(#naiad_flowchart-pointEnd)"
-      class="flowchart-link" />
+      stroke="#94a3b8"
+      stroke-width="1.5"
+      marker-end="url(#naiad_flowchart-pointEnd-c0)" />
     <rect
       x="237.93"
       y="744.4"

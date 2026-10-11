@@ -119,6 +119,75 @@ public class SvgBuilder
             });
     }
 
+    /// <summary>
+    /// The arrow and circle markers again in a colour of their own, for a link whose <c>linkStyle</c>
+    /// gives it a stroke: the shared markers take theirs from the stylesheet, so a link in another colour
+    /// needs heads to match. Their ids are the shared ones with <paramref name="suffix"/> added.
+    /// </summary>
+    public void AddMermaidColoredMarkers(string color, string suffix)
+    {
+        document.Defs.Markers.Add(
+            new()
+            {
+                Id = "naiad_flowchart-pointEnd" + suffix,
+                Path = "M 0 0 L 10 5 L 0 10 z",
+                MarkerWidth = 8,
+                MarkerHeight = 8,
+                RefX = 10,
+                RefY = 5,
+                ViewBox = "0 0 10 10",
+                MarkerUnits = "userSpaceOnUse",
+                Fill = color
+            });
+        document.Defs.Markers.Add(
+            new()
+            {
+                Id = "naiad_flowchart-pointStart" + suffix,
+                Path = "M 0 5 L 10 10 L 10 0 z",
+                MarkerWidth = 8,
+                MarkerHeight = 8,
+                RefX = 0,
+                RefY = 5,
+                ViewBox = "0 0 10 10",
+                MarkerUnits = "userSpaceOnUse",
+                Fill = color
+            });
+        document.Defs.Markers.Add(
+            new()
+            {
+                Id = "naiad_flowchart-circleEnd" + suffix,
+                Path = "",
+                UseCircle = true,
+                CircleCx = 5,
+                CircleCy = 5,
+                CircleR = 5,
+                MarkerWidth = 11,
+                MarkerHeight = 11,
+                RefX = 11,
+                RefY = 5,
+                ViewBox = "0 0 10 10",
+                MarkerUnits = "userSpaceOnUse",
+                Fill = color
+            });
+        document.Defs.Markers.Add(
+            new()
+            {
+                Id = "naiad_flowchart-circleStart" + suffix,
+                Path = "",
+                UseCircle = true,
+                CircleCx = 5,
+                CircleCy = 5,
+                CircleR = 5,
+                MarkerWidth = 11,
+                MarkerHeight = 11,
+                RefX = -1,
+                RefY = 5,
+                ViewBox = "0 0 10 10",
+                MarkerUnits = "userSpaceOnUse",
+                Fill = color
+            });
+    }
+
     public void AddMermaidCircleMarker()
     {
         document.Defs.Markers.Add(

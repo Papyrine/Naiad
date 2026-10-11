@@ -368,4 +368,93 @@ public class FlowchartTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // Edges arriving at an angle stop on the outline of a diamond, a circle and a hexagon, not on the
+    // box around them.
+    [Test]
+    public Task EdgesMeetTheShape()
+    {
+        const string input =
+            """
+            flowchart TD
+                A{Decision} --> B((Circle))
+                A --> C{{Hexagon}}
+                A --> D[Box]
+                B --> E{Another}
+                C --> E
+                D --> E
+                E --> F(((Double)))
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // A subgraph with a direction of its own is laid out in it, nested ones included. One with a member
+    // linked to the outside keeps the direction around it, as in Mermaid.
+    [Test]
+    public Task SubgraphDirection()
+    {
+        const string input =
+            """
+            flowchart LR
+                subgraph TOP
+                    direction TB
+                    subgraph B1
+                        direction RL
+                        i1 --> f1
+                    end
+                    subgraph B2
+                        direction BT
+                        i2 --> f2
+                    end
+                end
+                A --> TOP --> B
+                B1 --> B2
+                subgraph linked [Linked]
+                    direction TB
+                    x --> y
+                end
+                B --> x
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // A default for every link, one link picked out by number with its label coloured, and two more
+    // styled together. Arrowheads and the circle end take the colour of their link.
+    [Test]
+    public Task LinkStyles()
+    {
+        const string input =
+            """
+            flowchart LR
+                A -- first --> B
+                B --> C
+                C -.-> D
+                A ==o D
+                linkStyle default stroke:#888
+                linkStyle 0 stroke:#f00,stroke-width:4px,color:red
+                linkStyle 2,3 stroke:#00f,stroke-dasharray:6 3
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // Bold and italic in a node, an edge label and a subgraph title, a line break taken from the source,
+    // and underscores inside a word left alone.
+    [Test]
+    public Task MarkdownStrings()
+    {
+        const string input =
+            """
+            flowchart LR
+                subgraph "`**One** group`"
+                    a["`The **cat**
+                    in the _hat_`"] -- "`**Bold** edge`" --> b{{"`Plain *and* italic`"}}
+                end
+                b --> c["`a snake_case_name`"]
+            """;
+
+        return VerifySvg(input);
+    }
 }

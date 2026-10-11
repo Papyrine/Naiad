@@ -8,6 +8,12 @@ public class Edge
     public EdgeType Type { get; init; } = EdgeType.Arrow;
     public EdgeStyle LineStyle { get; init; } = EdgeStyle.Solid;
 
+    /// <summary>
+    /// Visual overrides from a <c>linkStyle</c> directive, or null for theme defaults. Stroke, stroke width
+    /// and dash array apply to the line; the colour applies to the label.
+    /// </summary>
+    public NodeStyle? Style { get; set; }
+
     // Optional layout hint (e.g. "place these on the same rank").
     public RankConstraint RankConstraint { get; set; } = RankConstraint.None;
 
@@ -66,6 +72,20 @@ public class Edge
 
     internal void ClearLabelPosition() =>
         laidOutLabelPosition = null;
+
+    // Moves the laid-out route and label, for a layout that is placed inside a larger one afterwards.
+    internal void Offset(double dx, double dy)
+    {
+        for (var i = 0; i < Points.Count; i++)
+        {
+            Points[i] = new(Points[i].X + dx, Points[i].Y + dy);
+        }
+
+        if (laidOutLabelPosition is { } label)
+        {
+            laidOutLabelPosition = new(label.X + dx, label.Y + dy);
+        }
+    }
 
     public bool HasArrowHead =>
         Type is
