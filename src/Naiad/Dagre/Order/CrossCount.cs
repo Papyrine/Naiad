@@ -11,7 +11,7 @@ static class CrossCount
         return cc;
     }
 
-    struct SouthEntry
+    internal struct SouthEntry
     {
         public int Pos;
         public double Weight;
@@ -43,20 +43,41 @@ static class CrossCount
                     });
             }
 
-            nodeEntries.Sort((a, b) => a.Pos - b.Pos);
+            SortByPosition(nodeEntries);
             southEntries.AddRange(nodeEntries);
         }
 
+        double[] tree = [];
+        return CountCrossings(southEntries, southLayer.Count, ref tree);
+    }
+
+    internal static void SortByPosition(List<SouthEntry> entries) =>
+        entries.Sort((a, b) => a.Pos - b.Pos);
+
+    /// <summary>
+    /// The weighted crossings among edges given as the south-layer position of each edge's head, taken
+    /// in order of the north-layer position of its tail. <paramref name="tree"/> is working storage a
+    /// caller may keep between calls; it is grown as needed and cleared before use.
+    /// </summary>
+    internal static int CountCrossings(List<SouthEntry> southEntries, int southCount, ref double[] tree)
+    {
         // Build the accumulator tree
         var firstIndex = 1;
-        while (firstIndex < southLayer.Count)
+        while (firstIndex < southCount)
         {
             firstIndex <<= 1;
         }
 
         var treeSize = 2 * firstIndex - 1;
         firstIndex -= 1;
-        var tree = new double[treeSize];
+        if (tree.Length < treeSize)
+        {
+            tree = new double[treeSize];
+        }
+        else
+        {
+            Array.Clear(tree, 0, treeSize);
+        }
 
         // Calculate the weighted crossings
         var cc = 0d;

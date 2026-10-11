@@ -526,4 +526,103 @@ public class OrderPositionEquivalenceTests
         await Assert.That(IndexedBK.TryPositionX(graph, Util.BuildLayerMatrix(graph))).IsFalse();
         await Assert.That(graph.NodeLabel("a").X).IsNull();
     }
+
+    // A node with far more neighbours than the few the merge searches as a list, many of them joined to
+    // it several times over, so the indexed side of merging a node's edges is taken.
+    [Test]
+    public async Task FlatOrder_WithAHubOfManyNeighbours_OrdersAsTheLayerGraphsDo()
+    {
+        static Graph Build(int seed)
+        {
+            var random = new Random(seed);
+            var graph = new Graph(directed: true, multigraph: true, compound: true);
+            graph.SetNode("hub", new() { Rank = 1 });
+            graph.SetNode("other", new() { Rank = 1 });
+            var edge = 0;
+            for (var i = 0; i < 40; i++)
+            {
+                graph.SetNode($"top{i}", new() { Rank = 0 });
+                graph.SetNode($"bottom{i}", new() { Rank = 2 });
+            }
+
+            for (var i = 0; i < 120; i++)
+            {
+                graph.SetEdge($"top{random.Next(40)}", random.Next(4) == 0 ? "other" : "hub", new() { Weight = random.Next(1, 5) }, "e" + edge++);
+                graph.SetEdge(random.Next(4) == 0 ? "other" : "hub", $"bottom{random.Next(40)}", new() { Weight = random.Next(1, 5) }, "e" + edge++);
+            }
+
+            return graph;
+        }
+
+        for (var seed = 0; seed < 20; seed++)
+        {
+            var direct = Build(seed);
+            var throughLayerGraphs = Build(seed);
+            Order.Run(direct, flatWhenPossible: true);
+            Order.Run(throughLayerGraphs, flatWhenPossible: false);
+
+            await Assert.That(Orders(direct)).IsEqualTo(Orders(throughLayerGraphs)).Because($"seed {seed}");
+        }
+    }
+
+    // What the direct ordering does not take on is left alone by it and ordered by the layer graphs: an
+    // edge that skips a rank, and an edge with no weight.
+    [Test]
+    [Arguments(true, 1)]
+    [Arguments(false, 0)]
+    public async Task FlatOrder_DeclinesWhatItCannotOrder(bool longEdge, int weight)
+    {
+        Graph Build()
+        {
+            var graph = new Graph(directed: true, multigraph: true, compound: true);
+            foreach (var (name, rank) in new[] { ("a", 0), ("b", 0), ("c", 1), ("d", 1), ("e", 2), ("f", 2) })
+            {
+                graph.SetNode(name, new() { Rank = rank });
+            }
+
+            graph.SetEdge("a", "d", new() { Weight = 1 });
+            graph.SetEdge("b", "c", new() { Weight = 1 });
+            graph.SetEdge("c", "f", new() { Weight = weight });
+            graph.SetEdge("d", "e", new() { Weight = 1 });
+            if (longEdge)
+            {
+                graph.SetNode("g", new() { Rank = 3 });
+                graph.SetEdge("e", "g", new() { Weight = 1 });
+                graph.SetEdge("c", "g", new() { Weight = 1 });
+            }
+
+            return graph;
+        }
+
+        var untouched = Build();
+        await Assert.That(FlatOrder.TryRun(untouched, (int) Util.MaxRank(untouched))).IsFalse();
+        await Assert.That(untouched.NodeLabels().All(_ => _.Order is null)).IsTrue();
+
+        var direct = Build();
+        var throughLayerGraphs = Build();
+        if (longEdge)
+        {
+            // The crossing count only knows neighbouring ranks, so the layer graphs reject this too.
+            await Assert.That(() => Order.Run(direct, flatWhenPossible: true)).Throws<KeyNotFoundException>();
+            await Assert.That(() => Order.Run(throughLayerGraphs, flatWhenPossible: false)).Throws<KeyNotFoundException>();
+            return;
+        }
+
+        Order.Run(direct, flatWhenPossible: true);
+        Order.Run(throughLayerGraphs, flatWhenPossible: false);
+        await Assert.That(Orders(direct)).IsEqualTo(Orders(throughLayerGraphs));
+    }
+
+    // An empty graph has nothing to order, and ordering it returns at once - it used to count layers
+    // down from a rank of negative infinity, which never finished.
+    [Test]
+    public async Task OrderingAnEmptyGraph_DoesNothing()
+    {
+        var graph = new Graph(compound: true);
+        await Assert.That(FlatOrder.TryRun(graph, (int) Util.MaxRank(graph))).IsFalse();
+
+        Order.Run(graph, flatWhenPossible: true);
+        Order.Run(graph, flatWhenPossible: false);
+        await Assert.That(graph.NodeCount).IsEqualTo(0);
+    }
 }
