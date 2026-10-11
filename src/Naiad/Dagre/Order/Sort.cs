@@ -8,7 +8,7 @@ static class Sort
         // descending by i, stable for ties.
         var unsortable = parts.Rhs.OrderByDescending(entry => entry.I).ToList();
 
-        var vs = new List<List<string>>();
+        var vs = new List<string>();
         var sum = 0d;
         var weight = 0d;
         var vsIndex = 0;
@@ -20,13 +20,13 @@ static class Sort
         foreach (var entry in sortable)
         {
             vsIndex += entry.Vs.Count;
-            vs.Add(entry.Vs);
+            vs.AddRange(entry.Vs);
             sum += entry.Barycenter!.Value * entry.Weight!.Value;
             weight += entry.Weight!.Value;
             vsIndex = ConsumeUnsortable(vs, unsortable, vsIndex);
         }
 
-        var result = new SortResult { Vs = vs.SelectMany(x => x).ToList() };
+        var result = new SortResult { Vs = vs };
         if (weight != 0)
         {
             result.Barycenter = sum / weight;
@@ -36,13 +36,13 @@ static class Sort
         return result;
     }
 
-    static int ConsumeUnsortable(List<List<string>> vs, List<ResolvedEntry> unsortable, int index)
+    static int ConsumeUnsortable(List<string> vs, List<ResolvedEntry> unsortable, int index)
     {
         ResolvedEntry? last;
         while (unsortable.Count > 0 && (last = unsortable[^1]).I <= index)
         {
             unsortable.RemoveAt(unsortable.Count - 1);
-            vs.Add(last.Vs);
+            vs.AddRange(last.Vs);
             index++;
         }
 

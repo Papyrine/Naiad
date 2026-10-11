@@ -54,15 +54,10 @@ static class BK
                     continue;
                 }
 
-                foreach (var scanNode in layer.GetRange(scanPos, i + 1 - scanPos))
+                for (var scanIndex = scanPos; scanIndex <= i; scanIndex++)
                 {
-                    var preds = graph.Predecessors(scanNode);
-                    if (preds == null)
-                    {
-                        continue;
-                    }
-
-                    foreach (var u in preds)
+                    var scanNode = layer[scanIndex];
+                    foreach (var u in graph.PredecessorsOf(scanNode))
                     {
                         var uLabel = graph.NodeLabel(u);
                         var uPos = uLabel.Order!.Value;
@@ -99,9 +94,9 @@ static class BK
 
         void Scan(List<string> south, int southPos, int southEnd, int prevNorthBorder, int nextNorthBorder)
         {
-            foreach (var i in Util.Range(southPos, southEnd))
+            for (var i = Math.Max(southPos, 0); i < southEnd && i < south.Count; i++)
             {
-                var v = i >= 0 && i < south.Count ? south[i] : null;
+                var v = south[i];
                 if (v == null)
                 {
                     continue;
@@ -112,13 +107,7 @@ static class BK
                     continue;
                 }
 
-                var preds = graph.Predecessors(v);
-                if (preds == null)
-                {
-                    continue;
-                }
-
-                foreach (var u in preds)
+                foreach (var u in graph.PredecessorsOf(v))
                 {
                     var uNode = graph.NodeLabel(u);
                     if (uNode.Dummy != null &&
@@ -136,15 +125,29 @@ static class BK
             var nextNorthPos = -1;
             var southPos = 0;
 
+            // The scan to the end of the layer that closes each step depends only on where it starts and
+            // on the border to its north, and those change only at a border node. dagre runs it at every
+            // node regardless, which is the same scan repeated for the whole stretch between two border
+            // nodes - a layer of n nodes scanned n times over. Scanning records conflicts in a set, so
+            // repeating one adds nothing; it is run once for each start and border it is asked for.
+            var scannedFrom = -1;
+            var scannedBorder = -1;
+            var scanned = false;
+
             for (var southLookahead = 0; southLookahead < south.Count; southLookahead++)
             {
                 var v = south[southLookahead];
                 if (graph.NodeLabel(v).Dummy == DummyKind.Border)
                 {
-                    var predecessors = graph.Predecessors(v);
-                    if (predecessors != null && predecessors.Count != 0)
+                    string? firstPred = null;
+                    foreach (var predecessor in graph.PredecessorsOf(v))
                     {
-                        var firstPred = predecessors[0];
+                        firstPred = predecessor;
+                        break;
+                    }
+
+                    if (firstPred != null)
+                    {
                         nextNorthPos = graph.NodeLabel(firstPred).Order!.Value;
                         Scan(south, southPos, southLookahead, prevNorthPos, nextNorthPos);
                         southPos = southLookahead;
@@ -152,7 +155,17 @@ static class BK
                     }
                 }
 
+                if (scanned &&
+                    scannedFrom == southPos &&
+                    scannedBorder == nextNorthPos)
+                {
+                    continue;
+                }
+
                 Scan(south, southPos, south.Count, nextNorthPos, north.Count);
+                scannedFrom = southPos;
+                scannedBorder = nextNorthPos;
+                scanned = true;
             }
 
             return south;
@@ -174,10 +187,12 @@ static class BK
     {
         if (graph.NodeLabel(name).Dummy != null)
         {
-            var preds = graph.Predecessors(name);
-            if (preds != null)
+            foreach (var predecessor in graph.PredecessorsOf(name))
             {
-                return preds.FirstOrDefault(_ => graph.NodeLabel(_).Dummy != null);
+                if (graph.NodeLabel(predecessor).Dummy != null)
+                {
+                    return predecessor;
+                }
             }
         }
 
@@ -312,96 +327,188 @@ static class BK
         // sweeps. The first sweep places blocks with the smallest possible
         // coordinates. The second sweep removes unused space by moving blocks to the
         // greatest coordinates without violating separation.
-        var xs = new Dictionary<string, double>(StringComparer.Ordinal);
-        var blockG = BuildBlockGraph(graph, layering, root, reverseSep);
+        var blocks = new Blocks(graph, layering, root, reverseSep);
+        var count = blocks.Names.Count;
+        var blockXs = new double[count];
         var borderType = reverseSep ? BorderKind.Left : BorderKind.Right;
 
-        void Iterate(Action<string> setXsFunc, Func<string, OrderedMap<int>.KeyEnumerable> nextNodesFunc)
-        {
-            var stack = blockG.Nodes(); // Create a copy of the node list.
-            var visited = new Dictionary<string, bool>(StringComparer.Ordinal);
-            var elem = Pop(stack);
+        // Visits every block after the blocks it depends on: those before it on the first pass, those
+        // after it on the second.
+        var stack = new List<int>(count);
+        var visited = new bool[count];
 
-            while (elem != null)
+        void Iterate(bool forward)
+        {
+            stack.Clear();
+            for (var i = 0; i < count; i++)
             {
-                if (visited.TryGetValue(elem, out var seen) && seen)
+                stack.Add(i);
+            }
+
+            Array.Clear(visited);
+
+            while (stack.Count > 0)
+            {
+                var elem = stack[^1];
+                stack.RemoveAt(stack.Count - 1);
+
+                if (visited[elem])
                 {
-                    setXsFunc(elem);
-                }
-                else
-                {
-                    visited[elem] = true;
-                    // Put the element back into the stack, so that we can process it
-                    // again after all of the `nextNodesFunc` items are processed.
-                    stack.Add(elem);
-                    foreach (var nextElem in nextNodesFunc(elem))
+                    if (forward)
                     {
-                        stack.Add(nextElem);
+                        Pass1(elem);
+                    }
+                    else
+                    {
+                        Pass2(elem);
+                    }
+
+                    continue;
+                }
+
+                visited[elem] = true;
+                // Put the element back into the stack, so that we can process it
+                // again after all of the blocks it depends on are processed.
+                stack.Add(elem);
+                if ((forward ? blocks.In[elem] : blocks.Out[elem]) is { } next)
+                {
+                    foreach (var edge in next)
+                    {
+                        stack.Add(edge.Other);
                     }
                 }
-
-                elem = Pop(stack);
             }
         }
 
         // First pass: smallest coordinate = max over in-edges (no in-edges leaves it 0).
-        void Pass1(string elem)
+        void Pass1(int elem)
         {
             double acc = 0;
-            foreach (var e in blockG.InEdgesOf(elem))
+            if (blocks.In[elem] is { } edges)
             {
-                var xsV = xs.GetValueOrDefault(e.V, 0);
-                var edgeWeight = blockG.FindEdgeLabel(e);
-                acc = Math.Max(acc, xsV + (edgeWeight.Weight ?? 0));
+                foreach (var edge in edges)
+                {
+                    acc = Math.Max(acc, blockXs[edge.Other] + blocks.Weights[edge.Weight]);
+                }
             }
 
-            xs[elem] = acc;
+            blockXs[elem] = acc;
         }
 
         // Second pass: greatest coordinate = min over out-edges (no out-edges leaves min at +Infinity,
         // so the assignment below is skipped).
-        void Pass2(string elem)
+        void Pass2(int elem)
         {
             var min = double.PositiveInfinity;
-            foreach (var e in blockG.OutEdgesOf(elem))
+            if (blocks.Out[elem] is { } edges)
             {
-                var xsW = xs.GetValueOrDefault(e.W, 0);
-                var edgeWeight = blockG.FindEdgeLabel(e);
-                min = Math.Min(min, xsW - (edgeWeight.Weight ?? 0));
+                foreach (var edge in edges)
+                {
+                    min = Math.Min(min, blockXs[edge.Other] - blocks.Weights[edge.Weight]);
+                }
             }
 
-            var node = graph.NodeLabel(elem);
+            var node = graph.NodeLabel(blocks.Names[elem]);
             if (!double.IsPositiveInfinity(min) && node.BorderType != borderType)
             {
-                xs[elem] = Math.Max(xs.GetValueOrDefault(elem, 0), min);
+                blockXs[elem] = Math.Max(blockXs[elem], min);
             }
         }
 
-        Iterate(Pass1, blockG.PredecessorsOf);
-        Iterate(Pass2, blockG.SuccessorsOf);
+        Iterate(forward: true);
+        Iterate(forward: false);
+
+        var xs = new Dictionary<string, double>(align.Count, StringComparer.Ordinal);
+        for (var i = 0; i < count; i++)
+        {
+            xs[blocks.Names[i]] = blockXs[i];
+        }
 
         // Assign x coordinates to all nodes
         foreach (var v in align.Keys)
         {
             if (root.TryGetValue(v, out var rootV))
             {
-                xs[v] = xs.GetValueOrDefault(rootV, 0);
+                xs[v] = blocks.Index.TryGetValue(rootV, out var block) ? blockXs[block] : 0;
             }
         }
 
         return xs;
     }
 
-    static string? Pop(List<string> stack)
+    readonly record struct BlockEdge(int Other, int Weight);
+
+    /// <summary>
+    /// The block graph of <see cref="BuildBlockGraph"/> as plain lists: a block for every root, in the
+    /// order the roots are met, and an edge from each block to the next one along in a layer, weighted
+    /// with the widest separation any layer asks of that pair. Compaction builds one of these for each of
+    /// its four alignments, and as general-purpose graphs they were most of what positioning allocated.
+    /// </summary>
+    sealed class Blocks
     {
-        if (stack.Count == 0)
+        public readonly Dictionary<string, int> Index;
+        public readonly List<string> Names = [];
+        public readonly List<List<BlockEdge>?> In = [];
+        public readonly List<List<BlockEdge>?> Out = [];
+        public readonly List<double> Weights = [];
+
+        public Blocks(Graph graph, List<List<string>> layering, Dictionary<string, string> root, bool reverseSep)
         {
-            return null;
+            Index = new(StringComparer.Ordinal);
+            var edges = new Dictionary<long, int>();
+            var graphLabel = graph.Label;
+            var sepFn = Sep(graphLabel.NodeSeparation!.Value, graphLabel.EdgeSeparation!.Value, reverseSep);
+
+            foreach (var layer in layering)
+            {
+                string? u = null;
+                foreach (var v in layer)
+                {
+                    if (!root.TryGetValue(v, out var vRoot))
+                    {
+                        continue;
+                    }
+
+                    var vBlock = Block(vRoot);
+                    if (u != null &&
+                        root.TryGetValue(u, out var uRoot))
+                    {
+                        var uBlock = Block(uRoot);
+                        var separation = sepFn(graph, v, u);
+                        var key = ((long) uBlock << 32) | (uint) vBlock;
+                        if (edges.TryGetValue(key, out var existing))
+                        {
+                            Weights[existing] = Math.Max(separation, Weights[existing]);
+                        }
+                        else
+                        {
+                            var weight = Weights.Count;
+                            edges[key] = weight;
+                            Weights.Add(Math.Max(separation, 0));
+                            (In[vBlock] ??= []).Add(new(uBlock, weight));
+                            (Out[uBlock] ??= []).Add(new(vBlock, weight));
+                        }
+                    }
+
+                    u = v;
+                }
+            }
         }
 
-        var last = stack[^1];
-        stack.RemoveAt(stack.Count - 1);
-        return last;
+        int Block(string name)
+        {
+            if (Index.TryGetValue(name, out var index))
+            {
+                return index;
+            }
+
+            index = Names.Count;
+            Index[name] = index;
+            Names.Add(name);
+            In.Add(null);
+            Out.Add(null);
+            return index;
+        }
     }
 
     internal static Graph BuildBlockGraph(
@@ -529,19 +636,26 @@ static class BK
             return new(StringComparer.Ordinal);
         }
 
-        // Build a new dictionary: the per-key lambda reads xss.Values (which includes ulMap), so mutating
-        // ulMap in place would corrupt later reads.
-        return ulMap.ToDictionary(
-            kv => kv.Key,
-            kv =>
+        // Build a new dictionary: each key reads every alignment (which includes ulMap), so mutating
+        // ulMap in place would corrupt later reads. The candidates for a key are sorted in one buffer
+        // that every key reuses.
+        var alignments = xss.Values.ToArray();
+        var candidates = new double[alignments.Length];
+        var balanced = new Dictionary<string, double>(ulMap.Count, StringComparer.Ordinal);
+        foreach (var key in ulMap.Keys)
+        {
+            for (var i = 0; i < alignments.Length; i++)
             {
-                var xs = xss.Values
-                    .Select(_ => _.GetValueOrDefault(kv.Key, 0))
-                    .OrderBy(_ => _)
-                    .ToList();
-                return ((xs.Count > 1 ? xs[1] : 0) + (xs.Count > 2 ? xs[2] : 0)) / 2;
-            },
-            StringComparer.Ordinal);
+                candidates[i] = alignments[i].GetValueOrDefault(key, 0);
+            }
+
+            Array.Sort(candidates);
+            var lower = candidates.Length > 1 ? candidates[1] : 0;
+            var upper = candidates.Length > 2 ? candidates[2] : 0;
+            balanced[key] = (lower + upper) / 2;
+        }
+
+        return balanced;
     }
 
     internal static Dictionary<string, double> PositionX(Graph graph)
