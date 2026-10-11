@@ -16,6 +16,7 @@ public class DagreBenchmarks
     FlowchartModel medium = null!;
     FlowchartModel large = null!;
     FlowchartModel wide = null!;
+    FlowchartModel huge = null!;
 
     [IterationSetup]
     public void Setup()
@@ -24,6 +25,7 @@ public class DagreBenchmarks
         medium = BuildDiamondGraph(20);
         large = BuildDiamondGraph(100);
         wide = BuildLayeredGraph(layers: 8, perLayer: 6);
+        huge = BuildLayeredGraph(layers: 40, perLayer: 10);
     }
 
     [Benchmark]
@@ -41,6 +43,12 @@ public class DagreBenchmarks
     [Benchmark]
     public LayoutResult Layout_Layered_8x6() =>
         new DagreEngine().BuildLayout(wide, Options);
+
+    // Four hundred nodes. Costs that grow faster than the graph - a lookup that allocates, a list rebuilt
+    // for every edge - are lost in the noise at the sizes above and are most of the time at this one.
+    [Benchmark]
+    public LayoutResult Layout_Layered_40x10() =>
+        new DagreEngine().BuildLayout(huge, Options);
 
     static FlowchartModel BuildLinearChain(int count)
     {

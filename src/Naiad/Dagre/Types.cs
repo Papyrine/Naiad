@@ -1,5 +1,22 @@
 /// <summary>An edge descriptor: {v, w, name}.</summary>
-sealed record EdgeKey(string V, string W, string? Name = null);
+sealed record EdgeKey(string V, string W, string? Name = null)
+{
+    // The key's id in a directed and in an undirected graph, kept once built. A graph looks every edge
+    // up by this string, and building it afresh for each lookup was most of what a layout allocated.
+    internal string? DirectedId;
+    internal string? UndirectedId;
+
+    // Equality is the descriptor alone. Left to the compiler it would take in the cached ids too, and two
+    // keys for the same edge would differ according to which of them had been looked up.
+    public bool Equals(EdgeKey? other) =>
+        other is not null &&
+        V == other.V &&
+        W == other.W &&
+        Name == other.Name;
+
+    public override int GetHashCode() =>
+        HashCode.Combine(V, W, Name);
+}
 
 /// <summary>Node label carrying every property the layout may read or write on a node.</summary>
 sealed class NodeLabel

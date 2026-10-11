@@ -16,6 +16,10 @@ sealed class Graph
     readonly OrderedMap<OrderedMap<int>> sucsMap = new();     // v -> w -> count
     readonly OrderedMap<EdgeKey> edgeObjsMap = new();            // edgeId -> edgeObj
     readonly OrderedMap<EdgeLabel> edgeLabelsMap = new();     // edgeId -> label
+
+    // The unnamed edges again, by their ends. Asking for the edge between two nodes is the layout's most
+    // frequent question, and this answers it without building the id string to ask edgeLabelsMap.
+    readonly Dictionary<(string V, string W), EdgeLabel> unnamedEdges = new();
     int uniqueIdCounter;
     readonly OrderedMap<string>? parentMap;
     readonly OrderedMap<OrderedMap<bool>>? childrenMap;
@@ -326,6 +330,10 @@ sealed class Graph
             if (valueSpecified)
             {
                 edgeLabelsMap[e] = value!;
+                if (name == null)
+                {
+                    unnamedEdges[Ends(v, w)] = value!;
+                }
             }
 
             return;
@@ -339,9 +347,23 @@ sealed class Graph
         SetNode(v);
         SetNode(w);
 
-        edgeLabelsMap[e] = valueSpecified ? value! : defaultEdgeLabelFn(v, w, name);
+        var edgeLabel = valueSpecified ? value! : defaultEdgeLabelFn(v, w, name);
+        edgeLabelsMap[e] = edgeLabel;
+        if (name == null)
+        {
+            unnamedEdges[Ends(v, w)] = edgeLabel;
+        }
 
         var edgeObj = EdgeArgsToObj(IsDirected, v, w, name);
+        if (IsDirected)
+        {
+            edgeObj.DirectedId = e;
+        }
+        else
+        {
+            edgeObj.UndirectedId = e;
+        }
+
         var vStr = edgeObj.V;
         var wStr = edgeObj.W;
 
@@ -354,12 +376,31 @@ sealed class Graph
 
     public EdgeLabel FindEdgeLabel(string v, string w, string? name = null)
     {
-        if (edgeLabelsMap.TryGetValue(EdgeArgsToId(IsDirected, v, w, name), out var label))
+        if (name == null)
+        {
+            if (unnamedEdges.TryGetValue(Ends(v, w), out var unnamed))
+            {
+                return unnamed;
+            }
+        }
+        else if (edgeLabelsMap.TryGetValue(EdgeArgsToId(IsDirected, v, w, name), out var label))
         {
             return label;
         }
 
         throw new KeyNotFoundException($"Graph has no edge {DescribeEdge(v, w, name)}");
+    }
+
+    // An undirected graph files an edge under its ends in order, whichever way round it was given.
+    (string V, string W) Ends(string v, string w)
+    {
+        if (!IsDirected &&
+            string.CompareOrdinal(v, w) > 0)
+        {
+            return (w, v);
+        }
+
+        return (v, w);
     }
 
     public EdgeLabel FindEdgeLabel(EdgeKey edge)
@@ -373,7 +414,7 @@ sealed class Graph
     }
 
     public bool TryGetEdgeLabel(string v, string w, out EdgeLabel label) =>
-        edgeLabelsMap.TryGetValue(EdgeArgsToId(IsDirected, v, w, null), out label);
+        unnamedEdges.TryGetValue(Ends(v, w), out label!);
 
     static string DescribeEdge(string v, string w, string? name)
     {
@@ -385,8 +426,15 @@ sealed class Graph
         return $"({v}, {w}, {name})";
     }
 
-    public bool HasEdge(string v, string w, string? name = null) =>
-        edgeLabelsMap.ContainsKey(EdgeArgsToId(IsDirected, v, w, name));
+    public bool HasEdge(string v, string w, string? name = null)
+    {
+        if (name == null)
+        {
+            return unnamedEdges.ContainsKey(Ends(v, w));
+        }
+
+        return edgeLabelsMap.ContainsKey(EdgeArgsToId(IsDirected, v, w, name));
+    }
 
     public void RemoveEdge(string v, string w, string? name = null) => RemoveEdgeId(EdgeArgsToId(IsDirected, v, w, name));
 
@@ -403,6 +451,10 @@ sealed class Graph
         var wStr = edge.W;
         edgeLabelsMap.Remove(e);
         edgeObjsMap.Remove(e);
+        if (edge.Name == null)
+        {
+            unnamedEdges.Remove((vStr, wStr));
+        }
         DecrementOrRemoveEntry(predsMap[wStr], vStr);
         DecrementOrRemoveEntry(sucsMap[vStr], wStr);
         inMap[wStr].Remove(e);
@@ -486,6 +538,13 @@ sealed class Graph
         return new(v, w, string.IsNullOrEmpty(name) ? null : name);
     }
 
-    static string EdgeKeyToId(bool isDirected, EdgeKey edgeObj) =>
-        EdgeArgsToId(isDirected, edgeObj.V, edgeObj.W, edgeObj.Name);
+    static string EdgeKeyToId(bool isDirected, EdgeKey edgeObj)
+    {
+        if (isDirected)
+        {
+            return edgeObj.DirectedId ??= EdgeArgsToId(true, edgeObj.V, edgeObj.W, edgeObj.Name);
+        }
+
+        return edgeObj.UndirectedId ??= EdgeArgsToId(false, edgeObj.V, edgeObj.W, edgeObj.Name);
+    }
 }
