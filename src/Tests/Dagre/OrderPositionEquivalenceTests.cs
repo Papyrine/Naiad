@@ -323,4 +323,93 @@ public class OrderPositionEquivalenceTests
         await Assert.That(string.Join("|", resolved.Select(_ => $"{string.Join(",", _.Vs)}:{_.I}:{_.Barycenter}:{_.Weight}")))
             .IsEqualTo("b:1:5:1|a:2:9:4");
     }
+
+    static string Coordinates(Graph graph) =>
+        string.Join(
+            ",",
+            graph.NodeEntries().Select(_ => string.Create(CultureInfo.InvariantCulture, $"{_.Key}=({_.Value?.X:R},{_.Value?.Y:R})")));
+
+    // Positioning the graph as it stands gives every node the place that positioning dagre's copy of it
+    // gives.
+    [Test]
+    public async Task PositioningInPlace_MatchesPositioningTheCopy()
+    {
+        for (var seed = 0; seed < 200; seed++)
+        {
+            var compound = seed % 2 == 0;
+            var inPlace = LayeredGraph(seed, compound);
+            var copied = LayeredGraph(seed, compound);
+            Order.Run(inPlace);
+            Order.Run(copied);
+
+            Positioning.Run(inPlace, inPlaceWhenPossible: true);
+            Positioning.Run(copied, inPlaceWhenPossible: false);
+
+            await Assert.That(Coordinates(inPlace)).IsEqualTo(Coordinates(copied)).Because($"seed {seed}");
+        }
+    }
+
+    // A subgraph as positioning meets it: a node with children, no rank of its own and no edges, carried
+    // in the ranks by its border nodes. That is still positioned in place, to the same result.
+    static Graph WithASubgraph(int? subgraphRank)
+    {
+        var graph = new Graph(directed: true, multigraph: true, compound: true);
+        graph.SetGraph(new() { NodeSeparation = 50, EdgeSeparation = 20, RankSeparation = 50 });
+        graph.SetDefaultEdgeLabel(new EdgeLabel { Weight = 1 });
+
+        graph.SetNode("a", new() { Rank = 0, Order = 0, Width = 40, Height = 20 });
+        graph.SetNode("b", new() { Rank = 0, Order = 1, Width = 60, Height = 20 });
+        graph.SetNode("left", new() { Rank = 1, Order = 0, Width = 0, Height = 0, Dummy = DummyKind.Border, BorderType = BorderKind.Left });
+        graph.SetNode("c", new() { Rank = 1, Order = 1, Width = 50, Height = 30 });
+        graph.SetNode("d", new() { Rank = 1, Order = 2, Width = 30, Height = 30 });
+        graph.SetNode("right", new() { Rank = 1, Order = 3, Width = 0, Height = 0, Dummy = DummyKind.Border, BorderType = BorderKind.Right });
+        graph.SetNode("e", new() { Rank = 2, Order = 0, Width = 70, Height = 20 });
+
+        graph.SetNode("group", new() { Rank = subgraphRank, Order = subgraphRank is null ? null : 4 });
+        foreach (var child in new[] { "left", "c", "d", "right" })
+        {
+            graph.SetParent(child, "group");
+        }
+
+        graph.SetEdge("a", "c");
+        graph.SetEdge("b", "d");
+        graph.SetEdge("c", "e");
+        graph.SetEdge("d", "e");
+        return graph;
+    }
+
+    [Test]
+    [Arguments(false)]
+    // A subgraph node with a rank of its own would be laid out with the rest, and the copy leaves it
+    // out. That takes the copy whichever way it is asked - and so agrees.
+    [Arguments(true)]
+    public async Task PositioningAGraphWithASubgraph_IsTheSameEitherWay(bool rankedSubgraph)
+    {
+        int? rank = rankedSubgraph ? 1 : null;
+        var inPlace = WithASubgraph(rank);
+        var copied = WithASubgraph(rank);
+
+        Positioning.Run(inPlace, inPlaceWhenPossible: true);
+        Positioning.Run(copied, inPlaceWhenPossible: false);
+
+        await Assert.That(Coordinates(inPlace)).IsEqualTo(Coordinates(copied));
+        await Assert.That(inPlace.NodeLabel("c").X).IsNotNull();
+    }
+
+    [Test]
+    public async Task MaxRank_CountsANodeWithoutARankAsAlmostZero()
+    {
+        var graph = new Graph();
+        await Assert.That(Util.MaxRank(graph)).IsEqualTo(double.NegativeInfinity);
+
+        graph.SetNode("unranked", new());
+        await Assert.That(Util.MaxRank(graph)).IsEqualTo(double.Epsilon);
+
+        graph.SetNode("low", new() { Rank = 0 });
+        await Assert.That(Util.MaxRank(graph)).IsEqualTo(double.Epsilon);
+
+        graph.SetNode("high", new() { Rank = 3 });
+        graph.SetNode("mid", new() { Rank = 2 });
+        await Assert.That(Util.MaxRank(graph)).IsEqualTo(3);
+    }
 }
