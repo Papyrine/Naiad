@@ -308,6 +308,8 @@ sealed class Graph
 
     public List<EdgeKey> Edges() => edgeObjsMap.Values();
 
+    public int EdgeCount => edgeObjsMap.Count;
+
     // Allocation-free enumeration of all edges — the network-simplex pivot loop scans these per iteration.
     public OrderedMap<EdgeKey>.ValueEnumerable EnumerateEdges() => edgeObjsMap.EnumerateValues();
 

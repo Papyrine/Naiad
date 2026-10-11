@@ -3,9 +3,9 @@ static class ResolveConflicts
     sealed class MappedEntry
     {
         public int Indegree;
-        public List<MappedEntry> In = [];
-        public List<MappedEntry> Out = [];
-        public List<string> Vs = [];
+        public List<MappedEntry> In = null!;
+        public List<MappedEntry> Out = null!;
+        public List<string> Vs = null!;
         public int I;
         public double? Barycenter;
         public double? Weight;
@@ -14,6 +14,12 @@ static class ResolveConflicts
 
     public static List<ResolvedEntry> Run(List<BarycenterEntry> entries, Graph constraintGraph)
     {
+        if (constraintGraph.EdgeCount == 0 &&
+            AllDistinct(entries))
+        {
+            return Unconstrained(entries);
+        }
+
         var mappedEntries = new Dictionary<string, MappedEntry>(StringComparer.Ordinal);
         var insertionOrder = new List<string>();
         for (var i = 0; i < entries.Count; i++)
@@ -58,6 +64,67 @@ static class ResolveConflicts
             .ToList();
 
         return DoResolveConflicts(sourceSet);
+    }
+
+    /// <summary>
+    /// With no constraints nothing is merged and nothing waits on anything else: every entry is a source,
+    /// and they come off the source set last first. That is the usual case - constraints only arise from
+    /// subgraphs - so it is answered directly, without the bookkeeping the general case builds per entry.
+    /// </summary>
+    static List<ResolvedEntry> Unconstrained(List<BarycenterEntry> entries)
+    {
+        var resolved = new List<ResolvedEntry>(entries.Count);
+        for (var i = entries.Count - 1; i >= 0; i--)
+        {
+            var entry = entries[i];
+            var result = new ResolvedEntry
+            {
+                Vs = [entry.V],
+                I = i
+            };
+            if (entry.Barycenter != null)
+            {
+                result.Barycenter = entry.Barycenter;
+                result.Weight = entry.Weight;
+            }
+
+            resolved.Add(result);
+        }
+
+        return resolved;
+    }
+
+    // An entry named twice replaces the first in the general case, which the shortcut above would not
+    // reproduce. Nodes of a rank are distinct, so this is a check that passes; a few entries are compared
+    // directly and more than that through a set.
+    static bool AllDistinct(List<BarycenterEntry> entries)
+    {
+        if (entries.Count <= 8)
+        {
+            for (var i = 1; i < entries.Count; i++)
+            {
+                for (var j = 0; j < i; j++)
+                {
+                    if (entries[i].V == entries[j].V)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        var seen = new HashSet<string>(entries.Count, StringComparer.Ordinal);
+        foreach (var entry in entries)
+        {
+            if (!seen.Add(entry.V))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     static List<ResolvedEntry> DoResolveConflicts(List<MappedEntry> sourceSet)
