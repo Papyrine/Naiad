@@ -10,4 +10,7 @@ public class ArchitectureEdge
     public bool TargetArrow { get; set; }
     public string? SourceGroup { get; set; }
     public string? TargetGroup { get; set; }
+
+    /// <summary>The text of <c>-[Label]-</c>, drawn at the middle of the edge.</summary>
+    public string? Label { get; set; }
 }

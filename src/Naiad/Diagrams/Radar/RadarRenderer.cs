@@ -7,6 +7,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
     const double legendHeight = 25;
     const double labelOffsetX = 60;  // Space for horizontal labels
     const double labelOffsetY = 30;  // Space for vertical labels (including text height)
+    const double labelGap = 20;      // Between the end of an axis and its label
 
     static string[] curveColors =
     [
@@ -35,10 +36,15 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
         var legendOffset = model is {ShowLegend: true, Curves.Count: > 0} ? legendHeight * model.Curves.Count : 0;
 
-        const double contentWidth = (chartRadius + labelOffsetX) * 2;
+        // Axis labels hang off the ends of the axes, so the room beside the chart has to take the widest
+        // of them; a fixed margin clipped anything longer than a short word.
+        var widestLabel = model.Axes.Max(_ => (_.Label ?? _.Id).Length) * (options.FontSize - 2) * 0.6;
+        var labelRoomX = Math.Max(labelOffsetX, labelGap + widestLabel + 5);
+
+        var contentWidth = (chartRadius + labelRoomX) * 2;
         var contentHeight = (chartRadius + labelOffsetY) * 2 + titleOffset + legendOffset;
 
-        const double centerX = chartRadius + labelOffsetX;
+        var centerX = chartRadius + labelRoomX;
         var centerY = chartRadius + labelOffsetY + titleOffset;
 
         var builder = new SvgBuilder();
@@ -144,8 +150,8 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
             builder.AddLine(cx, cy, x, y, stroke: "#BDBDBD", strokeWidth: 1);
 
             // Draw label
-            var labelX = cx + (chartRadius + 20) * Math.Cos(angle);
-            var labelY = cy + (chartRadius + 20) * Math.Sin(angle);
+            var labelX = cx + (chartRadius + labelGap) * Math.Cos(angle);
+            var labelY = cy + (chartRadius + labelGap) * Math.Sin(angle);
             var anchor = Math.Abs(Math.Cos(angle)) < 0.1 ? "middle" :
                          Math.Cos(angle) > 0 ? "start" : "end";
 

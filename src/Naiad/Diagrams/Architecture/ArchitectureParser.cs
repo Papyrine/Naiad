@@ -87,7 +87,8 @@ class ArchitectureParser : IDiagramParser<ArchitectureModel>
         var groupRef =
             Char('{').Then(identifier).Before(Char('}'));
 
-        // Source side: id{group}?:direction with optional arrow
+        // Source side: id{group}?:direction. The arrowhead belongs on the line (`db:L <-- R:server`),
+        // which is how Mermaid writes it; one in front of the id is accepted too.
         var sourceSideParser =
             from arw in Char('<').Optional()
             from nodeId in identifier
@@ -96,7 +97,7 @@ class ArchitectureParser : IDiagramParser<ArchitectureModel>
             from dir in directionParser
             select (id: nodeId, grp: grp.GetValueOrDefault(), dir, arrow: arw.HasValue);
 
-        // Target side: direction:id{group}? with optional arrow
+        // Target side: direction:id{group}?, likewise with an arrowhead accepted after the direction.
         var targetSideParser =
             from dir in directionParser
             from arw in Char('>').Optional()
@@ -105,17 +106,31 @@ class ArchitectureParser : IDiagramParser<ArchitectureModel>
             from grp in groupRef.Optional()
             select (id: nodeId, grp: grp.GetValueOrDefault(), dir, arrow: arw.HasValue);
 
-        // Edge: source:side <arrow>--<arrow> side:target
+        // The line itself: -- or -[Label]-, with an arrowhead at either end.
+        var lineParser =
+            from sourceArrow in Char('<').Optional()
+            from label in Try(String("--").ThenReturn((string?)null))
+                .Or(String("-[")
+                    .Then(Token(_ => _ != ']' && _ != '\r' && _ != '\n').ManyString())
+                    .Before(String("]-"))
+                    .Select(_ => (string?)_.Trim()))
+            from targetArrow in Char('>').Optional()
+            select (sourceArrow: sourceArrow.HasValue, targetArrow: targetArrow.HasValue, label);
+
+        // Edge: source:side <--> side:target
         var edgeParser =
             from _ in CommonParsers.InlineWhitespace
             from source in sourceSideParser
             from __ in CommonParsers.InlineWhitespace
-            from ___ in String("--")
+            from line in lineParser
             from ____ in CommonParsers.InlineWhitespace
             from target in targetSideParser
             from _____ in CommonParsers.InlineWhitespace
             from ______ in CommonParsers.LineEnd
-            select BuildEdge(source, target);
+            select BuildEdge(
+                source with { arrow = source.arrow || line.sourceArrow },
+                target with { arrow = target.arrow || line.targetArrow },
+                line.label);
 
         var skipLine =
             Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
@@ -141,8 +156,10 @@ class ArchitectureParser : IDiagramParser<ArchitectureModel>
 
     static ArchitectureEdge BuildEdge(
         (string id, string? grp, EdgeDirection dir, bool arrow) source,
-        (string id, string? grp, EdgeDirection dir, bool arrow) target) => new()
+        (string id, string? grp, EdgeDirection dir, bool arrow) target,
+        string? label) => new()
     {
+        Label = string.IsNullOrEmpty(label) ? null : label,
         SourceId = source.id,
         SourceGroup = source.grp,
         SourceSide = source.dir,

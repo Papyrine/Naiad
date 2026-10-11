@@ -176,4 +176,24 @@ public class ArchitectureTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // Mermaid puts the arrowheads on the line, not on the ids, and a label inside it.
+    [Test]
+    public Task ArrowsAndLabelsOnTheLine()
+    {
+        const string input =
+            """
+            architecture-beta
+                service gateway(internet)[Gateway]
+                service server(server)[Server]
+                service db(database)[Database]
+                service disk(disk)[Storage]
+
+                gateway:R --> L:server
+                server:R <--> L:db
+                db:B <-[backs up]- T:disk
+            """;
+
+        return VerifySvg(input);
+    }
 }

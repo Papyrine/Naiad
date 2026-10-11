@@ -169,4 +169,42 @@ public class RequirementTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // The layout Mermaid's own examples use: the closing brace indented with the properties, a quoted
+    // name and value, a comment and a blank line inside a block, and a relation written right to left.
+    [Test]
+    public Task IndentedBlocksAndReverseRelation()
+    {
+        const string input =
+            """
+            requirementDiagram
+
+                requirement test_req {
+                id: 1
+                text: the test text.
+                risk: high
+                verifymethod: test
+                }
+
+                functionalRequirement "Second requirement" {
+                id: 1.1
+                %% quoted, so the quotes are not part of the text
+                text: "the second test text."
+
+                risk: low
+                verifymethod: inspection
+                }
+
+                element test_entity {
+                type: "test suite"
+                docRef: reqs/test_entity
+                }
+
+                test_entity - satisfies -> test_req
+                test_req - traces -> "Second requirement"
+                "Second requirement" <- verifies - test_entity
+            """;
+
+        return VerifySvg(input);
+    }
 }

@@ -89,4 +89,28 @@ public class KanbanTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // Columns named by bare text, by a label alone and by id[label]; tasks with and without ids; a name
+    // long enough to wrap; and the ticket, assignee and priority a task can carry.
+    [Test]
+    public Task ColumnsWithoutIdsAndTaskMetadata()
+    {
+        const string input =
+            """
+            kanban
+              Todo
+                [Create Documentation]
+                docs[Create Blog about the new diagram]
+              [In progress]
+                id6[Create renderer so that it works in all cases. We also add some extra text here for testing purposes.]
+              id10[Ready for test]
+                id4[Create parsing tests]@{ ticket: MC-2038, assigned: 'K.Sveidqvist', priority: 'High' }
+                id66[last item]@{ priority: 'Very Low', assigned: 'knsv' }
+              id11[Done]
+                id5[define getData]
+                id2[Update DB function]@{ ticket: MC-2037, priority: 'Very High' }
+            """;
+
+        return VerifySvg(input);
+    }
 }

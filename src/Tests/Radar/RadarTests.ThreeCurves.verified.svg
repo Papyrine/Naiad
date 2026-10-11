@@ -2,15 +2,15 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 400 445"
-  style="max-width: 400px;"
+  viewBox="0 0 430.8 445"
+  style="max-width: 430.8px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <g
     transform="translate(20,20)">
     <text
-      x="180"
+      x="195.4"
       y="15"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -18,170 +18,170 @@
       font-family="Arial, sans-serif"
       font-weight="bold">Language Skills</text>
     <circle
-      cx="180"
+      cx="195.4"
       cy="180"
       r="24"
       fill="none"
       stroke="#E0E0E0" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="180"
       r="48"
       fill="none"
       stroke="#E0E0E0" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="180"
       r="72"
       fill="none"
       stroke="#E0E0E0" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="180"
       r="96"
       fill="none"
       stroke="#E0E0E0" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="180"
       r="120"
       fill="none"
       stroke="#E0E0E0" />
     <line
-      x1="180"
+      x1="195.4"
       y1="180"
-      x2="180"
+      x2="195.4"
       y2="60"
       stroke="#BDBDBD" />
     <text
-      x="180"
+      x="195.4"
       y="40"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">English</text>
     <line
-      x1="180"
+      x1="195.4"
       y1="180"
-      x2="300"
+      x2="315.4"
       y2="180"
       stroke="#BDBDBD" />
     <text
-      x="320"
+      x="335.4"
       y="180"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">French</text>
     <line
-      x1="180"
+      x1="195.4"
       y1="180"
-      x2="180"
+      x2="195.4"
       y2="300"
       stroke="#BDBDBD" />
     <text
-      x="180"
+      x="195.4"
       y="320"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">German</text>
     <line
-      x1="180"
+      x1="195.4"
       y1="180"
-      x2="60"
+      x2="75.4"
       y2="180"
       stroke="#BDBDBD" />
     <text
-      x="40"
+      x="55.4"
       y="180"
       text-anchor="end"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">Spanish</text>
     <path
-      d="M 180 60 L 225 180 L 180 240 L 105 180 Z"
+      d="M 195.4 60 L 240.4 180 L 195.4 240 L 120.4 180 Z"
       fill="rgba(31,119,180,0.3)"
       stroke="#1f77b4"
       stroke-width="2" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="60"
       r="4"
       fill="#1f77b4"
       stroke="white" />
     <circle
-      cx="225"
+      cx="240.4"
       cy="180"
       r="4"
       fill="#1f77b4"
       stroke="white" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="240"
       r="4"
       fill="#1f77b4"
       stroke="white" />
     <circle
-      cx="105"
+      cx="120.4"
       cy="180"
       r="4"
       fill="#1f77b4"
       stroke="white" />
     <path
-      d="M 180 105 L 300 180 L 180 225 L 120 180 Z"
+      d="M 195.4 105 L 315.4 180 L 195.4 225 L 135.4 180 Z"
       fill="rgba(255,127,14,0.3)"
       stroke="#ff7f0e"
       stroke-width="2" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="105"
       r="4"
       fill="#ff7f0e"
       stroke="white" />
     <circle
-      cx="300"
+      cx="315.4"
       cy="180"
       r="4"
       fill="#ff7f0e"
       stroke="white" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="225"
       r="4"
       fill="#ff7f0e"
       stroke="white" />
     <circle
-      cx="120"
+      cx="135.4"
       cy="180"
       r="4"
       fill="#ff7f0e"
       stroke="white" />
     <path
-      d="M 180 90 L 270 180 L 180 300 L 75 180 Z"
+      d="M 195.4 90 L 285.4 180 L 195.4 300 L 90.4 180 Z"
       fill="rgba(44,160,44,0.3)"
       stroke="#2ca02c"
       stroke-width="2" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="90"
       r="4"
       fill="#2ca02c"
       stroke="white" />
     <circle
-      cx="270"
+      cx="285.4"
       cy="180"
       r="4"
       fill="#2ca02c"
       stroke="white" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="300"
       r="4"
       fill="#2ca02c"
       stroke="white" />
     <circle
-      cx="75"
+      cx="90.4"
       cy="180"
       r="4"
       fill="#2ca02c"

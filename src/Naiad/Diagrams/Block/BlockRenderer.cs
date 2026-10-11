@@ -36,7 +36,12 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
             return emptyBuilder.Build();
         }
 
-        var columns = Math.Max(1, model.Columns);
+        // With no column count set, every block sits in one row.
+        var columns = model.Columns;
+        if (columns <= 0)
+        {
+            columns = Math.Max(1, model.Elements.Sum(_ => Math.Max(1, _.Span)));
+        }
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
 
         // Calculate rows needed
@@ -99,10 +104,15 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
             var blockWidth = span * cellW - cellPadding * 2;
             var blockHeight = cellH - cellPadding * 2;
 
-            var color = blockColors[colorIndex % blockColors.Length];
-            var label = element.Label ?? element.Id;
+            // A space holds its place in the grid and takes no colour from the cycle.
+            if (!element.IsSpace)
+            {
+                var color = blockColors[colorIndex % blockColors.Length];
+                var label = element.Label ?? element.Id;
 
-            DrawBlock(builder, x, y, blockWidth, blockHeight, label, element.Shape, color, options);
+                DrawBlock(builder, x, y, blockWidth, blockHeight, label, element.Shape, color, options);
+                colorIndex++;
+            }
 
             currentColumn += span;
             if (currentColumn >= columns)
@@ -110,8 +120,6 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
                 currentColumn = 0;
                 currentRow++;
             }
-
-            colorIndex++;
         }
 
         return builder.Build();

@@ -1,0 +1,78 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 880 100"
+  style="max-width: 880px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <rect
+    x="30"
+    y="30"
+    width="100"
+    height="40"
+    rx="4"
+    ry="4"
+    fill="#E3F2FD"
+    stroke="#333" />
+  <text
+    x="80"
+    y="50"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">First</text>
+  <rect
+    x="270"
+    y="30"
+    width="100"
+    height="40"
+    rx="4"
+    ry="4"
+    fill="#E8F5E9"
+    stroke="#333" />
+  <text
+    x="320"
+    y="50"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Second</text>
+  <rect
+    x="390"
+    y="30"
+    width="100"
+    height="40"
+    rx="4"
+    ry="4"
+    fill="#FFF3E0"
+    stroke="#333" />
+  <text
+    x="440"
+    y="50"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Third</text>
+  <rect
+    x="750"
+    y="30"
+    width="100"
+    height="40"
+    rx="4"
+    ry="4"
+    fill="#F3E5F5"
+    stroke="#333" />
+  <text
+    x="800"
+    y="50"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Fourth</text>
+</svg>

@@ -2,15 +2,15 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 400 395"
-  style="max-width: 400px;"
+  viewBox="0 0 430.8 395"
+  style="max-width: 430.8px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <g
     transform="translate(20,20)">
     <text
-      x="180"
+      x="195.4"
       y="15"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -18,131 +18,131 @@
       font-family="Arial, sans-serif"
       font-weight="bold">Performance Metrics</text>
     <circle
-      cx="180"
+      cx="195.4"
       cy="180"
       r="24"
       fill="none"
       stroke="#E0E0E0" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="180"
       r="48"
       fill="none"
       stroke="#E0E0E0" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="180"
       r="72"
       fill="none"
       stroke="#E0E0E0" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="180"
       r="96"
       fill="none"
       stroke="#E0E0E0" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="180"
       r="120"
       fill="none"
       stroke="#E0E0E0" />
     <line
-      x1="180"
+      x1="195.4"
       y1="180"
-      x2="180"
+      x2="195.4"
       y2="60"
       stroke="#BDBDBD" />
     <text
-      x="180"
+      x="195.4"
       y="40"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">Speed</text>
     <line
-      x1="180"
+      x1="195.4"
       y1="180"
-      x2="294.13"
+      x2="309.53"
       y2="142.92"
       stroke="#BDBDBD" />
     <text
-      x="313.15"
+      x="328.55"
       y="136.74"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">Quality</text>
     <line
-      x1="180"
+      x1="195.4"
       y1="180"
-      x2="250.53"
+      x2="265.93"
       y2="277.08"
       stroke="#BDBDBD" />
     <text
-      x="262.29"
+      x="277.69"
       y="293.26"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">Cost</text>
     <line
-      x1="180"
+      x1="195.4"
       y1="180"
-      x2="109.47"
+      x2="124.87"
       y2="277.08"
       stroke="#BDBDBD" />
     <text
-      x="97.71"
+      x="113.11"
       y="293.26"
       text-anchor="end"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">Time</text>
     <line
-      x1="180"
+      x1="195.4"
       y1="180"
-      x2="65.87"
+      x2="81.27"
       y2="142.92"
       stroke="#BDBDBD" />
     <text
-      x="46.85"
+      x="62.25"
       y="136.74"
       text-anchor="end"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">Scope</text>
     <path
-      d="M 180 73.33 L 256.08 155.28 L 211.35 223.15 L 125.14 255.51 L 65.87 142.92 Z"
+      d="M 195.4 73.33 L 271.48 155.28 L 226.75 223.15 L 140.54 255.51 L 81.27 142.92 Z"
       fill="rgba(31,119,180,0.3)"
       stroke="#1f77b4"
       stroke-width="2" />
     <circle
-      cx="180"
+      cx="195.4"
       cy="73.33"
       r="4"
       fill="#1f77b4"
       stroke="white" />
     <circle
-      cx="256.08"
+      cx="271.48"
       cy="155.28"
       r="4"
       fill="#1f77b4"
       stroke="white" />
     <circle
-      cx="211.35"
+      cx="226.75"
       cy="223.15"
       r="4"
       fill="#1f77b4"
       stroke="white" />
     <circle
-      cx="125.14"
+      cx="140.54"
       cy="255.51"
       r="4"
       fill="#1f77b4"
       stroke="white" />
     <circle
-      cx="65.87"
+      cx="81.27"
       cy="142.92"
       r="4"
       fill="#1f77b4"

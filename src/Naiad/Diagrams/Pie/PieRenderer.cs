@@ -79,8 +79,12 @@ public class PieRenderer : IDiagramRenderer<PieModel>
             var sweepAngle = section.Value / total * 360;
             var color = section.Color ?? defaultColors[i % defaultColors.Length];
 
-            var path = CreateMermaidArcPath(startAngle, sweepAngle);
-            builder.AddPath(path, fill: color, cssClass: "pieCircle");
+            // A section with nothing in it has no slice to draw.
+            if (sweepAngle > 0)
+            {
+                var path = CreateMermaidArcPath(startAngle, sweepAngle);
+                builder.AddPath(path, fill: color, cssClass: "pieCircle");
+            }
 
             startAngle += sweepAngle;
         }
@@ -98,14 +102,19 @@ public class PieRenderer : IDiagramRenderer<PieModel>
             var labelX = labelDist * Math.Sin(ToRadians(midAngle));
             var labelY = -labelDist * Math.Cos(ToRadians(midAngle));
 
-            builder.AddText(
-                0,
-                0,
-                $"{percentage}%",
-                cssClass: "slice",
-                style: "text-anchor: middle;",
-                transform: $"translate({FmtMermaid(labelX)},{FmtMermaid(labelY)})",
-                omitXY: true);
+            // As in Mermaid, a slice too thin to round up to 1% carries no label; several of them would
+            // only pile "0%" on top of each other.
+            if (percentage > 0)
+            {
+                builder.AddText(
+                    0,
+                    0,
+                    $"{percentage}%",
+                    cssClass: "slice",
+                    style: "text-anchor: middle;",
+                    transform: $"translate({FmtMermaid(labelX)},{FmtMermaid(labelY)})",
+                    omitXY: true);
+            }
 
             startAngle += sweepAngle;
         }
@@ -136,6 +145,15 @@ public class PieRenderer : IDiagramRenderer<PieModel>
     {
         // Mermaid uses: M startX,startY A r,r 0 largeArc,1 endX,endY L 0,0 Z
         // Angles start from top (12 o'clock) and go clockwise
+        // A slice that is the whole pie starts and ends at the same point, and an arc between a point
+        // and itself draws nothing. Two half circles do.
+        if (sweepAngle >= 360 - 1e-9)
+        {
+            return string.Create(
+                CultureInfo.InvariantCulture,
+                $"M0,-{radius}A{radius},{radius},0,1,1,0,{radius}A{radius},{radius},0,1,1,0,-{radius}Z");
+        }
+
         var startRad = ToRadians(startAngle);
         var endRad = ToRadians(startAngle + sweepAngle);
         var largeArc = sweepAngle > 180 ? 1 : 0;
