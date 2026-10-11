@@ -1,0 +1,147 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 502.8 370"
+  style="max-width: 502.8px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <text
+      x="231.4"
+      y="15"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="18px"
+      font-family="Arial, sans-serif"
+      font-weight="bold">Restaurant Comparison</text>
+    <path
+      d="M 231.4 150 L 261.4 180 L 231.4 210 L 201.4 180 Z"
+      fill="none"
+      stroke="#E0E0E0" />
+    <path
+      d="M 231.4 120 L 291.4 180 L 231.4 240 L 171.4 180 Z"
+      fill="none"
+      stroke="#E0E0E0" />
+    <path
+      d="M 231.4 90 L 321.4 180 L 231.4 270 L 141.4 180 Z"
+      fill="none"
+      stroke="#E0E0E0" />
+    <path
+      d="M 231.4 60 L 351.4 180 L 231.4 300 L 111.4 180 Z"
+      fill="none"
+      stroke="#E0E0E0" />
+    <line
+      x1="231.4"
+      y1="180"
+      x2="231.4"
+      y2="60"
+      stroke="#BDBDBD" />
+    <text
+      x="231.4"
+      y="40"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">Food Quality</text>
+    <line
+      x1="231.4"
+      y1="180"
+      x2="351.4"
+      y2="180"
+      stroke="#BDBDBD" />
+    <text
+      x="371.4"
+      y="180"
+      text-anchor="start"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">Service</text>
+    <line
+      x1="231.4"
+      y1="180"
+      x2="231.4"
+      y2="300"
+      stroke="#BDBDBD" />
+    <text
+      x="231.4"
+      y="320"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">Price</text>
+    <line
+      x1="231.4"
+      y1="180"
+      x2="111.4"
+      y2="180"
+      stroke="#BDBDBD" />
+    <text
+      x="91.4"
+      y="180"
+      text-anchor="end"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif">Ambiance</text>
+    <path
+      d="M 231.4 84 L 303.4 180 L 231.4 228 L 135.4 180 Z"
+      fill="rgba(31,119,180,0.3)"
+      stroke="#1f77b4"
+      stroke-width="2" />
+    <circle
+      cx="231.4"
+      cy="84"
+      r="4"
+      fill="#1f77b4"
+      stroke="white" />
+    <circle
+      cx="303.4"
+      cy="180"
+      r="4"
+      fill="#1f77b4"
+      stroke="white" />
+    <circle
+      cx="231.4"
+      cy="228"
+      r="4"
+      fill="#1f77b4"
+      stroke="white" />
+    <circle
+      cx="135.4"
+      cy="180"
+      r="4"
+      fill="#1f77b4"
+      stroke="white" />
+    <path
+      d="M 231.4 108 L 327.4 180 L 231.4 252 L 159.4 180 Z"
+      fill="rgba(255,127,14,0.3)"
+      stroke="#ff7f0e"
+      stroke-width="2" />
+    <circle
+      cx="231.4"
+      cy="108"
+      r="4"
+      fill="#ff7f0e"
+      stroke="white" />
+    <circle
+      cx="327.4"
+      cy="180"
+      r="4"
+      fill="#ff7f0e"
+      stroke="white" />
+    <circle
+      cx="231.4"
+      cy="252"
+      r="4"
+      fill="#ff7f0e"
+      stroke="white" />
+    <circle
+      cx="159.4"
+      cy="180"
+      r="4"
+      fill="#ff7f0e"
+      stroke="white" />
+  </g>
+</svg>

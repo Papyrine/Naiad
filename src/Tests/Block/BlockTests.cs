@@ -83,4 +83,19 @@ public class BlockTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // With no `columns`, every block shares one row however the lines are broken, and `space` leaves a
+    // gap of as many columns as it asks for.
+    [Test]
+    public Task SingleRowByDefault()
+    {
+        const string input =
+            """
+            block-beta
+                a["First"] space b["Second"]
+                c["Third"] space:2 d["Fourth"]
+            """;
+
+        return VerifySvg(input);
+    }
 }

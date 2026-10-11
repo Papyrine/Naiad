@@ -1,0 +1,392 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 820 222"
+  style="max-width: 820px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <rect
+    x="20"
+    y="20"
+    width="180"
+    height="182"
+    rx="8"
+    ry="8"
+    fill="#E3F2FD"
+    stroke="#ccc" />
+  <rect
+    x="20"
+    y="20"
+    width="180"
+    height="40"
+    rx="8"
+    ry="8"
+    fill="#E3F2FD"
+    stroke="none" />
+  <rect
+    x="20"
+    y="52"
+    width="180"
+    height="8"
+    fill="#E3F2FD"
+    stroke="none" />
+  <text
+    x="110"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Todo</text>
+  <rect
+    x="28"
+    y="75"
+    width="164"
+    height="40"
+    rx="4"
+    ry="4"
+    fill="#fff"
+    stroke="#ddd" />
+  <rect
+    x="28"
+    y="75"
+    width="4"
+    height="40"
+    rx="2"
+    ry="2"
+    fill="#BBDEFB"
+    stroke="none" />
+  <text
+    x="40"
+    y="95"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Create Documentation</text>
+  <rect
+    x="28"
+    y="123"
+    width="164"
+    height="48"
+    rx="4"
+    ry="4"
+    fill="#fff"
+    stroke="#ddd" />
+  <rect
+    x="28"
+    y="123"
+    width="4"
+    height="48"
+    rx="2"
+    ry="2"
+    fill="#BBDEFB"
+    stroke="none" />
+  <text
+    x="40"
+    y="139"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Create Blog about the</text>
+  <text
+    x="40"
+    y="155"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">new diagram</text>
+  <rect
+    x="215"
+    y="20"
+    width="180"
+    height="182"
+    rx="8"
+    ry="8"
+    fill="#E8F5E9"
+    stroke="#ccc" />
+  <rect
+    x="215"
+    y="20"
+    width="180"
+    height="40"
+    rx="8"
+    ry="8"
+    fill="#E8F5E9"
+    stroke="none" />
+  <rect
+    x="215"
+    y="52"
+    width="180"
+    height="8"
+    fill="#E8F5E9"
+    stroke="none" />
+  <text
+    x="305"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">In progress</text>
+  <rect
+    x="223"
+    y="75"
+    width="164"
+    height="96"
+    rx="4"
+    ry="4"
+    fill="#fff"
+    stroke="#ddd" />
+  <rect
+    x="223"
+    y="75"
+    width="4"
+    height="96"
+    rx="2"
+    ry="2"
+    fill="#C8E6C9"
+    stroke="none" />
+  <text
+    x="235"
+    y="91"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Create renderer so</text>
+  <text
+    x="235"
+    y="107"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">that it works in all</text>
+  <text
+    x="235"
+    y="123"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">cases. We also add</text>
+  <text
+    x="235"
+    y="139"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">some extra text here</text>
+  <text
+    x="235"
+    y="155"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">for testing purposes.</text>
+  <rect
+    x="410"
+    y="20"
+    width="180"
+    height="182"
+    rx="8"
+    ry="8"
+    fill="#FFF3E0"
+    stroke="#ccc" />
+  <rect
+    x="410"
+    y="20"
+    width="180"
+    height="40"
+    rx="8"
+    ry="8"
+    fill="#FFF3E0"
+    stroke="none" />
+  <rect
+    x="410"
+    y="52"
+    width="180"
+    height="8"
+    fill="#FFF3E0"
+    stroke="none" />
+  <text
+    x="500"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Ready for test</text>
+  <rect
+    x="418"
+    y="75"
+    width="164"
+    height="48"
+    rx="4"
+    ry="4"
+    fill="#fff"
+    stroke="#ddd" />
+  <rect
+    x="418"
+    y="75"
+    width="4"
+    height="48"
+    rx="2"
+    ry="2"
+    fill="#F57C00"
+    stroke="none" />
+  <text
+    x="430"
+    y="91"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Create parsing tests</text>
+  <text
+    x="430"
+    y="111"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#777">MC-2038  K.Sveidqvist</text>
+  <rect
+    x="418"
+    y="131"
+    width="164"
+    height="48"
+    rx="4"
+    ry="4"
+    fill="#fff"
+    stroke="#ddd" />
+  <rect
+    x="418"
+    y="131"
+    width="4"
+    height="48"
+    rx="2"
+    ry="2"
+    fill="#90CAF9"
+    stroke="none" />
+  <text
+    x="430"
+    y="147"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">last item</text>
+  <text
+    x="430"
+    y="167"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#777">knsv</text>
+  <rect
+    x="605"
+    y="20"
+    width="180"
+    height="182"
+    rx="8"
+    ry="8"
+    fill="#F3E5F5"
+    stroke="#ccc" />
+  <rect
+    x="605"
+    y="20"
+    width="180"
+    height="40"
+    rx="8"
+    ry="8"
+    fill="#F3E5F5"
+    stroke="none" />
+  <rect
+    x="605"
+    y="52"
+    width="180"
+    height="8"
+    fill="#F3E5F5"
+    stroke="none" />
+  <text
+    x="695"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Done</text>
+  <rect
+    x="613"
+    y="75"
+    width="164"
+    height="40"
+    rx="4"
+    ry="4"
+    fill="#fff"
+    stroke="#ddd" />
+  <rect
+    x="613"
+    y="75"
+    width="4"
+    height="40"
+    rx="2"
+    ry="2"
+    fill="#E1BEE7"
+    stroke="none" />
+  <text
+    x="625"
+    y="95"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">define getData</text>
+  <rect
+    x="613"
+    y="123"
+    width="164"
+    height="48"
+    rx="4"
+    ry="4"
+    fill="#fff"
+    stroke="#ddd" />
+  <rect
+    x="613"
+    y="123"
+    width="4"
+    height="48"
+    rx="2"
+    ry="2"
+    fill="#D32F2F"
+    stroke="none" />
+  <text
+    x="625"
+    y="139"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Update DB function</text>
+  <text
+    x="625"
+    y="159"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#777">MC-2037</text>
+</svg>

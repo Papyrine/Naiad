@@ -32,6 +32,11 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         // Compute the actual git graph from operations
         var computed = ComputeGraph(model);
 
+        if (model.Direction is Direction.TopToBottom or Direction.BottomToTop)
+        {
+            return RenderVertical(computed, model.Direction == Direction.BottomToTop, options);
+        }
+
         // Calculate dimensions
         var maxRow = computed.Commits.Count > 0 ? computed.Commits.Max(_ => _.Row) : 0;
         var maxColumn = computed.Branches.Count > 0 ? computed.Branches.Max(_ => _.Column) : 0;
@@ -65,6 +70,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
 
         var builder = new SvgBuilder();
         builder.Size(width, height);
+
+        var placement = new Placement(false, (row, column) => (offsetX + row * spacingX, offsetY + column * commitSpacingY));
 
         // Draw branch labels
         foreach (var branch in computed.Branches)
@@ -115,7 +122,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             {
                 if (computed.CommitMap.TryGetValue(parentId, out var parent))
                 {
-                    DrawConnection(builder, parent, commit, computed, offsetX, offsetY, spacingX);
+                    DrawConnection(builder, parent, commit, computed, placement);
                 }
             }
         }
@@ -123,7 +130,122 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         // Draw commits
         foreach (var commit in computed.Commits)
         {
-            DrawCommit(builder, commit, computed, offsetX, offsetY, spacingX, options);
+            DrawCommit(builder, commit, computed, placement, options);
+        }
+
+        return builder.Build();
+    }
+
+    // Where a commit sits, given its row (its place in time) and its branch's column (its lane), and
+    // whether time runs down or up the page rather than across it.
+    sealed record Placement(bool Vertical, Func<int, int, (double x, double y)> Point);
+
+    /// <summary>
+    /// The <c>TB</c> and <c>BT</c> layouts: each branch is a vertical lane with its name at the end the
+    /// history starts from, and commits step down the page (or up it, for <c>BT</c>). Captions stay
+    /// under their commit and tags above it, so a row is tall enough for both and a lane wide enough for
+    /// the widest of them.
+    /// </summary>
+    static SvgDocument RenderVertical(ComputedGitGraph computed, bool bottomToTop, RenderOptions options)
+    {
+        const double branchBand = 28;
+
+        var maxRow = computed.Commits.Count > 0 ? computed.Commits.Max(_ => _.Row) : 0;
+        var maxColumn = computed.Branches.Count > 0 ? computed.Branches.Max(_ => _.Column) : 0;
+
+        var labelFontSize = options.FontSize - 4;
+        var widest = 0.0;
+        foreach (var commit in computed.Commits)
+        {
+            widest = Math.Max(widest, LabelWidth(commit.DisplayLabel, labelFontSize));
+            if (!string.IsNullOrEmpty(commit.Tag))
+            {
+                widest = Math.Max(widest, MeasureText(commit.Tag, options.FontSize - 2) + tagPadding * 2);
+            }
+        }
+
+        foreach (var branch in computed.Branches)
+        {
+            widest = Math.Max(widest, MeasureText(branch.Name, options.FontSize - 2) + 4);
+        }
+
+        var hasTag = computed.Commits.Any(_ => !string.IsNullOrEmpty(_.Tag));
+        var above = hasTag ? commitRadius + tagHeight + 5 : commitRadius;
+        var below = commitRadius + labelGap + labelHeight;
+
+        var laneSpacing = Math.Max(commitSpacingX, widest + labelSpacing);
+        var rowSpacing = above + below + labelSpacing;
+
+        var offsetX = options.Padding + Math.Max(commitRadius, widest / 2);
+        var firstRowY = options.Padding + above + (bottomToTop ? 0 : branchBand);
+        var lastRowY = firstRowY + maxRow * rowSpacing;
+
+        var width = offsetX * 2 + maxColumn * laneSpacing;
+        var height = lastRowY + below + options.Padding + (bottomToTop ? branchBand : 0);
+
+        var placement = new Placement(
+            true,
+            (row, column) =>
+            {
+                var step = bottomToTop ? maxRow - row : row;
+                return (offsetX + column * laneSpacing, firstRowY + step * rowSpacing);
+            });
+
+        var builder = new SvgBuilder();
+        builder.Size(width, height);
+
+        // Branch names sit where the history starts: above the lanes, or below them when it runs upwards.
+        var bandY = bottomToTop
+            ? lastRowY + below + branchBand / 2
+            : options.Padding + branchBand / 2;
+        foreach (var branch in computed.Branches)
+        {
+            builder.AddText(
+                offsetX + branch.Column * laneSpacing,
+                bandY,
+                branch.Name,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: options.FontSize - 2,
+                fontFamily: options.FontFamily,
+                fill: branch.Color ?? branchColors[branch.Column % branchColors.Length],
+                fontWeight: "bold");
+        }
+
+        // Draw branch lines
+        foreach (var branch in computed.Branches)
+        {
+            if (branch.Commits.Count == 0)
+            {
+                continue;
+            }
+
+            var (x, startY) = placement.Point(branch.Commits.Min(_ => _.Row), branch.Column);
+            var (_, endY) = placement.Point(branch.Commits.Max(_ => _.Row), branch.Column);
+
+            builder.AddLine(
+                x,
+                startY,
+                x,
+                endY,
+                stroke: branch.Color ?? branchColors[branch.Column % branchColors.Length],
+                strokeWidth: 2);
+        }
+
+        foreach (var commit in computed.Commits)
+        {
+            foreach (var parentId in commit.Parents)
+            {
+                if (computed.CommitMap.TryGetValue(parentId, out var parent))
+                {
+                    DrawConnection(builder, parent, commit, computed, placement);
+                }
+            }
+        }
+
+        foreach (var commit in computed.Commits)
+        {
+            DrawCommit(builder, commit, computed, placement, options);
         }
 
         return builder.Build();
@@ -134,9 +256,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         GitCommit from,
         GitCommit to,
         ComputedGitGraph graph,
-        double offsetX,
-        double offsetY,
-        double spacingX)
+        Placement placement)
     {
         var fromBranch = graph.FindBranch(from.Branch);
         var toBranch = graph.FindBranch(to.Branch);
@@ -146,10 +266,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             return;
         }
 
-        var fromX = offsetX + from.Row * spacingX;
-        var fromY = offsetY + fromBranch.Column * commitSpacingY;
-        var toX = offsetX + to.Row * spacingX;
-        var toY = offsetY + toBranch.Column * commitSpacingY;
+        var (fromX, fromY) = placement.Point(from.Row, fromBranch.Column);
+        var (toX, toY) = placement.Point(to.Row, toBranch.Column);
 
         var toColor = toBranch.Color ?? branchColors[toBranch.Column % branchColors.Length];
 
@@ -160,6 +278,21 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         }
 
         // Different branches - draw curved connection (merge or branch point)
+        if (placement.Vertical)
+        {
+            // Leave and arrive along the lanes, crossing between them half-way.
+            var midY = (fromY + toY) / 2;
+            var verticalPath = string.Create(
+                CultureInfo.InvariantCulture,
+                $"""
+                 M {fromX:0.##} {fromY:0.##}
+                 C {fromX:0.##} {midY:0.##}, {toX:0.##} {midY:0.##}, {toX:0.##} {toY:0.##}
+                 """);
+
+            builder.AddPath(verticalPath, stroke: toColor, strokeWidth: 2, fill: "none");
+            return;
+        }
+
         // Use a simple path with control points
         var midX = (fromX + toX) / 2;
 
@@ -174,7 +307,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
     }
 
     static void DrawCommit(SvgBuilder builder, GitCommit commit, ComputedGitGraph graph,
-        double offsetX, double offsetY, double spacingX, RenderOptions options)
+        Placement placement, RenderOptions options)
     {
         var branch = graph.FindBranch(commit.Branch);
         if (branch == null)
@@ -182,8 +315,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             return;
         }
 
-        var x = offsetX + commit.Row * spacingX;
-        var y = offsetY + branch.Column * commitSpacingY;
+        var (x, y) = placement.Point(commit.Row, branch.Column);
         var color = branch.Color ?? branchColors[branch.Column % branchColors.Length];
 
         DrawCommitGlyph(builder, commit, x, y, color);

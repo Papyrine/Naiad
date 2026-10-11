@@ -174,7 +174,7 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
             {
                 var fromGroup = ResolveGroupBounds(edge.SourceId, edge.SourceGroup, servicesById, groupBounds);
                 var toGroup = ResolveGroupBounds(edge.TargetId, edge.TargetGroup, servicesById, groupBounds);
-                DrawEdge(builder, from, to, edge, fromGroup, toGroup);
+                DrawEdge(builder, from, to, edge, fromGroup, toGroup, options);
             }
         }
 
@@ -432,7 +432,8 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         (double x, double y) to,
         ArchitectureEdge edge,
         (double x, double y, double width, double height)? fromGroup,
-        (double x, double y, double width, double height)? toGroup)
+        (double x, double y, double width, double height)? toGroup,
+        RenderOptions options)
     {
         // Anchor each end to the service edge, or to the containing group's boundary when the
         // endpoint was flagged with {group}.
@@ -453,6 +454,21 @@ public class ArchitectureRenderer : IDiagramRenderer<ArchitectureModel>
         {
             var angle = Math.Atan2(fromY - toY, fromX - toX);
             DrawArrow(builder, fromX, fromY, angle);
+        }
+
+        // The label sits on the middle of the line, on a chip that masks the stretch under it.
+        if (!string.IsNullOrEmpty(edge.Label))
+        {
+            var fontSize = options.FontSize - 2;
+            builder.AddEdgeLabel(
+                (fromX + toX) / 2,
+                (fromY + toY) / 2,
+                edge.Label.Length * fontSize * 0.6 + 8,
+                fontSize + 4,
+                edge.Label,
+                fontSize,
+                options.FontFamily,
+                fill: "#333");
         }
     }
 

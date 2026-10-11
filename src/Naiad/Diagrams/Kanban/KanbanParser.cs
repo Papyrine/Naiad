@@ -10,27 +10,58 @@ class KanbanParser : IDiagramParser<KanbanModel>
         // Label in brackets: [Label Text]
         var labelParser =
             from _ in Char('[')
-            from label in Token(_ => _ != ']').ManyString()
+            from label in Token(_ => _ != ']' && _ != '\r' && _ != '\n').ManyString()
             from __ in Char(']')
             select label.Trim();
 
-        // Column: id[Name] (no leading whitespace or minimal)
-        var columnParser =
-            from indent in CommonParsers.Indentation.Where(_ => _ < 4)
-            from id in identifier
-            from name in labelParser
-            from __ in CommonParsers.InlineWhitespace
-            from ___ in CommonParsers.LineEnd
-            select (id, name);
+        // A metadata value: quoted either way, or bare text up to the next comma or the closing brace.
+        var metadataValue =
+            OneOf(
+                Char('\'').Then(Token(_ => _ != '\'' && _ != '\r' && _ != '\n').ManyString()).Before(Char('\'')),
+                Char('"').Then(Token(_ => _ != '"' && _ != '\r' && _ != '\n').ManyString()).Before(Char('"')),
+                Token(_ => _ is not (',' or '}' or '\r' or '\n')).ManyString().Select(_ => _.Trim()));
 
-        // Task: id[Name] (with significant leading whitespace - 4+ spaces or tabs)
-        var taskParser =
-            from indent in CommonParsers.Indentation.Where(_ => _ >= 4)
-            from id in identifier
-            from name in labelParser
+        var metadataEntry =
+            from _ in SkipWhitespaces
+            from key in Token(char.IsLetter).AtLeastOnceString()
+            from __ in CommonParsers.InlineWhitespace
+            from colon in Char(':')
+            from ___ in CommonParsers.InlineWhitespace
+            from value in metadataValue
+            from ____ in SkipWhitespaces
+            select (key, value);
+
+        // Metadata after a task: @{ assigned: 'knsv', ticket: MC-2037, priority: 'High' }
+        var metadataParser =
+            String("@{")
+                .Then(metadataEntry.Separated(Char(',')))
+                .Before(SkipWhitespaces)
+                .Before(Char('}'))
+                .Select(_ => _.ToList());
+
+        // An item is id[Label], [Label] on its own, or bare text. Bare text and a lone label stand for
+        // both the id and the name.
+        var bracketed =
+            from id in identifier.Optional()
+            from label in labelParser
+            select (id: id.GetValueOrDefault() ?? label, label);
+
+        var bare =
+            Token(_ => _ is not ('@' or '[' or ']' or '\r' or '\n'))
+                .AtLeastOnceString()
+                .Select(_ => _.Trim())
+                .Assert(_ => _.Length > 0)
+                .Select(_ => (id: _, label: _));
+
+        // Whether an item is a column or a task is decided by its indentation, once every item is known.
+        var itemParser =
+            from indent in CommonParsers.Indentation
+            from named in Try(bracketed).Or(bare)
+            from _ in CommonParsers.InlineWhitespace
+            from metadata in metadataParser.Optional()
             from __ in CommonParsers.InlineWhitespace
             from ___ in CommonParsers.LineEnd
-            select (id, name);
+            select new Item(indent, named.id, named.label, metadata.GetValueOrDefault() ?? []);
 
         // Skip line (comments, empty lines)
         var skipLine =
@@ -39,9 +70,8 @@ class KanbanParser : IDiagramParser<KanbanModel>
 
         var contentItem =
             OneOf(
-                Try(taskParser.Select<IKanbanContent?>(_ => new TaskItem(_.id, _.name))),
-                Try(columnParser.Select<IKanbanContent?>(_ => new ColumnItem(_.id, _.name))),
-                skipLine.ThenReturn<IKanbanContent?>(null)
+                Try(skipLine.ThenReturn<Item?>(null)),
+                itemParser.Select<Item?>(_ => _)
             );
 
         parser =
@@ -53,33 +83,63 @@ class KanbanParser : IDiagramParser<KanbanModel>
             select BuildModel(result.Item1);
     }
 
-    static KanbanModel BuildModel(IEnumerable<IKanbanContent?> content)
+    static KanbanModel BuildModel(IEnumerable<Item?> content)
     {
         var model = new KanbanModel();
         KanbanColumn? currentColumn = null;
 
+        // The first item is a column and sets the indentation every other column shares. Anything
+        // indented further belongs to the column above it.
+        int? columnIndent = null;
+
         foreach (var item in content)
         {
-            switch (item)
+            if (item is null)
             {
-                case ColumnItem column:
-                    currentColumn = new()
-                    {
-                        Id = column.Id,
-                        Name = column.Name
-                    };
-                    model.Columns.Add(currentColumn);
-                    break;
-
-                case TaskItem task:
-                    currentColumn?.Tasks.Add(
-                        new()
-                        {
-                            Id = task.Id,
-                            Name = task.Name
-                        });
-                    break;
+                continue;
             }
+
+            columnIndent ??= item.Indent;
+
+            if (item.Indent <= columnIndent)
+            {
+                currentColumn = new()
+                {
+                    Id = item.Id,
+                    Name = item.Label
+                };
+                model.Columns.Add(currentColumn);
+                continue;
+            }
+
+            var task = new KanbanTask
+            {
+                Id = item.Id,
+                Name = item.Label
+            };
+
+            foreach (var (key, value) in item.Metadata)
+            {
+                if (value.Length == 0)
+                {
+                    continue;
+                }
+
+                switch (key.ToLowerInvariant())
+                {
+                    case "assigned":
+                        task.Assigned = value;
+                        break;
+                    case "ticket":
+                        task.Ticket = value;
+                        break;
+                    case "priority":
+                        task.Priority = value;
+                        break;
+                }
+            }
+
+            currentColumn!.Tasks.Add(task);
         }
 
         return model;
@@ -87,7 +147,5 @@ class KanbanParser : IDiagramParser<KanbanModel>
 
     public Result<char, KanbanModel> Parse(string input) => parser.Parse(input);
 
-    internal interface IKanbanContent;
-    readonly record struct ColumnItem(string Id, string Name) : IKanbanContent;
-    readonly record struct TaskItem(string Id, string Name) : IKanbanContent;
+    sealed record Item(int Indent, string Id, string Label, List<(string key, string value)> Metadata);
 }

@@ -42,4 +42,19 @@ public class PieTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // One section holding everything is a full disc, and the empty section beside it has no slice and
+    // no "0%" label, though it keeps its place in the legend.
+    [Test]
+    public Task WholePie()
+    {
+        const string input =
+            """
+            pie title Coverage
+                "Covered" : 100
+                "Missed" : 0
+            """;
+
+        return VerifySvg(input);
+    }
 }

@@ -84,4 +84,28 @@ public class RadarTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // Axes with their own labels over two lines, a curve whose values are named for their axes, and
+    // every option: a polygon graticule, a fixed range, a tick count and no legend.
+    [Test]
+    public Task LabelledAxesAndOptions()
+    {
+        const string input =
+            """
+            radar-beta
+                title Restaurant Comparison
+                axis food["Food Quality"], service["Service"], price["Price"]
+                axis ambiance["Ambiance"]
+                curve a["Restaurant A"]{4, 3, 2, 4}
+                curve b["Restaurant B"]{ service: 4, food: 3, ambiance: 3, price: 3 }
+
+                graticule polygon
+                max 5
+                min 0
+                ticks 4
+                showLegend false
+            """;
+
+        return VerifySvg(input);
+    }
 }

@@ -1,0 +1,263 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 493.05 382"
+  style="max-width: 493.05px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="reqarrow"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#666" />
+    </marker>
+  </defs>
+  <rect
+    x="33.9"
+    y="20"
+    width="160"
+    height="146"
+    rx="5"
+    ry="5"
+    fill="#C8E6C9"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <text
+    x="113.9"
+    y="41"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">&lt;&lt;Requirement&gt;&gt;</text>
+  <text
+    x="113.9"
+    y="61"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">test_req</text>
+  <line
+    x1="33.9"
+    y1="77"
+    x2="193.9"
+    y2="77"
+    stroke="#4CAF50" />
+  <text
+    x="45.9"
+    y="91"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Id: 1</text>
+  <text
+    x="45.9"
+    y="109"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Text: the test text.</text>
+  <text
+    x="45.9"
+    y="127"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Risk: High</text>
+  <text
+    x="45.9"
+    y="145"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Verification: Test</text>
+  <rect
+    x="20"
+    y="216"
+    width="187.8"
+    height="146"
+    rx="5"
+    ry="5"
+    fill="#C8E6C9"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <text
+    x="113.9"
+    y="237"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">&lt;&lt;Functional Requirement&gt;&gt;</text>
+  <text
+    x="113.9"
+    y="257"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Second requirement</text>
+  <line
+    x1="20"
+    y1="273"
+    x2="207.8"
+    y2="273"
+    stroke="#4CAF50" />
+  <text
+    x="32"
+    y="287"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Id: 1.1</text>
+  <text
+    x="32"
+    y="305"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Text: the second test text.</text>
+  <text
+    x="32"
+    y="323"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Risk: Low</text>
+  <text
+    x="32"
+    y="341"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Verification: Inspection</text>
+  <rect
+    x="297.8"
+    y="20"
+    width="175.25"
+    height="110"
+    rx="5"
+    ry="5"
+    fill="#BBDEFB"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <text
+    x="385.43"
+    y="41"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">&lt;&lt;Element&gt;&gt;</text>
+  <text
+    x="385.43"
+    y="61"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">test_entity</text>
+  <line
+    x1="297.8"
+    y1="77"
+    x2="473.05"
+    y2="77"
+    stroke="#2196F3" />
+  <text
+    x="309.8"
+    y="91"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Type: test suite</text>
+  <text
+    x="309.8"
+    y="109"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#333">Doc Ref: reqs/test_entity</text>
+  <line
+    x1="297.8"
+    y1="80.81"
+    x2="193.9"
+    y2="87.7"
+    stroke="#666"
+    stroke-width="1.5"
+    stroke-dasharray="10,7" />
+  <path
+    d="M 193.9 87.7 L 200.55 83.25 L 201.08 91.23 Z"
+    fill="#666"
+    stroke="none" />
+  <text
+    x="244.93"
+    y="70.31"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">&lt;&lt;satisfies&gt;&gt;</text>
+  <line
+    x1="113.9"
+    y1="166"
+    x2="113.9"
+    y2="216"
+    stroke="#666"
+    stroke-width="1.5"
+    stroke-dasharray="10,7" />
+  <path
+    d="M 113.9 216 L 109.9 209.07 L 117.9 209.07 Z"
+    fill="#666"
+    stroke="none" />
+  <text
+    x="150.15"
+    y="191"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">&lt;&lt;traces&gt;&gt;</text>
+  <line
+    x1="315.64"
+    y1="130"
+    x2="206.52"
+    y2="216"
+    stroke="#666"
+    stroke-width="1.5"
+    stroke-dasharray="10,7" />
+  <path
+    d="M 206.52 216 L 209.49 208.57 L 214.44 214.85 Z"
+    fill="#666"
+    stroke="none" />
+  <text
+    x="239.53"
+    y="145.65"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#666">&lt;&lt;verifies&gt;&gt;</text>
+</svg>

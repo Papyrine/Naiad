@@ -1,0 +1,180 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 420 240"
+  style="max-width: 420px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arch-arrow"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#666" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="0"
+      y="0"
+      width="100"
+      height="80"
+      rx="8"
+      ry="8"
+      fill="#FAFAFA"
+      stroke="#BA68C8"
+      stroke-width="2" />
+    <g
+      transform="translate(34,8) scale(0.64)">
+      <path
+        d="M25,5 A20,20 0 1,1 25,45 A20,20 0 1,1 25,5 M5,25 L45,25 M25,5 Q15,25 25,45 M25,5 Q35,25 25,45"
+        fill="#BA68C8"
+        stroke="#333" />
+    </g>
+    <text
+      x="50"
+      y="68"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Gateway</text>
+    <rect
+      x="140"
+      y="0"
+      width="100"
+      height="80"
+      rx="8"
+      ry="8"
+      fill="#FAFAFA"
+      stroke="#90A4AE"
+      stroke-width="2" />
+    <g
+      transform="translate(174,8) scale(0.64)">
+      <path
+        d="M5,10 L45,10 L45,40 L5,40 Z M5,15 L45,15 M8,12.5 A1,1 0 1,1 8,12.49"
+        fill="#90A4AE"
+        stroke="#333" />
+    </g>
+    <text
+      x="190"
+      y="68"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Server</text>
+    <rect
+      x="280"
+      y="0"
+      width="100"
+      height="80"
+      rx="8"
+      ry="8"
+      fill="#FAFAFA"
+      stroke="#81C784"
+      stroke-width="2" />
+    <g
+      transform="translate(314,8) scale(0.64)">
+      <path
+        d="M10,20 L10,50 Q25,60 40,50 L40,20 Q25,10 10,20 M10,20 Q25,30 40,20"
+        fill="#81C784"
+        stroke="#333" />
+    </g>
+    <text
+      x="330"
+      y="68"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Database</text>
+    <rect
+      x="280"
+      y="120"
+      width="100"
+      height="80"
+      rx="8"
+      ry="8"
+      fill="#FAFAFA"
+      stroke="#FFB74D"
+      stroke-width="2" />
+    <g
+      transform="translate(314,128) scale(0.64)">
+      <path
+        d="M5,40 L5,20 A20,10 0 1,1 45,20 L45,40 A20,10 0 1,1 5,40 M5,20 A20,10 0 1,0 45,20"
+        fill="#FFB74D"
+        stroke="#333" />
+    </g>
+    <text
+      x="330"
+      y="188"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Storage</text>
+    <line
+      x1="100"
+      y1="40"
+      x2="140"
+      y2="40"
+      stroke="#666"
+      stroke-width="1.5" />
+    <path
+      d="M 140 40 L 133.07 44 L 133.07 36 Z"
+      fill="#666"
+      stroke="none" />
+    <line
+      x1="240"
+      y1="40"
+      x2="280"
+      y2="40"
+      stroke="#666"
+      stroke-width="1.5" />
+    <path
+      d="M 280 40 L 273.07 44 L 273.07 36 Z"
+      fill="#666"
+      stroke="none" />
+    <path
+      d="M 240 40 L 246.93 36 L 246.93 44 Z"
+      fill="#666"
+      stroke="none" />
+    <line
+      x1="330"
+      y1="80"
+      x2="330"
+      y2="120"
+      stroke="#666"
+      stroke-width="1.5" />
+    <path
+      d="M 330 80 L 334 86.93 L 326 86.93 Z"
+      fill="#666"
+      stroke="none" />
+    <rect
+      x="297.2"
+      y="92"
+      width="65.6"
+      height="16"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <text
+      x="330"
+      y="100"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">backs up</text>
+  </g>
+</svg>

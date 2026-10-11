@@ -176,4 +176,42 @@ public class GitGraphTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // Branches run down the page as lanes, with their names above and tags above their commits.
+    [Test]
+    public Task TopToBottom()
+    {
+        const string input =
+            """
+            gitGraph TB:
+                commit
+                commit tag: "v1.0"
+                branch develop
+                commit
+                commit
+                checkout main
+                commit
+                merge develop
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // The same lanes with history running up the page and the branch names underneath.
+    [Test]
+    public Task BottomToTop()
+    {
+        const string input =
+            """
+            gitGraph BT:
+                commit
+                branch develop
+                commit
+                checkout main
+                commit
+                merge develop tag: "v2.0"
+            """;
+
+        return VerifySvg(input);
+    }
 }

@@ -14,11 +14,12 @@ class BlockParser : IDiagramParser<BlockModel>
         var quotedLabel =
             Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
 
+        // `columns auto` is the default spelled out: no fixed count.
         var columnsParser =
             from inlineWhitespace in CommonParsers.InlineWhitespace
             from columns in CIString("columns")
             from rRequiredWhitespace in CommonParsers.RequiredWhitespace
-            from num in CommonParsers.UnsignedInt
+            from num in CommonParsers.UnsignedInt.Or(CIString("auto").ThenReturn(0))
             from innerInlineWhitespace in CommonParsers.InlineWhitespace
             from lineEnd in CommonParsers.LineEnd
             select num;
@@ -83,7 +84,7 @@ class BlockParser : IDiagramParser<BlockModel>
             from num in CommonParsers.UnsignedInt
             select num;
 
-        // Block element: id["label"]:2
+        // Block element: id["label"]:2. A bare `space` or `space:2` is a gap of that many columns.
         var elementParser =
             from id in identifier
             from shape in shapeParser.Optional()
@@ -93,7 +94,8 @@ class BlockParser : IDiagramParser<BlockModel>
                 Id = id,
                 Label = shape.HasValue ? shape.Value.label : id,
                 Shape = shape.HasValue ? shape.Value.shape : BlockShape.Rectangle,
-                Span = span.GetValueOrDefault(1)
+                Span = Math.Max(1, span.GetValueOrDefault(1)),
+                IsSpace = !shape.HasValue && id == "space"
             };
 
         // Elements on a line (space separated)
