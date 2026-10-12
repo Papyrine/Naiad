@@ -1,266 +1,271 @@
 class FlowchartParser : IDiagramParser<FlowchartModel>
 {
-    static Parser<char, FlowchartModel> parser;
+    static Parser<FlowchartModel> parser;
 
     // The head that may close a link, and the one that may open a two-headed link.
-    static readonly Parser<char, char> linkHead =
-        OneOf(Char('>'), Char('o'), Char('x'));
+    static readonly Parser<char> linkHead =
+        OneOf(Literals.Char('>'), Literals.Char('o'), Literals.Char('x'));
 
-    static readonly Parser<char, char> linkHeadStart =
-        OneOf(Char('<'), Char('o'), Char('x'));
+    static readonly Parser<char> linkHeadStart =
+        OneOf(Literals.Char('<'), Literals.Char('o'), Literals.Char('x'));
 
     static FlowchartParser()
     {
         // Node shape parsers - returns (label, shape)
-        var doubleCircleShape = Shape("(((", ")))", NodeShape.DoubleCircle, _ => _ != ')');
-        var circleShape = Shape("((", "))", NodeShape.Circle, _ => _ != ')');
-        var stadiumShape = Shape("([", "])", NodeShape.Stadium, _ => _ != ']');
-        var subroutineShape = Shape("[[", "]]", NodeShape.Subroutine, _ => _ != ']');
-        var cylinderShape = Shape("[(", ")]", NodeShape.Cylinder, _ => _ != ')');
-        var hexagonShape = Shape("{{", "}}", NodeShape.Hexagon, _ => _ != '}');
-        var diamondShape = Shape("{", "}", NodeShape.Diamond, _ => _ != '}');
-        var roundedShape = Shape("(", ")", NodeShape.RoundedRectangle, _ => _ != ')');
-        var rectangleShape = Shape("[", "]", NodeShape.Rectangle, _ => _ != ']');
-        var asymmetricShape = Shape(">", "]", NodeShape.Asymmetric, _ => _ != ']');
+        var doubleCircleShape = Shape("(((", ")))", NodeShape.DoubleCircle, ")");
+        var circleShape = Shape("((", "))", NodeShape.Circle, ")");
+        var stadiumShape = Shape("([", "])", NodeShape.Stadium, "]");
+        var subroutineShape = Shape("[[", "]]", NodeShape.Subroutine, "]");
+        var cylinderShape = Shape("[(", ")]", NodeShape.Cylinder, ")");
+        var hexagonShape = Shape("{{", "}}", NodeShape.Hexagon, "}");
+        var diamondShape = Shape("{", "}", NodeShape.Diamond, "}");
+        var roundedShape = Shape("(", ")", NodeShape.RoundedRectangle, ")");
+        var rectangleShape = Shape("[", "]", NodeShape.Rectangle, "]");
+        var asymmetricShape = Shape(">", "]", NodeShape.Asymmetric, "]");
 
         // Slash/backslash framed shapes. Bare text excludes / \ ] so the closing token is unambiguous; the
         // opener (`[/` vs `[\`) and closer (`/]` vs `\]`) together pick parallelogram vs trapezoid.
-        static bool SlashShapeText(char ch) =>
-            ch != '/' && ch != '\\' && ch != ']';
+        const string slashShapeEnd = "/\\]";
 
-        var parallelogramShape = Shape("[/", "/]", NodeShape.Parallelogram, SlashShapeText);
-        var trapezoidShape = Shape("[/", "\\]", NodeShape.Trapezoid, SlashShapeText);
-        var parallelogramAltShape = Shape("[\\", "\\]", NodeShape.ParallelogramAlt, SlashShapeText);
-        var trapezoidAltShape = Shape("[\\", "/]", NodeShape.TrapezoidAlt, SlashShapeText);
+        var parallelogramShape = Shape("[/", "/]", NodeShape.Parallelogram, slashShapeEnd);
+        var trapezoidShape = Shape("[/", "\\]", NodeShape.Trapezoid, slashShapeEnd);
+        var parallelogramAltShape = Shape("[\\", "\\]", NodeShape.ParallelogramAlt, slashShapeEnd);
+        var trapezoidAltShape = Shape("[\\", "/]", NodeShape.TrapezoidAlt, slashShapeEnd);
 
         var nodeShapeParser =
             OneOf(
-                Try(doubleCircleShape),
-                Try(circleShape),
-                Try(stadiumShape),
-                Try(subroutineShape),
-                Try(cylinderShape),
-                Try(hexagonShape),
-                Try(diamondShape),
-                Try(roundedShape),
-                Try(asymmetricShape),
-                Try(parallelogramShape),
-                Try(trapezoidShape),
-                Try(parallelogramAltShape),
-                Try(trapezoidAltShape),
+                doubleCircleShape,
+                circleShape,
+                stadiumShape,
+                subroutineShape,
+                cylinderShape,
+                hexagonShape,
+                diamondShape,
+                roundedShape,
+                asymmetricShape,
+                parallelogramShape,
+                trapezoidShape,
+                parallelogramAltShape,
+                trapezoidAltShape,
                 rectangleShape
             );
 
         // Node id: letters, digits and underscores, plus a hyphen that sits between two of them (`my-node`).
         // A hyphen that starts a link is not part of the id, so `A-->B`, `A-.->B` and `A---B` split into
         // node, link, node without needing spaces around the link.
-        var idChar =
-            Token(_ => char.IsLetterOrDigit(_) || _ == '_');
+        var idChars =
+            Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_');
 
         var nodeId =
-            idChar
-                .Then(idChar.Or(Try(Char('-').Before(Lookahead(idChar)))).SkipMany())
-                .Slice((span, _) => span.ToString())
-                .Labelled("node id");
+            Capture(idChars.And(ZeroOrMany(Literals.Char('-').And(idChars))))
+                .AsString();
 
         // `@{ shape: cyl, label: "Database" }` - the body is handed to ApplyShapeAttributes as text. A
         // quoted value is taken whole, so it may contain a `}`.
         var shapeAttributes =
-            String("@{")
-                .Then(
-                    OneOf(
-                            Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"')).Select(_ => $"\"{_}\""),
-                            Token(_ => _ != '}' && _ != '"').AtLeastOnceString())
-                        .ManyString())
-                .Before(Char('}'));
+            Literals.Text("@{")
+                .SkipAnd(
+                    Capture(
+                        OneOf(
+                                Capture(Literals.Char('"').And(Literals.NoneOf("\"", minSize: 0)).And(Literals.Char('"'))),
+                                Literals.NoneOf("}\""))
+                            .Many()))
+                .AndSkip(Literals.Char('}'))
+                .AsString();
 
         // Node parser: identifier optionally followed by a shape and/or `@{ ... }` attributes, then an
         // optional `:::class` shorthand whose class name is recorded on the node and resolved against
         // `classDef` styles at model-build time.
         var nodeParser =
-            from id in nodeId
-            from shape in nodeShapeParser.Optional()
-            from attributes in Try(shapeAttributes).Optional()
-            from _class in Try(String(":::").Then(CommonParsers.Identifier)).Optional()
-            select BuildNode(id, shape, attributes, _class);
+            nodeId
+                .And(nodeShapeParser.Optional())
+                .And(shapeAttributes.Optional())
+                .And(Literals.Text(":::").SkipAnd(CommonParsers.Identifier).Optional())
+                .Map(BuildNode);
 
         // `A & B` - several nodes sharing the links on either side of the group.
         var nodeGroup =
-            from first in nodeParser
-            from more in Try(
-                CommonParsers.InlineWhitespace
-                    .Then(Char('&'))
-                    .Then(CommonParsers.InlineWhitespace)
-                    .Then(nodeParser)).Many()
-            select new List<Node>([first, .. more]);
+            nodeParser
+                .And(
+                    CommonParsers.InlineWhitespace
+                        .SkipAnd(Literals.Char('&'))
+                        .SkipAnd(CommonParsers.InlineWhitespace)
+                        .SkipAnd(nodeParser)
+                        .Many())
+                .Map((first, more) => new List<Node>([first, .. more]));
 
         // A dotted link closes with `.-`, `.->`, `..->` etc. - one dot per rank it should span.
         var dottedTail =
-            from dots in Char('.').SkipAtLeastOnce().Slice((span, _) => span.Length)
-            from dash in Char('-')
-            from head in linkHead.Optional()
-            select new LinkTail(ToNullable(head), dots);
+            Literals.AnyOf(".")
+                .AndSkip(Literals.Char('-'))
+                .And(linkHead.Optional())
+                .Map((dots, head) => new LinkTail(head.ToNullable(), dots.Length));
 
         var invisibleTail =
-            Char('~').SkipAtLeastOnce().Slice((span, _) => span.Length)
+            Literals.AnyOf("~")
+                .Then(static _ => _.Length)
                 .Assert(_ => _ >= 3, "an invisible link is at least three tildes")
-                .Select(_ => new LinkTail(null, _ - 2));
+                .Then(static _ => new LinkTail(null, _ - 2));
 
         // Contiguous links: `-->`, `---`, `--->`, `--o`, `-.->`, `==>`, `====`, `~~~`.
         var contiguousLink =
             OneOf(
-                Try(LineTail('-')).Select(_ => new LinkBody(EdgeStyle.Solid, _, null, false)),
-                Try(Char('-').Then(dottedTail)).Select(_ => new LinkBody(EdgeStyle.Dotted, _, null, false)),
-                Try(LineTail('=')).Select(_ => new LinkBody(EdgeStyle.Thick, _, null, false)),
-                invisibleTail.Select(_ => new LinkBody(EdgeStyle.Solid, _, null, true)));
+                LineTail('-').Then(static _ => new LinkBody(EdgeStyle.Solid, _, null, false)),
+                Literals.Char('-').SkipAnd(dottedTail).Then(static _ => new LinkBody(EdgeStyle.Dotted, _, null, false)),
+                LineTail('=').Then(static _ => new LinkBody(EdgeStyle.Thick, _, null, false)),
+                invisibleTail.Then(static _ => new LinkBody(EdgeStyle.Solid, _, null, true)));
 
         // Links carrying their label inline: `-- text -->`, `-. text .->`, `== text ==>`.
         var inlineLabeledLink =
             OneOf(
-                Try(InlineLabeled("--", EdgeStyle.Solid, LineTail('-'))),
-                Try(InlineLabeled("-.", EdgeStyle.Dotted, dottedTail)),
+                InlineLabeled("--", EdgeStyle.Solid, LineTail('-')),
+                InlineLabeled("-.", EdgeStyle.Dotted, dottedTail),
                 InlineLabeled("==", EdgeStyle.Thick, LineTail('=')));
 
         // A link is a contiguous arrow or an inline-labeled one, optionally opened by `<`, `o` or `x` for the
         // two-headed forms (`<-->`, `o--o`, `x--x`, `<-.->`, `<==>`). Contiguous is tried first so `-->`,
         // `-.->`, `==>` etc. never fall through to the slower inline scan.
         var linkParser =
-            from start in linkHeadStart.Optional()
-            from body in Try(contiguousLink).Or(inlineLabeledLink)
-            select ToLink(ToNullable(start), body);
+            linkHeadStart.Optional()
+                .And(contiguousLink.Or(inlineLabeledLink))
+                .Map((start, body) => ToLink(start.ToNullable(), body));
 
         // Edge label: |text|
         var edgeLabelParser =
-            Char('|')
-                .Then(Token(_ => _ != '|').ManyString())
-                .Before(Char('|'));
+            Between(Literals.Char('|'), Literals.NoneOf("|", minSize: 0), Literals.Char('|'))
+                .AsString();
 
         var flowchartDirection =
             OneOf(
-                Try(String("TB")).ThenReturn(Direction.TopToBottom),
-                Try(String("TD")).ThenReturn(Direction.TopToBottom),
-                Try(String("BT")).ThenReturn(Direction.BottomToTop),
-                Try(String("LR")).ThenReturn(Direction.LeftToRight),
-                String("RL").ThenReturn(Direction.RightToLeft)
+                Literals.Text("TB").Then(Direction.TopToBottom),
+                Literals.Text("TD").Then(Direction.TopToBottom),
+                Literals.Text("BT").Then(Direction.BottomToTop),
+                Literals.Text("LR").Then(Direction.LeftToRight),
+                Literals.Text("RL").Then(Direction.RightToLeft)
             );
 
         // Statement: A --> B & C --> D (a chain of node groups joined by links). Each further link is tried
         // as a unit, so whitespace trailing the last node is left for the end of the statement rather than
         // being taken as the start of a link that is not there.
+        var linkedGroup =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(edgeLabelParser.Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(linkParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(edgeLabelParser.Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(nodeGroup)
+                .Map((label1, link, label2, nodes) => (nodes, Link: WithPipeLabel(link, label1, label2)));
+
         var statementParser =
-            from first in nodeGroup
-            from rest in Try(
-                from _1 in CommonParsers.InlineWhitespace
-                from label1 in edgeLabelParser.Optional()
-                from _2 in CommonParsers.InlineWhitespace
-                from link in linkParser
-                from _3 in CommonParsers.InlineWhitespace
-                from label2 in edgeLabelParser.Optional()
-                from _4 in CommonParsers.InlineWhitespace
-                from nodes in nodeGroup
-                select (nodes, Link: WithPipeLabel(link, label1, label2))
-            ).Many()
-            select new NodeChainStatement(
-                [first, .. rest.Select(_ => _.nodes)],
-                rest.Select(_ => _.Link).ToList());
+            nodeGroup
+                .And(linkedGroup.Many())
+                .Map((first, rest) =>
+                    new NodeChainStatement(
+                        [first, .. rest.Select(_ => _.nodes)],
+                        rest.Select(_ => _.Link).ToList()));
 
         var nonWhitespaceToken =
-            Token(_ => _ != ' ' && _ != '\t' && _ != '\r' && _ != '\n').AtLeastOnceString();
+            Literals.NoneOf(" \t\r\n").AsString();
+
+        // The rest of the line as it is read, and as the string kept from it.
+        var restOfLineText =
+            Literals.NoneOf("\r\n", minSize: 0);
 
         var restOfLine =
-            Token(_ => _ != '\r' && _ != '\n').ManyString();
+            restOfLineText.AsString();
 
         var inlineGap =
-            Token(_ => _ is ' ' or '\t').SkipAtLeastOnce();
+            Literals.AnyOf(" \t");
 
         // What may follow a statement on its line: an optional `;`, then a comment, the end of the line or,
         // after a `;`, the next statement.
         var endOfLine =
-            Try(CommonParsers.Comment).Or(CommonParsers.LineEnd);
+            CommonParsers.Comment.Or(CommonParsers.LineEnd);
 
         var statementEnd =
             CommonParsers.InlineWhitespace
-                .Then(
+                .SkipAnd(
                     OneOf(
-                        Char(';')
-                            .Then(CommonParsers.InlineWhitespace)
-                            .Then(endOfLine.Optional())
-                            .ThenReturn(Unit.Value),
+                        Literals.Char(';')
+                            .SkipAnd(CommonParsers.InlineWhitespace)
+                            .SkipAnd(endOfLine.ZeroOrOne()),
                         endOfLine));
 
         // Style directive: `style NodeName fill:#color,stroke:#color` — applies an inline style to one element.
         var styleDirective =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in String("style")
-            from ___ in CommonParsers.RequiredWhitespace
-            from id in nonWhitespaceToken
-            from ____ in CommonParsers.RequiredWhitespace
-            from props in restOfLine
-            from lineEnd in CommonParsers.LineEnd
-            select new StyleStatement(id, props);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("style"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(nonWhitespaceToken)
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .And(restOfLine)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map((id, props) => new StyleStatement(id, props));
 
         // Class definition: `classDef className fill:#color,...` (className may be a comma-separated list).
         var classDefDirective =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in String("classDef")
-            from ___ in CommonParsers.RequiredWhitespace
-            from names in nonWhitespaceToken
-            from ____ in CommonParsers.RequiredWhitespace
-            from props in restOfLine
-            from lineEnd in CommonParsers.LineEnd
-            select new ClassDefStatement(names, props);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("classDef"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(nonWhitespaceToken)
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .And(restOfLine)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map((names, props) => new ClassDefStatement(names, props));
 
         // Class application: `class nodeId,nodeId2 className`.
         var classDirective =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in String("class")
-            from ___ in CommonParsers.RequiredWhitespace
-            from ids in nonWhitespaceToken
-            from ____ in CommonParsers.RequiredWhitespace
-            from className in nonWhitespaceToken
-            from _____ in CommonParsers.InlineWhitespace
-            from lineEnd in CommonParsers.LineEnd
-            select new ClassAssignStatement(ids, className);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("class"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(nonWhitespaceToken)
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .And(nonWhitespaceToken)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map((ids, className) => new ClassAssignStatement(ids, className));
 
         // Subgraph start: `subgraph id`, `subgraph id [Label]`, `subgraph "Title"` or `subgraph Some Title`.
         // The rest of the line is sorted into id and title by ParseSubgraphHeader.
         var subgraphStart =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("subgraph")
-            from header in inlineGap.Then(restOfLine).Or(Return(""))
-            from lineEnd in CommonParsers.LineEnd
-            select ParseSubgraphHeader(header);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("subgraph"))
+                .SkipAnd(inlineGap.SkipAnd(restOfLine).Else(""))
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(ParseSubgraphHeader);
 
         // Subgraph end: end
         var subgraphEnd =
-            from _ in CommonParsers.InlineWhitespace
-            from end in String("end")
-            from ___ in statementEnd
-            select new SubgraphEndStatement();
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("end"))
+                .SkipAnd(statementEnd)
+                .Then(static _ => new SubgraphEndStatement());
 
         // Direction statement, e.g. `direction LR` (sets the enclosing subgraph's direction, or the chart's).
         var directionStatement =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("direction")
-            from __ in CommonParsers.RequiredWhitespace
-            from dir in flowchartDirection
-            from ___ in statementEnd
-            select new DirectionStatement(dir);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("direction"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(flowchartDirection)
+                .AndSkip(statementEnd)
+                .Then(static _ => new DirectionStatement(_));
 
         // Link style: `linkStyle 0 stroke:#f00`, `linkStyle 1,2 ...` or `linkStyle default ...`. Links are
         // numbered in the order they are written, from zero.
         var linkStyleDirective =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in String("linkStyle")
-            from ___ in CommonParsers.RequiredWhitespace
-            from targets in Try(String("default"))
-                .Or(Digit.AtLeastOnceString())
-                .SeparatedAtLeastOnce(
-                    Try(CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace)))
-            from ____ in CommonParsers.RequiredWhitespace
-            from props in restOfLine
-            from lineEnd in CommonParsers.LineEnd
-            select new LinkStyleStatement(targets.ToList(), props);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("linkStyle"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(
+                    Separated(
+                        CommonParsers.InlineWhitespace.SkipAnd(Literals.Char(',')).SkipAnd(CommonParsers.InlineWhitespace),
+                        Literals.Text("default").Or(Literals.Pattern(char.IsDigit).AsString())))
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .And(restOfLine)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map((targets, props) => new LinkStyleStatement(targets.ToList(), props));
 
         // Directives that are valid Mermaid but change nothing in what is drawn here: interaction (`click`)
         // and the accessibility title/description. Naming them keeps them
@@ -268,87 +273,83 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         // skip, so a statement the parser cannot read is reported instead of vanishing from the diagram.
         var ignoredKeyword =
             OneOf(
-                Try(String("click")),
-                Try(String("accTitle")),
-                String("accDescr"));
+                Literals.Text("click"),
+                Literals.Text("accTitle"),
+                Literals.Text("accDescr"));
 
         var ignoredDirective =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in ignoredKeyword
-            from boundary in Lookahead(Token(_ => _ is ' ' or '\t' or ':'))
-            from rest in restOfLine
-            from lineEnd in CommonParsers.LineEnd
-            select Unit.Value;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(ignoredKeyword.WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1)))
+                .SkipAnd(restOfLineText)
+                .SkipAnd(CommonParsers.LineEnd);
 
         // `accDescr { ... }` may run over several lines.
         var multiLineDescription =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("accDescr")
-            from __ in CommonParsers.InlineWhitespace
-            from open in Char('{')
-            from text in Token(_ => _ != '}').SkipMany()
-            from close in Char('}')
-            from ___ in CommonParsers.InlineWhitespace
-            from lineEnd in CommonParsers.LineEnd
-            select Unit.Value;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("accDescr"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(Literals.Char('{'))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd);
 
         // Empty lines, comments and the ignored directives.
         var skipLine =
             OneOf(
-                Try(multiLineDescription),
-                Try(ignoredDirective),
-                CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline))
+                multiLineDescription,
+                ignoredDirective,
+                CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Comment.Or(CommonParsers.Newline))
             );
 
         var nodeStatement =
             CommonParsers.InlineWhitespace
-                .Then(statementParser)
-                .Before(statementEnd);
+                .SkipAnd(statementParser)
+                .AndSkip(statementEnd);
 
         var item = OneOf(
-            Try(subgraphStart.Select<FlowStatement?>(_ => _)),
-            Try(subgraphEnd.Select<FlowStatement?>(_ => _)),
-            Try(directionStatement.Select<FlowStatement?>(_ =>  _)),
+            subgraphStart.Then<FlowStatement?>(static _ => _),
+            subgraphEnd.Then<FlowStatement?>(static _ => _),
+            directionStatement.Then<FlowStatement?>(static _ => _),
             // classDef before class (the latter is a prefix of the former); both before nodeStatement so a
             // styling line is never mis-parsed as a node named "class"/"style".
-            Try(classDefDirective.Select<FlowStatement?>(_ =>  _)),
-            Try(classDirective.Select<FlowStatement?>(_ => _)),
-            Try(styleDirective.Select<FlowStatement?>(_ => _)),
-            Try(linkStyleDirective.Select<FlowStatement?>(_ => _)),
-            Try(nodeStatement.Select<FlowStatement?>(_ => _)),
-            skipLine.Select<FlowStatement?>(_ => null));
+            classDefDirective.Then<FlowStatement?>(static _ => _),
+            classDirective.Then<FlowStatement?>(static _ => _),
+            styleDirective.Then<FlowStatement?>(static _ => _),
+            linkStyleDirective.Then<FlowStatement?>(static _ => _),
+            nodeStatement.Then<FlowStatement?>(static _ => _),
+            skipLine.Then<FlowStatement?>(static _ => null));
 
         // The statements must account for the whole input. Without the end-of-input check a line no rule
         // matches would just end the list, and everything after it would be dropped without an error.
         var endOfInput =
-            Try(CommonParsers.InlineWhitespace.Then(End));
+            CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.End);
 
         parser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in Try(String("flowchart")).Or(String("graph"))
-            from __ in CommonParsers.InlineWhitespace
-            from direction in flowchartDirection.Optional()
-            from ___ in statementEnd
-            from statements in item.ManyThen(endOfInput)
-            select BuildModel(
-                direction.GetValueOrDefault(Direction.TopToBottom),
-                statements.Item1.OfType<FlowStatement>().ToList());
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("flowchart").Or(Literals.Text("graph")))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(flowchartDirection.Else(Direction.TopToBottom))
+                .AndSkip(statementEnd)
+                .And(item.Many())
+                .AndSkip(endOfInput)
+                .Map((direction, statements) =>
+                    BuildModel(direction, statements.OfType<FlowStatement>().ToList()));
     }
 
     // A node shape: its opening token, its text, its closing token. The text is either a quoted string -
     // the quotes are dropped, and inside them the characters that would otherwise close the shape are
-    // just text, as in `A["array[0] (first)"]` - or bare text running up to the closing token.
-    static Parser<char, (string, NodeShape)> Shape(string open, string close, NodeShape shape, Func<char, bool> bare) =>
-        String(open)
-            .Then(
-                Try(
-                        CommonParsers.InlineWhitespace
-                            .Then(CommonParsers.DoubleQuotedString)
-                            .Before(CommonParsers.InlineWhitespace)
-                            .Before(Lookahead(Try(String(close)))))
-                    .Or(Token(bare).ManyString()))
-            .Before(String(close))
-            .Select(text => (text, shape));
+    // just text, as in `A["array[0] (first)"]` - or bare text running up to the first of `bareEnd`.
+    static Parser<(string, NodeShape)> Shape(string open, string close, NodeShape shape, string bareEnd) =>
+        Literals.Text(open)
+            .SkipAnd(
+                CommonParsers.InlineWhitespace
+                    .SkipAnd(CommonParsers.DoubleQuotedString)
+                    .AndSkip(CommonParsers.InlineWhitespace)
+                    .WhenFollowedBy(Literals.Text(close))
+                    .Or(Literals.NoneOf(bareEnd, minSize: 0).AsString()))
+            .AndSkip(Literals.Text(close))
+            .Then(_ => (_, shape));
 
     // An edge label written in quotes is shown without them.
     static string Unquote(string label)
@@ -362,23 +363,14 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         return label;
     }
 
-    static char? ToNullable(Maybe<char> value)
-    {
-        if (value.HasValue)
-        {
-            return value.Value;
-        }
-
-        return null;
-    }
-
     // The closing run of a solid (`-`) or thick (`=`) link: `-->`, `--->`, `--o`, `---`, `----`. Each
-    // character beyond the shortest spelling asks for one more rank between the two nodes.
-    static Parser<char, LinkTail> LineTail(char line) =>
-        (from run in Char(line).SkipAtLeastOnce().Slice((span, _) => span.Length)
-            from head in linkHead.Optional()
-            select ToLineTail(run, ToNullable(head)))
-        .Assert(_ => _.Length > 0, "a link needs two line characters and a head, or three without one");
+    // character beyond the shortest spelling asks for one more rank between the two nodes. A link needs
+    // two line characters and a head, or three without one.
+    static Parser<LinkTail> LineTail(char line) =>
+        Literals.AnyOf(line.ToString())
+            .And(linkHead.Optional())
+            .Map((run, head) => ToLineTail(run.Length, head.ToNullable()))
+            .When(static (_, tail) => tail.Length > 0);
 
     static LinkTail ToLineTail(int run, char? head)
     {
@@ -392,11 +384,11 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
 
     // Inline edge label, e.g. `-- text -->`, `-. text .->`, `== text ==>`. The text runs up to the first
     // place the closing run matches, which also fixes the head and the length.
-    static Parser<char, LinkBody> InlineLabeled(string start, EdgeStyle style, Parser<char, LinkTail> tail) =>
-        from open in String(start)
-        from text in Token(_ => _ != '\r' && _ != '\n').Until(Lookahead(Try(tail)))
-        from close in tail
-        select new LinkBody(style, close, NullIfEmpty(Unquote(new string(text.ToArray()).Trim())), false);
+    static Parser<LinkBody> InlineLabeled(string start, EdgeStyle style, Parser<LinkTail> tail) =>
+        Literals.Text(start)
+            .SkipAnd(LineBefore(tail))
+            .And(tail)
+            .Map((text, close) => new LinkBody(style, close, NullIfEmpty(Unquote(text.Span.Trim().ToString())), false));
 
     static string? NullIfEmpty(string text)
     {
@@ -437,7 +429,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         };
 
     // A `|text|` label before the link wins over an inline one, which wins over a `|text|` after it.
-    static Link WithPipeLabel(Link link, Maybe<string> before, Maybe<string> after)
+    static Link WithPipeLabel(Link link, Option<string> before, Option<string> after)
     {
         if (before.HasValue)
         {
@@ -454,9 +446,9 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
 
     static Node BuildNode(
         string id,
-        Maybe<(string Label, NodeShape Shape)> shape,
-        Maybe<string> attributes,
-        Maybe<string> styleClass)
+        Option<(string Label, NodeShape Shape)> shape,
+        Option<string> attributes,
+        Option<string> styleClass)
     {
         var node = new Node
         {
@@ -999,7 +991,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         return double.TryParse(trimmed, NumberStyles.Float, CultureInfo.InvariantCulture, out width);
     }
 
-    public Result<char, FlowchartModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<FlowchartModel> Parse(string input) => parser.ParseDiagram(input);
 
     // The closing run of a link: the head it ends in (`>`, `o`, `x`, or none) and the ranks it spans.
     readonly record struct LinkTail(char? Head, int Length);

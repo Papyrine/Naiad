@@ -3,57 +3,70 @@ class TreemapParser : IDiagramParser<TreemapModel>
     // Node line
     internal record NodeLine(int Indent, string Name, double? Value, string? CssClass);
 
-    static Parser<char, TreemapModel> parser;
+    static Parser<TreemapModel> parser;
 
     static TreemapParser()
     {
         // Quoted string: "text"
         var quotedString =
-            Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
+            Between(Literals.Char('"'), Literals.NoneOf("\"", minSize: 0), Literals.Char('"'))
+                .AsString();
 
         // Number
         var number = CommonParsers.SignedDecimal;
 
         // CSS class: :::className
         var cssClass =
-            String(":::").Then(Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString());
+            Literals.Text(":::")
+                .SkipAnd(Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AsString());
+
+        // Where a value or a class is left out, what comes next is neither a blank nor a colon: either
+        // of those has to lead into the value or the class. So a name takes a class only after a value
+        // (`"Name":::class` is not read), and blanks may end a line only after a class.
+        var leftOut =
+            Not(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1));
+
+        // A node with no value is given 0.
+        var value =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Char(':'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(number)
+                .Or(leftOut.Then(0d));
+
+        var cssClassName =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(cssClass)
+                .Then<string?>(static _ => _)
+                .Or(leftOut.Then<string?>(static _ => null));
 
         var nodeLineParser =
-            from indent in CommonParsers.Indentation
-            from name in quotedString
-            from value in (
-                from _ in CommonParsers.InlineWhitespace
-                from __ in Char(':')
-                from ___ in CommonParsers.InlineWhitespace
-                from v in number
-                select v
-            ).Optional()
-            from cssClassName in (
-                from _ in CommonParsers.InlineWhitespace
-                from cls in cssClass
-                select cls
-            ).Optional()
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CommonParsers.LineEnd
-            select new NodeLine(indent, name, value.GetValueOrDefault(), cssClassName.GetValueOrDefault());
+            CommonParsers.Indentation
+                .And(quotedString)
+                .And(value)
+                .And(cssClassName)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map((indent, name, nodeValue, className) => new NodeLine(indent, name, nodeValue, className));
 
         // Skip line
         var skipLine =
-            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+            CommonParsers.InlineWhitespace
+                .SkipAnd(CommonParsers.Comment.Or(CommonParsers.Newline));
 
         // Content item
         var contentItem =
-            Try(nodeLineParser.Select<NodeLine?>(_ => _))
-                .Or(skipLine.ThenReturn<NodeLine?>(null));
+            nodeLineParser.Then<NodeLine?>(static _ => _)
+                .Or(skipLine.Then<NodeLine?>(static _ => null));
 
         parser =
-            from whitespance in CommonParsers.InlineWhitespace
-            from ciString in CommonParsers.BetaKeyword("treemap")
-            from innerWhitespace in CommonParsers.InlineWhitespace
-            from lineEnd in CommonParsers.LineEnd
-            from lines in contentItem.ManyThen(End)
-            select BuildModel(lines.Item1.Where(_ => _ != null).ToList());
+            CommonParsers.InlineWhitespace
+                .SkipAnd(CommonParsers.BetaKeyword("treemap"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd)
+                .SkipAnd(contentItem.Many())
+                .AndSkip(CommonParsers.End)
+                .Then(static _ => BuildModel(_.OfType<NodeLine>().ToList()));
     }
 
     static TreemapModel BuildModel(List<NodeLine> lines)
@@ -94,5 +107,5 @@ class TreemapParser : IDiagramParser<TreemapModel>
         return model;
     }
 
-    public Result<char, TreemapModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<TreemapModel> Parse(string input) => parser.ParseDiagram(input);
 }

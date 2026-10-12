@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pidgin" />
+    <PackageReference Include="Parlot" />
     <PackageReference Include="Polyfill" PrivateAssets="all" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <PackageReference Include="SponsorCheck" PrivateAssets="all" />

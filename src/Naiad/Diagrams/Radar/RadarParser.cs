@@ -1,132 +1,139 @@
 class RadarParser : IDiagramParser<RadarModel>
 {
-    static Parser<char, RadarModel> parser;
+    static Parser<RadarModel> parser;
 
     static RadarParser()
     {
         var identifier =
-            Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
+            Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AsString();
 
         var number = CommonParsers.SignedDecimal;
 
         var listSeparator =
-            CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace);
+            CommonParsers.InlineWhitespace.SkipAnd(Literals.Char(',')).SkipAnd(CommonParsers.InlineWhitespace);
 
-        // Label: ["label"] or [label]
+        // Label: ["label"] or [label]. An opening quote makes it the quoted form: one that is never
+        // closed is not read as plain text instead.
         var label =
-            Char('[')
-                .Then(CommonParsers.DoubleQuotedString.Or(Token(_ => _ != ']' && _ != '\r' && _ != '\n').ManyString()))
-                .Before(Char(']'))
-                .Select(_ => _.Trim());
+            Between(
+                    Literals.Char('['),
+                    CommonParsers.DoubleQuotedString
+                        .Or(Not(Literals.Char('"')).SkipAnd(Literals.NoneOf("]\r\n", minSize: 0)).AsString()),
+                    Literals.Char(']'))
+                .Then(static _ => _.Trim());
 
         // Axis: id or id["label"]
         var axisItemParser =
-            from id in identifier
-            from text in Try(CommonParsers.InlineWhitespace.Then(label)).Optional()
-            select new RadarAxis
-            {
-                Id = id,
-                Label = text.GetValueOrDefault() ?? id
-            };
+            identifier
+                .And(CommonParsers.InlineWhitespace.SkipAnd(label).Optional())
+                .Map(static (id, text) =>
+                    new RadarAxis
+                    {
+                        Id = id,
+                        Label = text.OrNull() ?? id
+                    });
 
         // Axis list: axis id1, id2["label"], id3
         var axisParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("axis")
-            from ___ in CommonParsers.RequiredWhitespace
-            from axes in axisItemParser.SeparatedAtLeastOnce(Try(listSeparator))
-            from ____ in CommonParsers.InlineWhitespace
-            from _____ in CommonParsers.LineEnd
-            select axes.ToList();
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("axis"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(Separated(listSeparator, axisItemParser))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(static _ => _.ToList());
 
         // A value, optionally named for the axis it belongs to: 85 or math: 85
         var entryParser =
-            from axis in Try(identifier.Before(CommonParsers.InlineWhitespace).Before(Char(':'))).Optional()
-            from _ in CommonParsers.InlineWhitespace
-            from value in number
-            select new Entry(axis.GetValueOrDefault(), value);
+            identifier.AndSkip(CommonParsers.InlineWhitespace).AndSkip(Literals.Char(':')).Optional()
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(number)
+                .Map(static (axis, value) => new Entry(axis.OrNull(), value));
 
         // Value list: {1, 2, 3} or {math: 1, art: 2}. It may run over several lines.
         var valueList =
-            Char('{')
-                .Then(SkipWhitespaces)
-                .Then(entryParser.SeparatedAtLeastOnce(Try(SkipWhitespaces.Then(Char(',')).Then(SkipWhitespaces))))
-                .Before(SkipWhitespaces)
-                .Before(Char('}'))
-                .Select(_ => _.ToList());
+            Literals.Char('{')
+                .SkipAnd(ZeroOrMore(char.IsWhiteSpace))
+                .SkipAnd(
+                    Separated(
+                        ZeroOrMore(char.IsWhiteSpace).SkipAnd(Literals.Char(',')).SkipAnd(ZeroOrMore(char.IsWhiteSpace)),
+                        entryParser))
+                .AndSkip(ZeroOrMore(char.IsWhiteSpace))
+                .AndSkip(Literals.Char('}'))
+                .Then(static _ => _.ToList());
 
         // Curve definition: curve id["label"]{1, 2, 3}
         var curveItemParser =
-            from id in identifier
-            from text in Try(CommonParsers.InlineWhitespace.Then(label)).Optional()
-            from _ in CommonParsers.InlineWhitespace
-            from values in valueList
-            select new CurveSpec(id, text.GetValueOrDefault() ?? id, values);
+            identifier
+                .And(CommonParsers.InlineWhitespace.SkipAnd(label).Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(valueList)
+                .Map(static (id, text, values) => new CurveSpec(id, text.OrNull() ?? id, values));
 
         // Curve line: curve id1["label"]{1, 2, 3}, id2{4, 5, 6}
         var curveLineParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("curve")
-            from ___ in CommonParsers.RequiredWhitespace
-            from curves in curveItemParser.SeparatedAtLeastOnce(Try(listSeparator))
-            from ____ in CommonParsers.InlineWhitespace
-            from _____ in CommonParsers.LineEnd
-            select curves.ToList();
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("curve"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(Separated(listSeparator, curveItemParser))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(static _ => _.ToList());
 
         var titleParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("title")
-            from ___ in CommonParsers.RequiredWhitespace
-            from title in Token(_ => _ != '\r' && _ != '\n').ManyString()
-            from ____ in CommonParsers.LineEnd
-            select title.Trim();
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("title"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(Literals.NoneOf("\r\n", minSize: 0))
+                .AndSkip(CommonParsers.LineEnd)
+                .AsTrimmedString();
 
         // Options: max 100, min 0, ticks 5, graticule polygon, showLegend false
         var optionValue =
             OneOf(
-                Try(CIString("max").Then(CommonParsers.RequiredWhitespace).Then(number))
-                    .Select<Action<RadarModel>>(value => model => model.Max = value),
-                Try(CIString("min").Then(CommonParsers.RequiredWhitespace).Then(number))
-                    .Select<Action<RadarModel>>(value => model => model.Min = value),
-                Try(CIString("ticks").Then(CommonParsers.RequiredWhitespace).Then(CommonParsers.UnsignedInt))
-                    .Select<Action<RadarModel>>(value => model => model.Ticks = Math.Max(1, value)),
-                Try(CIString("graticule").Then(CommonParsers.RequiredWhitespace).Then(
-                        Try(CIString("polygon")).ThenReturn(GraticuleType.Polygon)
-                            .Or(CIString("circle").ThenReturn(GraticuleType.Circle))))
-                    .Select<Action<RadarModel>>(value => model => model.Graticule = value),
-                CIString("showLegend").Then(CommonParsers.RequiredWhitespace).Then(
-                        Try(CIString("true")).ThenReturn(true)
-                            .Or(CIString("false").ThenReturn(false)))
-                    .Select<Action<RadarModel>>(value => model => model.ShowLegend = value));
+                TextIgnoreCase("max").SkipAnd(CommonParsers.RequiredWhitespace).SkipAnd(number)
+                    .Then<Action<RadarModel>>(static _ => model => model.Max = _),
+                TextIgnoreCase("min").SkipAnd(CommonParsers.RequiredWhitespace).SkipAnd(number)
+                    .Then<Action<RadarModel>>(static _ => model => model.Min = _),
+                TextIgnoreCase("ticks").SkipAnd(CommonParsers.RequiredWhitespace).SkipAnd(CommonParsers.UnsignedInt)
+                    .Then<Action<RadarModel>>(static _ => model => model.Ticks = Math.Max(1, _)),
+                TextIgnoreCase("graticule").SkipAnd(CommonParsers.RequiredWhitespace).SkipAnd(
+                        TextIgnoreCase("polygon").Then(GraticuleType.Polygon)
+                            .Or(TextIgnoreCase("circle").Then(GraticuleType.Circle)))
+                    .Then<Action<RadarModel>>(static _ => model => model.Graticule = _),
+                TextIgnoreCase("showLegend").SkipAnd(CommonParsers.RequiredWhitespace).SkipAnd(
+                        TextIgnoreCase("true").Then(true)
+                            .Or(TextIgnoreCase("false").Then(false)))
+                    .Then<Action<RadarModel>>(static _ => model => model.ShowLegend = _));
 
         var optionParser =
-            from _ in CommonParsers.InlineWhitespace
-            from option in optionValue
-            from __ in CommonParsers.InlineWhitespace
-            from ___ in CommonParsers.LineEnd
-            select option;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(optionValue)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd);
 
         var skipLine =
-            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+            CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Comment)
+                .Or(CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Newline));
 
         // Content item
         var contentItem =
             OneOf(
-                Try(titleParser.Select<IRadarContent?>(_ => new TitleItem(_))),
-                Try(axisParser.Select<IRadarContent?>(_ => new AxisItem(_))),
-                Try(curveLineParser.Select<IRadarContent?>(_ => new CurveItem(_))),
-                Try(optionParser.Select<IRadarContent?>(_ => new OptionItem(_))),
-                skipLine.ThenReturn<IRadarContent?>(null)
+                titleParser.Then<IRadarContent?>(static _ => new TitleItem(_)),
+                axisParser.Then<IRadarContent?>(static _ => new AxisItem(_)),
+                curveLineParser.Then<IRadarContent?>(static _ => new CurveItem(_)),
+                optionParser.Then<IRadarContent?>(static _ => new OptionItem(_)),
+                skipLine.Then<IRadarContent?>(static _ => null)
             );
 
         parser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CommonParsers.BetaKeyword("radar")
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in CommonParsers.LineEnd
-            from result in contentItem.ManyThen(End)
-            select BuildModel(result.Item1);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(CommonParsers.BetaKeyword("radar"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd)
+                .SkipAnd(contentItem.Many())
+                .AndSkip(CommonParsers.End)
+                .Then(BuildModel);
     }
 
     static RadarModel BuildModel(IEnumerable<IRadarContent?> content)
@@ -194,7 +201,7 @@ class RadarParser : IDiagramParser<RadarModel>
         return axes.Select(_ => named.GetValueOrDefault(_.Id));
     }
 
-    public Result<char, RadarModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<RadarModel> Parse(string input) => parser.ParseDiagram(input);
 
     readonly record struct Entry(string? Axis, double Value);
     sealed record CurveSpec(string Id, string Label, List<Entry> Entries);

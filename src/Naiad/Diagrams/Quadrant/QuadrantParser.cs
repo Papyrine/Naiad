@@ -1,116 +1,118 @@
 class QuadrantParser : IDiagramParser<QuadrantModel>
 {
-    static Parser<char, QuadrantModel> parser;
+    static Parser<QuadrantModel> parser;
 
     static QuadrantParser()
     {
         var restOfLine =
-            Token(_ => _ != '\r' && _ != '\n').ManyString();
+            Literals.NoneOf("\r\n", minSize: 0).AsTrimmedString();
 
         // Title: title My Chart
         var titleParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("title")
-            from ___ in CommonParsers.RequiredWhitespace
-            from title in restOfLine
-            from ____ in CommonParsers.LineEnd
-            select title.Trim();
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("title"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(restOfLine)
+                .AndSkip(CommonParsers.LineEnd);
 
         // X-axis: x-axis Low --> High
         var xAxisParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("x-axis")
-            from ___ in CommonParsers.RequiredWhitespace
-            from left in Token(_ => _ is not '-').AtLeastOnceString()
-                .Where(s => !s.TrimEnd().EndsWith('-'))
-                .Or(Token(_ => _ != '\r' && _ != '\n' && _ != '-').ManyString())
-            from arrow in String("-->")
-            from ____ in CommonParsers.InlineWhitespace
-            from right in restOfLine
-            from _____ in CommonParsers.LineEnd
-            select (left: left.Trim().TrimEnd('-').Trim(), right: right.Trim());
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("x-axis"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(
+                    Literals.NoneOf("-").AsString()
+                        .When(static (_, text) => !text.TrimEnd().EndsWith('-'))
+                        .Or(Literals.NoneOf("\r\n-", minSize: 0).AsString()))
+                .AndSkip(Literals.Text("-->"))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(restOfLine)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map((left, right) => (left: left.Trim().TrimEnd('-').Trim(), right));
 
         // Y-axis: y-axis Low --> High
         var yAxisParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("y-axis")
-            from ___ in CommonParsers.RequiredWhitespace
-            from bottom in Token(_ => _ is not '-').AtLeastOnceString()
-                .Where(s => !s.TrimEnd().EndsWith('-'))
-                .Or(Token(_ => _ != '\r' && _ != '\n' && _ != '-').ManyString())
-            from arrow in String("-->")
-            from ____ in CommonParsers.InlineWhitespace
-            from top in restOfLine
-            from _____ in CommonParsers.LineEnd
-            select (bottom: bottom.Trim().TrimEnd('-').Trim(), top: top.Trim());
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("y-axis"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(
+                    Literals.NoneOf("-").AsString()
+                        .When(static (_, text) => !text.TrimEnd().EndsWith('-'))
+                        .Or(Literals.NoneOf("\r\n-", minSize: 0).AsString()))
+                .AndSkip(Literals.Text("-->"))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(restOfLine)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map((bottom, top) => (bottom: bottom.Trim().TrimEnd('-').Trim(), top));
 
         // Quadrant labels: quadrant-1 Label
         var quadrantLabelParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("quadrant-")
-            from num in Digit.Select(_ => _ - '0')
-            from ___ in CommonParsers.RequiredWhitespace
-            from label in restOfLine
-            from ____ in CommonParsers.LineEnd
-            select (quadrant: num, label: label.Trim());
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("quadrant-"))
+                .SkipAnd(Literals.Pattern(char.IsDigit, minSize: 1, maxSize: 1))
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .And(restOfLine)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map((digit, label) => (quadrant: digit.Span[0] - '0', label));
 
         // Coordinate value. Mirrors Mermaid's lexer rule (1)|(0(\.\d+)?): either a bare 1, or a 0 with
         // an optional fraction. Anything else (1.0, 1.5, 2, -3, ...) fails to parse, exactly as mermaid.js
         // rejects it with a lexical error — so a parsed value is always within [0, 1].
         var coordinateParser =
-            Char('1').ThenReturn(1d)
+            Literals.Char('1').Then(1d)
                 .Or(
                     // Parse the matched 0 / 0.x span directly instead of building a "0."+frac string.
-                    Char('0')
-                        .Then(Try(Char('.').Then(Digit.SkipAtLeastOnce())).Optional())
-                        .Slice((span, _) => double.Parse(span, NumberStyles.Float, CultureInfo.InvariantCulture)));
+                    Capture(Literals.Char('0').And(Literals.Char('.').And(Literals.AnyOf("0123456789")).Optional()))
+                        .Then(static _ => double.Parse(_.Span, NumberStyles.Float, CultureInfo.InvariantCulture)));
 
         // Point: Name: [0.5, 0.7]
         var pointParser =
-            from _ in CommonParsers.InlineWhitespace
-            from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
-            from __ in Char(':')
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in Char('[')
-            from _____ in CommonParsers.InlineWhitespace
-            from x in coordinateParser
-            from ______ in CommonParsers.InlineWhitespace
-            from _______ in Char(',')
-            from ________ in CommonParsers.InlineWhitespace
-            from y in coordinateParser
-            from _________ in CommonParsers.InlineWhitespace
-            from __________ in Char(']')
-            from ___________ in CommonParsers.InlineWhitespace
-            from ____________ in CommonParsers.LineEnd
-            select new QuadrantPoint
-            {
-                Name = name.Trim(),
-                X = x,
-                Y = y
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.NoneOf(":\r\n").AsTrimmedString())
+                .AndSkip(Literals.Char(':'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('['))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(coordinateParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char(','))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(coordinateParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char(']'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map((name, x, y) =>
+                    new QuadrantPoint
+                    {
+                        Name = name,
+                        X = x,
+                        Y = y
+                    });
 
         // Skip line (comments, empty lines)
         var skipLine =
-            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+            CommonParsers.InlineWhitespace
+                .SkipAnd(CommonParsers.Comment.Or(CommonParsers.Newline));
 
         var contentItem =
             OneOf(
-                Try(titleParser.Select<IQuadrantContent?>(_ => new TitleItem(_))),
-                Try(xAxisParser.Select<IQuadrantContent?>(_ => new XAxisItem(_.left, _.right))),
-                Try(yAxisParser.Select<IQuadrantContent?>(_ => new YAxisItem(_.bottom, _.top))),
-                Try(quadrantLabelParser.Select<IQuadrantContent?>(_ => new QuadrantLabelItem(_.quadrant, _.label))),
-                Try(pointParser.Select<IQuadrantContent?>(_ => new PointItem(_))),
-                skipLine.ThenReturn<IQuadrantContent?>(null)
+                titleParser.Then<IQuadrantContent?>(static _ => new TitleItem(_)),
+                xAxisParser.Then<IQuadrantContent?>(static _ => new XAxisItem(_.left, _.right)),
+                yAxisParser.Then<IQuadrantContent?>(static _ => new YAxisItem(_.bottom, _.top)),
+                quadrantLabelParser.Then<IQuadrantContent?>(static _ => new QuadrantLabelItem(_.quadrant, _.label)),
+                pointParser.Then<IQuadrantContent?>(static _ => new PointItem(_)),
+                skipLine.Then<IQuadrantContent?>(static _ => null)
             );
 
         parser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("quadrantChart")
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in CommonParsers.LineEnd
-            from result in contentItem.ManyThen(End)
-            select BuildModel(result.Item1);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("quadrantChart"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd)
+                .SkipAnd(contentItem.Many())
+                .AndSkip(CommonParsers.End)
+                .Then(BuildModel);
     }
 
     static QuadrantModel BuildModel(IEnumerable<IQuadrantContent?> content)
@@ -154,7 +156,7 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
         return model;
     }
 
-    public Result<char, QuadrantModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<QuadrantModel> Parse(string input) => parser.ParseDiagram(input);
 
     internal interface IQuadrantContent;
     readonly record struct TitleItem(string Value) : IQuadrantContent;

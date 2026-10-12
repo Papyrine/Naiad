@@ -1,363 +1,367 @@
 class ClassParser : IDiagramParser<ClassModel>
 {
-    static Parser<char, ClassModel> parser;
+    static Parser<ClassModel> parser;
 
     // One member line, as written in a class body or after `ClassName :`.
-    static Parser<char, IClassBodyContent> memberLine;
+    static Parser<IClassBodyContent> memberLine;
 
     static ClassParser()
     {
         // Spaces and tabs only. Whitespace that may span a newline would let a member's type bind to the
         // name on the *following* line, merging bodies such as an enumeration's one-value-per-line list.
         var inlineGap =
-            Token(_ => _ is ' ' or '\t').SkipAtLeastOnce();
+            Literals.AnyOf(" \t");
 
         // Letters, digits and underscores, plus a hyphen between two of them (`Order-Line`). A hyphen that
         // starts a relationship line is not part of the name.
-        var idChar =
-            Token(_ => char.IsLetterOrDigit(_) || _ == '_');
+        var idChars =
+            Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_');
 
         var identifier =
-            idChar
-                .Then(idChar.Or(Try(Char('-').Before(Lookahead(idChar)))).SkipMany())
-                .Slice((span, _) => span.ToString())
-                .Labelled("class identifier");
+            Capture(idChars.And(ZeroOrMany(Literals.Char('-').And(idChars))))
+                .AsString();
 
         // A name in backticks may hold anything, spaces and punctuation included.
         var backtickName =
-            Char('`')
-                .Then(Token(_ => _ != '`' && _ != '\r' && _ != '\n').AtLeastOnceString())
-                .Before(Char('`'));
+            Between(Literals.Char('`'), Literals.NoneOf("`\r\n"), Literals.Char('`'))
+                .AsString();
 
         // Mermaid spells generics ~T~. The tilde form is display only, so a class is keyed on its bare
         // name and `IRepository~T~` in a relationship resolves to the `class IRepository~T~` declaration.
         var genericArgument =
-            Char('~')
-                .Then(Token(_ => _ != '~' && _ != '\r' && _ != '\n').AtLeastOnceString())
-                .Before(Char('~'));
+            Between(Literals.Char('~'), Literals.NoneOf("~\r\n"), Literals.Char('~'))
+                .AsString();
 
         var className =
-            backtickName.Select(_ => new ClassName(_, null))
+            backtickName.Then(static _ => new ClassName(_, null))
                 .Or(
-                    from id in identifier
-                    from generic in Try(genericArgument).Optional()
-                    select new ClassName(id, generic.HasValue ? $"{id}<{generic.Value}>" : null));
+                    identifier
+                        .And(genericArgument.Optional())
+                        .Map(static (id, generic) =>
+                            new ClassName(id, generic.HasValue ? $"{id}<{generic.Value}>" : null)));
 
         var visibilityParser =
             OneOf(
-                Char('+').ThenReturn(Visibility.Public),
-                Char('-').ThenReturn(Visibility.Private),
-                Char('#').ThenReturn(Visibility.Protected),
-                Char('~').ThenReturn(Visibility.PackagePrivate)
+                Literals.Char('+').Then(Visibility.Public),
+                Literals.Char('-').Then(Visibility.Private),
+                Literals.Char('#').Then(Visibility.Protected),
+                Literals.Char('~').Then(Visibility.PackagePrivate)
             );
 
         // A type name, including a ~T~ generic argument, which is normalised to angle brackets.
         var typeName =
-            Token(_ => char.IsLetterOrDigit(_) || _ is '_' or '<' or '>' or '[' or ']' or ',' or '~')
-                .AtLeastOnceString()
-                .Select(NormalizeGenerics);
+            Literals.Pattern(
+                    static _ => char.IsLetterOrDigit(_) || _ is '_' or '<' or '>' or '[' or ']' or ',' or '~')
+                .AsString()
+                .Then(NormalizeGenerics);
 
         // Type annotation like : String or : int
         var typeAnnotation =
             CommonParsers.InlineWhitespace
-                .Then(Char(':'))
-                .Then(CommonParsers.InlineWhitespace)
-                .Then(typeName);
+                .SkipAnd(Literals.Char(':'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(typeName);
 
         // Mermaid's classifier suffix: $ marks a static member, * an abstract one. It trails the
         // declaration, after the parentheses for a method (`+validate()$ bool`).
-        var classifier = OneOf(Char('$'), Char('*'));
+        var classifier = OneOf(Literals.Char('$'), Literals.Char('*'));
 
         // Method parameters like (String name, int age) or (id: int)
         var parametersParser =
-            Char('(')
-                .Then(
-                    Token(_ => _ != ')' && _ != '\r' && _ != '\n')
-                        .ManyString()
-                )
-                .Before(Char(')'))
-                .Select(ParseParameters);
+            Between(Literals.Char('('), Literals.NoneOf(")\r\n", minSize: 0), Literals.Char(')'))
+                .AsString()
+                .Then(ParseParameters);
 
-        // Member: +String name (type first), +name : String (type after colon) or a bare enumeration value
+        // Member: +String name (type first), +name : String (type after colon) or a bare enumeration value.
+        // The first word is the type when a name follows it, and the name otherwise.
         var memberParser =
-            from _ in CommonParsers.InlineWhitespace
-            from visibility in visibilityParser.Optional()
-            from firstWord in typeName
-            from rest in Try(
-                // Type first format: +String name
-                from __ in inlineGap
-                from memberName in Token(_ => char.IsLetterOrDigit(_) || _ == '_').AtLeastOnceString()
-                select (Type: (string?) firstWord, Name: memberName)
-            ).Or(
-                // Name only or name : Type format
-                from annotation in typeAnnotation.Optional()
-                select (Type: annotation.HasValue ? annotation.Value : null, Name: firstWord)
-            )
-            from suffix in classifier.Optional()
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in CommonParsers.LineEnd
-            select new ClassMember
-            {
-                Name = rest.Name,
-                Type = rest.Type,
-                Visibility = visibility.HasValue ? visibility.Value : Visibility.Public,
-                IsStatic = suffix is {HasValue: true, Value: '$'}
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(visibilityParser.Optional())
+                .And(typeName)
+                .And(
+                    OneOf(
+                        // Type first format: +String name
+                        inlineGap
+                            .SkipAnd(idChars)
+                            .Then(static _ => (Name: (string?) _.ToString(), Type: (string?) null)),
+                        // Name only or name : Type format
+                        typeAnnotation.Optional()
+                            .Then(static _ => (Name: (string?) null, Type: _.OrNull()))))
+                .And(classifier.Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (visibility, firstWord, rest, suffix) =>
+                    new ClassMember
+                    {
+                        Name = rest.Name ?? firstWord,
+                        Type = rest.Name is null ? rest.Type : firstWord,
+                        Visibility = visibility.OrSome(Visibility.Public),
+                        IsStatic = suffix is {HasValue: true, Value: '$'}
+                    });
 
         // Method: +makeSound(), +move(int distance) : void, +getId() int or +validate()$ bool
         var methodParser =
-            from _ in CommonParsers.InlineWhitespace
-            from visibility in visibilityParser.Optional()
-            from name in Token(_ => char.IsLetterOrDigit(_) || _ == '_').AtLeastOnceString()
-            from parameters in parametersParser
-            from suffix in classifier.Optional()
-            from returnType in OneOf(
-                // `: void` and the bare `void` of `+getId() int` are both Mermaid return types.
-                Try(typeAnnotation),
-                Try(inlineGap.Then(typeName))
-            ).Optional()
-            from __ in CommonParsers.InlineWhitespace
-            from ___ in CommonParsers.LineEnd
-            select CreateMethod(
-                name,
-                parameters,
-                returnType.HasValue ? returnType.Value : null,
-                visibility.HasValue ? visibility.Value : Visibility.Public,
-                suffix);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(visibilityParser.Optional())
+                .And(idChars.AsString())
+                .And(parametersParser)
+                .And(classifier.Optional())
+                .And(
+                    OneOf(
+                        // `: void` and the bare `void` of `+getId() int` are both Mermaid return types.
+                        typeAnnotation,
+                        inlineGap.SkipAnd(typeName)
+                    ).Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (visibility, name, parameters, suffix, returnType) =>
+                    CreateMethod(
+                        name,
+                        parameters,
+                        returnType.OrNull(),
+                        visibility.OrSome(Visibility.Public),
+                        suffix));
 
         // Class annotation: <<interface>>, <<abstract>>, or any other text, such as <<Entity>>.
         var annotationText =
-            String("<<")
-                .Then(Token(_ => _ != '>' && _ != '\r' && _ != '\n').AtLeastOnceString())
-                .Before(String(">>"));
+            Between(Literals.Text("<<"), Literals.NoneOf(">\r\n"), Literals.Text(">>"))
+                .AsString();
 
         var annotationParser =
             CommonParsers.InlineWhitespace
-                .Then(annotationText)
-                .Before(CommonParsers.InlineWhitespace)
-                .Before(CommonParsers.LineEnd);
+                .SkipAnd(annotationText)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd);
 
         // One line of a class body, in the spellings that are understood structurally. A line that fits
         // none of them is still a member (see ParseLooseMember), so nothing in a body can fail the parse.
         memberLine =
             OneOf(
-                Try(annotationParser.Select<IClassBodyContent>(_ => new AnnotationItem(_))),
-                Try(methodParser.Select<IClassBodyContent>(_ => new MethodItem(_))),
-                Try(memberParser.Select<IClassBodyContent>(_ => new MemberItem(_))));
+                annotationParser.Then<IClassBodyContent>(static _ => new AnnotationItem(_)),
+                methodParser.Then<IClassBodyContent>(static _ => new MethodItem(_)),
+                memberParser.Then<IClassBodyContent>(static _ => new MemberItem(_)));
 
         // Class body: { ... }. As in Mermaid everything up to the closing brace belongs to the body, one
         // member per line, so the braces may share a line with the members (`class A { +x }`) and may be
         // followed by trailing whitespace.
         var classBody =
-            Char('{')
-                .Then(Token(_ => _ != '}').ManyString())
-                .Before(Char('}'))
-                .Select(text => ParseBody(text, memberLine));
+            Between(Literals.Char('{'), Literals.NoneOf("}", minSize: 0), Literals.Char('}'))
+                .AsString()
+                .Then(static _ => ParseBody(_, memberLine));
 
-        // Display label: class Animal["Animal with a label"]
+        // Display label: class Animal["Animal with a label"]. Unquoted text does not start with a quote, so
+        // a label that opens one is a quoted string or it is not a label.
         var classLabel =
-            Char('[')
-                .Then(CommonParsers.DoubleQuotedString
-                    .Or(Token(_ => _ != ']' && _ != '\r' && _ != '\n').ManyString()))
-                .Before(Char(']'));
+            Between(
+                Literals.Char('['),
+                CommonParsers.DoubleQuotedString
+                    .Or(Not(Literals.Char('"')).SkipAnd(Literals.NoneOf("]\r\n", minSize: 0).AsString())),
+                Literals.Char(']'));
 
         // Class definition: class ClassName, class ClassName { ... }, class ClassName["Label"] or
         // class ClassName:::cssClass. Styling is not applied to class diagrams, so the css class is read
         // and dropped.
         var classDefinitionParser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("class")
-            from __ in inlineGap
-            from name in className
-            from label in Try(CommonParsers.InlineWhitespace.Then(classLabel)).Optional()
-            from cssClass in Try(String(":::").Then(CommonParsers.Identifier)).Optional()
-            from ___ in CommonParsers.InlineWhitespace
-            from body in Try(classBody).Optional()
-            from ____ in CommonParsers.InlineWhitespace
-            from _____ in CommonParsers.LineEnd
-            select CreateClassDefinition(name, label, body);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("class"))
+                .SkipAnd(inlineGap)
+                .SkipAnd(className)
+                .And(CommonParsers.InlineWhitespace.SkipAnd(classLabel).Optional())
+                .AndSkip(Literals.Text(":::").SkipAnd(CommonParsers.Identifier).Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(classBody.Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(CreateClassDefinition);
 
         // A marker token on each side of the line, so `<|--`, `--|>`, `*--`, `--o` and two-sided forms
         // such as `<|--|>` each keep their glyph on the end the author wrote it on.
         var fromMarker =
             OneOf(
-                Try(String("<|")).ThenReturn(RelationshipMarker.Triangle),
-                Try(String("()")).ThenReturn(RelationshipMarker.Lollipop),
-                Try(String("*")).ThenReturn(RelationshipMarker.FilledDiamond),
-                Try(String("o")).ThenReturn(RelationshipMarker.HollowDiamond),
-                Try(String("<")).ThenReturn(RelationshipMarker.Arrow)
+                Literals.Text("<|").Then(RelationshipMarker.Triangle),
+                Literals.Text("()").Then(RelationshipMarker.Lollipop),
+                Literals.Text("*").Then(RelationshipMarker.FilledDiamond),
+                Literals.Text("o").Then(RelationshipMarker.HollowDiamond),
+                Literals.Text("<").Then(RelationshipMarker.Arrow)
             );
 
         var toMarker =
             OneOf(
-                Try(String("|>")).ThenReturn(RelationshipMarker.Triangle),
-                Try(String("()")).ThenReturn(RelationshipMarker.Lollipop),
-                Try(String("*")).ThenReturn(RelationshipMarker.FilledDiamond),
-                Try(String("o")).ThenReturn(RelationshipMarker.HollowDiamond),
-                Try(String(">")).ThenReturn(RelationshipMarker.Arrow)
+                Literals.Text("|>").Then(RelationshipMarker.Triangle),
+                Literals.Text("()").Then(RelationshipMarker.Lollipop),
+                Literals.Text("*").Then(RelationshipMarker.FilledDiamond),
+                Literals.Text("o").Then(RelationshipMarker.HollowDiamond),
+                Literals.Text(">").Then(RelationshipMarker.Arrow)
             );
 
         var relationshipLine =
             OneOf(
-                Try(String("--")).ThenReturn(false),
-                String("..").ThenReturn(true)
+                Literals.Text("--").Then(false),
+                Literals.Text("..").Then(true)
             );
 
         var relationshipArrowParser =
-            from from_ in Try(fromMarker).Optional()
-            from dashed in relationshipLine
-            from to in Try(toMarker).Optional()
-            select new RelationshipArrow(
-                from_.HasValue ? from_.Value : RelationshipMarker.None,
-                to.HasValue ? to.Value : RelationshipMarker.None,
-                dashed);
+            fromMarker.Optional()
+                .And(relationshipLine)
+                .And(toMarker.Optional())
+                .Map(static (start, dashed, end) =>
+                    new RelationshipArrow(
+                        start.OrSome(RelationshipMarker.None),
+                        end.OrSome(RelationshipMarker.None),
+                        dashed));
 
         // Cardinality like "1", "0..1", "1..*", "*"
         var cardinalityParser =
-            Char('"')
-                .Then(Token(_ => _ != '"').AtLeastOnceString())
-                .Before(Char('"'));
+            Between(Literals.Char('"'), Literals.NoneOf("\""), Literals.Char('"'))
+                .AsString();
 
         // Relationship: ClassA "1" <|-- "*" ClassB : label
         var relationshipParser =
-            from _ in CommonParsers.InlineWhitespace
-            from fromId in className
-            from __ in CommonParsers.InlineWhitespace
-            from fromCardinality in Try(cardinalityParser.Before(CommonParsers.InlineWhitespace)).Optional()
-            from arrow in relationshipArrowParser
-            from ___ in CommonParsers.InlineWhitespace
-            from toCardinality in Try(cardinalityParser.Before(inlineGap)).Optional()
-            from toId in className
-            from ____ in CommonParsers.InlineWhitespace
-            from label in Try(
-                Char(':')
-                    .Then(CommonParsers.InlineWhitespace)
-                    .Then(Token(_ => _ != '\r' && _ != '\n').ManyString())
-            ).Optional()
-            from lineEnd in CommonParsers.LineEnd
-            select new RelationshipItem(
-                new()
-                {
-                    FromId = fromId.Id,
-                    ToId = toId.Id,
-                    Type = Classify(arrow),
-                    FromMarker = arrow.From,
-                    ToMarker = arrow.To,
-                    IsDashed = arrow.Dashed,
-                    Label = label.HasValue ? label.Value.Trim() : null,
-                    FromCardinality = fromCardinality.HasValue ? fromCardinality.Value : null,
-                    ToCardinality = toCardinality.HasValue ? toCardinality.Value : null
-                },
-                fromId,
-                toId);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(className)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(cardinalityParser.AndSkip(CommonParsers.InlineWhitespace).Optional())
+                .And(relationshipArrowParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(cardinalityParser.AndSkip(inlineGap).Optional())
+                .And(className)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(
+                    Literals.Char(':')
+                        .SkipAnd(CommonParsers.InlineWhitespace)
+                        .SkipAnd(Literals.NoneOf("\r\n", minSize: 0))
+                        .AsTrimmedString()
+                        .Optional())
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (fromId, fromCardinality, arrow, toCardinality, toId, label) =>
+                    new RelationshipItem(
+                        new()
+                        {
+                            FromId = fromId.Id,
+                            ToId = toId.Id,
+                            Type = Classify(arrow),
+                            FromMarker = arrow.From,
+                            ToMarker = arrow.To,
+                            IsDashed = arrow.Dashed,
+                            Label = label.OrNull(),
+                            FromCardinality = fromCardinality.OrNull(),
+                            ToCardinality = toCardinality.OrNull()
+                        },
+                        fromId,
+                        toId));
 
         // Direction directive
         var directionDirectiveParser =
             CommonParsers.InlineWhitespace
-                .Then(String("direction"))
-                .Then(CommonParsers.RequiredWhitespace)
-                .Then(CommonParsers.DirectionParser)
-                .Before(CommonParsers.LineEnd);
+                .SkipAnd(Literals.Text("direction"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(CommonParsers.DirectionParser)
+                .AndSkip(CommonParsers.LineEnd);
+
+        // The rest of the line as it is read, and as the string kept from it.
+        var restOfLineText =
+            Literals.NoneOf("\r\n", minSize: 0);
 
         var restOfLine =
-            Token(_ => _ != '\r' && _ != '\n').ManyString();
+            restOfLineText.AsString();
 
         // Member added from outside the class body: `Animal : +int age`, `Animal: +isMammal()`
         var memberStatementParser =
-            from _ in CommonParsers.InlineWhitespace
-            from owner in className
-            from __ in CommonParsers.InlineWhitespace
-            from colon in Char(':')
-            from text in restOfLine
-            from ___ in CommonParsers.LineEnd
-            select new MemberStatementItem(owner, text);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(className)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char(':'))
+                .And(restOfLine)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (owner, text) => new MemberStatementItem(owner, text));
 
         // Annotation given on its own line: `<<interface>> Shape`
         var annotationStatementParser =
-            from _ in CommonParsers.InlineWhitespace
-            from text in annotationText
-            from __ in CommonParsers.InlineWhitespace
-            from owner in className
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in CommonParsers.LineEnd
-            select new AnnotationStatementItem(owner, text);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(annotationText)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(className)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (text, owner) => new AnnotationStatementItem(owner, text));
 
         // note "text" or note for ClassName "text"
         var noteParser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("note")
-            from __ in inlineGap
-            from owner in Try(String("for").Then(inlineGap).Then(className).Before(inlineGap)).Optional()
-            from text in CommonParsers.DoubleQuotedString
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in CommonParsers.LineEnd
-            select new NoteItem(owner.HasValue ? owner.Value : (ClassName?) null, text);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("note"))
+                .SkipAnd(inlineGap)
+                .SkipAnd(Literals.Text("for").SkipAnd(inlineGap).SkipAnd(className).AndSkip(inlineGap).Optional())
+                .And(CommonParsers.DoubleQuotedString)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (owner, text) => new NoteItem(owner.ToNullable(), text));
 
         // namespace Name { ... } groups the classes declared inside it.
         var namespaceStartParser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("namespace")
-            from __ in inlineGap
-            from name in Token(_ => char.IsLetterOrDigit(_) || _ is '_' or '.' or '-').AtLeastOnceString()
-            from ___ in CommonParsers.InlineWhitespace
-            from open in Char('{')
-            from ____ in CommonParsers.InlineWhitespace
-            from _____ in CommonParsers.LineEnd
-            select new NamespaceStartItem(name);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("namespace"))
+                .SkipAnd(inlineGap)
+                .SkipAnd(Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ is '_' or '.' or '-'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('{'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(static _ => new NamespaceStartItem(_.ToString()));
 
         var namespaceEndParser =
-            from _ in CommonParsers.InlineWhitespace
-            from close in Char('}')
-            from __ in CommonParsers.InlineWhitespace
-            from ___ in CommonParsers.LineEnd
-            select new NamespaceEndItem();
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd)
+                .Then(static _ => new NamespaceEndItem());
 
         // Styling and interaction, neither of which a class diagram here acts on.
         var ignoredParser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in OneOf(
-                Try(String("classDef")),
-                Try(String("cssClass")),
-                Try(String("style")),
-                Try(String("click")),
-                Try(String("link")),
-                String("callback"))
-            from __ in inlineGap
-            from rest in restOfLine
-            from ___ in CommonParsers.LineEnd
-            select Unit.Value;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(
+                    OneOf(
+                        Literals.Text("classDef"),
+                        Literals.Text("cssClass"),
+                        Literals.Text("style"),
+                        Literals.Text("click"),
+                        Literals.Text("link"),
+                        Literals.Text("callback")))
+                .SkipAnd(inlineGap)
+                .SkipAnd(restOfLineText)
+                .SkipAnd(CommonParsers.LineEnd);
 
         // Skip line (comments, empty lines)
         var skipLine =
             CommonParsers.InlineWhitespace
-                .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
+                .SkipAnd(CommonParsers.Comment.Or(CommonParsers.Newline));
 
         var parseContent =
             OneOf(
-                Try(directionDirectiveParser.Select<IClassContent?>(_ => new DirectionItem(_))),
-                Try(classDefinitionParser.Select<IClassContent?>(_ => new ClassDefinitionItem(_))),
-                Try(relationshipParser.Select<IClassContent?>(_ => _)),
-                Try(noteParser.Select<IClassContent?>(_ => _)),
-                Try(namespaceStartParser.Select<IClassContent?>(_ => _)),
-                Try(namespaceEndParser.Select<IClassContent?>(_ => _)),
-                Try(annotationStatementParser.Select<IClassContent?>(_ => _)),
-                Try(ignoredParser.ThenReturn<IClassContent?>(null)),
-                Try(memberStatementParser.Select<IClassContent?>(_ => _)),
-                skipLine.ThenReturn<IClassContent?>(null)
+                directionDirectiveParser.Then<IClassContent?>(static _ => new DirectionItem(_)),
+                classDefinitionParser.Then<IClassContent?>(static _ => new ClassDefinitionItem(_)),
+                relationshipParser.Then<IClassContent?>(static _ => _),
+                noteParser.Then<IClassContent?>(static _ => _),
+                namespaceStartParser.Then<IClassContent?>(static _ => _),
+                namespaceEndParser.Then<IClassContent?>(static _ => _),
+                annotationStatementParser.Then<IClassContent?>(static _ => _),
+                ignoredParser.Then<IClassContent?>(static _ => null),
+                memberStatementParser.Then<IClassContent?>(static _ => _),
+                skipLine.Then<IClassContent?>(static _ => null)
             );
 
         // The statements must account for the whole input. Without the end-of-input check a line no rule
         // matches would just end the list, and everything after it would be dropped without an error.
         var endOfInput =
-            Try(CommonParsers.InlineWhitespace.Then(End));
+            CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.End);
 
         parser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("classDiagram")
-            from __ in CommonParsers.InlineWhitespace
-            from ___ in CommonParsers.LineEnd
-            from content in parseContent.ManyThen(endOfInput)
-            select BuildModel(content.Item1);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("classDiagram"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd)
+                .SkipAnd(parseContent.Many())
+                .AndSkip(endOfInput)
+                .Then(BuildModel);
     }
 
     /// <summary>
@@ -439,7 +443,7 @@ class ClassParser : IDiagramParser<ClassModel>
         List<MethodParameter> parameters,
         string? returnType,
         Visibility visibility,
-        Maybe<char> classifier)
+        Option<char> classifier)
     {
         var method = new ClassMethod
         {
@@ -508,7 +512,7 @@ class ClassParser : IDiagramParser<ClassModel>
 
     static (string? annotation, List<ClassMember> members, List<ClassMethod> methods) ParseBody(
         string text,
-        Parser<char, IClassBodyContent> bodyLine)
+        Parser<IClassBodyContent> bodyLine)
     {
         string? annotation = null;
         var members = new List<ClassMember>();
@@ -523,8 +527,7 @@ class ClassParser : IDiagramParser<ClassModel>
                 continue;
             }
 
-            var parsed = bodyLine.Parse(line.ToString());
-            var item = parsed.Success ? parsed.Value : ParseLooseMember(line);
+            var item = bodyLine.TryMatch(line.ToString(), out var parsed) ? parsed : ParseLooseMember(line);
             switch (item)
             {
                 case AnnotationItem a:
@@ -682,8 +685,8 @@ class ClassParser : IDiagramParser<ClassModel>
 
     static ClassDefinition CreateClassDefinition(
         ClassName name,
-        Maybe<string> label,
-        Maybe<(string? annotation, List<ClassMember> members, List<ClassMethod> methods)> body)
+        Option<string> label,
+        Option<(string? annotation, List<ClassMember> members, List<ClassMethod> methods)> body)
     {
         var classDef = new ClassDefinition
         {
@@ -850,7 +853,7 @@ class ClassParser : IDiagramParser<ClassModel>
         }
     }
 
-    public Result<char, ClassModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<ClassModel> Parse(string input) => parser.ParseDiagram(input);
 
     readonly record struct ClassName(string Id, string? DisplayName);
 
