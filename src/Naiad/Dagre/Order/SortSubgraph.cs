@@ -1,15 +1,12 @@
 static class SortSubgraph
 {
-    public static SortResult Run(Graph graph, string v, Graph constraintGraph, bool biasRight = false)
+    public static SortResult Run(Graph graph, string v, Graph constraintGraph, bool biasRight = false) =>
+        Run(new GraphSortLayer(graph), v, constraintGraph, biasRight);
+
+    public static SortResult Run(SortLayer graph, string v, Graph constraintGraph, bool biasRight = false)
     {
         var movable = graph.Children(v);
-        string? bl = null;
-        string? br = null;
-        if (graph.TryGetNodeLabel(v, out var label))
-        {
-            bl = label.BorderLeftId;
-            br = label.BorderRightId;
-        }
+        graph.Borders(v, out var bl, out var br);
         var subgraphs = new Dictionary<string, SortResult>(StringComparer.Ordinal);
 
         if (bl != null)
@@ -17,7 +14,7 @@ static class SortSubgraph
             movable = movable.Where(w => w != bl && w != br).ToList();
         }
 
-        var barycenters = Barycenter.Run(graph, movable);
+        var barycenters = graph.Barycenters(movable);
         foreach (var entry in barycenters)
         {
             if (graph.ChildCount(entry.V) == 0)
@@ -33,20 +30,20 @@ static class SortSubgraph
             }
         }
 
-        var entries = ResolveConflicts.Run(barycenters, constraintGraph);
-        ExpandSubgraphs(entries, subgraphs);
+        var entries = ResolveConflicts.Run(barycenters, constraintGraph, knownDistinct: true);
+        if (subgraphs.Count > 0)
+        {
+            ExpandSubgraphs(entries, subgraphs);
+        }
 
         var result = Sort.Run(entries, biasRight);
 
         if (bl != null && br != null)
         {
             result.Vs = [bl, .. result.Vs, br];
-            var blPredecessors = graph.Predecessors(bl);
-            if (blPredecessors != null && blPredecessors.Count != 0)
+            if (graph.FirstPredecessor(bl) is { } blPred)
             {
-                var blPred = graph.NodeLabel(blPredecessors[0]);
-                var brPredecessors = graph.Predecessors(br);
-                var brPred = graph.NodeLabel(brPredecessors![0]);
+                var brPred = graph.FirstPredecessor(br)!;
                 if (result.Barycenter == null)
                 {
                     result.Barycenter = 0;

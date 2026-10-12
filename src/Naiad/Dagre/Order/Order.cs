@@ -1,14 +1,20 @@
 static class Order
 {
+    // Set by a test to send a whole layout through the layer graphs dagre builds, so that it can be
+    // compared with the same layout through the shorter routes. Per thread, and never set otherwise.
+    [ThreadStatic]
+    internal static bool UseLayerGraphs;
+
     public static void Run(Graph graph) =>
-        Run(graph, flatWhenPossible: true);
+        Run(graph, flatWhenPossible: !UseLayerGraphs, lightLayers: !UseLayerGraphs);
 
     /// <summary>
     /// <paramref name="flatWhenPossible"/> hands a graph with no subgraphs to <see cref="FlatOrder"/>.
-    /// Turning it off sends every graph through the layer graphs, which is what the tests use to hold
-    /// the two to the same answer.
+    /// Turning it off sends every graph through the layers, which is what the tests use to hold the two
+    /// to the same answer. <paramref name="lightLayers"/> does the same for <see cref="LightSortLayer"/>
+    /// against the layer graphs dagre builds.
     /// </summary>
-    internal static void Run(Graph graph, bool flatWhenPossible)
+    internal static void Run(Graph graph, bool flatWhenPossible, bool lightLayers = true)
     {
         // Nothing to order. The greatest rank of no nodes is negative infinity, which as a whole number
         // is not a rank to count layers down from.
@@ -25,8 +31,8 @@ static class Order
             return;
         }
 
-        var downLayerGraphs = BuildLayerGraphs(graph, Util.Range(1, maxRank + 1), graph.InEdgesOf);
-        var upLayerGraphs = BuildLayerGraphs(graph, Util.Range(maxRank - 1, -1, -1), graph.OutEdgesOf);
+        var downLayerGraphs = BuildLayers(graph, Util.Range(1, maxRank + 1), graph.InEdgesOf, lightLayers);
+        var upLayerGraphs = BuildLayers(graph, Util.Range(maxRank - 1, -1, -1), graph.OutEdgesOf, lightLayers);
 
         AssignOrder(graph, InitOrder.Run(graph));
 
@@ -55,7 +61,11 @@ static class Order
         AssignOrder(graph, best!);
     }
 
-    static List<Graph> BuildLayerGraphs(Graph graph, List<int> ranks, Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf)
+    static List<SortLayer> BuildLayers(
+        Graph graph,
+        List<int> ranks,
+        Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf,
+        bool light)
     {
         // Build an index mapping from rank to the nodes with that rank.
         // This helps to avoid a quadratic search for all nodes with the same rank as
@@ -103,23 +113,38 @@ static class Order
             }
         }
 
-        return ranks.Select(rank =>
-            BuildLayerGraph.Run(graph, rank, edgesOf, nodesByRank.GetValueOrDefault(rank) ?? [])).ToList();
+        var layers = new List<SortLayer>(ranks.Count);
+        foreach (var rank in ranks)
+        {
+            var nodesWithRank = nodesByRank.GetValueOrDefault(rank) ?? [];
+            if (light)
+            {
+                // The root's name is drawn from the graph as a layer graph's would be, so the names the
+                // graph hands out afterwards are the same either way.
+                var root = BuildLayerGraph.CreateRootNode(graph);
+                layers.Add(new LightSortLayer(graph, rank, root, edgesOf, nodesWithRank));
+            }
+            else
+            {
+                layers.Add(new GraphSortLayer(BuildLayerGraph.Run(graph, rank, edgesOf, nodesWithRank)));
+            }
+        }
+
+        return layers;
     }
 
-    static void SweepLayerGraphs(List<Graph> layerGraphs, bool biasRight)
+    static void SweepLayerGraphs(List<SortLayer> layers, bool biasRight)
     {
         var cg = new Graph();
-        foreach (var lg in layerGraphs)
+        foreach (var layer in layers)
         {
-            var root = lg.Label.Root!;
-            var sorted = SortSubgraph.Run(lg, root, cg, biasRight);
+            var sorted = SortSubgraph.Run(layer, layer.Root, cg, biasRight);
             for (var i = 0; i < sorted.Vs.Count; i++)
             {
-                lg.NodeLabel(sorted.Vs[i]).Order = i;
+                layer.SetOrder(sorted.Vs[i], i);
             }
 
-            AddSubgraphConstraints.Run(lg, cg, sorted.Vs);
+            AddSubgraphConstraints.Run(layer, cg, sorted.Vs);
         }
     }
 
