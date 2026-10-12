@@ -184,6 +184,10 @@ sealed class OrderedMap<TValue> : IEnumerable<KeyValuePair<string, TValue>>
     /// <see cref="Values"/> the map must not be mutated while the result is iterated.</summary>
     public ValueEnumerable EnumerateValues() => new(this);
 
+    /// <summary>Entries in insertion order, enumerated without allocating a snapshot list. Unlike
+    /// <see cref="Entries"/> the map must not be mutated while the result is iterated.</summary>
+    public EntryEnumerable EnumerateEntries() => new(this);
+
     // A struct GetEnumerator so `foreach (var kv in map)` in the hot layout passes does not box. The explicit
     // interface implementations remain for IEnumerable/LINQ callers.
     public Enumerator GetEnumerator() => new(this);
@@ -338,6 +342,11 @@ sealed class OrderedMap<TValue> : IEnumerable<KeyValuePair<string, TValue>>
         public readonly void Dispose()
         {
         }
+    }
+
+    public readonly struct EntryEnumerable(OrderedMap<TValue> map)
+    {
+        public Enumerator GetEnumerator() => map.GetEnumerator();
     }
 
     public readonly struct KeyEnumerable(OrderedMap<TValue> map)

@@ -2,29 +2,48 @@ static class InitOrder
 {
     public static List<List<string>> Run(Graph graph)
     {
-        var nodes = graph.Nodes();
-        var visited = new HashSet<string>(nodes.Count, StringComparer.Ordinal);
+        var visited = new HashSet<string>(graph.NodeCount, StringComparer.Ordinal);
 
-        // The nodes that are not subgraphs, and the greatest rank among them - negative infinity when
-        // there are none, which leaves no layers.
-        var simpleNodes = new List<string>(nodes.Count);
-        var greatest = double.NegativeInfinity;
-        foreach (var v in nodes)
+        // How many of the nodes that are not subgraphs lie in each rank, up to the greatest rank among
+        // them - none at all when there are no such nodes, which leaves no layers.
+        var counts = new List<int>();
+        var simpleCount = 0;
+        foreach (var (v, node) in graph.EnumerateNodeEntries())
         {
             if (graph.ChildCount(v) != 0)
             {
                 continue;
             }
 
-            simpleNodes.Add(v);
-            greatest = Math.Max(greatest, graph.NodeLabel(v).Rank!.Value);
+            var rank = node.Rank!.Value;
+            while (counts.Count <= rank)
+            {
+                counts.Add(0);
+            }
+
+            counts[rank]++;
+            simpleCount++;
         }
 
-        var maxRank = (int) greatest;
-        var layers = new List<List<string>>();
-        for (var rank = 0; rank < maxRank + 1; rank++)
+        // Those nodes by rank, the ones of a rank in the order the graph has them, each put straight in
+        // its place - and a layer for each rank, as long as that rank will make it.
+        var layers = new List<List<string>>(counts.Count);
+        var next = new int[counts.Count];
+        var offset = 0;
+        for (var rank = 0; rank < counts.Count; rank++)
         {
-            layers.Add([]);
+            layers.Add(new(counts[rank]));
+            next[rank] = offset;
+            offset += counts[rank];
+        }
+
+        var orderedVs = new string[simpleCount];
+        foreach (var (v, node) in graph.EnumerateNodeEntries())
+        {
+            if (graph.ChildCount(v) == 0)
+            {
+                orderedVs[next[node.Rank!.Value]++] = v;
+            }
         }
 
         // Depth-first, pre-order, on an explicit stack: the depth is the length of the longest path, and a
@@ -61,8 +80,6 @@ static class InitOrder
             }
         }
 
-        // Stable sort: preserve original order for nodes of equal rank.
-        var orderedVs = simpleNodes.OrderBy(_ => graph.NodeLabel(_).Rank!.Value).ToList();
         foreach (var v in orderedVs)
         {
             Dfs(v);

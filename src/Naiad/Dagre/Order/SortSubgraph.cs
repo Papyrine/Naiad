@@ -9,7 +9,7 @@ static class SortSubgraph
         graph.Borders(v, out var bl, out var br);
         Dictionary<string, SortResult>? subgraphs = null;
 
-        var barycenters = graph.Barycenters(movable);
+        var barycenters = graph.Barycenters(movable, scratch);
         foreach (var entry in barycenters)
         {
             if (graph.ChildCount(entry.V) == 0)
@@ -36,23 +36,34 @@ static class SortSubgraph
         {
             entries = ResolveConflicts.Run(barycenters, constraintGraph, scratch);
         }
+
         if (subgraphs != null)
         {
             ExpandSubgraphs(entries, subgraphs);
+        }
+
+        // The nodes of the whole layer go where the sweep reads them; a subgraph's are its own, to be
+        // read when the subgraph it lies in is sorted.
+        List<string>? into = null;
+        if (scratch != null &&
+            v == graph.Root)
+        {
+            into = scratch.Layer;
         }
 
         var bordered = bl != null && br != null;
         SortResult result;
         if (bordered)
         {
-            result = Sort.Run(entries, biasRight, scratch, bl, br);
+            result = Sort.Run(entries, biasRight, scratch, bl, br, into);
         }
         else
         {
-            result = Sort.Run(entries, biasRight, scratch, null, null);
+            result = Sort.Run(entries, biasRight, scratch, null, null, into);
         }
 
         scratch?.Release();
+        scratch?.Return(barycenters);
 
         if (bordered)
         {

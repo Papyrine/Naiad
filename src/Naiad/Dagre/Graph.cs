@@ -78,6 +78,14 @@ sealed class Graph
     /// lookup. A snapshot (safe to mutate the graph while iterating), mirroring <see cref="EdgeLabels"/>.</summary>
     public List<NodeLabel> NodeLabels() => nodesMap.Values();
 
+    /// <summary>As <see cref="NodeEntries"/> without the snapshot: the graph's nodes must not be added to
+    /// or removed while the result is iterated.</summary>
+    public OrderedMap<NodeLabel>.EntryEnumerable EnumerateNodeEntries() => nodesMap.EnumerateEntries();
+
+    /// <summary>As <see cref="NodeLabels"/> without the snapshot: the graph's nodes must not be added to
+    /// or removed while the result is iterated.</summary>
+    public OrderedMap<NodeLabel>.ValueEnumerable EnumerateNodeLabels() => nodesMap.EnumerateValues();
+
     public List<string> Sources() => Nodes().Where(v => inMap[v].Count == 0).ToList();
 
     public void SetNode(string name)
