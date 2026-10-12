@@ -105,9 +105,6 @@ sealed class LayerShape
     public readonly List<string> Nodes;
     public readonly List<string> Top;
 
-    // Where each node is in Nodes.
-    readonly Dictionary<string, int> index;
-
     // Null in a rank no subgraph reaches.
     Dictionary<string, List<string>>? children;
     Dictionary<string, (string? Left, string? Right)>? borders;
@@ -121,7 +118,6 @@ sealed class LayerShape
     /// </summary>
     public LayerShape(Graph graph, int rank, List<string> nodesWithRank)
     {
-        index = new(nodesWithRank.Count, StringComparer.Ordinal);
         List<string>? nodes = null;
         List<string>? top = null;
         for (var i = 0; i < nodesWithRank.Count; i++)
@@ -154,7 +150,6 @@ sealed class LayerShape
                 top?.Add(v);
             }
 
-            index[v] = index.Count;
             nodes?.Add(v);
 
             if (node.MinRank != null)
@@ -166,17 +161,6 @@ sealed class LayerShape
 
         Nodes = nodes ?? nodesWithRank;
         Top = top ?? Nodes;
-    }
-
-    /// <summary>Where <paramref name="v"/> is in <see cref="Nodes"/>, or -1 if it is not in the rank.</summary>
-    public int IndexOf(string v)
-    {
-        if (index.TryGetValue(v, out var found))
-        {
-            return found;
-        }
-
-        return -1;
     }
 
     public List<string> Children(string v) =>
@@ -229,94 +213,127 @@ sealed class LayerShape
 }
 
 /// <summary>
-/// A layer held as lists, built straight from the graph being ordered. It answers as the layer graph for
-/// the same rank would: the same children in the same order, the same edges merged the same way.
+/// Every node's weighted edges on one side - the edges in, for a sweep going down, or the edges out, for
+/// one going up - as one weight per neighbour, in the order each neighbour is first met. That is how a
+/// layer graph, having one edge per pair of nodes, holds them, and it is the same for every rank, so the
+/// layers of a sweep share it.
 /// </summary>
-sealed class LightSortLayer : SortLayer
+sealed class LayerEdges
 {
-    // The edges of the node at place i in the shape's nodes are neighbor[start[i] .. start[i + 1]), one
-    // per neighbour, in the order each neighbour was first met.
+    // The edges of the node numbered n are neighbor[start[n] .. start[n + 1]).
     readonly int[] start;
     readonly NodeLabel[] neighbor;
     readonly double[] weight;
 
-    readonly Graph graph;
-    readonly LayerShape shape;
-
-    public override string Root { get; }
-
-    /// <summary>
-    /// Builds the layer for the rank of <paramref name="shape"/>, taking each node's edges from
-    /// <paramref name="edgesOf"/>. <paramref name="names"/> is working storage, there to be used again
-    /// for the next layer.
-    /// </summary>
-    public LightSortLayer(
-        Graph graph,
-        string root,
-        LayerShape shape,
-        Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf,
-        List<string> names)
+    /// <summary>Numbers the nodes of <paramref name="graph"/> in the order it has them, and takes each one's edges from <paramref name="edgesOf"/>.</summary>
+    public LayerEdges(Graph graph, Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf)
     {
-        Root = root;
-        this.graph = graph;
-        this.shape = shape;
+        start = new int[graph.NodeCount + 1];
+        // Room for every edge; parallel edges merge and leave some of it unused.
+        neighbor = new NodeLabel[graph.EdgeCount];
+        weight = new double[graph.EdgeCount];
 
-        // Counted first, so that the arrays are made once at their final size.
-        var nodes = shape.Nodes;
-        var edgeCount = 0;
-        foreach (var v in nodes)
+        // The neighbours of the node in hand. A handful are searched as a list; past that they are
+        // indexed, so a node with hundreds of edges does not search hundreds of names for each one.
+        const int indexedFrom = 12;
+        var names = new List<string>();
+        Dictionary<string, int>? indexed = null;
+        var used = 0;
+        var number = 0;
+
+        foreach (var (v, node) in graph.EnumerateNodeEntries())
         {
-            foreach (var _ in edgesOf(v))
-            {
-                edgeCount++;
-            }
-        }
+            node.Number = number;
+            names.Clear();
+            indexed?.Clear();
+            var first = used;
 
-        start = new int[nodes.Count + 1];
-        // Room for an edge to every neighbour; parallel edges merge and leave some of it unused.
-        neighbor = new NodeLabel[edgeCount];
-        weight = new double[edgeCount];
-        names.Clear();
-
-        for (var n = 0; n < nodes.Count; n++)
-        {
-            // This assumes we have only short edges! One edge per neighbour, its weight the sum of the
-            // weights of every edge to that neighbour, added in the order the edges come.
-            var v = nodes[n];
-            var first = names.Count;
+            // This assumes we have only short edges!
             foreach (var e in edgesOf(v))
             {
                 var u = e.V == v ? e.W : e.V;
                 var edgeWeight = graph.FindEdgeLabel(e).Weight!.Value;
                 var index = -1;
-                for (var i = first; i < names.Count; i++)
+                if (names.Count < indexedFrom)
                 {
-                    if (names[i] == u)
-                    {
-                        index = i;
-                        break;
-                    }
-                }
-
-                if (index < 0)
-                {
-                    neighbor[names.Count] = graph.NodeLabel(u);
-                    weight[names.Count] = edgeWeight + 0;
-                    names.Add(u);
+                    index = names.IndexOf(u);
                 }
                 else
                 {
-                    weight[index] = edgeWeight + weight[index];
+                    indexed ??= new(StringComparer.Ordinal);
+                    if (indexed.Count == 0)
+                    {
+                        for (var i = 0; i < names.Count; i++)
+                        {
+                            indexed[names[i]] = i;
+                        }
+                    }
+
+                    index = indexed.GetValueOrDefault(u, -1);
                 }
+
+                if (index >= 0)
+                {
+                    weight[first + index] = edgeWeight + weight[first + index];
+                    continue;
+                }
+
+                if (indexed is { Count: > 0 })
+                {
+                    indexed[u] = names.Count;
+                }
+
+                names.Add(u);
+                neighbor[used] = graph.NodeLabel(u);
+                weight[used] = edgeWeight + 0;
+                used++;
             }
 
-            start[n + 1] = names.Count;
+            start[++number] = used;
         }
     }
 
+    /// <summary>The barycenter of <paramref name="node"/>'s neighbours and the weight behind it, if it has any.</summary>
+    public bool TryBarycenter(NodeLabel node, out double barycenter, out double total)
+    {
+        var from = start[node.Number];
+        var to = start[node.Number + 1];
+        var sum = 0d;
+        total = 0;
+        for (var j = from; j < to; j++)
+        {
+            sum += weight[j] * neighbor[j].Order!.Value;
+            total += weight[j];
+        }
+
+        barycenter = sum / total;
+        return from != to;
+    }
+
+    /// <summary>The first neighbour of <paramref name="node"/>, or null if it has none.</summary>
+    public NodeLabel? First(NodeLabel node)
+    {
+        var from = start[node.Number];
+        if (from == start[node.Number + 1])
+        {
+            return null;
+        }
+
+        return neighbor[from];
+    }
+}
+
+/// <summary>
+/// A layer held as lists, built straight from the graph being ordered. It answers as the layer graph for
+/// the same rank would: the same children in the same order, the same edges merged the same way.
+/// </summary>
+sealed class LightSortLayer(Graph graph, string root, LayerShape shape, LayerEdges edges) : SortLayer
+{
+    public override string Root => root;
+
     public override List<string> Children(string v)
     {
-        if (v == Root)
+        if (v == root)
         {
             return shape.Top;
         }
@@ -329,7 +346,7 @@ sealed class LightSortLayer : SortLayer
 
     public override List<string> Movable(string v)
     {
-        if (v == Root)
+        if (v == root)
         {
             return shape.Top;
         }
@@ -354,49 +371,28 @@ sealed class LightSortLayer : SortLayer
 
         foreach (var entry in result)
         {
-            var index = shape.IndexOf(entry.V);
-            if (index < 0 ||
-                start[index] == start[index + 1])
+            if (edges.TryBarycenter(graph.NodeLabel(entry.V), out var barycenter, out var total))
             {
-                continue;
+                entry.Barycenter = barycenter;
+                entry.Weight = total;
             }
-
-            var sum = 0d;
-            var total = 0d;
-            for (var j = start[index]; j < start[index + 1]; j++)
-            {
-                sum += weight[j] * neighbor[j].Order!.Value;
-                total += weight[j];
-            }
-
-            entry.Barycenter = sum / total;
-            entry.Weight = total;
         }
 
         return result;
     }
 
-    public override NodeLabel? FirstPredecessor(string v)
-    {
-        var index = shape.IndexOf(v);
-        if (index < 0 ||
-            start[index] == start[index + 1])
-        {
-            return null;
-        }
-
-        return neighbor[start[index]];
-    }
+    public override NodeLabel? FirstPredecessor(string v) =>
+        edges.First(graph.NodeLabel(v));
 
     // Every node of the rank hangs under its subgraph, or under the root if it has none.
     public override string? Parent(string v)
     {
-        if (v == Root)
+        if (v == root)
         {
             return null;
         }
 
-        return graph.Parent(v) ?? Root;
+        return graph.Parent(v) ?? root;
     }
 
     // A subgraph has a label of its own in a layer graph, made for that one rank, so an order given to
