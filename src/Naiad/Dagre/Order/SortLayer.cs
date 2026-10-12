@@ -93,48 +93,34 @@ sealed class GraphSortLayer(Graph graph) : SortLayer
 }
 
 /// <summary>
-/// A layer held as lists, built straight from the graph being ordered. It answers as the layer graph for
-/// the same rank would: the same children in the same order, the same edges merged the same way.
+/// The nodes of one rank and how they nest. It is the same whichever way a sweep is going, so the layer
+/// that looks up from a rank and the one that looks down share it.
 /// </summary>
-sealed class LightSortLayer : SortLayer
+sealed class LayerShape
 {
     static readonly List<string> none = [];
 
-    readonly Dictionary<string, List<string>> children = new(StringComparer.Ordinal);
-    readonly Dictionary<string, string> parents = new(StringComparer.Ordinal);
-    readonly Dictionary<string, (string? Left, string? Right)> borders = new(StringComparer.Ordinal);
+    // The nodes of the rank, in the order the graph gave them, and of those the ones under no subgraph.
+    public readonly List<string> Nodes;
+    public readonly List<string> Top;
+
+    // Null in a rank no subgraph reaches.
+    Dictionary<string, List<string>>? children;
+    Dictionary<string, (string? Left, string? Right)>? borders;
 
     // Made the first time they are asked for and kept: a subgraph's children without its borders, and
     // the entries handed out for a list of nodes, which every sweep fills in again.
-    readonly Dictionary<string, List<string>> movable = new(StringComparer.Ordinal);
-    readonly Dictionary<List<string>, List<BarycenterEntry>> entries = new(ReferenceEqualityComparer.Instance);
-
-    // The nodes that have edges, and for each its place in the lists below: its edges are
-    // neighbor[start[i] .. start[i + 1]), one per neighbour, in the order each neighbour was first met.
-    readonly Dictionary<string, int> withEdges = new(StringComparer.Ordinal);
-    readonly List<int> start = [0];
-    readonly List<NodeLabel> neighbor = [];
-    readonly List<double> weight = [];
-
-    readonly Graph graph;
-
-    public override string Root { get; }
+    Dictionary<string, List<string>>? movable;
+    readonly Dictionary<List<string>, List<BarycenterEntry>> entries = new(1, ReferenceEqualityComparer.Instance);
 
     /// <summary>
-    /// Builds the layer for <paramref name="rank"/> from the nodes that lie in it, as
-    /// <see cref="BuildLayerGraph.Run"/> does, taking each node's edges from <paramref name="edgesOf"/>.
+    /// Takes from <paramref name="nodesWithRank"/> the nodes that lie in <paramref name="rank"/>, as
+    /// <see cref="BuildLayerGraph.Run"/> does.
     /// </summary>
-    public LightSortLayer(
-        Graph graph,
-        int rank,
-        string root,
-        Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf,
-        List<string> nodesWithRank)
+    public LayerShape(Graph graph, int rank, List<string> nodesWithRank)
     {
-        Root = root;
-        this.graph = graph;
-        var merged = new List<(string U, double Weight)>();
-
+        Nodes = new(nodesWithRank.Count);
+        Top = new(nodesWithRank.Count);
         foreach (var v in nodesWithRank)
         {
             var node = graph.NodeLabel(v);
@@ -145,83 +131,59 @@ sealed class LightSortLayer : SortLayer
                 continue;
             }
 
-            var parent = graph.Parent(v) ?? root;
-            parents[v] = parent;
-            if (!children.TryGetValue(parent, out var siblings))
+            Nodes.Add(v);
+            if (graph.Parent(v) is { } parent)
             {
-                children[parent] = siblings = [];
+                children ??= new(StringComparer.Ordinal);
+                if (!children.TryGetValue(parent, out var siblings))
+                {
+                    children[parent] = siblings = [];
+                }
+
+                siblings.Add(v);
             }
-
-            siblings.Add(v);
-
-            // This assumes we have only short edges! One edge per neighbour, its weight the sum of the
-            // weights of every edge to that neighbour, added in the order the edges come.
-            merged.Clear();
-            foreach (var e in edgesOf(v))
+            else
             {
-                var u = e.V == v ? e.W : e.V;
-                var edgeWeight = graph.FindEdgeLabel(e).Weight!.Value;
-                var index = -1;
-                for (var i = 0; i < merged.Count; i++)
-                {
-                    if (merged[i].U == u)
-                    {
-                        index = i;
-                        break;
-                    }
-                }
-
-                if (index < 0)
-                {
-                    merged.Add((u, edgeWeight + 0));
-                }
-                else
-                {
-                    merged[index] = (u, edgeWeight + merged[index].Weight);
-                }
-            }
-
-            if (merged.Count > 0)
-            {
-                withEdges[v] = start.Count - 1;
-                foreach (var (u, edgeWeight) in merged)
-                {
-                    neighbor.Add(graph.NodeLabel(u));
-                    weight.Add(edgeWeight);
-                }
-
-                start.Add(neighbor.Count);
+                Top.Add(v);
             }
 
             if (node.MinRank != null)
             {
+                borders ??= new(StringComparer.Ordinal);
                 borders[v] = (node.BorderLeft![rank], node.BorderRight![rank]);
             }
         }
     }
 
-    public override List<string> Children(string v) =>
-        children.GetValueOrDefault(v) ?? none;
+    public List<string> Children(string v) =>
+        children?.GetValueOrDefault(v) ?? none;
 
-    public override int ChildCount(string v)
+    public bool IsSubgraph(string v) =>
+        borders != null &&
+        borders.ContainsKey(v);
+
+    public void Borders(string v, out string? left, out string? right)
     {
-        if (children.TryGetValue(v, out var list))
+        left = null;
+        right = null;
+        if (borders != null &&
+            borders.TryGetValue(v, out var found))
         {
-            return list.Count;
+            (left, right) = found;
         }
-
-        return 0;
     }
 
-    public override List<string> Movable(string v)
+    public List<string> Movable(string v)
     {
         var all = Children(v);
-        if (!borders.TryGetValue(v, out var found) ||
+        if (borders == null ||
+            !borders.TryGetValue(v, out var found) ||
             found.Left == null)
         {
             return all;
         }
 
+        movable ??= new(StringComparer.Ordinal);
         if (movable.TryGetValue(v, out var kept))
         {
             return kept;
@@ -241,29 +203,152 @@ sealed class LightSortLayer : SortLayer
         return kept;
     }
 
-    public override void Borders(string v, out string? left, out string? right)
+    /// <summary>An entry for each of <paramref name="nodes"/>, the same ones every time.</summary>
+    public List<BarycenterEntry> Entries(List<string> nodes)
     {
-        left = null;
-        right = null;
-        if (borders.TryGetValue(v, out var found))
+        if (entries.TryGetValue(nodes, out var result))
         {
-            (left, right) = found;
+            return result;
+        }
+
+        result = new(nodes.Count);
+        foreach (var v in nodes)
+        {
+            result.Add(new() { V = v });
+        }
+
+        entries[nodes] = result;
+        return result;
+    }
+}
+
+/// <summary>
+/// A layer held as lists, built straight from the graph being ordered. It answers as the layer graph for
+/// the same rank would: the same children in the same order, the same edges merged the same way.
+/// </summary>
+sealed class LightSortLayer : SortLayer
+{
+    // The nodes that have edges, and for each its place in the arrays below: its edges are
+    // neighbor[start[i] .. start[i + 1]), one per neighbour, in the order each neighbour was first met.
+    readonly Dictionary<string, int> withEdges;
+    readonly int[] start;
+    readonly NodeLabel[] neighbor;
+    readonly double[] weight;
+
+    readonly Graph graph;
+    readonly LayerShape shape;
+
+    public override string Root { get; }
+
+    /// <summary>
+    /// Builds the layer for the rank of <paramref name="shape"/>, taking each node's edges from
+    /// <paramref name="edgesOf"/>.
+    /// </summary>
+    public LightSortLayer(
+        Graph graph,
+        string root,
+        LayerShape shape,
+        Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf)
+    {
+        Root = root;
+        this.graph = graph;
+        this.shape = shape;
+
+        // Counted first, so that everything below is made once at its final size.
+        var nodes = shape.Nodes;
+        var edgeCount = 0;
+        var nodeCount = 0;
+        foreach (var v in nodes)
+        {
+            var before = edgeCount;
+            foreach (var _ in edgesOf(v))
+            {
+                edgeCount++;
+            }
+
+            if (edgeCount != before)
+            {
+                nodeCount++;
+            }
+        }
+
+        withEdges = new(nodeCount, StringComparer.Ordinal);
+        start = new int[nodeCount + 1];
+        // Room for an edge to every neighbour; parallel edges merge and leave some of it unused.
+        neighbor = new NodeLabel[edgeCount];
+        weight = new double[edgeCount];
+        var names = new string[edgeCount];
+        var used = 0;
+
+        foreach (var v in nodes)
+        {
+            // This assumes we have only short edges! One edge per neighbour, its weight the sum of the
+            // weights of every edge to that neighbour, added in the order the edges come.
+            var first = used;
+            foreach (var e in edgesOf(v))
+            {
+                var u = e.V == v ? e.W : e.V;
+                var edgeWeight = graph.FindEdgeLabel(e).Weight!.Value;
+                var index = -1;
+                for (var i = first; i < used; i++)
+                {
+                    if (names[i] == u)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+
+                if (index < 0)
+                {
+                    names[used] = u;
+                    neighbor[used] = graph.NodeLabel(u);
+                    weight[used] = edgeWeight + 0;
+                    used++;
+                }
+                else
+                {
+                    weight[index] = edgeWeight + weight[index];
+                }
+            }
+
+            if (used != first)
+            {
+                start[withEdges.Count + 1] = used;
+                withEdges[v] = withEdges.Count;
+            }
         }
     }
 
-    public override List<BarycenterEntry> Barycenters(List<string> movable)
+    public override List<string> Children(string v)
     {
-        if (!entries.TryGetValue(movable, out var result))
+        if (v == Root)
         {
-            result = new(movable.Count);
-            foreach (var v in movable)
-            {
-                result.Add(new() { V = v });
-            }
-
-            entries[movable] = result;
+            return shape.Top;
         }
 
+        return shape.Children(v);
+    }
+
+    public override int ChildCount(string v) =>
+        Children(v).Count;
+
+    public override List<string> Movable(string v)
+    {
+        if (v == Root)
+        {
+            return shape.Top;
+        }
+
+        return shape.Movable(v);
+    }
+
+    public override void Borders(string v, out string? left, out string? right) =>
+        shape.Borders(v, out left, out right);
+
+    public override List<BarycenterEntry> Barycenters(List<string> movable)
+    {
+        var result = shape.Entries(movable);
         foreach (var entry in result)
         {
             entry.Barycenter = null;
@@ -298,14 +383,22 @@ sealed class LightSortLayer : SortLayer
         return null;
     }
 
-    public override string? Parent(string v) =>
-        parents.GetValueOrDefault(v);
+    // Every node of the rank hangs under its subgraph, or under the root if it has none.
+    public override string? Parent(string v)
+    {
+        if (v == Root)
+        {
+            return null;
+        }
+
+        return graph.Parent(v) ?? Root;
+    }
 
     // A subgraph has a label of its own in a layer graph, made for that one rank, so an order given to
     // it there goes nowhere. Every other node's label is the graph's.
     public override void SetOrder(string v, int order)
     {
-        if (borders.ContainsKey(v))
+        if (shape.IsSubgraph(v))
         {
             return;
         }
