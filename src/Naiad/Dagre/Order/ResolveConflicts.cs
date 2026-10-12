@@ -12,10 +12,17 @@ static class ResolveConflicts
         public bool Merged;
     }
 
-    public static List<ResolvedEntry> Run(List<BarycenterEntry> entries, Graph constraintGraph)
+    public static List<ResolvedEntry> Run(List<BarycenterEntry> entries, Graph constraintGraph) =>
+        Run(entries, constraintGraph, knownDistinct: false);
+
+    /// <summary>
+    /// <paramref name="knownDistinct"/> is for a caller whose entries are the children of one node, which
+    /// cannot repeat, and spares checking that they do not.
+    /// </summary>
+    internal static List<ResolvedEntry> Run(List<BarycenterEntry> entries, Graph constraintGraph, bool knownDistinct)
     {
         if (constraintGraph.EdgeCount == 0 &&
-            AllDistinct(entries))
+            (knownDistinct || AllDistinct(entries)))
         {
             return Unconstrained(entries);
         }

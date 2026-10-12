@@ -1,3 +1,5 @@
+using Naiad.Diagrams.Flowchart;
+
 // Ordering and positioning each have a shorter route through them than the one ported from dagre. These
 // hold the shorter route to the longer one's answer, over generated graphs wider and denser than the
 // hand-written cases elsewhere.
@@ -630,5 +632,146 @@ public class OrderPositionEquivalenceTests
         Order.Run(graph, flatWhenPossible: true);
         Order.Run(graph, flatWhenPossible: false);
         await Assert.That(graph.NodeCount).IsEqualTo(0);
+    }
+
+    // A flowchart with subgraphs, some nested and some empty of links, and edges that run within a
+    // subgraph, between subgraphs and to a subgraph as a whole.
+    static string FlowchartWithSubgraphs(int seed)
+    {
+        var random = new Random(seed);
+        var text = new StringBuilder("flowchart TD\n");
+        var groups = random.Next(2, 7);
+        var open = 0;
+        for (var group = 0; group < groups; group++)
+        {
+            if (open == 0 && random.Next(3) == 0)
+            {
+                text.Append(CultureInfo.InvariantCulture, $"    subgraph outer{group} [Outer {group}]\n");
+                open = random.Next(1, 3);
+            }
+
+            text.Append(CultureInfo.InvariantCulture, $"    subgraph sg{group} [Group {group}]\n");
+            var size = random.Next(1, 6);
+            for (var i = 0; i < size; i++)
+            {
+                text.Append(CultureInfo.InvariantCulture, $"        S{group}_{i}[Node {group}-{i}]\n");
+            }
+
+            for (var i = 0; i < size; i++)
+            {
+                if (random.Next(2) == 0)
+                {
+                    text.Append(CultureInfo.InvariantCulture, $"        S{group}_{random.Next(size)} --> S{group}_{i}\n");
+                }
+            }
+
+            text.Append("    end\n");
+            if (open > 0 && --open == 0)
+            {
+                text.Append("    end\n");
+            }
+        }
+
+        if (open > 0)
+        {
+            text.Append("    end\n");
+        }
+
+        var links = random.Next(groups, groups * 4);
+        for (var i = 0; i < links; i++)
+        {
+            var from = random.Next(groups);
+            var to = random.Next(groups);
+            text.Append(CultureInfo.InvariantCulture, $"    S{from}_0 --> S{to}_0\n");
+            if (random.Next(4) == 0 && from != to)
+            {
+                text.Append(CultureInfo.InvariantCulture, $"    lone{i}[Lone {i}] --> sg{to}\n");
+            }
+        }
+
+        return text.ToString();
+    }
+
+    static string Describe(FlowchartModel model)
+    {
+        var text = new StringBuilder();
+        foreach (var node in model.Nodes)
+        {
+            text.Append(CultureInfo.InvariantCulture, $"{node.Id}@{node.Position.X:R},{node.Position.Y:R};");
+        }
+
+        foreach (var edge in model.Edges)
+        {
+            text.Append(CultureInfo.InvariantCulture, $"{edge.SourceId}>{edge.TargetId}:");
+            foreach (var point in edge.Points)
+            {
+                text.Append(CultureInfo.InvariantCulture, $"{point.X:R},{point.Y:R} ");
+            }
+        }
+
+        void Subgraphs(List<Subgraph> subgraphs)
+        {
+            foreach (var subgraph in subgraphs)
+            {
+                text.Append(CultureInfo.InvariantCulture, $"[{subgraph.Id}@{subgraph.Position.X:R},{subgraph.Position.Y:R} {subgraph.Width:R}x{subgraph.Height:R}]");
+                Subgraphs(subgraph.NestedSubgraphs);
+            }
+        }
+
+        Subgraphs(model.Subgraphs);
+        return text.ToString();
+    }
+
+    static string LayOut(string input, bool throughLayerGraphs)
+    {
+        var model = new FlowchartParser().Parse(input).Value;
+        Order.UseLayerGraphs = throughLayerGraphs;
+        try
+        {
+            new FlowchartRenderer().Render(model, RenderOptions.Default);
+        }
+        finally
+        {
+            Order.UseLayerGraphs = false;
+        }
+
+        return Describe(model);
+    }
+
+    // A whole layout of a diagram with subgraphs comes out the same - every node, every edge point,
+    // every subgraph box - whether its ranks are ordered through light layers or through the layer
+    // graphs dagre builds.
+    [Test]
+    public async Task LayoutWithSubgraphs_IsTheSameThroughLightLayers()
+    {
+        for (var seed = 0; seed < 150; seed++)
+        {
+            var input = FlowchartWithSubgraphs(seed);
+
+            await Assert.That(LayOut(input, throughLayerGraphs: false))
+                .IsEqualTo(LayOut(input, throughLayerGraphs: true))
+                .Because($"seed {seed}:\n{input}");
+        }
+    }
+
+    // And a whole layout of a diagram without them, through the ordering that needs no layers at all.
+    [Test]
+    public async Task LayoutWithoutSubgraphs_IsTheSameThroughTheFlatOrder()
+    {
+        for (var seed = 0; seed < 60; seed++)
+        {
+            var random = new Random(seed);
+            var text = new StringBuilder("flowchart TD\n");
+            var nodes = random.Next(3, 30);
+            for (var i = 0; i < nodes * 2; i++)
+            {
+                text.Append(CultureInfo.InvariantCulture, $"    N{random.Next(nodes)} -->|l{i}| N{random.Next(nodes)}\n");
+            }
+
+            var input = text.ToString();
+            await Assert.That(LayOut(input, throughLayerGraphs: false))
+                .IsEqualTo(LayOut(input, throughLayerGraphs: true))
+                .Because($"seed {seed}:\n{input}");
+        }
     }
 }

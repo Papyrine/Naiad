@@ -1,6 +1,9 @@
 static class AddSubgraphConstraints
 {
-    public static void Run(Graph graph, Graph constraintGraph, List<string> vs)
+    public static void Run(Graph graph, Graph constraintGraph, List<string> vs) =>
+        Run(new GraphSortLayer(graph), constraintGraph, vs);
+
+    public static void Run(SortLayer graph, Graph constraintGraph, List<string> vs)
     {
         var prev = new Dictionary<string, string>(StringComparer.Ordinal);
         string? rootPrev = null;

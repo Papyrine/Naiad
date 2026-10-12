@@ -65,7 +65,7 @@ static class BuildLayerGraph
         return result;
     }
 
-    static string CreateRootNode(Graph graph)
+    internal static string CreateRootNode(Graph graph)
     {
         string v;
         while (graph.HasNode(v = graph.UniqueId(DummyNames.Root)))
