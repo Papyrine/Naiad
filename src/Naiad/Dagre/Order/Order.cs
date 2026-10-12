@@ -31,8 +31,16 @@ static class Order
             return;
         }
 
-        var downLayerGraphs = BuildLayers(graph, Util.Range(1, maxRank + 1), graph.InEdgesOf, lightLayers);
-        var upLayerGraphs = BuildLayers(graph, Util.Range(maxRank - 1, -1, -1), graph.OutEdgesOf, lightLayers);
+        var nodesByRank = NodesByRank(graph);
+        // What a light layer holds of a rank's nodes, shared by the two layers of that rank.
+        Dictionary<int, LayerShape>? shapes = null;
+        if (lightLayers)
+        {
+            shapes = [];
+        }
+
+        var downLayerGraphs = BuildLayers(graph, Util.Range(1, maxRank + 1), graph.InEdgesOf, nodesByRank, shapes);
+        var upLayerGraphs = BuildLayers(graph, Util.Range(maxRank - 1, -1, -1), graph.OutEdgesOf, nodesByRank, shapes);
 
         AssignOrder(graph, InitOrder.Run(graph));
 
@@ -71,11 +79,7 @@ static class Order
         AssignOrder(graph, best!);
     }
 
-    static List<SortLayer> BuildLayers(
-        Graph graph,
-        List<int> ranks,
-        Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf,
-        bool light)
+    static Dictionary<int, List<string>> NodesByRank(Graph graph)
     {
         // Build an index mapping from rank to the nodes with that rank.
         // This helps to avoid a quadratic search for all nodes with the same rank as
@@ -123,16 +127,33 @@ static class Order
             }
         }
 
+        return nodesByRank;
+    }
+
+    // A layer for each of `ranks`: light ones if there are `shapes` to build them on, and otherwise the
+    // layer graphs dagre builds.
+    static List<SortLayer> BuildLayers(
+        Graph graph,
+        List<int> ranks,
+        Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf,
+        Dictionary<int, List<string>> nodesByRank,
+        Dictionary<int, LayerShape>? shapes)
+    {
         var layers = new List<SortLayer>(ranks.Count);
         foreach (var rank in ranks)
         {
             var nodesWithRank = nodesByRank.GetValueOrDefault(rank) ?? [];
-            if (light)
+            if (shapes != null)
             {
+                if (!shapes.TryGetValue(rank, out var shape))
+                {
+                    shapes[rank] = shape = new(graph, rank, nodesWithRank);
+                }
+
                 // The root's name is drawn from the graph as a layer graph's would be, so the names the
                 // graph hands out afterwards are the same either way.
                 var root = BuildLayerGraph.CreateRootNode(graph);
-                layers.Add(new LightSortLayer(graph, rank, root, edgesOf, nodesWithRank));
+                layers.Add(new LightSortLayer(graph, root, shape, edgesOf));
             }
             else
             {
