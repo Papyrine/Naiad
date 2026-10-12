@@ -27,7 +27,7 @@ public class SamplePickerTests : BunitTestContext
             .Add(_ => _.Samples, DiagramSamples.All)
             .Add(_ => _.OnSampleSelected, (DiagramSample sample) => picked = sample));
 
-        await EventHandlerDispatchExtensions.ChangeAsync(cut.Find("select"), "Pie");
+        await cut.Find("select").ChangeAsync("Pie");
 
         await Assert.That(picked).IsNotNull();
         await Assert.That(picked!.Name).IsEqualTo("Pie");
@@ -41,7 +41,7 @@ public class SamplePickerTests : BunitTestContext
             .Add(_ => _.Samples, DiagramSamples.All)
             .Add(_ => _.OnSampleSelected, (DiagramSample _) => raised = true));
 
-        await EventHandlerDispatchExtensions.ChangeAsync(cut.Find("select"), "");
+        await cut.Find("select").ChangeAsync("");
 
         await Assert.That(raised).IsFalse();
     }
