@@ -38,13 +38,22 @@ static class Order
 
         var bestCC = double.PositiveInfinity;
         List<List<string?>>? best = null;
+        List<List<string?>> spare = [];
+        // The layer graphs are sorted as dagre sorts them, entries made afresh and all.
+        SortScratch? scratch = null;
+        if (lightLayers)
+        {
+            scratch = new();
+        }
+
+        var crossings = new CrossCount.Scratch();
 
         for (int i = 0, lastBest = 0; lastBest < 4; ++i, ++lastBest)
         {
-            SweepLayerGraphs(i % 2 != 0 ? downLayerGraphs : upLayerGraphs, i % 4 >= 2);
+            SweepLayerGraphs(i % 2 != 0 ? downLayerGraphs : upLayerGraphs, i % 4 >= 2, scratch);
 
-            var layering = Util.BuildLayerMatrix(graph);
-            var cc = CrossCount.Run(graph, layering);
+            var layering = Util.BuildLayerMatrix(graph, spare);
+            var cc = CrossCount.Run(graph, layering, crossings);
             // Only a strict improvement replaces the best ordering, as in the dagre Mermaid ships. Letting a
             // sweep that merely ties take over hands the result to the last of the four tied sweeps, which
             // is a right-biased one: it breaks equal barycenters in reverse, so siblings came out mirrored
@@ -52,8 +61,9 @@ static class Order
             if (cc < bestCC)
             {
                 lastBest = 0;
-                // shallow copy: BuildLayerMatrix builds fresh inner lists on every sweep.
-                best = new(layering);
+                // The matrix just filled is kept as the best, and the one it replaces is filled next.
+                spare = best ?? [];
+                best = layering;
                 bestCC = cc;
             }
         }
@@ -133,12 +143,12 @@ static class Order
         return layers;
     }
 
-    static void SweepLayerGraphs(List<SortLayer> layers, bool biasRight)
+    static void SweepLayerGraphs(List<SortLayer> layers, bool biasRight, SortScratch? scratch)
     {
         var cg = new Graph();
         foreach (var layer in layers)
         {
-            var sorted = SortSubgraph.Run(layer, layer.Root, cg, biasRight);
+            var sorted = SortSubgraph.Run(layer, layer.Root, cg, biasRight, scratch);
             for (var i = 0; i < sorted.Vs.Count; i++)
             {
                 layer.SetOrder(sorted.Vs[i], i);

@@ -5,7 +5,7 @@ static class AddSubgraphConstraints
 
     public static void Run(SortLayer graph, Graph constraintGraph, List<string> vs)
     {
-        var prev = new Dictionary<string, string>(StringComparer.Ordinal);
+        Dictionary<string, string>? prev = null;
         string? rootPrev = null;
 
         foreach (var v in vs)
@@ -22,6 +22,7 @@ static class AddSubgraphConstraints
                 }
                 else
                 {
+                    prev ??= new(StringComparer.Ordinal);
                     prevChild = prev.GetValueOrDefault(parent);
                     prev[parent] = child;
                 }

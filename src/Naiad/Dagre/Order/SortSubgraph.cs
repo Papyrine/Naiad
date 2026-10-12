@@ -1,18 +1,13 @@
 static class SortSubgraph
 {
     public static SortResult Run(Graph graph, string v, Graph constraintGraph, bool biasRight = false) =>
-        Run(new GraphSortLayer(graph), v, constraintGraph, biasRight);
+        Run(new GraphSortLayer(graph), v, constraintGraph, biasRight, null);
 
-    public static SortResult Run(SortLayer graph, string v, Graph constraintGraph, bool biasRight = false)
+    public static SortResult Run(SortLayer graph, string v, Graph constraintGraph, bool biasRight, SortScratch? scratch)
     {
-        var movable = graph.Children(v);
+        var movable = graph.Movable(v);
         graph.Borders(v, out var bl, out var br);
-        var subgraphs = new Dictionary<string, SortResult>(StringComparer.Ordinal);
-
-        if (bl != null)
-        {
-            movable = movable.Where(w => w != bl && w != br).ToList();
-        }
+        Dictionary<string, SortResult>? subgraphs = null;
 
         var barycenters = graph.Barycenters(movable);
         foreach (var entry in barycenters)
@@ -22,7 +17,8 @@ static class SortSubgraph
                 continue;
             }
 
-            var subgraphResult = Run(graph, entry.V, constraintGraph, biasRight);
+            var subgraphResult = Run(graph, entry.V, constraintGraph, biasRight, scratch);
+            subgraphs ??= new(StringComparer.Ordinal);
             subgraphs[entry.V] = subgraphResult;
             if (subgraphResult.Barycenter != null)
             {
@@ -30,20 +26,39 @@ static class SortSubgraph
             }
         }
 
-        var entries = ResolveConflicts.Run(barycenters, constraintGraph, knownDistinct: true);
-        if (subgraphs.Count > 0)
+        // The subgraphs inside this one are sorted by now, so the scratch is this sort's alone.
+        List<ResolvedEntry> entries;
+        if (scratch == null)
+        {
+            entries = ResolveConflicts.Run(barycenters, constraintGraph);
+        }
+        else
+        {
+            entries = ResolveConflicts.Run(barycenters, constraintGraph, scratch);
+        }
+        if (subgraphs != null)
         {
             ExpandSubgraphs(entries, subgraphs);
         }
 
-        var result = Sort.Run(entries, biasRight);
-
-        if (bl != null && br != null)
+        var bordered = bl != null && br != null;
+        SortResult result;
+        if (bordered)
         {
-            result.Vs = [bl, .. result.Vs, br];
-            if (graph.FirstPredecessor(bl) is { } blPred)
+            result = Sort.Run(entries, biasRight, scratch, bl, br);
+        }
+        else
+        {
+            result = Sort.Run(entries, biasRight, scratch, null, null);
+        }
+
+        scratch?.Release();
+
+        if (bordered)
+        {
+            if (graph.FirstPredecessor(bl!) is { } blPred)
             {
-                var brPred = graph.FirstPredecessor(br)!;
+                var brPred = graph.FirstPredecessor(br!)!;
                 if (result.Barycenter == null)
                 {
                     result.Barycenter = 0;
@@ -64,6 +79,18 @@ static class SortSubgraph
     {
         foreach (var entry in entries)
         {
+            // The usual entry, one node: it is a subgraph and takes that subgraph's nodes as they are, or
+            // it is not and stays as it is.
+            if (entry.Vs.Count == 1)
+            {
+                if (subgraphs.TryGetValue(entry.Vs[0], out var only))
+                {
+                    entry.Vs = only.Vs;
+                }
+
+                continue;
+            }
+
             var expanded = new List<string>(entry.Vs.Count);
             foreach (var v in entry.Vs)
             {

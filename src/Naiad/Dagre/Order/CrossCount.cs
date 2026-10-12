@@ -1,14 +1,26 @@
 static class CrossCount
 {
-    public static int Run(Graph graph, List<List<string?>> layering)
+    public static int Run(Graph graph, List<List<string?>> layering) =>
+        Run(graph, layering, new());
+
+    internal static int Run(Graph graph, List<List<string?>> layering, Scratch scratch)
     {
         var cc = 0;
         for (var i = 1; i < layering.Count; ++i)
         {
-            cc += TwoLayerCrossCount(graph, layering[i - 1], layering[i]);
+            cc += TwoLayerCrossCount(graph, layering[i - 1], layering[i], scratch);
         }
 
         return cc;
+    }
+
+    /// <summary>Working storage a caller counting the same graph again and again may keep between counts.</summary>
+    internal sealed class Scratch
+    {
+        public readonly Dictionary<string, int> SouthPos = new(StringComparer.Ordinal);
+        public readonly List<SouthEntry> SouthEntries = [];
+        public readonly List<SouthEntry> NodeEntries = [];
+        public double[] Tree = [];
     }
 
     internal struct SouthEntry
@@ -17,12 +29,13 @@ static class CrossCount
         public double Weight;
     }
 
-    static int TwoLayerCrossCount(Graph graph, List<string?> northLayer, List<string?> southLayer)
+    static int TwoLayerCrossCount(Graph graph, List<string?> northLayer, List<string?> southLayer, Scratch scratch)
     {
         // Sort all of the edges between the north and south layers by their position
         // in the north layer and then the south. Map these edges to the position of
         // their head in the south layer.
-        var southPos = new Dictionary<string, int>(southLayer.Count, StringComparer.Ordinal);
+        var southPos = scratch.SouthPos;
+        southPos.Clear();
         for (var i = 0; i < southLayer.Count; i++)
         {
             if (southLayer[i] is { } name)
@@ -31,8 +44,9 @@ static class CrossCount
             }
         }
 
-        var southEntries = new List<SouthEntry>();
-        var nodeEntries = new List<SouthEntry>();
+        var southEntries = scratch.SouthEntries;
+        var nodeEntries = scratch.NodeEntries;
+        southEntries.Clear();
         foreach (var v in northLayer)
         {
             if (v is null)
@@ -55,8 +69,7 @@ static class CrossCount
             southEntries.AddRange(nodeEntries);
         }
 
-        double[] tree = [];
-        return CountCrossings(southEntries, southLayer.Count, ref tree);
+        return CountCrossings(southEntries, southLayer.Count, ref scratch.Tree);
     }
 
     internal static void SortByPosition(List<SouthEntry> entries) =>
