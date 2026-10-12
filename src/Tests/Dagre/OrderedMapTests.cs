@@ -25,10 +25,10 @@ public class OrderedMapTests
         {
             ["a"] = "1",
             ["b"] = "2",
-            ["c"] = "3"
+            ["c"] = "3",
+            ["a"] = "updated"
         };
 
-        map["a"] = "updated";
         map.Remove("b");
         map["b"] = "back";
 

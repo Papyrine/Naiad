@@ -171,9 +171,9 @@ public class GanttDateTests
 
         var tasks = Schedule(input);
 
-        await Assert.That(tasks[0].ComputedStart.TimeOfDay).IsEqualTo(new TimeSpan(9, 0, 0));
-        await Assert.That(tasks[0].ComputedEnd.TimeOfDay).IsEqualTo(new TimeSpan(10, 30, 0));
-        await Assert.That(tasks[1].ComputedEnd.TimeOfDay).IsEqualTo(new TimeSpan(12, 30, 0));
+        await Assert.That(tasks[0].ComputedStart.TimeOfDay).IsEqualTo(new(9, 0, 0));
+        await Assert.That(tasks[0].ComputedEnd.TimeOfDay).IsEqualTo(new(10, 30, 0));
+        await Assert.That(tasks[1].ComputedEnd.TimeOfDay).IsEqualTo(new(12, 30, 0));
     }
 
     [Test]

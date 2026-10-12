@@ -186,8 +186,7 @@ class RequirementParser : IDiagramParser<RequirementModel>
     // A quoted value's quotes are delimiters, not part of the value.
     static string Unquote(string value)
     {
-        if (value.Length >= 2 &&
-            value[0] == '"' &&
+        if (value is ['"', _, ..] &&
             value[^1] == '"')
         {
             return value[1..^1];

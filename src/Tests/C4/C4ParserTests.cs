@@ -200,7 +200,7 @@ public class C4ParserTests
     {
         var svg = Mermaid.Render($"C4Context\n    System(a, \"A\")\n    System(b, \"B\")\n    {keyword}(a, b, \"uses\")");
 
-        await Assert.That(Regex.Matches(svg, @"fill=.#666. stroke=.none.|stroke=.none. fill=.#666.|<path[^>]*Z[^>]*fill=.#666.").Count)
+        await Assert.That(Regex.Matches(svg, "fill=.#666. stroke=.none.|stroke=.none. fill=.#666.|<path[^>]*Z[^>]*fill=.#666.").Count)
             .IsEqualTo(expected);
     }
 

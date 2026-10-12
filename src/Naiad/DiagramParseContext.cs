@@ -5,7 +5,7 @@ namespace Naiad;
 // statement its line does not end after, a list of statements that stops short of the end of the input -
 // note where, and the furthest of those places is where the failure is reported.
 sealed class DiagramParseContext(string input) :
-    ParseContext(new Scanner(input))
+    ParseContext(new(input))
 {
     int furthest;
     string? reason;

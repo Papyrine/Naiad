@@ -1,7 +1,4 @@
 using Naiad.Diagrams.Architecture;
-using Naiad.Diagrams.Block;
-using Naiad.Diagrams.GitGraph;
-using Naiad.Diagrams.Kanban;
 using Naiad.Diagrams.Radar;
 using Naiad.Diagrams.Requirement;
 

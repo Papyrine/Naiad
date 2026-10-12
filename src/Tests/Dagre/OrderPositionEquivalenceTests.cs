@@ -96,15 +96,20 @@ public class OrderPositionEquivalenceTests
 
     // dagre's own loop for type-2 conflicts, scanning to the end of the layer at every node. The port
     // skips a scan it has already made; the conflicts found must be the same.
-    static Dictionary<string, Dictionary<string, bool>> Type2ConflictsByRepeatedScan(Graph graph, List<List<string>> layering)
+    static Dictionary<string, Dictionary<string, bool>> Type2ConflictsByRepeatedScan(Graph graph, List<List<string?>> layering)
     {
         var conflicts = new Dictionary<string, Dictionary<string, bool>>(StringComparer.Ordinal);
 
-        void Scan(List<string> south, int southPos, int southEnd, int prevNorthBorder, int nextNorthBorder)
+        void Scan(List<string?> south, int southPos, int southEnd, int prevNorthBorder, int nextNorthBorder)
         {
             for (var i = southPos; i < southEnd; i++)
             {
                 var v = south[i];
+                if (v is null)
+                {
+                    continue;
+                }
+
                 if (graph.NodeLabel(v).Dummy == null)
                 {
                     continue;
@@ -133,7 +138,8 @@ public class OrderPositionEquivalenceTests
             for (var southLookahead = 0; southLookahead < south.Count; southLookahead++)
             {
                 var v = south[southLookahead];
-                if (graph.NodeLabel(v).Dummy == DummyKind.Border)
+                if (v is not null &&
+                    graph.NodeLabel(v).Dummy == DummyKind.Border)
                 {
                     var predecessors = graph.Predecessors(v)!;
                     if (predecessors.Count != 0)
@@ -221,7 +227,7 @@ public class OrderPositionEquivalenceTests
 
     static Dictionary<string, double> CompactionOverBlockGraph(
         Graph graph,
-        List<List<string>> layering,
+        List<List<string?>> layering,
         Dictionary<string, string> root,
         Dictionary<string, string> align,
         bool reverseSep)
@@ -301,7 +307,7 @@ public class OrderPositionEquivalenceTests
             new() { V = "c", Barycenter = 1, Weight = 1 }
         };
 
-        var resolved = ResolveConflicts.Run(entries, new Graph());
+        var resolved = ResolveConflicts.Run(entries, new());
 
         await Assert.That(string.Join("|", resolved.Select(_ => $"{string.Join(",", _.Vs)}:{_.I}:{_.Barycenter}:{_.Weight}")))
             .IsEqualTo("c:2:1:1|b:1::|a:0:2:3");
@@ -318,7 +324,7 @@ public class OrderPositionEquivalenceTests
             new() { V = "a", Barycenter = 9, Weight = 4 }
         };
 
-        var resolved = ResolveConflicts.Run(entries, new Graph());
+        var resolved = ResolveConflicts.Run(entries, new());
 
         await Assert.That(string.Join("|", resolved.Select(_ => $"{string.Join(",", _.Vs)}:{_.I}:{_.Barycenter}:{_.Weight}")))
             .IsEqualTo("b:1:5:1|a:2:9:4");
@@ -497,7 +503,7 @@ public class OrderPositionEquivalenceTests
 
     [Test]
     public async Task IndexedPositioning_OfAnEmptyGraph_DoesNothing() =>
-        await Assert.That(IndexedBK.TryPositionX(new Graph(), [])).IsTrue();
+        await Assert.That(IndexedBK.TryPositionX(new(), [])).IsTrue();
 
     // A layering it cannot number is declined, with nothing positioned, and left to the dictionary version.
     [Test]

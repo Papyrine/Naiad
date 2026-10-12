@@ -248,8 +248,8 @@ public class FlowchartFeatureTests
         var options = new RenderOptions { Png = new() { Scale = 2 } };
         Func<string, RenderOptions, byte[]>[] backends =
         [
-            (input, renderOptions) => SkiaRenderer.RenderPng(input, renderOptions),
-            (input, renderOptions) => ImageSharpRenderer.RenderPng(input, renderOptions)
+            SkiaRenderer.RenderPng,
+            ImageSharpRenderer.RenderPng
         ];
 
         foreach (var backend in backends)
@@ -271,7 +271,7 @@ public class FlowchartFeatureTests
             for (var x = 0; x < image.Width; x++)
             {
                 var pixel = image[x, y];
-                if (pixel.R < 110 && pixel.G < 110 && pixel.B < 110)
+                if (pixel is { R: < 110, G: < 110, B: < 110 })
                 {
                     count++;
                 }

@@ -89,7 +89,7 @@ sealed class FlatOrder
             return false;
         }
 
-        flat.Run(graph);
+        flat.Run();
         return true;
     }
 
@@ -276,7 +276,7 @@ sealed class FlatOrder
 
     // dagre's loop: sweep up and down, biased left then right, until four sweeps running have failed to
     // cut the crossings, and keep the best order seen.
-    void Run(Graph graph)
+    void Run()
     {
         var bestCC = double.PositiveInfinity;
 

@@ -27,11 +27,11 @@ static class BK
      * This algorithm (safely) assumes that a dummy node will only be incident on a
      * single node in the layers being scanned.
      */
-    internal static Dictionary<string, Dictionary<string, bool>> FindType1Conflicts(Graph graph, List<List<string>> layering)
+    internal static Dictionary<string, Dictionary<string, bool>> FindType1Conflicts(Graph graph, List<List<string?>> layering)
     {
         var conflicts = new Dictionary<string, Dictionary<string, bool>>(StringComparer.Ordinal);
 
-        List<string> VisitLayer(List<string> prevLayer, List<string> layer)
+        List<string?> VisitLayer(List<string?> prevLayer, List<string?> layer)
         {
             var k0 =
                 // last visited node in the previous layer that is incident on an inner
@@ -46,7 +46,7 @@ static class BK
             for (var i = 0; i < layer.Count; i++)
             {
                 var v = layer[i];
-                var w = FindOtherInnerSegmentNode(graph, v);
+                var w = v is null ? null : FindOtherInnerSegmentNode(graph, v);
                 var k1 = w != null ? graph.NodeLabel(w).Order!.Value : prevLayerLength;
 
                 if (w == null && v != lastNode)
@@ -57,6 +57,11 @@ static class BK
                 for (var scanIndex = scanPos; scanIndex <= i; scanIndex++)
                 {
                     var scanNode = layer[scanIndex];
+                    if (scanNode is null)
+                    {
+                        continue;
+                    }
+
                     foreach (var u in graph.PredecessorsOf(scanNode))
                     {
                         var uLabel = graph.NodeLabel(u);
@@ -88,11 +93,11 @@ static class BK
         return conflicts;
     }
 
-    internal static Dictionary<string, Dictionary<string, bool>> FindType2Conflicts(Graph graph, List<List<string>> layering)
+    internal static Dictionary<string, Dictionary<string, bool>> FindType2Conflicts(Graph graph, List<List<string?>> layering)
     {
         var conflicts = new Dictionary<string, Dictionary<string, bool>>(StringComparer.Ordinal);
 
-        void Scan(List<string> south, int southPos, int southEnd, int prevNorthBorder, int nextNorthBorder)
+        void Scan(List<string?> south, int southPos, int southEnd, int prevNorthBorder, int nextNorthBorder)
         {
             for (var i = Math.Max(southPos, 0); i < southEnd && i < south.Count; i++)
             {
@@ -119,7 +124,7 @@ static class BK
             }
         }
 
-        List<string> VisitLayer(List<string> north, List<string> south)
+        List<string?> VisitLayer(List<string?> north, List<string?> south)
         {
             var prevNorthPos = -1;
             var nextNorthPos = -1;
@@ -137,7 +142,8 @@ static class BK
             for (var southLookahead = 0; southLookahead < south.Count; southLookahead++)
             {
                 var v = south[southLookahead];
-                if (graph.NodeLabel(v).Dummy == DummyKind.Border)
+                if (v is not null &&
+                    graph.NodeLabel(v).Dummy == DummyKind.Border)
                 {
                     string? firstPred = null;
                     foreach (var predecessor in graph.PredecessorsOf(v))
@@ -233,7 +239,7 @@ static class BK
      * blocks would be split in that scenario.
      */
     internal static AlignmentResult VerticalAlignment(
-        List<List<string>> layering,
+        List<List<string?>> layering,
         Dictionary<string, Dictionary<string, bool>> conflicts,
         Func<string, OrderedMap<int>.KeyEnumerable> neighborFn)
     {
@@ -257,6 +263,11 @@ static class BK
             for (var order = 0; order < layer.Count; order++)
             {
                 var v = layer[order];
+                if (v is null)
+                {
+                    continue;
+                }
+
                 root[v] = v;
                 align[v] = v;
                 pos[v] = order;
@@ -270,6 +281,11 @@ static class BK
             var prevIdx = -1;
             foreach (var v in layer)
             {
+                if (v is null)
+                {
+                    continue;
+                }
+
                 ws.Clear();
                 foreach (var w in neighborFn(v))
                 {
@@ -325,7 +341,7 @@ static class BK
 
     internal static Dictionary<string, double> HorizontalCompaction(
         Graph graph,
-        List<List<string>> layering,
+        List<List<string?>> layering,
         Dictionary<string, string> root,
         Dictionary<string, string> align,
         bool reverseSep = false)
@@ -460,7 +476,7 @@ static class BK
         public readonly List<List<BlockEdge>?> Out = [];
         public readonly List<double> Weights = [];
 
-        public Blocks(Graph graph, List<List<string>> layering, Dictionary<string, string> root, bool reverseSep)
+        public Blocks(Graph graph, List<List<string?>> layering, Dictionary<string, string> root, bool reverseSep)
         {
             Index = new(StringComparer.Ordinal);
             var edges = new Dictionary<long, int>();
@@ -472,6 +488,11 @@ static class BK
                 string? u = null;
                 foreach (var v in layer)
                 {
+                    if (v is null)
+                    {
+                        continue;
+                    }
+
                     if (!root.TryGetValue(v, out var vRoot))
                     {
                         continue;
@@ -521,7 +542,7 @@ static class BK
 
     internal static Graph BuildBlockGraph(
         Graph graph,
-        List<List<string>> layering,
+        List<List<string?>> layering,
         Dictionary<string, string> root,
         bool reverseSep)
     {
@@ -534,7 +555,8 @@ static class BK
             string? u = null;
             foreach (var v in layer)
             {
-                if (root.TryGetValue(v, out var vRoot))
+                if (v is not null &&
+                    root.TryGetValue(v, out var vRoot))
                 {
                     blockGraph.SetNode(vRoot);
                     if (u != null)
@@ -669,7 +691,7 @@ static class BK
     internal static Dictionary<string, double> PositionX(Graph graph) =>
         PositionX(graph, Util.BuildLayerMatrix(graph));
 
-    internal static Dictionary<string, double> PositionX(Graph graph, List<List<string>> layering)
+    internal static Dictionary<string, double> PositionX(Graph graph, List<List<string?>> layering)
     {
         var conflicts = FindType1Conflicts(graph, layering);
         var type2 = FindType2Conflicts(graph, layering);

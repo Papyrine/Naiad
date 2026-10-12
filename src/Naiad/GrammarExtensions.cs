@@ -23,7 +23,7 @@ static class GrammarExtensions
     internal static bool TryMatch<T>(this Parser<T> parser, string input, [MaybeNullWhen(false)] out T value)
     {
         var result = new ParseResult<T>();
-        if (parser.Parse(new ParseContext(new Scanner(input)), ref result))
+        if (parser.Parse(new(new(input)), ref result))
         {
             value = result.Value;
             return true;

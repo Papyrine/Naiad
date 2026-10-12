@@ -6,11 +6,9 @@ namespace Naiad;
 public readonly struct DiagramParseResult<TModel>
     where TModel : DiagramBase
 {
-    readonly TModel? value;
-
     internal DiagramParseResult(TModel value)
     {
-        this.value = value;
+        Value = value;
         Success = true;
     }
 
@@ -27,12 +25,12 @@ public readonly struct DiagramParseResult<TModel>
     {
         get
         {
-            if (value is null)
+            if (field is null)
             {
                 throw new InvalidOperationException($"The parse failed, so it has no value: {Error}");
             }
 
-            return value;
+            return field;
         }
     }
 

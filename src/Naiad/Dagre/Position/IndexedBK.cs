@@ -20,7 +20,7 @@ static class IndexedBK
     /// nothing, for a layering this cannot number: one with a gap in a layer, or with an edge to a node
     /// that is not in it. Neither arises in a layout, and <see cref="BK.PositionX(Graph)"/> remains for them.
     /// </summary>
-    internal static bool TryPositionX(Graph graph, List<List<string>> layering)
+    internal static bool TryPositionX(Graph graph, List<List<string?>> layering)
     {
         if (Nodes.TryNumber(graph, layering) is not { } nodes)
         {
@@ -95,7 +95,7 @@ static class IndexedBK
         public required int[] SuccessorStart;
         public required List<int> Successors;
 
-        public static Nodes? TryNumber(Graph graph, List<List<string>> layering)
+        public static Nodes? TryNumber(Graph graph, List<List<string?>> layering)
         {
             var count = 0;
             foreach (var layer in layering)

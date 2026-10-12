@@ -116,10 +116,10 @@ static class Util
     }
 
     /// <summary>Builds a matrix of node ids indexed by [rank][order].</summary>
-    public static List<List<string>> BuildLayerMatrix(Graph graph)
+    public static List<List<string?>> BuildLayerMatrix(Graph graph)
     {
         var rankCount = (int) (MaxRank(graph) + 1);
-        var layering = new List<List<string>>();
+        var layering = new List<List<string?>>();
         for (var i = 0; i < rankCount; i++)
         {
             layering.Add([]);
@@ -141,7 +141,7 @@ static class Util
             var order = node.Order!.Value;
             while (row.Count <= order)
             {
-                row.Add(null!);
+                row.Add(null);
             }
 
             row[order] = v;

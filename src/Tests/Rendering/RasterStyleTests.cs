@@ -5,10 +5,10 @@ using SixLabors.ImageSharp.PixelFormats;
 // label's own `color` was ignored.
 public class RasterStyleTests
 {
-    static readonly Func<string, RenderOptions, byte[]>[] backends =
+    static Func<string, RenderOptions, byte[]>[] backends =
     [
-        (input, options) => SkiaRenderer.RenderPng(input, options),
-        (input, options) => ImageSharpRenderer.RenderPng(input, options)
+        SkiaRenderer.RenderPng,
+        ImageSharpRenderer.RenderPng
     ];
 
     static int Count(byte[] png, Func<Rgba32, bool> match)

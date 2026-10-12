@@ -1454,7 +1454,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         // Render nested transitions
-        RenderNestedTransitions(builder, model.States, stateMap, model, options);
+        RenderNestedTransitions(builder, model.States, stateMap, options);
     }
 
     /// <summary>
@@ -1465,7 +1465,6 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         SvgBuilder builder,
         List<State> states,
         Dictionary<string, State> outerMap,
-        StateModel model,
         RenderOptions options)
     {
         foreach (var state in states)
@@ -1515,7 +1514,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
                 }
             }
 
-            RenderNestedTransitions(builder, state.NestedStates, nestedMap, model, options);
+            RenderNestedTransitions(builder, state.NestedStates, nestedMap, options);
         }
     }
 

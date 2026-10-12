@@ -70,7 +70,7 @@ public class CommonParsersTests
         CultureInfo.CurrentCulture = new("tr-TR");
         try
         {
-            var keyword = Parsers.OneOf(GrammarExtensions.TextIgnoreCase("id"), GrammarExtensions.TextIgnoreCase("x"));
+            var keyword = OneOf(GrammarExtensions.TextIgnoreCase("id"), GrammarExtensions.TextIgnoreCase("x"));
 
             await Assert.That(Parse(keyword, input)).IsEqualTo(input);
         }
@@ -93,7 +93,7 @@ public class CommonParsersTests
     // What a parser leaves of its input.
     static string Unread<T>(Parser<T> parser, string input)
     {
-        var context = new ParseContext(new Scanner(input));
+        var context = new ParseContext(new(input));
         var result = new ParseResult<T>();
         if (!parser.Parse(context, ref result))
         {

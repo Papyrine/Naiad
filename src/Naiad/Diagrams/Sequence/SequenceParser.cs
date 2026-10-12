@@ -258,8 +258,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
 
     static string Unquote(string text)
     {
-        if (text.Length >= 2 &&
-            text[0] == '"' &&
+        if (text is ['"', _, ..] &&
             text[^1] == '"')
         {
             return text[1..^1];

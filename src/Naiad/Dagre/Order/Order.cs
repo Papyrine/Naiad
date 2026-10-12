@@ -28,17 +28,16 @@ static class Order
         var downLayerGraphs = BuildLayerGraphs(graph, Util.Range(1, maxRank + 1), graph.InEdgesOf);
         var upLayerGraphs = BuildLayerGraphs(graph, Util.Range(maxRank - 1, -1, -1), graph.OutEdgesOf);
 
-        var layering = InitOrder.Run(graph);
-        AssignOrder(graph, layering);
+        AssignOrder(graph, InitOrder.Run(graph));
 
         var bestCC = double.PositiveInfinity;
-        List<List<string>>? best = null;
+        List<List<string?>>? best = null;
 
         for (int i = 0, lastBest = 0; lastBest < 4; ++i, ++lastBest)
         {
             SweepLayerGraphs(i % 2 != 0 ? downLayerGraphs : upLayerGraphs, i % 4 >= 2);
 
-            layering = Util.BuildLayerMatrix(graph);
+            var layering = Util.BuildLayerMatrix(graph);
             var cc = CrossCount.Run(graph, layering);
             // Only a strict improvement replaces the best ordering, as in the dagre Mermaid ships. Letting a
             // sweep that merely ties take over hands the result to the last of the four tied sweeps, which
@@ -124,13 +123,16 @@ static class Order
         }
     }
 
-    static void AssignOrder(Graph graph, List<List<string>> layering)
+    static void AssignOrder(Graph graph, IEnumerable<IReadOnlyList<string?>> layering)
     {
         foreach (var layer in layering)
         {
             for (var i = 0; i < layer.Count; i++)
             {
-                graph.NodeLabel(layer[i]).Order = i;
+                if (layer[i] is { } name)
+                {
+                    graph.NodeLabel(name).Order = i;
+                }
             }
         }
     }

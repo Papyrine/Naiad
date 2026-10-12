@@ -1077,13 +1077,19 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
                 case C4RelationshipDirection.Neighbor:
                     var side = rel.Direction == C4RelationshipDirection.Left ? -1 : 1;
                     var offset = (from.Width + to.Width) / 2 + separation + index * (to.Width + separation);
-                    to.Position = new(from.Position.X + side * offset, from.Position.Y);
+                    to.Position = from.Position with
+                    {
+                        X = from.Position.X + side * offset
+                    };
                     break;
 
                 // Down already ranks below the source; it only needs lining up under it, since the rank
                 // ordering can otherwise leave it off to one side.
                 case C4RelationshipDirection.Down:
-                    to.Position = new(from.Position.X + index * (to.Width + separation), to.Position.Y);
+                    to.Position = to.Position with
+                    {
+                        X = from.Position.X + index * (to.Width + separation)
+                    };
                     break;
 
                 default:

@@ -78,8 +78,8 @@ static class EdgeObstacleRouter
         var vertical = anchor.Y < node.Top - clearance || anchor.Y > node.Bottom + clearance;
 
         var corner = vertical
-            ? new Position(node.CenterX, anchor.Y)
-            : new Position(anchor.X, node.CenterY);
+            ? anchor with { X = node.CenterX }
+            : anchor with { Y = node.CenterY };
 
         var border = vertical
             ? new Position(node.CenterX, anchor.Y < node.CenterY ? node.Top : node.Bottom)

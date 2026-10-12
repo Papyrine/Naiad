@@ -133,15 +133,24 @@ public class GraphTests
             await Assert.That(graph.TryGetEdgeLabel("a", "b", out var found)).IsTrue();
             await Assert.That(found).IsSameReferenceAs(label);
             await Assert.That(graph.FindEdgeLabel(graph.Edges().Single())).IsSameReferenceAs(label);
-            await Assert.That(graph.FindEdgeLabel(new EdgeKey("a", "b"))).IsSameReferenceAs(label);
+            await Assert.That(graph.FindEdgeLabel(new("a", "b"))).IsSameReferenceAs(label);
         }
 
         [Test]
         public async Task ReplacingTheLabel_ReplacesItForBothLookups()
         {
             var graph = new Graph();
-            graph.SetEdge("a", "b", new EdgeLabel { Weight = 1 });
-            var replacement = new EdgeLabel { Weight = 2 };
+            graph.SetEdge(
+                "a",
+                "b",
+                new()
+                {
+                    Weight = 1
+                });
+            var replacement = new EdgeLabel
+            {
+                Weight = 2
+            };
             graph.SetEdge("a", "b", replacement);
 
             await Assert.That(graph.FindEdgeLabel("a", "b")).IsSameReferenceAs(replacement);
@@ -153,8 +162,8 @@ public class GraphTests
         public async Task RemovedEdge_IsGoneFromBothLookups()
         {
             var graph = new Graph();
-            graph.SetEdge("a", "b", new EdgeLabel());
-            graph.SetEdge("b", "c", new EdgeLabel());
+            graph.SetEdge("a", "b", new());
+            graph.SetEdge("b", "c", new());
             var key = graph.Edges()[0];
 
             graph.RemoveEdge("a", "b");
@@ -169,8 +178,8 @@ public class GraphTests
         public async Task RemovingANode_RemovesItsEdgesFromTheLookup()
         {
             var graph = new Graph();
-            graph.SetEdge("a", "b", new EdgeLabel());
-            graph.SetEdge("b", "c", new EdgeLabel());
+            graph.SetEdge("a", "b", new());
+            graph.SetEdge("b", "c", new());
 
             graph.RemoveNode("b");
 
@@ -222,7 +231,7 @@ public class GraphTests
         public async Task EdgeKey_EqualityIgnoresWhatItHasBeenLookedUpIn()
         {
             var directed = new Graph();
-            directed.SetEdge("b", "a", new EdgeLabel());
+            directed.SetEdge("b", "a", new());
             var undirected = new Graph(directed: false);
             var undirectedLabel = new EdgeLabel();
             undirected.SetEdge("a", "b", undirectedLabel);
@@ -235,7 +244,7 @@ public class GraphTests
             await Assert.That(used.GetHashCode()).IsEqualTo(fresh.GetHashCode());
             await Assert.That(new HashSet<EdgeKey> { used }.Contains(fresh)).IsTrue();
             await Assert.That(undirected.FindEdgeLabel(used)).IsSameReferenceAs(undirectedLabel);
-            await Assert.That(new EdgeKey("a", "b", "x")).IsNotEqualTo(new EdgeKey("a", "b"));
+            await Assert.That(new EdgeKey("a", "b", "x")).IsNotEqualTo(new("a", "b"));
         }
     }
 }

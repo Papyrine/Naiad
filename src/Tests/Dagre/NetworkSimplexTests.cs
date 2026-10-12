@@ -542,6 +542,6 @@ public class NetworkSimplexTests
             return new(e.V, e.W);
         }
 
-        return new EdgeKey(e.W, e.V);
+        return new(e.W, e.V);
     }
 }

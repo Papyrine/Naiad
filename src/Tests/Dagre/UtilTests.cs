@@ -160,7 +160,7 @@ public class UtilTests
             graph.SetNode("d", new() { Rank = 1, Order = 1 });
             graph.SetNode("e", new() { Rank = 2, Order = 0 });
 
-            var expected = new List<List<string>>
+            var expected = new List<List<string?>>
             {
                 new() { "a", "b" },
                 new() { "c", "d" },

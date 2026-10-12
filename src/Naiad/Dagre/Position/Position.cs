@@ -77,7 +77,7 @@ static class Positioning
         return true;
     }
 
-    static void PositionY(Graph graph, List<List<string>> layering)
+    static void PositionY(Graph graph, List<List<string?>> layering)
     {
         var graphLabel = graph.Label;
         var rankSep = graphLabel.RankSeparation!.Value;
@@ -87,11 +87,21 @@ static class Positioning
             double maxHeight = 0;
             foreach (var v in layer)
             {
+                if (v is null)
+                {
+                    continue;
+                }
+
                 maxHeight = Math.Max(maxHeight, graph.NodeLabel(v).Height);
             }
 
             foreach (var v in layer)
             {
+                if (v is null)
+                {
+                    continue;
+                }
+
                 var node = graph.NodeLabel(v);
                 node.Y = prevY + maxHeight / 2;
             }

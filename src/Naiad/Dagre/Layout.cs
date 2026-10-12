@@ -432,6 +432,11 @@ static class Layout
             for (var i = 0; i < layer.Count; i++)
             {
                 var v = layer[i];
+                if (v is null)
+                {
+                    continue;
+                }
+
                 var node = graph.NodeLabel(v);
                 node.Order = i + orderShift;
                 foreach (var selfEdge in node.SelfEdges ?? [])

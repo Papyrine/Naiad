@@ -90,10 +90,10 @@ public class FlowchartLayoutTests
         };
         edge.Points.AddRange([new(0, 0), new(10, 0), new(10, 20)]);
 
-        await Assert.That(edge.LabelPosition).IsEqualTo(new Position(10, 0));
+        await Assert.That(edge.LabelPosition).IsEqualTo(new(10, 0));
 
         edge.LabelPosition = new(3, 4);
-        await Assert.That(edge.LabelPosition).IsEqualTo(new Position(3, 4));
+        await Assert.That(edge.LabelPosition).IsEqualTo(new(3, 4));
     }
 
     // Each of these used to throw KeyNotFoundException out of the layout: dagre cannot rank an edge that

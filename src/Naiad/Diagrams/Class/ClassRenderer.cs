@@ -41,7 +41,7 @@ public class ClassRenderer :
         // Namespace boxes sit behind everything.
         foreach (var subgraph in graphModel.Subgraphs)
         {
-            RenderNamespace(builder, subgraph, options);
+            RenderNamespace(builder, subgraph);
         }
 
         // Render edges first (behind nodes). Each relationship is paired with the edge Dagre routed for it
@@ -183,7 +183,7 @@ public class ClassRenderer :
         return null;
     }
 
-    static void RenderNamespace(SvgBuilder builder, Subgraph subgraph, RenderOptions options)
+    static void RenderNamespace(SvgBuilder builder, Subgraph subgraph)
     {
         var bounds = subgraph.Bounds;
         builder.AddRect(

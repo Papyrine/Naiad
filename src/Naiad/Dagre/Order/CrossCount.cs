@@ -1,6 +1,6 @@
 static class CrossCount
 {
-    public static int Run(Graph graph, List<List<string>> layering)
+    public static int Run(Graph graph, List<List<string?>> layering)
     {
         var cc = 0;
         for (var i = 1; i < layering.Count; ++i)
@@ -17,7 +17,7 @@ static class CrossCount
         public double Weight;
     }
 
-    static int TwoLayerCrossCount(Graph graph, List<string> northLayer, List<string> southLayer)
+    static int TwoLayerCrossCount(Graph graph, List<string?> northLayer, List<string?> southLayer)
     {
         // Sort all of the edges between the north and south layers by their position
         // in the north layer and then the south. Map these edges to the position of
@@ -25,13 +25,21 @@ static class CrossCount
         var southPos = new Dictionary<string, int>(southLayer.Count, StringComparer.Ordinal);
         for (var i = 0; i < southLayer.Count; i++)
         {
-            southPos[southLayer[i]] = i;
+            if (southLayer[i] is { } name)
+            {
+                southPos[name] = i;
+            }
         }
 
         var southEntries = new List<SouthEntry>();
         var nodeEntries = new List<SouthEntry>();
         foreach (var v in northLayer)
         {
+            if (v is null)
+            {
+                continue;
+            }
+
             nodeEntries.Clear();
             foreach (var e in graph.OutEdgesOf(v))
             {

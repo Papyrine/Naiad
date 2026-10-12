@@ -715,7 +715,7 @@ class ClassParser : IDiagramParser<ClassModel>
         var trimmed = text.Trim();
         if (trimmed.Length > 0 &&
             char.IsLetter(trimmed[0]) &&
-            System.Enum.TryParse<ClassAnnotation>(trimmed, true, out var known))
+            Enum.TryParse<ClassAnnotation>(trimmed, true, out var known))
         {
             classDef.Annotation = known;
             classDef.AnnotationText = null;

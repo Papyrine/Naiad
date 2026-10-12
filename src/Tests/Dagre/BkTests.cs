@@ -50,7 +50,7 @@ public class BkTests
     public class FindType1Conflicts
     {
         Graph graph = null!;
-        List<List<string>> layering = null!;
+        List<List<string?>> layering = null!;
 
         [Before(Test)]
         public void Setup()
@@ -153,7 +153,7 @@ public class BkTests
     public class FindType2Conflicts
     {
         Graph graph = null!;
-        List<List<string>> layering = null!;
+        List<List<string?>> layering = null!;
 
         [Before(Test)]
         public void Setup()
