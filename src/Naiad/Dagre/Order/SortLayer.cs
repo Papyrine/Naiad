@@ -18,10 +18,16 @@ abstract class SortLayer
 
     public abstract int ChildCount(string v);
 
+    /// <summary>The nodes directly under <paramref name="v"/> but for its border nodes. Not to be changed.</summary>
+    public abstract List<string> Movable(string v);
+
     /// <summary>The border nodes of a subgraph in this rank, or nulls for anything else.</summary>
     public abstract void Borders(string v, out string? left, out string? right);
 
-    /// <summary>A barycenter for each of <paramref name="movable"/> that has an edge from the rank before.</summary>
+    /// <summary>
+    /// A barycenter for each of <paramref name="movable"/> that has an edge from the rank before. The
+    /// entries are the caller's until it next asks for the same nodes.
+    /// </summary>
     public abstract List<BarycenterEntry> Barycenters(List<string> movable);
 
     /// <summary>The label of the first node <paramref name="v"/> has an edge from, or null if it has none.</summary>
@@ -41,6 +47,18 @@ sealed class GraphSortLayer(Graph graph) : SortLayer
     public override List<string> Children(string v) => graph.Children(v);
 
     public override int ChildCount(string v) => graph.ChildCount(v);
+
+    public override List<string> Movable(string v)
+    {
+        var movable = graph.Children(v);
+        Borders(v, out var left, out var right);
+        if (left == null)
+        {
+            return movable;
+        }
+
+        return movable.Where(w => w != left && w != right).ToList();
+    }
 
     public override void Borders(string v, out string? left, out string? right)
     {
@@ -85,6 +103,11 @@ sealed class LightSortLayer : SortLayer
     readonly Dictionary<string, List<string>> children = new(StringComparer.Ordinal);
     readonly Dictionary<string, string> parents = new(StringComparer.Ordinal);
     readonly Dictionary<string, (string? Left, string? Right)> borders = new(StringComparer.Ordinal);
+
+    // Made the first time they are asked for and kept: a subgraph's children without its borders, and
+    // the entries handed out for a list of nodes, which every sweep fills in again.
+    readonly Dictionary<string, List<string>> movable = new(StringComparer.Ordinal);
+    readonly Dictionary<List<string>, List<BarycenterEntry>> entries = new(ReferenceEqualityComparer.Instance);
 
     // The nodes that have edges, and for each its place in the lists below: its edges are
     // neighbor[start[i] .. start[i + 1]), one per neighbour, in the order each neighbour was first met.
@@ -190,6 +213,34 @@ sealed class LightSortLayer : SortLayer
         return 0;
     }
 
+    public override List<string> Movable(string v)
+    {
+        var all = Children(v);
+        if (!borders.TryGetValue(v, out var found) ||
+            found.Left == null)
+        {
+            return all;
+        }
+
+        if (movable.TryGetValue(v, out var kept))
+        {
+            return kept;
+        }
+
+        kept = new(all.Count);
+        foreach (var w in all)
+        {
+            if (w != found.Left &&
+                w != found.Right)
+            {
+                kept.Add(w);
+            }
+        }
+
+        movable[v] = kept;
+        return kept;
+    }
+
     public override void Borders(string v, out string? left, out string? right)
     {
         left = null;
@@ -202,12 +253,23 @@ sealed class LightSortLayer : SortLayer
 
     public override List<BarycenterEntry> Barycenters(List<string> movable)
     {
-        var result = new List<BarycenterEntry>(movable.Count);
-        foreach (var v in movable)
+        if (!entries.TryGetValue(movable, out var result))
         {
-            if (!withEdges.TryGetValue(v, out var index))
+            result = new(movable.Count);
+            foreach (var v in movable)
             {
                 result.Add(new() { V = v });
+            }
+
+            entries[movable] = result;
+        }
+
+        foreach (var entry in result)
+        {
+            entry.Barycenter = null;
+            entry.Weight = null;
+            if (!withEdges.TryGetValue(entry.V, out var index))
+            {
                 continue;
             }
 
@@ -219,7 +281,8 @@ sealed class LightSortLayer : SortLayer
                 total += weight[j];
             }
 
-            result.Add(new() { V = v, Barycenter = sum / total, Weight = total });
+            entry.Barycenter = sum / total;
+            entry.Weight = total;
         }
 
         return result;

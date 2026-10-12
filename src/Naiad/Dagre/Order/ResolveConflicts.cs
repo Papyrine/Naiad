@@ -12,25 +12,84 @@ static class ResolveConflicts
         public bool Merged;
     }
 
-    public static List<ResolvedEntry> Run(List<BarycenterEntry> entries, Graph constraintGraph) =>
-        Run(entries, constraintGraph, knownDistinct: false);
-
-    /// <summary>
-    /// <paramref name="knownDistinct"/> is for a caller whose entries are the children of one node, which
-    /// cannot repeat, and spares checking that they do not.
-    /// </summary>
-    internal static List<ResolvedEntry> Run(List<BarycenterEntry> entries, Graph constraintGraph, bool knownDistinct)
+    public static List<ResolvedEntry> Run(List<BarycenterEntry> entries, Graph constraintGraph)
     {
         if (constraintGraph.EdgeCount == 0 &&
-            (knownDistinct || AllDistinct(entries)))
+            AllDistinct(entries))
         {
             return Unconstrained(entries);
         }
 
-        var mappedEntries = new Dictionary<string, MappedEntry>(StringComparer.Ordinal);
-        var insertionOrder = new List<string>();
+        return Constrained(entries, null, constraintGraph, []);
+    }
+
+    /// <summary>
+    /// For entries that are the children of one node, which cannot repeat. A constraint lies between two
+    /// nodes of the constraint graph, so an entry that is not one of those is neither merged nor waited
+    /// on, and is answered directly from <paramref name="scratch"/>; only the rest go through the
+    /// bookkeeping. The entries come back in no particular order - each has an
+    /// <see cref="ResolvedEntry.I"/> of its own, which is all <see cref="Sort"/> places them by - and are
+    /// good until the scratch is released.
+    /// </summary>
+    internal static List<ResolvedEntry> Run(List<BarycenterEntry> entries, Graph constraintGraph, SortScratch scratch)
+    {
+        var resolved = scratch.Resolved;
+        resolved.Clear();
+
+        List<int>? constrained = null;
+        if (constraintGraph.EdgeCount != 0)
+        {
+            for (var i = 0; i < entries.Count; i++)
+            {
+                if (constraintGraph.HasNode(entries[i].V))
+                {
+                    constrained ??= [];
+                    constrained.Add(i);
+                }
+            }
+
+            if (constrained is { Count: < 2 })
+            {
+                constrained = null;
+            }
+        }
+
+        var next = 0;
         for (var i = 0; i < entries.Count; i++)
         {
+            if (constrained != null &&
+                next < constrained.Count &&
+                constrained[next] == i)
+            {
+                next++;
+                continue;
+            }
+
+            resolved.Add(scratch.Rent(entries[i], i));
+        }
+
+        if (constrained != null)
+        {
+            Constrained(entries, constrained, constraintGraph, resolved);
+        }
+
+        return resolved;
+    }
+
+    // The entries at the places in `only`, or all of them, resolved against the constraints and added
+    // to `resolved`.
+    static List<ResolvedEntry> Constrained(
+        List<BarycenterEntry> entries,
+        List<int>? only,
+        Graph constraintGraph,
+        List<ResolvedEntry> resolved)
+    {
+        var count = only?.Count ?? entries.Count;
+        var mappedEntries = new Dictionary<string, MappedEntry>(count, StringComparer.Ordinal);
+        var insertionOrder = new List<string>(count);
+        for (var k = 0; k < count; k++)
+        {
+            var i = only?[k] ?? k;
             var entry = entries[i];
             var tmp = new MappedEntry
             {
@@ -54,7 +113,7 @@ static class ResolveConflicts
             mappedEntries[entry.V] = tmp;
         }
 
-        foreach (var e in constraintGraph.Edges())
+        foreach (var e in constraintGraph.EnumerateEdges())
         {
             var hasV = mappedEntries.TryGetValue(e.V, out var entryV);
             var hasW = mappedEntries.TryGetValue(e.W, out var entryW);
@@ -65,12 +124,18 @@ static class ResolveConflicts
             }
         }
 
-        var sourceSet = insertionOrder
-            .Select(v => mappedEntries[v])
-            .Where(entry => entry.Indegree == 0)
-            .ToList();
+        var sourceSet = new List<MappedEntry>(insertionOrder.Count);
+        foreach (var v in insertionOrder)
+        {
+            var entry = mappedEntries[v];
+            if (entry.Indegree == 0)
+            {
+                sourceSet.Add(entry);
+            }
+        }
 
-        return DoResolveConflicts(sourceSet);
+        DoResolveConflicts(sourceSet, resolved);
+        return resolved;
     }
 
     /// <summary>
@@ -134,35 +199,9 @@ static class ResolveConflicts
         return true;
     }
 
-    static List<ResolvedEntry> DoResolveConflicts(List<MappedEntry> sourceSet)
+    static void DoResolveConflicts(List<MappedEntry> sourceSet, List<ResolvedEntry> resolved)
     {
-        var entries = new List<MappedEntry>();
-
-        static Action<MappedEntry> HandleIn(MappedEntry vEntry) =>
-            uEntry =>
-            {
-                if (uEntry.Merged)
-                {
-                    return;
-                }
-
-                if (uEntry.Barycenter == null ||
-                    vEntry.Barycenter == null ||
-                    uEntry.Barycenter >= vEntry.Barycenter)
-                {
-                    MergeEntries(vEntry, uEntry);
-                }
-            };
-
-        Action<MappedEntry> HandleOut(MappedEntry vEntry) =>
-            wEntry =>
-            {
-                wEntry.In.Add(vEntry);
-                if (--wEntry.Indegree == 0)
-                {
-                    sourceSet.Add(wEntry);
-                }
-            };
+        var entries = new List<MappedEntry>(sourceSet.Count);
 
         while (sourceSet.Count > 0)
         {
@@ -170,29 +209,47 @@ static class ResolveConflicts
             sourceSet.RemoveAt(sourceSet.Count - 1);
             entries.Add(entry);
             entry.In.Reverse();
-            var handleIn = HandleIn(entry);
             foreach (var uEntry in entry.In)
             {
-                handleIn(uEntry);
+                if (uEntry.Merged)
+                {
+                    continue;
+                }
+
+                if (uEntry.Barycenter == null ||
+                    entry.Barycenter == null ||
+                    uEntry.Barycenter >= entry.Barycenter)
+                {
+                    MergeEntries(entry, uEntry);
+                }
             }
 
-            var handleOut = HandleOut(entry);
             foreach (var wEntry in entry.Out)
             {
-                handleOut(wEntry);
+                wEntry.In.Add(entry);
+                if (--wEntry.Indegree == 0)
+                {
+                    sourceSet.Add(wEntry);
+                }
             }
         }
 
-        return entries
-            .Where(_ => !_.Merged)
-            .Select(entry => new ResolvedEntry
+        foreach (var entry in entries)
+        {
+            if (entry.Merged)
             {
-                Vs = entry.Vs,
-                I = entry.I,
-                Barycenter = entry.Barycenter,
-                Weight = entry.Weight
-            })
-            .ToList();
+                continue;
+            }
+
+            resolved.Add(
+                new()
+                {
+                    Vs = entry.Vs,
+                    I = entry.I,
+                    Barycenter = entry.Barycenter,
+                    Weight = entry.Weight
+                });
+        }
     }
 
     static void MergeEntries(MappedEntry target, MappedEntry source)

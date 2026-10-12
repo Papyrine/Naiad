@@ -1,19 +1,75 @@
 static class Sort
 {
-    public static SortResult Run(List<ResolvedEntry> entries, bool biasRight = false)
+    static readonly Comparison<ResolvedEntry> leftBias = (entryV, entryW) => Compare(entryV, entryW, false);
+    static readonly Comparison<ResolvedEntry> rightBias = (entryV, entryW) => Compare(entryV, entryW, true);
+    static readonly Comparison<ResolvedEntry> descendingByI = (entryV, entryW) => entryW.I.CompareTo(entryV.I);
+
+    public static SortResult Run(List<ResolvedEntry> entries, bool biasRight = false) =>
+        Run(entries, biasRight, null, null, null);
+
+    /// <summary>
+    /// <paramref name="scratch"/> lends the lists the sort works in, for a caller whose entries each have
+    /// an <see cref="ResolvedEntry.I"/> of their own. <paramref name="first"/> and <paramref name="last"/>,
+    /// given together, are put either side of the sorted nodes.
+    /// </summary>
+    internal static SortResult Run(
+        List<ResolvedEntry> entries,
+        bool biasRight,
+        SortScratch? scratch,
+        string? first,
+        string? last)
     {
-        var parts = Util.Partition(entries, entry => entry.Barycenter != null);
-        var sortable = parts.Lhs;
+        var sortable = scratch?.Sortable ?? [];
+        var unsortable = scratch?.Unsortable ?? [];
+        sortable.Clear();
+        unsortable.Clear();
+        var count = 0;
+        foreach (var entry in entries)
+        {
+            count += entry.Vs.Count;
+            if (entry.Barycenter != null)
+            {
+                sortable.Add(entry);
+            }
+            else
+            {
+                unsortable.Add(entry);
+            }
+        }
 
-        // descending by i, stable for ties.
-        var unsortable = parts.Rhs.OrderByDescending(entry => entry.I).ToList();
+        // descending by i, stable for ties. Entries that each have an i of their own have no ties.
+        if (scratch == null)
+        {
+            unsortable = unsortable.OrderByDescending(entry => entry.I).ToList();
+        }
+        else
+        {
+            unsortable.Sort(descendingByI);
+        }
 
-        var vs = new List<string>();
+        if (first != null)
+        {
+            count += 2;
+        }
+
+        var vs = new List<string>(count);
+        if (first != null)
+        {
+            vs.Add(first);
+        }
+
         var sum = 0d;
         var weight = 0d;
         var vsIndex = 0;
 
-        sortable.Sort(CompareWithBias(biasRight));
+        if (biasRight)
+        {
+            sortable.Sort(rightBias);
+        }
+        else
+        {
+            sortable.Sort(leftBias);
+        }
 
         vsIndex = ConsumeUnsortable(vs, unsortable, vsIndex);
 
@@ -24,6 +80,11 @@ static class Sort
             sum += entry.Barycenter!.Value * entry.Weight!.Value;
             weight += entry.Weight!.Value;
             vsIndex = ConsumeUnsortable(vs, unsortable, vsIndex);
+        }
+
+        if (last != null)
+        {
+            vs.Add(last);
         }
 
         var result = new SortResult { Vs = vs };
@@ -49,24 +110,23 @@ static class Sort
         return index;
     }
 
-    static Comparison<ResolvedEntry> CompareWithBias(bool bias) =>
-        (entryV, entryW) =>
+    static int Compare(ResolvedEntry entryV, ResolvedEntry entryW, bool bias)
+    {
+        if (entryV.Barycenter!.Value < entryW.Barycenter!.Value)
         {
-            if (entryV.Barycenter!.Value < entryW.Barycenter!.Value)
-            {
-                return -1;
-            }
+            return -1;
+        }
 
-            if (entryV.Barycenter!.Value > entryW.Barycenter!.Value)
-            {
-                return 1;
-            }
+        if (entryV.Barycenter!.Value > entryW.Barycenter!.Value)
+        {
+            return 1;
+        }
 
-            if (!bias)
-            {
-                return entryV.I - entryW.I;
-            }
+        if (!bias)
+        {
+            return entryV.I - entryW.I;
+        }
 
-            return entryW.I - entryV.I;
-        };
+        return entryW.I - entryV.I;
+    }
 }

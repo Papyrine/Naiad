@@ -116,11 +116,22 @@ static class Util
     }
 
     /// <summary>Builds a matrix of node ids indexed by [rank][order].</summary>
-    public static List<List<string?>> BuildLayerMatrix(Graph graph)
+    public static List<List<string?>> BuildLayerMatrix(Graph graph) =>
+        BuildLayerMatrix(graph, []);
+
+    /// <summary>
+    /// Fills <paramref name="layering"/> - empty, or a matrix built earlier for this graph, whose rows are
+    /// emptied and used again - and returns it.
+    /// </summary>
+    internal static List<List<string?>> BuildLayerMatrix(Graph graph, List<List<string?>> layering)
     {
         var rankCount = (int) (MaxRank(graph) + 1);
-        var layering = new List<List<string?>>();
-        for (var i = 0; i < rankCount; i++)
+        foreach (var row in layering)
+        {
+            row.Clear();
+        }
+
+        for (var i = layering.Count; i < rankCount; i++)
         {
             layering.Add([]);
         }
