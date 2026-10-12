@@ -1,157 +1,160 @@
 class ArchitectureParser : IDiagramParser<ArchitectureModel>
 {
-    static Parser<char, ArchitectureModel> parser;
+    static Parser<ArchitectureModel> parser;
 
     static ArchitectureParser()
     {
         var identifier =
-            Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
+            Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AsString();
 
         var iconParser =
-            Char('(').Then(Token(_ => _ != ')').ManyString()).Before(Char(')'));
+            Between(Literals.Char('('), Literals.NoneOf(")", minSize: 0), Literals.Char(')')).AsString();
 
         var labelParser =
-            Char('[').Then(Token(_ => _ != ']').ManyString()).Before(Char(']'));
+            Between(Literals.Char('['), Literals.NoneOf("]", minSize: 0), Literals.Char(']')).AsString();
 
         var parentParser =
-            Try(
-                CommonParsers.RequiredWhitespace
-                    .Then(CIString("in"))
-                    .Then(CommonParsers.RequiredWhitespace)
-                    .Then(identifier)
-            );
+            CommonParsers.RequiredWhitespace
+                .SkipAnd(TextIgnoreCase("in"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(identifier);
 
         // Direction: L, R, T, B
         var directionParser =
             OneOf(
-                Char('L').ThenReturn(EdgeDirection.Left),
-                Char('R').ThenReturn(EdgeDirection.Right),
-                Char('T').ThenReturn(EdgeDirection.Top),
-                Char('B').ThenReturn(EdgeDirection.Bottom)
+                Literals.Char('L').Then(EdgeDirection.Left),
+                Literals.Char('R').Then(EdgeDirection.Right),
+                Literals.Char('T').Then(EdgeDirection.Top),
+                Literals.Char('B').Then(EdgeDirection.Bottom)
             );
 
         // Group: group id(icon)[label] in parent
         var groupParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("group")
-            from ___ in CommonParsers.RequiredWhitespace
-            from id in identifier
-            from icon in iconParser.Optional()
-            from label in labelParser.Optional()
-            from parent in parentParser.Optional()
-            from ____ in CommonParsers.InlineWhitespace
-            from _____ in CommonParsers.LineEnd
-            select new ArchitectureGroup
-            {
-                Id = id,
-                Icon = icon.GetValueOrDefault(),
-                Label = label.GetValueOrDefault(),
-                Parent = parent.GetValueOrDefault()
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("group"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(identifier)
+                .And(iconParser.Optional())
+                .And(labelParser.Optional())
+                .And(parentParser.Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (id, icon, label, parent) =>
+                    new ArchitectureGroup
+                    {
+                        Id = id,
+                        Icon = icon.OrNull(),
+                        Label = label.OrNull(),
+                        Parent = parent.OrNull()
+                    });
 
         // Service: service id(icon)[label] in parent
         var serviceParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("service")
-            from ___ in CommonParsers.RequiredWhitespace
-            from id in identifier
-            from icon in iconParser.Optional()
-            from label in labelParser.Optional()
-            from parent in parentParser.Optional()
-            from ____ in CommonParsers.InlineWhitespace
-            from _____ in CommonParsers.LineEnd
-            select new ArchitectureService
-            {
-                Id = id,
-                Icon = icon.GetValueOrDefault(),
-                Label = label.GetValueOrDefault(),
-                Parent = parent.GetValueOrDefault()
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("service"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(identifier)
+                .And(iconParser.Optional())
+                .And(labelParser.Optional())
+                .And(parentParser.Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (id, icon, label, parent) =>
+                    new ArchitectureService
+                    {
+                        Id = id,
+                        Icon = icon.OrNull(),
+                        Label = label.OrNull(),
+                        Parent = parent.OrNull()
+                    });
 
         // Junction: junction id in parent
         var junctionParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("junction")
-            from ___ in CommonParsers.RequiredWhitespace
-            from id in identifier
-            from parent in parentParser.Optional()
-            from ____ in CommonParsers.InlineWhitespace
-            from _____ in CommonParsers.LineEnd
-            select new ArchitectureJunction
-            {
-                Id = id,
-                Parent = parent.GetValueOrDefault()
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("junction"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(identifier)
+                .And(parentParser.Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (id, parent) =>
+                    new ArchitectureJunction
+                    {
+                        Id = id,
+                        Parent = parent.OrNull()
+                    });
 
         // Group reference: {groupId}
         var groupRef =
-            Char('{').Then(identifier).Before(Char('}'));
+            Between(Literals.Char('{'), identifier, Literals.Char('}'));
 
         // Source side: id{group}?:direction. The arrowhead belongs on the line (`db:L <-- R:server`),
         // which is how Mermaid writes it; one in front of the id is accepted too.
         var sourceSideParser =
-            from arw in Char('<').Optional()
-            from nodeId in identifier
-            from grp in groupRef.Optional()
-            from colon in Char(':')
-            from dir in directionParser
-            select (id: nodeId, grp: grp.GetValueOrDefault(), dir, arrow: arw.HasValue);
+            Literals.Char('<').Optional()
+                .And(identifier)
+                .And(groupRef.Optional())
+                .AndSkip(Literals.Char(':'))
+                .And(directionParser)
+                .Map(static (arw, nodeId, grp, dir) => (id: nodeId, grp: grp.OrNull(), dir, arrow: arw.HasValue));
 
         // Target side: direction:id{group}?, likewise with an arrowhead accepted after the direction.
         var targetSideParser =
-            from dir in directionParser
-            from arw in Char('>').Optional()
-            from colon in Char(':')
-            from nodeId in identifier
-            from grp in groupRef.Optional()
-            select (id: nodeId, grp: grp.GetValueOrDefault(), dir, arrow: arw.HasValue);
+            directionParser
+                .And(Literals.Char('>').Optional())
+                .AndSkip(Literals.Char(':'))
+                .And(identifier)
+                .And(groupRef.Optional())
+                .Map(static (dir, arw, nodeId, grp) => (id: nodeId, grp: grp.OrNull(), dir, arrow: arw.HasValue));
 
         // The line itself: -- or -[Label]-, with an arrowhead at either end.
         var lineParser =
-            from sourceArrow in Char('<').Optional()
-            from label in Try(String("--").ThenReturn((string?)null))
-                .Or(String("-[")
-                    .Then(Token(_ => _ != ']' && _ != '\r' && _ != '\n').ManyString())
-                    .Before(String("]-"))
-                    .Select(_ => (string?)_.Trim()))
-            from targetArrow in Char('>').Optional()
-            select (sourceArrow: sourceArrow.HasValue, targetArrow: targetArrow.HasValue, label);
+            Literals.Char('<').Optional()
+                .And(
+                    Literals.Text("--").Then<string?>(static _ => null)
+                        .Or(Between(Literals.Text("-["), Literals.NoneOf("]\r\n", minSize: 0), Literals.Text("]-"))
+                            .Then<string?>(static _ => _.Span.Trim().ToString())))
+                .And(Literals.Char('>').Optional())
+                .Map(static (sourceArrow, label, targetArrow) =>
+                    (sourceArrow: sourceArrow.HasValue, targetArrow: targetArrow.HasValue, label));
 
         // Edge: source:side <--> side:target
         var edgeParser =
-            from _ in CommonParsers.InlineWhitespace
-            from source in sourceSideParser
-            from __ in CommonParsers.InlineWhitespace
-            from line in lineParser
-            from ____ in CommonParsers.InlineWhitespace
-            from target in targetSideParser
-            from _____ in CommonParsers.InlineWhitespace
-            from ______ in CommonParsers.LineEnd
-            select BuildEdge(
-                source with { arrow = source.arrow || line.sourceArrow },
-                target with { arrow = target.arrow || line.targetArrow },
-                line.label);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(sourceSideParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(lineParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(targetSideParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (source, line, target) =>
+                    BuildEdge(
+                        source with { arrow = source.arrow || line.sourceArrow },
+                        target with { arrow = target.arrow || line.targetArrow },
+                        line.label));
 
         var skipLine =
-            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+            CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Comment)
+                .Or(CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Newline));
 
         var contentItem =
             OneOf(
-                Try(groupParser.Select<IArchitectureContent?>(_ => new GroupItem(_))),
-                Try(serviceParser.Select<IArchitectureContent?>(_ => new ServiceItem(_))),
-                Try(junctionParser.Select<IArchitectureContent?>(_ => new JunctionItem(_))),
-                Try(edgeParser.Select<IArchitectureContent?>(_ => new EdgeItem(_))),
-                skipLine.ThenReturn<IArchitectureContent?>(null)
+                groupParser.Then<IArchitectureContent?>(static _ => new GroupItem(_)),
+                serviceParser.Then<IArchitectureContent?>(static _ => new ServiceItem(_)),
+                junctionParser.Then<IArchitectureContent?>(static _ => new JunctionItem(_)),
+                edgeParser.Then<IArchitectureContent?>(static _ => new EdgeItem(_)),
+                skipLine.Then<IArchitectureContent?>(static _ => null)
             );
 
         parser =
-            from inlineWhitespace in CommonParsers.InlineWhitespace
-            from architecture in CommonParsers.BetaKeyword("architecture")
-            from innerInlineWhitespace in CommonParsers.InlineWhitespace
-            from lineEnd in CommonParsers.LineEnd
-            from result in contentItem.ManyThen(End)
-            select BuildModel(result.Item1);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(CommonParsers.BetaKeyword("architecture"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd)
+                .SkipAnd(contentItem.Many())
+                .AndSkip(CommonParsers.End)
+                .Then(BuildModel);
     }
 
     static ArchitectureEdge BuildEdge(
@@ -199,7 +202,7 @@ class ArchitectureParser : IDiagramParser<ArchitectureModel>
         return model;
     }
 
-    public Result<char, ArchitectureModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<ArchitectureModel> Parse(string input) => parser.ParseDiagram(input);
 
     internal interface IArchitectureContent;
     readonly record struct GroupItem(ArchitectureGroup Value) : IArchitectureContent;

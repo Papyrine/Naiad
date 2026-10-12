@@ -1,60 +1,63 @@
 class SankeyParser : IDiagramParser<SankeyModel>
 {
-    static Parser<char, SankeyModel> parser;
+    static Parser<SankeyModel> parser;
 
     static SankeyParser()
     {
         var numberParser = CommonParsers.SignedDecimal;
 
         var quotedString =
-            Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
+            Between(Literals.Char('"'), Literals.NoneOf("\"", minSize: 0), Literals.Char('"'))
+                .AsString();
 
         // Unquoted name (no commas or newlines)
         var unquotedName =
-            Token(_ => _ != ',' && _ != '\r' && _ != '\n').AtLeastOnceString()
-                .Select(_ => _.Trim());
+            Literals.NoneOf(",\r\n").AsTrimmedString();
 
-        // Name (quoted or unquoted)
+        // Name (quoted or unquoted). A name that opens with a quote is a quoted one: left unclosed, it is
+        // not read as an unquoted name instead.
         var name =
-            quotedString.Or(unquotedName);
+            quotedString.Or(Not(Literals.Char('"')).SkipAnd(unquotedName));
 
         // Link: source,target,value
         var linkParser =
-            from _ in CommonParsers.InlineWhitespace
-            from source in name
-            from __ in Char(',')
-            from ___ in CommonParsers.InlineWhitespace
-            from target in name
-            from ____ in Char(',')
-            from _____ in CommonParsers.InlineWhitespace
-            from value in numberParser
-            from ______ in CommonParsers.InlineWhitespace
-            from _______ in CommonParsers.LineEnd
-            select new SankeyLink
-            {
-                Source = source,
-                Target = target,
-                Value = value
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(name)
+                .AndSkip(Literals.Char(','))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(name)
+                .AndSkip(Literals.Char(','))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(numberParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map((source, target, value) =>
+                    new SankeyLink
+                    {
+                        Source = source,
+                        Target = target,
+                        Value = value
+                    });
 
         // Skip line (comments, empty lines)
         var skipLine =
-            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+            CommonParsers.InlineWhitespace
+                .SkipAnd(CommonParsers.Comment.Or(CommonParsers.Newline));
 
         var contentItem =
             OneOf(
-                Try(linkParser.Select<SankeyLink?>(_ => _)),
-                skipLine.ThenReturn<SankeyLink?>(null)
+                linkParser.Then<SankeyLink?>(static _ => _),
+                skipLine.Then<SankeyLink?>(static _ => null)
             );
 
         parser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CommonParsers.BetaKeyword("sankey")
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in CommonParsers.LineEnd
-            from result in contentItem.ManyThen(End)
-            select BuildModel(result.Item1.Where(_ => _ != null).ToList());
+            CommonParsers.InlineWhitespace
+                .SkipAnd(CommonParsers.BetaKeyword("sankey"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd)
+                .SkipAnd(contentItem.Many())
+                .AndSkip(CommonParsers.End)
+                .Then(static _ => BuildModel(_.OfType<SankeyLink>().ToList()));
     }
 
     static SankeyModel BuildModel(List<SankeyLink> links)
@@ -64,5 +67,5 @@ class SankeyParser : IDiagramParser<SankeyModel>
         return model;
     }
 
-    public Result<char, SankeyModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<SankeyModel> Parse(string input) => parser.ParseDiagram(input);
 }

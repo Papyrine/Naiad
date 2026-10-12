@@ -1,124 +1,128 @@
 class ERParser : IDiagramParser<ERModel>
 {
-    static Parser<char, ERModel> parser;
+    static Parser<ERModel> parser;
 
     static ERParser()
     {
-        var restOfLine = Token(_ => _ != '\r' && _ != '\n').ManyString();
+        var restOfLine = Literals.NoneOf("\r\n", minSize: 0);
 
         // Trailing spaces are allowed before every line end.
-        var endOfLine = CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd);
+        var endOfLine = CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.LineEnd);
 
         // Entity name: alphanumeric, underscore and hyphen, or anything at all inside double quotes.
         var bareEntityName =
-            Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')
-                .AtLeastOnceString();
+            Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')
+                .AsString();
 
         // `CAR:::highlight` attaches style classes to an entity wherever it is named. They are read and
         // dropped: styling is not drawn, but the entity it sits on still is.
         var styleClasses =
-            String(":::")
-                .Then(Token(_ => char.IsLetterOrDigit(_) || _ is '_' or '-' or ',').SkipAtLeastOnce());
+            Literals.Text(":::")
+                .SkipAnd(Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ is '_' or '-' or ','));
 
         var entityName =
             CommonParsers.DoubleQuotedString
                 .Or(bareEntityName)
-                .Before(Try(styleClasses).Optional())
-                .Labelled("entity name");
+                .AndSkip(styleClasses.Optional());
 
         // The cardinalities written out in words, which read the same at either end of a relationship.
         // Longer spellings come first so that `1+` is not taken for `1`.
         var wordCardinality =
             OneOf(
-                Try(CIString("zero or one")).ThenReturn(Cardinality.ZeroOrOne),
-                Try(CIString("one or zero")).ThenReturn(Cardinality.ZeroOrOne),
-                Try(CIString("zero or more")).ThenReturn(Cardinality.ZeroOrMore),
-                Try(CIString("zero or many")).ThenReturn(Cardinality.ZeroOrMore),
-                Try(CIString("many(0)")).ThenReturn(Cardinality.ZeroOrMore),
-                Try(String("0+")).ThenReturn(Cardinality.ZeroOrMore),
-                Try(CIString("one or more")).ThenReturn(Cardinality.OneOrMore),
-                Try(CIString("one or many")).ThenReturn(Cardinality.OneOrMore),
-                Try(CIString("many(1)")).ThenReturn(Cardinality.OneOrMore),
-                Try(String("1+")).ThenReturn(Cardinality.OneOrMore),
-                Try(CIString("only one")).ThenReturn(Cardinality.ExactlyOne),
-                String("1").ThenReturn(Cardinality.ExactlyOne)
+                TextIgnoreCase("zero or one").Then(Cardinality.ZeroOrOne),
+                TextIgnoreCase("one or zero").Then(Cardinality.ZeroOrOne),
+                TextIgnoreCase("zero or more").Then(Cardinality.ZeroOrMore),
+                TextIgnoreCase("zero or many").Then(Cardinality.ZeroOrMore),
+                TextIgnoreCase("many(0)").Then(Cardinality.ZeroOrMore),
+                Literals.Text("0+").Then(Cardinality.ZeroOrMore),
+                TextIgnoreCase("one or more").Then(Cardinality.OneOrMore),
+                TextIgnoreCase("one or many").Then(Cardinality.OneOrMore),
+                TextIgnoreCase("many(1)").Then(Cardinality.OneOrMore),
+                Literals.Text("1+").Then(Cardinality.OneOrMore),
+                TextIgnoreCase("only one").Then(Cardinality.ExactlyOne),
+                Literals.Text("1").Then(Cardinality.ExactlyOne)
             );
 
         // Left cardinality markers
         var leftCardinality =
             OneOf(
-                Try(String("||")).ThenReturn(Cardinality.ExactlyOne),
-                Try(String("|o")).ThenReturn(Cardinality.ZeroOrOne),
-                Try(String("}|")).ThenReturn(Cardinality.OneOrMore),
-                Try(String("}o")).ThenReturn(Cardinality.ZeroOrMore),
+                Literals.Text("||").Then(Cardinality.ExactlyOne),
+                Literals.Text("|o").Then(Cardinality.ZeroOrOne),
+                Literals.Text("}|").Then(Cardinality.OneOrMore),
+                Literals.Text("}o").Then(Cardinality.ZeroOrMore),
                 wordCardinality
             );
 
         // Right cardinality markers
         var rightCardinality =
             OneOf(
-                Try(String("||")).ThenReturn(Cardinality.ExactlyOne),
-                Try(String("o|")).ThenReturn(Cardinality.ZeroOrOne),
-                Try(String("|{")).ThenReturn(Cardinality.OneOrMore),
-                Try(String("o{")).ThenReturn(Cardinality.ZeroOrMore),
+                Literals.Text("||").Then(Cardinality.ExactlyOne),
+                Literals.Text("o|").Then(Cardinality.ZeroOrOne),
+                Literals.Text("|{").Then(Cardinality.OneOrMore),
+                Literals.Text("o{").Then(Cardinality.ZeroOrMore),
                 wordCardinality
             );
 
         // Line style: -- or `to` for identifying, .. or `optionally to` for non-identifying
         var lineStyle =
             OneOf(
-                String("--").ThenReturn(true),
-                String("..").ThenReturn(false),
-                Try(CIString("optionally to")).ThenReturn(false),
-                CIString("to").ThenReturn(true)
+                Literals.Text("--").Then(true),
+                Literals.Text("..").Then(false),
+                TextIgnoreCase("optionally to").Then(false),
+                TextIgnoreCase("to").Then(true)
             );
+
+        // A quoted label's delimiters are syntax, so take the string's contents when there is one and
+        // fall back to the bare rest of the line otherwise. A quote that is never closed is not a label
+        // of either kind.
+        var relationshipLabel =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Char(':'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(
+                    CommonParsers.DoubleQuotedString
+                        .Or(Not(Literals.Char('"')).SkipAnd(Literals.NoneOf("\r\n").AsString())));
 
         // Relationship: ENTITY1 ||--o{ ENTITY2 : label
         var relationshipParser =
-            from _ in CommonParsers.InlineWhitespace
-            from fromEntity in entityName
-            from __ in CommonParsers.InlineWhitespace
-            from leftCard in leftCardinality
-            from ___ in CommonParsers.InlineWhitespace
-            from identifying in lineStyle
-            from ____ in CommonParsers.InlineWhitespace
-            from rightCard in rightCardinality
-            from _____ in CommonParsers.InlineWhitespace
-            from toEntity in entityName
-            from label in Try(
-                CommonParsers.InlineWhitespace
-                    .Then(Char(':'))
-                    .Then(CommonParsers.InlineWhitespace)
-                    // A quoted label's delimiters are syntax, so take the string's contents when there is
-                    // one and fall back to the bare rest of the line otherwise.
-                    .Then(CommonParsers.DoubleQuotedString
-                        .Or(Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString()))
-            ).Optional()
-            from ______ in endOfLine
-            select new Relationship
-            {
-                FromEntity = fromEntity,
-                ToEntity = toEntity,
-                FromCardinality = leftCard,
-                ToCardinality = rightCard,
-                Label = label.HasValue ? label.Value.Trim() : null,
-                Identifying = identifying
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(entityName)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(leftCardinality)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(lineStyle)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(rightCardinality)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(entityName)
+                .And(relationshipLabel.Optional())
+                .AndSkip(endOfLine)
+                .Map(static (fromEntity, leftCard, identifying, rightCard, toEntity, label) =>
+                    new Relationship
+                    {
+                        FromEntity = fromEntity,
+                        ToEntity = toEntity,
+                        FromCardinality = leftCard,
+                        ToCardinality = rightCard,
+                        Label = label.HasValue ? label.Value.Trim() : null,
+                        Identifying = identifying
+                    });
 
         // Attribute key type. Mermaid's grammar is case-insensitive, so pk is as good as PK.
         var keyTypeParser =
             OneOf(
-                Try(CIString("PK")).ThenReturn(AttributeKeyType.PrimaryKey),
-                Try(CIString("FK")).ThenReturn(AttributeKeyType.ForeignKey),
-                CIString("UK").ThenReturn(AttributeKeyType.UniqueKey)
+                TextIgnoreCase("PK").Then(AttributeKeyType.PrimaryKey),
+                TextIgnoreCase("FK").Then(AttributeKeyType.ForeignKey),
+                TextIgnoreCase("UK").Then(AttributeKeyType.UniqueKey)
             );
 
         // An attribute may carry several keys: PK, FK
         var keyTypesParser =
-            keyTypeParser.SeparatedAtLeastOnce(
-                Try(CommonParsers.InlineWhitespace
-                    .Then(Char(','))
-                    .Then(CommonParsers.InlineWhitespace)));
+            Separated(
+                CommonParsers.InlineWhitespace
+                    .SkipAnd(Literals.Char(','))
+                    .SkipAnd(CommonParsers.InlineWhitespace),
+                keyTypeParser);
 
         // Attribute comment (in quotes)
         var attributeComment =
@@ -127,133 +131,126 @@ class ERParser : IDiagramParser<ERModel>
         // A type or a name. Beyond identifier characters Mermaid admits hyphens, brackets, parentheses,
         // dots and commas, which is what lets a type carry its size: nvarchar(200), decimal(18,2).
         var attributeWord =
-            Token(_ => char.IsLetterOrDigit(_) || _ is '_' or '-' or '[' or ']' or '(' or ')' or '.' or ',' or '*')
-                .AtLeastOnceString();
+            Literals.Pattern(
+                static _ => char.IsLetterOrDigit(_) || _ is '_' or '-' or '[' or ']' or '(' or ')' or '.' or ',' or '*');
 
         // A type may end in ? to mark it optional.
         var attributeType =
-            from word in attributeWord
-            from optional in Char('?').Optional()
-            select optional.HasValue ? word + '?' : word;
+            Capture(attributeWord.And(Literals.Char('?').Optional()))
+                .AsString();
 
         // Entity attribute: type name PK "comment"
         var attributeParser =
-            from _ in CommonParsers.InlineWhitespace
-            from type in attributeType
-            from __ in CommonParsers.RequiredWhitespace
-            from name in attributeWord
-            from ___ in CommonParsers.InlineWhitespace
-            from keyTypes in Try(keyTypesParser).Optional()
-            from ____ in CommonParsers.InlineWhitespace
-            from comment in Try(attributeComment).Optional()
-            from _____ in endOfLine
-            select CreateAttribute(type, name, keyTypes.HasValue ? keyTypes.Value : [], comment.HasValue ? comment.Value : null);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(attributeType)
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .And(attributeWord.AsString())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(keyTypesParser.Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(attributeComment.Optional())
+                .AndSkip(endOfLine)
+                .Map(static (type, name, keyTypes, comment) =>
+                    CreateAttribute(type, name, keyTypes.OrSome([]), comment.OrNull()));
 
         // Entity body content: attribute lines, with comments and blank lines between them
         var entityBodyParser =
             OneOf(
-                Try(attributeParser.Select<EntityAttribute?>(_ => _)),
-                Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-                    .ThenReturn<EntityAttribute?>(null),
-                Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline))
-                    .ThenReturn<EntityAttribute?>(null)
+                attributeParser.Then<EntityAttribute?>(static _ => _),
+                CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Comment)
+                    .Then<EntityAttribute?>(static _ => null),
+                CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Newline)
+                    .Then<EntityAttribute?>(static _ => null)
             ).Many()
-            .Select(_ => _.Where(_ => _ != null).Cast<EntityAttribute>().ToList());
+            .Then(static _ => _.Where(static _ => _ != null).Cast<EntityAttribute>().ToList());
 
         // Entity alias: ["Display text"] or [Display]
         var entityAlias =
-            Char('[')
-                .Then(CommonParsers.DoubleQuotedString.Or(bareEntityName))
-                .Before(Char(']'))
-                .Before(Try(styleClasses).Optional());
+            Between(Literals.Char('['), CommonParsers.DoubleQuotedString.Or(bareEntityName), Literals.Char(']'))
+                .AndSkip(styleClasses.Optional());
 
         // Entity definition: EntityName { attributes } or EntityName["alias"] { attributes }
         var entityDefinitionParser =
-            Try(
-                from _ in CommonParsers.InlineWhitespace
-                from name in entityName
-                from alias in Try(CommonParsers.InlineWhitespace.Then(entityAlias)).Optional()
-                from __ in CommonParsers.InlineWhitespace
-                from open in Char('{')
-                from ___ in CommonParsers.InlineWhitespace
-                from ____ in CommonParsers.Newline.Optional()
-                from attributes in entityBodyParser
-                from _____ in CommonParsers.InlineWhitespace
-                from close in Char('}')
-                from ______ in endOfLine
-                select CreateEntity(name, alias.HasValue ? alias.Value : null, attributes)
-            );
+            CommonParsers.InlineWhitespace
+                .SkipAnd(entityName)
+                .And(CommonParsers.InlineWhitespace.SkipAnd(entityAlias).Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('{'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.Newline.Optional())
+                .And(entityBodyParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('}'))
+                .AndSkip(endOfLine)
+                .Map(static (name, alias, attributes) => CreateEntity(name, alias.OrNull(), attributes));
 
         // An entity with no attributes, named on a line of its own: EntityName or EntityName["alias"]
         var bareEntityParser =
-            from _ in CommonParsers.InlineWhitespace
-            from name in entityName
-            from alias in Try(CommonParsers.InlineWhitespace.Then(entityAlias)).Optional()
-            from __ in endOfLine
-            select CreateEntity(name, alias.HasValue ? alias.Value : null, []);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(entityName)
+                .And(CommonParsers.InlineWhitespace.SkipAnd(entityAlias).Optional())
+                .AndSkip(endOfLine)
+                .Map(static (name, alias) => CreateEntity(name, alias.OrNull(), []));
 
         var directionParser =
             CommonParsers.InlineWhitespace
-                .Then(String("direction"))
-                .Then(CommonParsers.RequiredWhitespace)
-                .Then(CommonParsers.DirectionParser)
-                .Before(endOfLine);
+                .SkipAnd(Literals.Text("direction"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(CommonParsers.DirectionParser)
+                .AndSkip(endOfLine);
 
         // Lines that are valid Mermaid but change nothing in what is drawn here: styling (`classDef`,
         // `class`, `style`) and the accessibility title and description. Naming them keeps them from
         // failing the parse, and from being read as entities.
         var ignoredKeyword =
             OneOf(
-                Try(String("classDef")),
-                Try(String("class")),
-                Try(String("style")),
-                Try(String("accTitle")),
-                String("accDescr"));
+                Literals.Text("classDef"),
+                Literals.Text("class"),
+                Literals.Text("style"),
+                Literals.Text("accTitle"),
+                Literals.Text("accDescr"));
 
         var ignoredDirective =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in ignoredKeyword
-            from boundary in Lookahead(Token(_ => _ is ' ' or '\t' or ':'))
-            from rest in restOfLine
-            from lineEnd in CommonParsers.LineEnd
-            select Unit.Value;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(ignoredKeyword.WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1)))
+                .SkipAnd(restOfLine)
+                .SkipAnd(CommonParsers.LineEnd);
 
         // `accDescr { ... }` may run over several lines.
         var multiLineDescription =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("accDescr")
-            from __ in CommonParsers.InlineWhitespace
-            from open in Char('{')
-            from text in Token(_ => _ != '}').SkipMany()
-            from close in Char('}')
-            from ___ in endOfLine
-            select Unit.Value;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("accDescr"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(Literals.Char('{'))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(endOfLine);
 
         // Skip line (comments, empty lines)
         var skipLine =
             CommonParsers.InlineWhitespace
-                .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
+                .SkipAnd(CommonParsers.Comment.Or(CommonParsers.Newline));
 
         var parseContent =
             OneOf(
-                Try(directionParser.Select<IERContent?>(_ => new DirectionItem(_))),
-                Try(multiLineDescription.ThenReturn<IERContent?>(null)),
-                Try(ignoredDirective.ThenReturn<IERContent?>(null)),
-                Try(entityDefinitionParser.Select<IERContent?>(_ => new EntityItem(_))),
-                Try(relationshipParser.Select<IERContent?>(_ => new RelationshipItem(_))),
-                Try(bareEntityParser.Select<IERContent?>(_ => new EntityItem(_))),
-                skipLine.ThenReturn<IERContent?>(null)
+                directionParser.Then<IERContent?>(static _ => new DirectionItem(_)),
+                multiLineDescription.Then<IERContent?>(static _ => null),
+                ignoredDirective.Then<IERContent?>(static _ => null),
+                entityDefinitionParser.Then<IERContent?>(static _ => new EntityItem(_)),
+                relationshipParser.Then<IERContent?>(static _ => new RelationshipItem(_)),
+                bareEntityParser.Then<IERContent?>(static _ => new EntityItem(_)),
+                skipLine.Then<IERContent?>(static _ => null)
             ).Many();
 
         parser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("erDiagram")
-            from __ in endOfLine
-            from content in parseContent
-            // Nothing may be left over: without this a line no rule matches ends the list quietly and the
-            // rest of the diagram is dropped instead of being reported.
-            from end in End
-            select BuildModel(content);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("erDiagram"))
+                .SkipAnd(endOfLine)
+                .SkipAnd(parseContent)
+                // Nothing may be left over: without this a line no rule matches ends the list quietly and the
+                // rest of the diagram is dropped instead of being reported.
+                .AndSkip(CommonParsers.End)
+                .Then(BuildModel);
     }
 
     static EntityAttribute CreateAttribute(string type, string name, IEnumerable<AttributeKeyType> keyTypes, string? comment)
@@ -340,7 +337,7 @@ class ERParser : IDiagramParser<ERModel>
         model.Entities.Add(entity);
     }
 
-    public Result<char, ERModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<ERModel> Parse(string input) => parser.ParseDiagram(input);
 
     internal interface IERContent;
     readonly record struct EntityItem(Entity Value) : IERContent;

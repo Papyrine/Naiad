@@ -1,59 +1,56 @@
 class GanttParser : IDiagramParser<GanttModel>
 {
-    static Parser<char, GanttModel> parser;
+    static Parser<GanttModel> parser;
 
     static GanttParser()
     {
         // Basic parsers
         var restOfLine =
-            Token(_ => _ != '\r' &&
-                       _ != '\n')
-                .ManyString();
+            Literals.NoneOf("\r\n", minSize: 0);
+
+        var trimmedRestOfLine =
+            restOfLine.AsTrimmedString();
 
         // Title: title My Chart Title
         var titleParser =
-            from inlineWhitespace in CommonParsers.InlineWhitespace
-            from title in CIString("title")
-            from requiredWhitespace in CommonParsers.RequiredWhitespace
-            from innerTitle in restOfLine
-            from lineEnd in CommonParsers.LineEnd
-            select innerTitle.Trim();
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("title"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(trimmedRestOfLine)
+                .AndSkip(CommonParsers.LineEnd);
 
         // Date format: dateFormat YYYY-MM-DD
         var dateFormatParser =
-            from inlineWhitespace in CommonParsers.InlineWhitespace
-            from dateFormat in CIString("dateFormat")
-            from requiredWhitespace in CommonParsers.RequiredWhitespace
-            from format in restOfLine
-            from lineEnd in CommonParsers.LineEnd
-            select format.Trim();
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("dateFormat"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(trimmedRestOfLine)
+                .AndSkip(CommonParsers.LineEnd);
 
         // Axis format: axisFormat %Y-%m-%d
         var axisFormatParser =
-            from inlineWhitespace in CommonParsers.InlineWhitespace
-            from axisFormat in CIString("axisFormat")
-            from requiredWhitespace in CommonParsers.RequiredWhitespace
-            from format in restOfLine
-            from lienEnd in CommonParsers.LineEnd
-            select format.Trim();
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("axisFormat"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(trimmedRestOfLine)
+                .AndSkip(CommonParsers.LineEnd);
 
         // Excludes: excludes weekends
         var excludesParser =
-            from whitespace in CommonParsers.InlineWhitespace
-            from excludes in CIString("excludes")
-            from requiredWhitespace in CommonParsers.RequiredWhitespace
-            from innerExcludes in restOfLine
-            from lineEnd in CommonParsers.LineEnd
-            select ParseExcludes(innerExcludes);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("excludes"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(restOfLine.AsString())
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(ParseExcludes);
 
         // Section: section Section Name
         var sectionParser =
-            from inlienWhitespace in CommonParsers.InlineWhitespace
-            from section in CIString("section")
-            from requiredWhitespace in CommonParsers.RequiredWhitespace
-            from name in restOfLine
-            from lineEnd in CommonParsers.LineEnd
-            select name.Trim();
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("section"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(trimmedRestOfLine)
+                .AndSkip(CommonParsers.LineEnd);
 
         // Task line parser - handles multiple formats
         // Format: Task name :modifiers, id, start, duration
@@ -62,42 +59,42 @@ class GanttParser : IDiagramParser<GanttModel>
         //   Task B :done, after a1, 20d
         //   Task C :crit, milestone, 2024-02-01, 0d
         var taskParser =
-            from _ in CommonParsers.InlineWhitespace
-            from name in Token(_ => _ != ':' && _ != '\r' && _ != '\n').AtLeastOnceString()
-            from __ in CommonParsers.InlineWhitespace
-            from colon in Char(':')
-            from ____ in CommonParsers.InlineWhitespace
-            from parts in Token(_ => _ != '\r' && _ != '\n').ManyString()
-            from lineEnd in CommonParsers.LineEnd
-            select new TaskItem(name.Trim(), parts.Trim());
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.NoneOf(":\r\n").AsTrimmedString())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char(':'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(trimmedRestOfLine)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (name, parts) => new TaskItem(name, parts));
 
         // Skip line (comments, empty lines)
         var skipLine =
             CommonParsers.InlineWhitespace
-                .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
+                .SkipAnd(CommonParsers.Comment.Or(CommonParsers.Newline));
 
         // Content item
         var contentItem =
             OneOf(
-                Try(titleParser.Select<IGanttContent?>(_ => new TitleItem(_))),
-                Try(dateFormatParser.Select<IGanttContent?>(_ => new DateFormatItem(_))),
-                Try(axisFormatParser.Select<IGanttContent?>(_ => new AxisFormatItem(_))),
-                Try(excludesParser.Select<IGanttContent?>(_ => new ExcludesItem(_))),
-                Try(sectionParser.Select<IGanttContent?>(_ => new SectionItem(_))),
-                Try(taskParser.Select<IGanttContent?>(_ => _)),
-                skipLine.ThenReturn<IGanttContent?>(null)
+                titleParser.Then<IGanttContent?>(static _ => new TitleItem(_)),
+                dateFormatParser.Then<IGanttContent?>(static _ => new DateFormatItem(_)),
+                axisFormatParser.Then<IGanttContent?>(static _ => new AxisFormatItem(_)),
+                excludesParser.Then<IGanttContent?>(static _ => new ExcludesItem(_)),
+                sectionParser.Then<IGanttContent?>(static _ => new SectionItem(_)),
+                taskParser.Then<IGanttContent?>(static _ => _),
+                skipLine.Then<IGanttContent?>(static _ => null)
             );
 
         parser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("gantt")
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in CommonParsers.LineEnd
-            from content in contentItem.Many()
-            // Nothing may be left over: without this a line no rule matches ends the list quietly and the
-            // rest of the diagram is dropped instead of being reported.
-            from end in End
-            select BuildModel(content);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("gantt"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd)
+                .SkipAnd(contentItem.Many())
+                // Nothing may be left over: without this a line no rule matches ends the list quietly and the
+                // rest of the diagram is dropped instead of being reported.
+                .AndSkip(CommonParsers.End)
+                .Then(BuildModel);
     }
 
     // The data after a task's name: status tags, then one to three positional items, as in Mermaid.
@@ -463,7 +460,7 @@ class GanttParser : IDiagramParser<GanttModel>
         return model;
     }
 
-    public Result<char, GanttModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<GanttModel> Parse(string input) => parser.ParseDiagram(input);
 
     interface IGanttContent;
     readonly record struct TitleItem(string Value) : IGanttContent;

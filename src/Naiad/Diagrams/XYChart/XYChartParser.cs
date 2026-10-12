@@ -1,25 +1,31 @@
 class XYChartParser : IDiagramParser<XYChartModel>
 {
-    static readonly Parser<char, XYChartModel> parser;
+    static readonly Parser<XYChartModel> parser;
 
     static XYChartParser()
     {
         // Rest of line (for text content)
         var restOfLine =
-            Token(_ => _ != '\r' && _ != '\n').ManyString();
+            Literals.NoneOf("\r\n", minSize: 0).AsString();
 
         // Quoted string
         var quotedString =
-            Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
+            Between(Literals.Char('"'), Literals.NoneOf("\"", minSize: 0), Literals.Char('"'))
+                .AsString();
+
+        // Text that opens with a quote is a quoted string: left unclosed, it is not read as plain text
+        // instead.
+        var unquoted =
+            Not(Literals.Char('"'));
 
         // Title: title "My Chart" or title My Chart
         var titleParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("title")
-            from ___ in CommonParsers.RequiredWhitespace
-            from title in quotedString.Or(restOfLine)
-            from ____ in CommonParsers.LineEnd
-            select title.Trim();
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("title"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(quotedString.Or(unquoted.SkipAnd(restOfLine)))
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(static _ => _.Trim());
 
         // Number parser
         var numberParser = CommonParsers.SignedDecimal;
@@ -27,102 +33,107 @@ class XYChartParser : IDiagramParser<XYChartModel>
         // Category item (unquoted or quoted)
         var categoryItem =
             quotedString.Or(
-                Token(_ => _ != ',' && _ != ']' && _ != '\r' && _ != '\n').AtLeastOnceString()
-                    .Select(_ => _.Trim()));
+                unquoted.SkipAnd(Literals.NoneOf(",]\r\n").AsTrimmedString()));
 
-        // Category list: [jan, feb, mar] or ["Jan", "Feb", "Mar"]
+        // Category list: [jan, feb, mar] or ["Jan", "Feb", "Mar"]. Blanks may surround a comma, but the
+        // closing bracket comes straight after the last item. An unquoted item takes the blanks after it
+        // as its own, a quoted one does not: `["Jan", "Feb" ]` is not read.
         var categoryListParser =
-            from _ in Char('[')
-            from __ in CommonParsers.InlineWhitespace
-            from items in categoryItem.SeparatedAtLeastOnce(
-                CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace))
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in Char(']')
-            select items.ToList();
+            Literals.Char('[')
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(
+                    Separated(
+                        CommonParsers.InlineWhitespace.SkipAnd(Literals.Char(',')).SkipAnd(CommonParsers.InlineWhitespace),
+                        categoryItem))
+                .AndSkip(Literals.Char(']'))
+                .Then(static _ => _.ToList());
 
         // X-axis: x-axis [cat1, cat2] or x-axis "Label" [cat1, cat2]
         var xAxisParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("x-axis")
-            from ___ in CommonParsers.RequiredWhitespace
-            from label in Try(quotedString.Before(CommonParsers.RequiredWhitespace)).Optional()
-            from categories in categoryListParser
-            from ____ in CommonParsers.InlineWhitespace
-            from _____ in CommonParsers.LineEnd
-            select (label: label.GetValueOrDefault() ?? "", categories);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("x-axis"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(quotedString.AndSkip(CommonParsers.RequiredWhitespace).Optional())
+                .And(categoryListParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map((label, categories) => (label: label.OrSome(""), categories));
 
         // Y-axis: y-axis "Label" min --> max or y-axis min --> max
         var yAxisParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("y-axis")
-            from ___ in CommonParsers.RequiredWhitespace
-            from label in Try(quotedString.Before(CommonParsers.RequiredWhitespace)).Optional()
-            from range in Try(
-                from min in numberParser
-                from ____ in CommonParsers.InlineWhitespace
-                from arrow in String("-->")
-                from _____ in CommonParsers.InlineWhitespace
-                from max in numberParser
-                select (min, max)
-            ).Optional()
-            from ______ in CommonParsers.InlineWhitespace
-            from _______ in CommonParsers.LineEnd
-            select (label: label.GetValueOrDefault() ?? "",
-                    min: range.HasValue ? range.Value.min : 0,
-                    max: range.HasValue ? range.Value.max : 100);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("y-axis"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(quotedString.AndSkip(CommonParsers.RequiredWhitespace).Optional())
+                .And(
+                    numberParser
+                        .AndSkip(CommonParsers.InlineWhitespace)
+                        .AndSkip(Literals.Text("-->"))
+                        .AndSkip(CommonParsers.InlineWhitespace)
+                        .And(numberParser)
+                        .Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map((label, range) =>
+                    (label: label.OrSome(""),
+                        min: range.HasValue ? range.Value.Item1 : 0,
+                        max: range.HasValue ? range.Value.Item2 : 100));
 
-        // Data list: [100, 200, 300]
+        // Data list: [100, 200, 300]. As in a category list, the closing bracket comes straight after
+        // the last number: `[100, 200 ]` is not read.
         var dataListParser =
-            from _ in Char('[')
-            from __ in CommonParsers.InlineWhitespace
-            from items in numberParser.SeparatedAtLeastOnce(
-                CommonParsers.InlineWhitespace.Then(Char(',')).Then(CommonParsers.InlineWhitespace))
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in Char(']')
-            select items.ToList();
+            Literals.Char('[')
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(
+                    Separated(
+                        CommonParsers.InlineWhitespace.SkipAnd(Literals.Char(',')).SkipAnd(CommonParsers.InlineWhitespace),
+                        numberParser))
+                .AndSkip(Literals.Char(']'))
+                .Then(static _ => _.ToList());
 
         // Bar series: bar [100, 200, 300]
         var barParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("bar")
-            from ___ in CommonParsers.RequiredWhitespace
-            from data in dataListParser
-            from ____ in CommonParsers.InlineWhitespace
-            from _____ in CommonParsers.LineEnd
-            select new ChartSeries { Type = ChartSeriesType.Bar, Data = data };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("bar"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(dataListParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(static _ => new ChartSeries { Type = ChartSeriesType.Bar, Data = _ });
 
         // Line series: line [100, 200, 300]
         var lineParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("line")
-            from ___ in CommonParsers.RequiredWhitespace
-            from data in dataListParser
-            from ____ in CommonParsers.InlineWhitespace
-            from _____ in CommonParsers.LineEnd
-            select new ChartSeries { Type = ChartSeriesType.Line, Data = data };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("line"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(dataListParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(static _ => new ChartSeries { Type = ChartSeriesType.Line, Data = _ });
 
         // Skip line (comments, empty lines)
         var skipLine =
-            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+            CommonParsers.InlineWhitespace
+                .SkipAnd(CommonParsers.Comment.Or(CommonParsers.Newline));
 
         var contentItem =
             OneOf(
-                Try(titleParser.Select<IXYContent?>(_ => new TitleItem(_))),
-                Try(xAxisParser.Select<IXYContent?>(_ => new XAxisItem(_.label, _.categories))),
-                Try(yAxisParser.Select<IXYContent?>(_ => new YAxisItem(_.label, _.min, _.max))),
-                Try(barParser.Select<IXYContent?>(_ => new SeriesItem(_))),
-                Try(lineParser.Select<IXYContent?>(_ => new SeriesItem(_))),
-                skipLine.ThenReturn<IXYContent?>(null)
+                titleParser.Then<IXYContent?>(static _ => new TitleItem(_)),
+                xAxisParser.Then<IXYContent?>(static _ => new XAxisItem(_.label, _.categories)),
+                yAxisParser.Then<IXYContent?>(static _ => new YAxisItem(_.label, _.min, _.max)),
+                barParser.Then<IXYContent?>(static _ => new SeriesItem(_)),
+                lineParser.Then<IXYContent?>(static _ => new SeriesItem(_)),
+                skipLine.Then<IXYContent?>(static _ => null)
             );
 
         parser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CommonParsers.BetaKeyword("xychart")
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in CommonParsers.LineEnd
-            from result in contentItem.ManyThen(End)
-            select BuildModel(result.Item1);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(CommonParsers.BetaKeyword("xychart"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd)
+                .SkipAnd(contentItem.Many())
+                .AndSkip(CommonParsers.End)
+                .Then(BuildModel);
     }
 
     static XYChartModel BuildModel(IEnumerable<IXYContent?> content)
@@ -157,7 +168,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
         return model;
     }
 
-    public Result<char, XYChartModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<XYChartModel> Parse(string input) => parser.ParseDiagram(input);
 
     interface IXYContent;
     readonly record struct TitleItem(string Value) : IXYContent;

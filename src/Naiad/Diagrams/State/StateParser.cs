@@ -1,192 +1,201 @@
-﻿using NotePosition = Naiad.Diagrams.State.NotePosition;
+using NotePosition = Naiad.Diagrams.State.NotePosition;
 
 class StateParser : IDiagramParser<StateModel>
 {
-    static Parser<char, StateModel> parser;
+    static Parser<StateModel> parser;
 
     static StateParser()
     {
-        var restOfLine = Token(_ => _ != '\r' && _ != '\n').ManyString();
+        // The rest of the line as it is read, and as the string kept from it.
+        var restOfLineText =
+            Literals.NoneOf("\r\n", minSize: 0);
+
+        var restOfLine = restOfLineText.AsString();
 
         // Trailing spaces are allowed before every line end.
-        var endOfLine = CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd);
+        var endOfLine = CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.LineEnd);
 
         // State identifier (alphanumeric, underscore, or [*] for start/end)
         var bareIdentifier =
-            Try(String("[*]")).Or(
-                Token(_ => char.IsLetterOrDigit(_) || _ == '_')
-                    .AtLeastOnceString()
-            ).Labelled("state identifier");
+            Literals.Text("[*]").Or(
+                Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_')
+                    .AsString()
+            );
 
         // `Moving:::fast` attaches a style class to a state wherever the state is named. The class is read
         // and dropped: styling is not drawn, but the state it sits on still is.
         var styleClass =
-            String(":::")
-                .Then(Token(_ => char.IsLetterOrDigit(_) || _ is '_' or '-').SkipAtLeastOnce());
+            Literals.Text(":::")
+                .SkipAnd(Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ is '_' or '-'));
 
-        var stateIdentifier = bareIdentifier.Before(Try(styleClass).Optional());
+        var stateIdentifier = bareIdentifier.AndSkip(styleClass.Optional());
 
         // State type annotations: <<fork>> or [[fork]]
         var stateTypeName =
             OneOf(
-                Try(String("fork")).ThenReturn(StateType.Fork),
-                Try(String("join")).ThenReturn(StateType.Join),
-                String("choice").ThenReturn(StateType.Choice));
+                Literals.Text("fork").Then(StateType.Fork),
+                Literals.Text("join").Then(StateType.Join),
+                Literals.Text("choice").Then(StateType.Choice));
 
         var stateTypeAnnotation =
-            String("<<").Then(stateTypeName).Before(String(">>"))
-                .Or(String("[[").Then(stateTypeName).Before(String("]]")));
+            Literals.Text("<<").SkipAnd(stateTypeName).AndSkip(Literals.Text(">>"))
+                .Or(Literals.Text("[[").SkipAnd(stateTypeName).AndSkip(Literals.Text("]]")));
 
         // Transition arrow
         var transitionArrow =
-            String("-->").ThenReturn(Unit.Value);
+            Literals.Text("-->");
 
         // The `"Description" as StateName` part of a declaration.
         var describedIdentifier =
-            from description in CommonParsers.DoubleQuotedString
-            from _ in CommonParsers.RequiredWhitespace
-            from asKeyword in String("as")
-            from __ in CommonParsers.RequiredWhitespace
-            from id in stateIdentifier
-            select (id, description: (string?)description);
+            CommonParsers.DoubleQuotedString
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .AndSkip(Literals.Text("as"))
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .And(stateIdentifier)
+                .Map(static (description, id) => (id, description: (string?)description));
 
-        var plainIdentifier = stateIdentifier.Select(_ => (id: _, description: (string?)null));
+        var plainIdentifier = stateIdentifier.Then(static _ => (id: _, description: (string?)null));
 
         // State declaration: state "Description" as StateName
         var stateDeclarationWithAlias =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("state")
-            from __ in CommonParsers.RequiredWhitespace
-            from named in describedIdentifier
-            from ___ in endOfLine
-            select new State
-            {
-                Id = named.id,
-                Description = named.description
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("state"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(describedIdentifier)
+                .AndSkip(endOfLine)
+                .Map(static (id, description) =>
+                    new State
+                    {
+                        Id = id,
+                        Description = description
+                    });
 
         // State declaration with type: state StateName <<fork>>
         var stateDeclarationWithType =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("state")
-            from __ in CommonParsers.RequiredWhitespace
-            from id in stateIdentifier
-            from ___ in CommonParsers.InlineWhitespace
-            from stateType in stateTypeAnnotation
-            from ____ in endOfLine
-            select new State
-            {
-                Id = id,
-                Type = stateType
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("state"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(stateIdentifier)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(stateTypeAnnotation)
+                .AndSkip(endOfLine)
+                .Map(static (id, stateType) =>
+                    new State
+                    {
+                        Id = id,
+                        Type = stateType
+                    });
 
         // Simple state declaration: state StateName
         var simpleStateDeclaration =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("state")
-            from __ in CommonParsers.RequiredWhitespace
-            from id in stateIdentifier
-            from ___ in endOfLine
-            select new State { Id = id };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("state"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(stateIdentifier)
+                .AndSkip(endOfLine)
+                .Then(static _ => new State { Id = _ });
 
         // A state named on a line of its own for the sake of its style class: StateName:::fast
         var styledStateDeclaration =
-            from _ in CommonParsers.InlineWhitespace
-            from id in bareIdentifier
-            from style in styleClass
-            from __ in endOfLine
-            select new State { Id = id };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(bareIdentifier)
+                .AndSkip(styleClass)
+                .AndSkip(endOfLine)
+                .Then(static _ => new State { Id = _ });
 
         // State with description on same line: StateName : Description
         var stateWithDescription =
-            from _ in CommonParsers.InlineWhitespace
-            from id in stateIdentifier
-            from __ in CommonParsers.InlineWhitespace
-            from colon in Char(':')
-            from description in restOfLine
-            from ___ in CommonParsers.LineEnd
-            select new State
-            {
-                Id = id,
-                Description = description.Trim()
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(stateIdentifier)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char(':'))
+                .And(restOfLineText.AsTrimmedString())
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (id, description) =>
+                    new State
+                    {
+                        Id = id,
+                        Description = description
+                    });
 
         // Transition: StateA --> StateB : label
         var transitionParser =
-            from _ in CommonParsers.InlineWhitespace
-            from fromId in stateIdentifier
-            from __ in CommonParsers.InlineWhitespace
-            from arrow in transitionArrow
-            from ___ in CommonParsers.InlineWhitespace
-            from toId in stateIdentifier
-            from label in Try(
-                CommonParsers.InlineWhitespace
-                    .Then(Char(':'))
-                    .Then(restOfLine)
-            ).Optional()
-            from ____ in endOfLine
-            select new StateTransition
-            {
-                FromId = fromId,
-                ToId = toId,
-                Label = label.HasValue && !string.IsNullOrWhiteSpace(label.Value) ? label.Value.Trim() : null
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(stateIdentifier)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(transitionArrow)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(stateIdentifier)
+                .And(
+                    CommonParsers.InlineWhitespace
+                        .SkipAnd(Literals.Char(':'))
+                        .SkipAnd(restOfLine)
+                        .Optional())
+                .AndSkip(endOfLine)
+                .Map(static (fromId, toId, label) =>
+                    new StateTransition
+                    {
+                        FromId = fromId,
+                        ToId = toId,
+                        Label = label.HasValue && !string.IsNullOrWhiteSpace(label.Value) ? label.Value.Trim() : null
+                    });
 
         var notePosition =
             OneOf(
-                Try(String("right of")).ThenReturn(NotePosition.RightOf),
-                String("left of").ThenReturn(NotePosition.LeftOf));
+                Literals.Text("right of").Then(NotePosition.RightOf),
+                Literals.Text("left of").Then(NotePosition.LeftOf));
 
         var noteHeader =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("note")
-            from __ in CommonParsers.RequiredWhitespace
-            from position in notePosition
-            from ___ in CommonParsers.RequiredWhitespace
-            from stateId in stateIdentifier
-            select (position, stateId);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("note"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(notePosition)
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .And(stateIdentifier);
 
         // Note: note right of State : Text
         var singleLineNote =
-            from header in noteHeader
-            from _ in CommonParsers.InlineWhitespace
-            from colon in Char(':')
-            from text in restOfLine
-            from __ in CommonParsers.LineEnd
-            select new StateNote
-            {
-                StateId = header.stateId,
-                Text = NoteText([text]),
-                Position = header.position
-            };
+            noteHeader
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char(':'))
+                .And(restOfLine)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (position, stateId, text) =>
+                    new StateNote
+                    {
+                        StateId = stateId,
+                        Text = NoteText([text]),
+                        Position = position
+                    });
 
         var endNote =
             CommonParsers.InlineWhitespace
-                .Then(String("end note"))
-                .Then(endOfLine);
+                .SkipAnd(Literals.Text("end note"))
+                .SkipAnd(endOfLine);
 
         // Note written as a block: every line up to `end note` is a line of the note.
         var multiLineNote =
-            from header in noteHeader
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CommonParsers.Newline
-            from lines in Try(Not(Try(endNote)).Then(restOfLine).Before(CommonParsers.Newline)).Many()
-            from ___ in endNote
-            select new StateNote
-            {
-                StateId = header.stateId,
-                Text = NoteText(lines),
-                Position = header.position
-            };
+            noteHeader
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.Newline)
+                .And(Not(endNote).SkipAnd(restOfLine).AndSkip(CommonParsers.Newline).Many())
+                .AndSkip(endNote)
+                .Map(static (position, stateId, lines) =>
+                    new StateNote
+                    {
+                        StateId = stateId,
+                        Text = NoteText(lines),
+                        Position = position
+                    });
 
-        var noteParser = Try(singleLineNote).Or(multiLineNote);
+        var noteParser = singleLineNote.Or(multiLineNote);
 
         var directionParser =
             CommonParsers.InlineWhitespace
-                .Then(String("direction"))
-                .Then(CommonParsers.RequiredWhitespace)
-                .Then(CommonParsers.DirectionParser)
-                .Before(endOfLine);
+                .SkipAnd(Literals.Text("direction"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(CommonParsers.DirectionParser)
+                .AndSkip(endOfLine);
 
         // Lines that are valid Mermaid but change nothing in what is drawn here: styling (`classDef`,
         // `class`, `style`), interaction (`click`), the accessibility title and description, and the
@@ -194,91 +203,89 @@ class StateParser : IDiagramParser<StateModel>
         // parse, and keeps `accTitle: x` from being read as a state called accTitle.
         var ignoredKeyword =
             OneOf(
-                Try(String("classDef")),
-                Try(String("class")),
-                Try(String("style")),
-                Try(String("click")),
-                Try(String("accTitle")),
-                Try(String("accDescr")),
-                Try(String("hide empty description")),
-                String("scale"));
+                Literals.Text("classDef"),
+                Literals.Text("class"),
+                Literals.Text("style"),
+                Literals.Text("click"),
+                Literals.Text("accTitle"),
+                Literals.Text("accDescr"),
+                Literals.Text("hide empty description"),
+                Literals.Text("scale"));
+
+        var keywordBoundary =
+            Literals.AnyOf(" \t:\r\n", minSize: 1, maxSize: 1).Or(CommonParsers.End);
 
         var ignoredDirective =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in ignoredKeyword
-            from boundary in Lookahead(Token(_ => _ is ' ' or '\t' or ':' or '\r' or '\n').IgnoreResult().Or(End))
-            from rest in restOfLine
-            from lineEnd in CommonParsers.LineEnd
-            select Unit.Value;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(ignoredKeyword.WhenFollowedBy(keywordBoundary))
+                .SkipAnd(restOfLineText)
+                .SkipAnd(CommonParsers.LineEnd);
 
         // `accDescr { ... }` may run over several lines.
         var multiLineDescription =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("accDescr")
-            from __ in CommonParsers.InlineWhitespace
-            from open in Char('{')
-            from text in Token(_ => _ != '}').SkipMany()
-            from close in Char('}')
-            from ___ in endOfLine
-            select Unit.Value;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("accDescr"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(Literals.Char('{'))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(endOfLine);
 
         // Skip line (comments, empty lines)
         var skipLine =
             CommonParsers.InlineWhitespace
-                .Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
+                .SkipAnd(CommonParsers.Comment.Or(CommonParsers.Newline));
 
         // Composite state start: state StateName {  or  state "Description" as StateName {
         var compositeStateStart =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("state")
-            from __ in CommonParsers.RequiredWhitespace
-            from named in describedIdentifier.Or(plainIdentifier)
-            from ___ in CommonParsers.InlineWhitespace
-            from open in Char('{')
-            from ____ in endOfLine
-            select new CompositeStartItem(named.id, named.description);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("state"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(describedIdentifier.Or(plainIdentifier))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('{'))
+                .AndSkip(endOfLine)
+                .Map(static (id, description) => new CompositeStartItem(id, description));
 
         // Composite state end: }
         var compositeStateEnd =
             CommonParsers.InlineWhitespace
-                .Then(Char('}'))
-                .Then(endOfLine)
-                .ThenReturn(Unit.Value);
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(endOfLine);
 
         // `--` on a line of its own splits a composite into regions that run concurrently.
         var divider =
             CommonParsers.InlineWhitespace
-                .Then(String("--"))
-                .Then(endOfLine)
-                .ThenReturn(Unit.Value);
+                .SkipAnd(Literals.Text("--"))
+                .SkipAnd(endOfLine);
 
         var parseContentRecursive =
             OneOf(
-                Try(directionParser.Select<IStateContent?>(_ => new DirectionItem(_))),
-                Try(noteParser.Select<IStateContent?>(_ => new NoteItem(_))),
-                Try(multiLineDescription.ThenReturn<IStateContent?>(null)),
-                Try(ignoredDirective.ThenReturn<IStateContent?>(null)),
-                Try(stateDeclarationWithAlias.Select<IStateContent?>(_ => new StateItem(_))),
-                Try(stateDeclarationWithType.Select<IStateContent?>(_ => new StateItem(_))),
-                Try(compositeStateStart.Select<IStateContent?>(_ => _)),
-                Try(compositeStateEnd.ThenReturn<IStateContent?>(new CompositeEndItem())),
-                Try(divider.ThenReturn<IStateContent?>(new DividerItem())),
-                Try(transitionParser.Select<IStateContent?>(_ => new TransitionItem(_))),
-                Try(styledStateDeclaration.Select<IStateContent?>(_ => new StateItem(_))),
-                Try(stateWithDescription.Select<IStateContent?>(_ => new StateItem(_))),
-                Try(simpleStateDeclaration.Select<IStateContent?>(_ => new StateItem(_))),
-                skipLine.ThenReturn<IStateContent?>(null)
+                directionParser.Then<IStateContent?>(static _ => new DirectionItem(_)),
+                noteParser.Then<IStateContent?>(static _ => new NoteItem(_)),
+                multiLineDescription.Then<IStateContent?>(static _ => null),
+                ignoredDirective.Then<IStateContent?>(static _ => null),
+                stateDeclarationWithAlias.Then<IStateContent?>(static _ => new StateItem(_)),
+                stateDeclarationWithType.Then<IStateContent?>(static _ => new StateItem(_)),
+                compositeStateStart.Then<IStateContent?>(static _ => _),
+                compositeStateEnd.Then<IStateContent?>(new CompositeEndItem()),
+                divider.Then<IStateContent?>(new DividerItem()),
+                transitionParser.Then<IStateContent?>(static _ => new TransitionItem(_)),
+                styledStateDeclaration.Then<IStateContent?>(static _ => new StateItem(_)),
+                stateWithDescription.Then<IStateContent?>(static _ => new StateItem(_)),
+                simpleStateDeclaration.Then<IStateContent?>(static _ => new StateItem(_)),
+                skipLine.Then<IStateContent?>(static _ => null)
             ).Many();
 
         parser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in Try(String("stateDiagram-v2")).Or(String("stateDiagram"))
-            from __ in endOfLine
-            from content in parseContentRecursive
-            // Nothing may be left over: without this a line no rule matches ends the list quietly and the
-            // rest of the diagram is dropped instead of being reported.
-            from end in End
-            select BuildModel(content);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("stateDiagram-v2").Or(Literals.Text("stateDiagram")))
+                .SkipAnd(endOfLine)
+                .SkipAnd(parseContentRecursive)
+                // Nothing may be left over: without this a line no rule matches ends the list quietly and the
+                // rest of the diagram is dropped instead of being reported.
+                .AndSkip(CommonParsers.End)
+                .Then(BuildModel);
     }
 
     // A note's lines as the one `<br/>`-separated label the renderer draws. A literal `\n` breaks a line
@@ -546,7 +553,7 @@ class StateParser : IDiagramParser<StateModel>
         }
     }
 
-    public Result<char, StateModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<StateModel> Parse(string input) => parser.ParseDiagram(input);
 
     internal interface IStateContent;
     readonly record struct DirectionItem(Direction Value) : IStateContent;

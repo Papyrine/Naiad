@@ -1,6 +1,6 @@
 class C4Parser : IDiagramParser<C4Model>
 {
-    static Parser<char, C4Model> parser;
+    static Parser<C4Model> parser;
 
     // Every element keyword, without the `_Ext` that marks an element as external.
     static readonly Dictionary<string, C4ElementType> elementTypes = new(StringComparer.OrdinalIgnoreCase)
@@ -53,151 +53,151 @@ class C4Parser : IDiagramParser<C4Model>
     static C4Parser()
     {
         var quotedString =
-            Char('"').Then(Token(_ => _ != '"').ManyString()).Before(Char('"'));
+            Between(Literals.Char('"'), Literals.NoneOf("\"", minSize: 0), Literals.Char('"'))
+                .AsString();
 
         var restOfLine =
-            Token(_ => _ != '\r' && _ != '\n').ManyString();
+            Literals.NoneOf("\r\n", minSize: 0);
 
         // Title: title My Diagram
         var titleParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("title")
-            from ___ in CommonParsers.RequiredWhitespace
-            from title in restOfLine
-            from ____ in CommonParsers.LineEnd
-            select title.Trim();
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("title"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(restOfLine.AsTrimmedString())
+                .AndSkip(CommonParsers.LineEnd);
 
         // An argument's value: a quoted string, or bare text up to the next comma or the closing bracket.
         var argumentValue =
             quotedString.Or(
-                Token(_ => _ is not (',' or ')' or '"' or '\r' or '\n'))
-                    .ManyString()
-                    .Select(_ => _.Trim()));
+                Literals.NoneOf(",)\"\r\n", minSize: 0)
+                    .AsTrimmedString());
 
         // `$tags="v1"` names the argument it sets, wherever it comes in the list.
         var namedArgument =
-            from dollar in Char('$')
-            from name in Token(char.IsLetterOrDigit).AtLeastOnceString()
-            from _ in CommonParsers.InlineWhitespace
-            from assign in Char('=')
-            from __ in CommonParsers.InlineWhitespace
-            from value in argumentValue
-            select new Argument(name, value);
+            Literals.Char('$')
+                .SkipAnd(Literals.Pattern(char.IsLetterOrDigit).AsString())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('='))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(argumentValue)
+                .Map(static (name, value) => new Argument(name, value));
 
         var argument =
             CommonParsers.InlineWhitespace
-                .Then(Try(namedArgument).Or(argumentValue.Select(_ => new Argument(null, _))))
-                .Before(CommonParsers.InlineWhitespace);
+                .SkipAnd(namedArgument.Or(argumentValue.Then(static _ => new Argument(null, _))))
+                .AndSkip(CommonParsers.InlineWhitespace);
 
         // Every C4 statement is a call: Keyword(argument, argument, ...)
+        // The indentation before it is left to the rules that use it, so that a keyword they turn down is
+        // reported where it starts.
         var call =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in Token(_ => char.IsLetterOrDigit(_) || _ == '_').AtLeastOnceString()
-            from __ in CommonParsers.InlineWhitespace
-            from open in Char('(')
-            from arguments in argument.Separated(Char(','))
-            from close in Char(')')
-            from ___ in CommonParsers.InlineWhitespace
-            select new Call(keyword, arguments.ToList());
+            Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_').AsString()
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('('))
+                .And(Separated(Literals.Char(','), argument).Optional())
+                .AndSkip(Literals.Char(')'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .Map(static (keyword, arguments) => new Call(keyword, arguments.OrSome([]).ToList()));
 
         // An element, a relationship, or a call that is read and ignored.
         var statement =
-            call
-                .Assert(IsStatement, _ => $"Unknown C4 statement '{_.Keyword}'")
-                .Before(CommonParsers.LineEnd)
-                .Select(ToContent);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(call.Assert(IsStatement, static _ => $"Unknown C4 statement '{_.Keyword}'"))
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(ToContent);
 
         // The accessibility title and description, which are not drawn.
         var accessibilityLine =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in Try(String("accTitle")).Or(String("accDescr"))
-            from boundary in Lookahead(Token(_ => _ is ' ' or '\t' or ':'))
-            from rest in restOfLine
-            from lineEnd in CommonParsers.LineEnd
-            select Unit.Value;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(
+                    Literals.Text("accTitle")
+                        .Or(Literals.Text("accDescr"))
+                        .WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1)))
+                .SkipAnd(restOfLine)
+                .SkipAnd(CommonParsers.LineEnd);
 
         // `accDescr { ... }` may run over several lines.
         var multiLineDescription =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("accDescr")
-            from __ in CommonParsers.InlineWhitespace
-            from open in Char('{')
-            from text in Token(_ => _ != '}').SkipMany()
-            from close in Char('}')
-            from ___ in CommonParsers.InlineWhitespace
-            from lineEnd in CommonParsers.LineEnd
-            select Unit.Value;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("accDescr"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(Literals.Char('{'))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd);
 
         // Skip line (comments, empty lines)
         var skipLine =
             OneOf(
-                Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment)),
-                Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)),
-                Try(multiLineDescription),
-                Try(accessibilityLine));
+                CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Comment),
+                CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Newline),
+                multiLineDescription,
+                accessibilityLine);
 
         // Boundary opening: Type_Boundary(id, "label") {
         var boundaryOpen =
-            from opening in call.Assert(_ => boundaryTypes.ContainsKey(_.Keyword), _ => $"Unknown C4 boundary '{_.Keyword}'")
-            // The brace may sit on the line after the call.
-            from _ in SkipWhitespaces.Then(Char('{'))
-            from __ in CommonParsers.InlineWhitespace
-            from ___ in CommonParsers.LineEnd.Optional()
-            select opening;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(call.When(static (_, opening) => boundaryTypes.ContainsKey(opening.Keyword)))
+                // The brace may sit on the line after the call.
+                .AndSkip(ZeroOrMore(char.IsWhiteSpace))
+                .AndSkip(Literals.Char('{'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd.Optional());
 
         // Boundary closing: }
         var boundaryClose =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in Char('}')
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in CommonParsers.LineEnd.Optional()
-            select Unit.Value;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd.Optional());
 
-        // Assigned just below; boundaryParser captures the variable and only dereferences it at
-        // parse time, by which point the real parser is in place.
-        Parser<char, IC4Content?> boundaryContentOrNestedBoundary = null!;
+        // Defined just below, once boundaryParser exists: what a boundary holds may itself be a boundary.
+        var boundaryContentOrNestedBoundary = Deferred<IC4Content?>();
 
         // Recursive boundary parser - parses boundary with nested content
         var boundaryParser =
-            from open in boundaryOpen
-            from content in boundaryContentOrNestedBoundary.Until(Lookahead(Try(boundaryClose)))
-            from close in boundaryClose
-            select new BoundaryItem(ToBoundary(open), content.ToList());
+            boundaryOpen
+                .And(Not(boundaryClose).SkipAnd(boundaryContentOrNestedBoundary).Many())
+                .AndSkip(boundaryClose)
+                .Map(static (open, content) => new BoundaryItem(ToBoundary(open), content.ToList()));
 
         // Content inside boundary: either nested boundary or regular element
-        boundaryContentOrNestedBoundary =
+        boundaryContentOrNestedBoundary.Parser =
             OneOf(
-                Try(boundaryParser.Select<IC4Content?>(_ => _)),
-                Try(statement),
-                skipLine.ThenReturn<IC4Content?>(null)
+                boundaryParser.Then<IC4Content?>(static _ => _),
+                statement,
+                skipLine.Then<IC4Content?>(static _ => null)
             );
 
         // Content item (top level)
         var contentItem =
             OneOf(
-                Try(titleParser.Select<IC4Content?>(_ => new TitleItem(_))),
-                Try(boundaryParser.Select<IC4Content?>(_ => _)),
-                Try(statement),
-                skipLine.ThenReturn<IC4Content?>(null)
+                titleParser.Then<IC4Content?>(static _ => new TitleItem(_)),
+                boundaryParser.Then<IC4Content?>(static _ => _),
+                statement,
+                skipLine.Then<IC4Content?>(static _ => null)
             );
 
         // Diagram type header
         var diagramTypeParser =
             OneOf(
-                Try(CIString("C4Context")).ThenReturn(C4DiagramType.Context),
-                Try(CIString("C4Container")).ThenReturn(C4DiagramType.Container),
-                Try(CIString("C4Component")).ThenReturn(C4DiagramType.Component),
-                Try(CIString("C4Dynamic")).ThenReturn(C4DiagramType.Dynamic),
-                Try(CIString("C4Deployment")).ThenReturn(C4DiagramType.Deployment)
+                TextIgnoreCase("C4Context").Then(C4DiagramType.Context),
+                TextIgnoreCase("C4Container").Then(C4DiagramType.Container),
+                TextIgnoreCase("C4Component").Then(C4DiagramType.Component),
+                TextIgnoreCase("C4Dynamic").Then(C4DiagramType.Dynamic),
+                TextIgnoreCase("C4Deployment").Then(C4DiagramType.Deployment)
             );
 
         parser =
-            from _ in CommonParsers.InlineWhitespace
-            from type in diagramTypeParser
-            from __ in CommonParsers.InlineWhitespace
-            from ___ in CommonParsers.LineEnd
-            from result in contentItem.ManyThen(End)
-            select BuildModel(type, result.Item1);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(diagramTypeParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .And(contentItem.Many())
+                .AndSkip(CommonParsers.End)
+                .Map(BuildModel);
     }
 
     static bool IsExternal(string keyword) =>
@@ -370,7 +370,7 @@ class C4Parser : IDiagramParser<C4Model>
         }
     }
 
-    public Result<char, C4Model> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<C4Model> Parse(string input) => parser.ParseDiagram(input);
 
     readonly record struct Argument(string? Name, string Value);
 

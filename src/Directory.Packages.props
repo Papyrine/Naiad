@@ -3,7 +3,7 @@
     <PackageVersion Include="AngleSharp" Version="1.8.4" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.5.0" />
     <PackageVersion Include="Svg.Skia" Version="5.2.3" />
-    <PackageVersion Include="Pidgin" Version="3.5.1" />
+    <PackageVersion Include="Parlot" Version="1.5.11" />
     <PackageVersion Include="SkiaSharp" Version="4.153.1" />
     <PackageVersion Include="SixLabors.ImageSharp" Version="4.1.2" />
     <PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="3.1.2" />

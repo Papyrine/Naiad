@@ -1,179 +1,186 @@
 class RequirementParser : IDiagramParser<RequirementModel>
 {
-    static Parser<char, RequirementModel> parser;
+    static Parser<RequirementModel> parser;
 
     static RequirementParser()
     {
         var identifier =
-            Token(_ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AtLeastOnceString();
+            Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AsString();
 
         // `test_req:::important` attaches style classes to a node wherever it is named. They are read
         // and dropped: styling is not drawn, but the node it sits on still is.
         var styleClasses =
-            String(":::")
-                .Then(Token(_ => char.IsLetterOrDigit(_) || _ is '_' or '-' or ',').SkipAtLeastOnce());
+            Literals.Text(":::")
+                .SkipAnd(Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ is '_' or '-' or ','));
 
         // A requirement or element name: a bare word, or anything at all inside double quotes.
         var nodeName =
             CommonParsers.DoubleQuotedString
                 .Or(identifier)
-                .Before(Try(styleClasses).Optional());
+                .AndSkip(styleClasses.Optional());
+
+        var restOfLineText =
+            Literals.NoneOf("\r\n", minSize: 0);
 
         var restOfLine =
-            Token(_ => _ != '\r' && _ != '\n').ManyString();
+            restOfLineText.AsString();
 
         var requirementTypeParser =
             OneOf(
-                Try(CIString("functionalRequirement")).ThenReturn(RequirementType.FunctionalRequirement),
-                Try(CIString("interfaceRequirement")).ThenReturn(RequirementType.InterfaceRequirement),
-                Try(CIString("performanceRequirement")).ThenReturn(RequirementType.PerformanceRequirement),
-                Try(CIString("physicalRequirement")).ThenReturn(RequirementType.PhysicalRequirement),
-                Try(CIString("designConstraint")).ThenReturn(RequirementType.DesignConstraint),
-                CIString("requirement").ThenReturn(RequirementType.Requirement)
+                TextIgnoreCase("functionalRequirement").Then(RequirementType.FunctionalRequirement),
+                TextIgnoreCase("interfaceRequirement").Then(RequirementType.InterfaceRequirement),
+                TextIgnoreCase("performanceRequirement").Then(RequirementType.PerformanceRequirement),
+                TextIgnoreCase("physicalRequirement").Then(RequirementType.PhysicalRequirement),
+                TextIgnoreCase("designConstraint").Then(RequirementType.DesignConstraint),
+                TextIgnoreCase("requirement").Then(RequirementType.Requirement)
             );
 
         // Property: key: value
         var propertyParser =
-            from _ in CommonParsers.InlineWhitespace
-            from key in identifier
-            from __ in CommonParsers.InlineWhitespace
-            from ___ in Char(':')
-            from ____ in CommonParsers.InlineWhitespace
-            from value in restOfLine
-            from _____ in CommonParsers.LineEnd
-            select (key.ToLowerInvariant(), Unquote(value.Trim()));
+            CommonParsers.InlineWhitespace
+                .SkipAnd(identifier)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char(':'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(restOfLine)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (key, value) => (key.ToLowerInvariant(), Unquote(value.Trim())));
 
         // A block's lines: properties, with blank lines and comments between them. Each is tried and
         // given back whole, so the indentation in front of the closing brace is not taken for the start
         // of another property.
         var blockBody =
             OneOf(
-                Try(propertyParser.Select<(string, string)?>(_ => _)),
-                Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment)).ThenReturn<(string, string)?>(null),
-                Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)).ThenReturn<(string, string)?>(null)
+                propertyParser.Then<(string, string)?>(static _ => _),
+                CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Comment).Then<(string, string)?>(static _ => null),
+                CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Newline).Then<(string, string)?>(static _ => null)
             ).Many()
-            .Select(_ => _.Where(_ => _ is not null).Select(_ => _!.Value).ToList());
+            .Then(static _ => _.Where(static _ => _ is not null).Select(static _ => _!.Value).ToList());
 
         var requirementBlockParser =
-            from _ in CommonParsers.InlineWhitespace
-            from type in requirementTypeParser
-            from __ in CommonParsers.RequiredWhitespace
-            from name in nodeName
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in Char('{')
-            from _____ in CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd)
-            from props in blockBody
-            from ______ in CommonParsers.InlineWhitespace
-            from _______ in Char('}')
-            from ________ in CommonParsers.InlineWhitespace
-            from _________ in CommonParsers.LineEnd
-            select BuildRequirement(name, type, props);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(requirementTypeParser)
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .And(nodeName)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('{'))
+                .AndSkip(CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.LineEnd))
+                .And(blockBody)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('}'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (type, name, props) => BuildRequirement(name, type, props));
 
         var elementBlockParser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("element")
-            from ___ in CommonParsers.RequiredWhitespace
-            from name in nodeName
-            from ____ in CommonParsers.InlineWhitespace
-            from _____ in Char('{')
-            from ______ in CommonParsers.InlineWhitespace.Then(CommonParsers.LineEnd)
-            from props in blockBody
-            from _______ in CommonParsers.InlineWhitespace
-            from ________ in Char('}')
-            from _________ in CommonParsers.InlineWhitespace
-            from __________ in CommonParsers.LineEnd
-            select BuildElement(name, props);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("element"))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(nodeName)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('{'))
+                .AndSkip(CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.LineEnd))
+                .And(blockBody)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('}'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(BuildElement);
 
         var relationTypeParser =
             OneOf(
-                Try(CIString("contains")).ThenReturn(RelationType.Contains),
-                Try(CIString("copies")).ThenReturn(RelationType.Copies),
-                Try(CIString("derives")).ThenReturn(RelationType.Derives),
-                Try(CIString("satisfies")).ThenReturn(RelationType.Satisfies),
-                Try(CIString("verifies")).ThenReturn(RelationType.Verifies),
-                Try(CIString("refines")).ThenReturn(RelationType.Refines),
-                CIString("traces").ThenReturn(RelationType.Traces)
+                TextIgnoreCase("contains").Then(RelationType.Contains),
+                TextIgnoreCase("copies").Then(RelationType.Copies),
+                TextIgnoreCase("derives").Then(RelationType.Derives),
+                TextIgnoreCase("satisfies").Then(RelationType.Satisfies),
+                TextIgnoreCase("verifies").Then(RelationType.Verifies),
+                TextIgnoreCase("refines").Then(RelationType.Refines),
+                TextIgnoreCase("traces").Then(RelationType.Traces)
             );
 
         // Relation: source - type -> target
         var relationParser =
-            from _ in CommonParsers.InlineWhitespace
-            from source in nodeName
-            from __ in CommonParsers.InlineWhitespace
-            from ___ in Char('-')
-            from ____ in CommonParsers.InlineWhitespace
-            from relType in relationTypeParser
-            from _____ in CommonParsers.InlineWhitespace
-            from ______ in String("->")
-            from _______ in CommonParsers.InlineWhitespace
-            from target in nodeName
-            from ________ in CommonParsers.InlineWhitespace
-            from _________ in CommonParsers.LineEnd
-            select new RequirementRelation
-            {
-                Source = source,
-                Target = target,
-                Type = relType
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(nodeName)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('-'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(relationTypeParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Text("->"))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(nodeName)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (source, relType, target) =>
+                    new RequirementRelation
+                    {
+                        Source = source,
+                        Target = target,
+                        Type = relType
+                    });
 
         // The same relation written the other way round: target <- type - source
         var reverseRelationParser =
-            from _ in CommonParsers.InlineWhitespace
-            from target in nodeName
-            from __ in CommonParsers.InlineWhitespace
-            from ___ in String("<-")
-            from ____ in CommonParsers.InlineWhitespace
-            from relType in relationTypeParser
-            from _____ in CommonParsers.InlineWhitespace
-            from ______ in Char('-')
-            from _______ in CommonParsers.InlineWhitespace
-            from source in nodeName
-            from ________ in CommonParsers.InlineWhitespace
-            from _________ in CommonParsers.LineEnd
-            select new RequirementRelation
-            {
-                Source = source,
-                Target = target,
-                Type = relType
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(nodeName)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Text("<-"))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(relationTypeParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char('-'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(nodeName)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (target, relType, source) =>
+                    new RequirementRelation
+                    {
+                        Source = source,
+                        Target = target,
+                        Type = relType
+                    });
 
         // Lines that are valid Mermaid but change nothing in what is drawn here: the direction (the
         // layout is fixed), styling, and the accessibility title and description.
+        var ignoredKeyword =
+            OneOf(
+                Literals.Text("direction"),
+                Literals.Text("classDef"),
+                Literals.Text("class"),
+                Literals.Text("style"),
+                Literals.Text("accTitle"),
+                Literals.Text("accDescr"));
+
         var ignoredLine =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in OneOf(
-                Try(String("direction")),
-                Try(String("classDef")),
-                Try(String("class")),
-                Try(String("style")),
-                Try(String("accTitle")),
-                String("accDescr"))
-            from boundary in Lookahead(Token(_ => _ is ' ' or '\t' or ':'))
-            from rest in restOfLine
-            from lineEnd in CommonParsers.LineEnd
-            select Unit.Value;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(ignoredKeyword.WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1)))
+                .SkipAnd(restOfLineText)
+                .SkipAnd(CommonParsers.LineEnd);
 
         var skipLine =
-            Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Comment))
-                .Or(Try(CommonParsers.InlineWhitespace.Then(CommonParsers.Newline)));
+            CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Comment)
+                .Or(CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Newline));
 
         var contentItem =
             OneOf(
-                Try(requirementBlockParser.Select<IRequirementContent?>(_ => new RequirementBlockItem(_))),
-                Try(elementBlockParser.Select<IRequirementContent?>(_ => new ElementBlockItem(_))),
-                Try(ignoredLine.ThenReturn<IRequirementContent?>(null)),
-                Try(relationParser.Select<IRequirementContent?>(_ => new RelationItem(_))),
-                Try(reverseRelationParser.Select<IRequirementContent?>(_ => new RelationItem(_))),
-                skipLine.ThenReturn<IRequirementContent?>(null)
+                requirementBlockParser.Then<IRequirementContent?>(static _ => new RequirementBlockItem(_)),
+                elementBlockParser.Then<IRequirementContent?>(static _ => new ElementBlockItem(_)),
+                ignoredLine.Then<IRequirementContent?>(static _ => null),
+                relationParser.Then<IRequirementContent?>(static _ => new RelationItem(_)),
+                reverseRelationParser.Then<IRequirementContent?>(static _ => new RelationItem(_)),
+                skipLine.Then<IRequirementContent?>(static _ => null)
             );
 
         parser =
-            from _ in CommonParsers.InlineWhitespace
-            from __ in CIString("requirementDiagram")
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in CommonParsers.LineEnd
-            from result in contentItem.ManyThen(End)
-            select BuildModel(result.Item1);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("requirementDiagram"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd)
+                .SkipAnd(contentItem.Many())
+                .AndSkip(CommonParsers.End)
+                .Then(BuildModel);
     }
 
     // A quoted value's quotes are delimiters, not part of the value.
@@ -259,7 +266,7 @@ class RequirementParser : IDiagramParser<RequirementModel>
         return model;
     }
 
-    public Result<char, RequirementModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<RequirementModel> Parse(string input) => parser.ParseDiagram(input);
 
     internal interface IRequirementContent;
     readonly record struct RequirementBlockItem(Requirement Value) : IRequirementContent;

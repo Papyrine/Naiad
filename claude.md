@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Naiad is a .NET library that renders Mermaid diagram markup to SVG without requiring a browser or JavaScript runtime. Built on .NET 10.0 with C# latest, using Pidgin parser combinators for input parsing.
+Naiad is a .NET library that renders Mermaid diagram markup to SVG without requiring a browser or JavaScript runtime. Built on .NET 10.0 with C# latest, using Parlot parser combinators for input parsing.
 
 ## Build & Test Commands
 
@@ -27,7 +27,7 @@ dotnet test src --configuration Release -- --treenode-filter "/*/*/PngRegenerato
 
 **Pipeline:** Each diagram type follows a three-stage pipeline: **Parser → Model → Renderer**
 
-- **Parser** (`IDiagramParser<TModel>`): Converts Mermaid text to a model using Pidgin parser combinators. Parsers use LINQ-style `from`/`select` syntax. Shared parser building blocks live in `CommonParsers`.
+- **Parser** (`IDiagramParser<TModel>`): Converts Mermaid text to a model using Parlot's fluent parser combinators (`Parlot.Fluent`). A rule is a chain of `.And()` / `.SkipAnd()` / `.AndSkip()` ending in `.Map(...)` or `.Then(...)`; `Literals` only, never the whitespace-skipping `Terms`, since the grammars are line-oriented. Shared parser building blocks live in `CommonParsers`, and what Parlot lacks (`Many`, `Map`, `AsString`, `Assert`, `LineBefore`, `TextIgnoreCase`) in `GrammarExtensions`. Case-insensitive keywords use `TextIgnoreCase("x")`, not `Literals.Text("x", caseInsensitive: true)`: up to at least Parlot 1.5.11 the latter picks its lookup characters from the culture the grammar is built under, and misses `I` for `i` under a Turkish one. Parlot always backtracks and reports nothing about a failure by itself, so `CommonParsers.LineEnd` / `Newline` / `End` and `.Many()` note how far they got in `DiagramParseContext`, which is where a parse error's line and column come from. Use `.Many()` rather than Parlot's `ZeroOrMany`: it also stops on a rule that matches without consuming anything instead of looping forever.
 - **Model** (`DiagramBase`): Domain objects. `GraphDiagramBase` extends this for node/edge diagrams (Flowchart, Class, ER, State, etc.) with `Node`, `Edge`, `Subgraph`.
 - **Renderer** (`IDiagramRenderer<TModel>`): Converts model to `SvgDocument` using `SvgBuilder` fluent API.
 

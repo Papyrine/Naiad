@@ -3,236 +3,257 @@ using Rect = Naiad.Diagrams.Sequence.Rect;
 
 class SequenceParser : IDiagramParser<SequenceModel>
 {
-    static readonly Parser<char, SequenceModel> parser;
+    static readonly Parser<SequenceModel> parser;
 
     static SequenceParser()
     {
         // Sequence diagram identifier: letters, digits and underscores, plus a hyphen between two of them
         // (`web-app`). A hyphen that starts an arrow is not part of the name - and, as in Mermaid, neither
         // is one followed by `x`, which is how the `-x` arrow is spelled.
-        var idChar =
-            Token(_ => char.IsLetterOrDigit(_) || _ == '_');
+        var idChars =
+            Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_');
+
+        var idHyphen =
+            Literals.Char('-')
+                .WhenFollowedBy(
+                    Literals.Pattern(static _ => (char.IsLetterOrDigit(_) || _ == '_') && _ != 'x', minSize: 1, maxSize: 1));
 
         var seqIdentifier =
-            idChar
-                .Then(idChar.Or(Try(Char('-').Before(Lookahead(Token(_ => (char.IsLetterOrDigit(_) || _ == '_') && _ != 'x'))))).SkipMany())
-                .Slice((span, _) => span.ToString())
-                .Labelled("identifier");
+            Capture(idChars.And(ZeroOrMany(idHyphen.And(idChars))))
+                .AsString();
+
+        // The rest of the line as it is read, and as the string kept from it.
+        var restOfLineText =
+            Literals.NoneOf("\r\n", minSize: 0);
+
+        var restOfLine =
+            restOfLineText.AsString();
+
+        var inlineGap =
+            Literals.AnyOf(" \t");
 
         // Participant declaration: participant/actor Name as Alias, optionally introduced by `create`.
         var participantParser =
-            from _ in CommonParsers.InlineWhitespace
-            from created in Try(String("create").Then(CommonParsers.RequiredWhitespace)).Optional()
-            from type in OneOf(
-                Try(String("actor")).ThenReturn(ParticipantType.Actor),
-                String("participant").ThenReturn(ParticipantType.Participant)
-            )
-            from __ in CommonParsers.RequiredWhitespace
-            from id in seqIdentifier
-            from alias in Try(
-                CommonParsers.RequiredWhitespace
-                    .Then(String("as"))
-                    .Then(CommonParsers.RequiredWhitespace)
-                    .Then(Token(_ => _ != '\r' && _ != '\n').AtLeastOnceString())
-            ).Optional()
-            from ___ in CommonParsers.LineEnd
-            select new Participant
-            {
-                Id = id,
-                Alias = alias.HasValue ? Unquote(alias.Value.Trim()) : null,
-                Type = type,
-                IsCreated = created.HasValue
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("create").SkipAnd(CommonParsers.RequiredWhitespace).Optional())
+                .And(
+                    OneOf(
+                        Literals.Text("actor").Then(ParticipantType.Actor),
+                        Literals.Text("participant").Then(ParticipantType.Participant)
+                    ))
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .And(seqIdentifier)
+                .And(
+                    CommonParsers.RequiredWhitespace
+                        .SkipAnd(Literals.Text("as"))
+                        .SkipAnd(CommonParsers.RequiredWhitespace)
+                        .SkipAnd(Literals.NoneOf("\r\n").AsString())
+                        .Optional())
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (created, type, id, alias) =>
+                    new Participant
+                    {
+                        Id = id,
+                        Alias = alias.HasValue ? Unquote(alias.Value.Trim()) : null,
+                        Type = type,
+                        IsCreated = created.HasValue
+                    });
 
         // Message arrows
         var messageArrowParser =
             OneOf(
-                Try(String("<<-->>")).ThenReturn(MessageType.DottedBiDirectional),
-                Try(String("<<->>")).ThenReturn(MessageType.BiDirectional),
-                Try(String("-->>")).ThenReturn(MessageType.DottedArrow),
-                Try(String("->>")).ThenReturn(MessageType.SolidArrow),
-                Try(String("--x")).ThenReturn(MessageType.DottedCross),
-                Try(String("-x")).ThenReturn(MessageType.SolidCross),
-                Try(String("--)")).ThenReturn(MessageType.DottedAsync),
-                Try(String("-)")).ThenReturn(MessageType.SolidAsync),
-                Try(String("-->")).ThenReturn(MessageType.DottedOpen),
-                String("->").ThenReturn(MessageType.SolidOpen)
+                Literals.Text("<<-->>").Then(MessageType.DottedBiDirectional),
+                Literals.Text("<<->>").Then(MessageType.BiDirectional),
+                Literals.Text("-->>").Then(MessageType.DottedArrow),
+                Literals.Text("->>").Then(MessageType.SolidArrow),
+                Literals.Text("--x").Then(MessageType.DottedCross),
+                Literals.Text("-x").Then(MessageType.SolidCross),
+                Literals.Text("--)").Then(MessageType.DottedAsync),
+                Literals.Text("-)").Then(MessageType.SolidAsync),
+                Literals.Text("-->").Then(MessageType.DottedOpen),
+                Literals.Text("->").Then(MessageType.SolidOpen)
             );
 
         // Message: From->>To: Text
         var messageParser =
-            from _ in CommonParsers.InlineWhitespace
-            from fromId in seqIdentifier
-            from __ in CommonParsers.InlineWhitespace
-            from arrow in messageArrowParser
-            from activate in Char('+').Optional()
-            from deactivate in Char('-').Optional()
-            from ___ in CommonParsers.InlineWhitespace
-            from toId in seqIdentifier
-            from ____ in CommonParsers.InlineWhitespace
-            from text in Try(
-                Char(':')
-                    .Then(CommonParsers.InlineWhitespace)
-                    .Then(Token(_ => _ != '\r' && _ != '\n').ManyString())
-            ).Optional()
-            from _____ in CommonParsers.LineEnd
-            select new Message
-            {
-                FromId = fromId,
-                ToId = toId,
-                Text = text.HasValue ? text.Value : null,
-                Type = arrow,
-                Activate = activate.HasValue,
-                Deactivate = deactivate.HasValue
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(seqIdentifier)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(messageArrowParser)
+                .And(Literals.Char('+').Optional())
+                .And(Literals.Char('-').Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(seqIdentifier)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(
+                    Literals.Char(':')
+                        .SkipAnd(CommonParsers.InlineWhitespace)
+                        .SkipAnd(restOfLine)
+                        .Optional())
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (fromId, arrow, activate, deactivate, toId, text) =>
+                    new Message
+                    {
+                        FromId = fromId,
+                        ToId = toId,
+                        Text = text.OrNull(),
+                        Type = arrow,
+                        Activate = activate.HasValue,
+                        Deactivate = deactivate.HasValue
+                    });
 
         // Note: Note right of/left of/over Participant: Text
         var noteParser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in Try(String("Note")).Or(String("note"))
-            from __ in CommonParsers.RequiredWhitespace
-            from position in OneOf(
-                Try(String("right of")).ThenReturn(NotePosition.RightOf),
-                Try(String("left of")).ThenReturn(NotePosition.LeftOf),
-                String("over").ThenReturn(NotePosition.Over)
-            )
-            from ___ in CommonParsers.RequiredWhitespace
-            from participantId in seqIdentifier
-            from participant2 in Try(
-                Char(',')
-                    .Then(CommonParsers.InlineWhitespace)
-                    .Then(seqIdentifier)
-            ).Optional()
-            from ____ in CommonParsers.InlineWhitespace
-            from colon in Char(':')
-            from _____ in CommonParsers.InlineWhitespace
-            from text in Token(_ => _ != '\r' && _ != '\n').ManyString()
-            from ______ in CommonParsers.LineEnd
-            select new Note
-            {
-                Text = text,
-                Position = position,
-                ParticipantId = participantId,
-                OverParticipantId2 = participant2.HasValue ? participant2.Value : null
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("Note").Or(Literals.Text("note")))
+                .SkipAnd(CommonParsers.RequiredWhitespace)
+                .SkipAnd(
+                    OneOf(
+                        Literals.Text("right of").Then(NotePosition.RightOf),
+                        Literals.Text("left of").Then(NotePosition.LeftOf),
+                        Literals.Text("over").Then(NotePosition.Over)
+                    ))
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .And(seqIdentifier)
+                .And(
+                    Literals.Char(',')
+                        .SkipAnd(CommonParsers.InlineWhitespace)
+                        .SkipAnd(seqIdentifier)
+                        .Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Char(':'))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(restOfLine)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (position, participantId, participant2, text) =>
+                    new Note
+                    {
+                        Text = text,
+                        Position = position,
+                        ParticipantId = participantId,
+                        OverParticipantId2 = participant2.OrNull()
+                    });
 
         var activationParser =
-            from _ in CommonParsers.InlineWhitespace
-            from isActivate in OneOf(
-                String("activate").ThenReturn(true),
-                String("deactivate").ThenReturn(false)
-            )
-            from __ in CommonParsers.RequiredWhitespace
-            from participantId in seqIdentifier
-            from ___ in CommonParsers.LineEnd
-            select new Activation
-            {
-                ParticipantId = participantId,
-                IsActivate = isActivate
-            };
+            CommonParsers.InlineWhitespace
+                .SkipAnd(
+                    OneOf(
+                        Literals.Text("activate").Then(true),
+                        Literals.Text("deactivate").Then(false)
+                    ))
+                .AndSkip(CommonParsers.RequiredWhitespace)
+                .And(seqIdentifier)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (isActivate, participantId) =>
+                    new Activation
+                    {
+                        ParticipantId = participantId,
+                        IsActivate = isActivate
+                    });
 
         // autonumber, autonumber 10, autonumber 10 5, autonumber off
         var autoNumberParser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("autonumber")
-            from arguments in Token(_ => _ != '\r' && _ != '\n').ManyString()
-            from __ in CommonParsers.LineEnd
-            select ParseAutoNumber(arguments);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("autonumber"))
+                .SkipAnd(restOfLine)
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(ParseAutoNumber);
 
         // destroy Name
         var destroyParser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("destroy")
-            from __ in Token(_ => _ is ' ' or '\t').SkipAtLeastOnce()
-            from id in seqIdentifier
-            from ___ in CommonParsers.InlineWhitespace
-            from ____ in CommonParsers.LineEnd
-            select new DestroyItem(id);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("destroy"))
+                .SkipAnd(inlineGap)
+                .SkipAnd(seqIdentifier)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(static _ => new DestroyItem(_));
+
+        // What follows a keyword on its line: text set off from it by a gap, or nothing at all.
+        var keywordText =
+            OneOf(
+                inlineGap.SkipAnd(restOfLineText.AsTrimmedString()),
+                Always("").WhenFollowedBy(CommonParsers.LineEnd));
 
         // box, box Title, box Aqua Title, box rgb(33,66,99) Title
         var boxParser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("box")
-            from text in OneOf(
-                Token(_ => _ is ' ' or '\t').SkipAtLeastOnce()
-                    .Then(Token(_ => _ != '\r' && _ != '\n').ManyString()),
-                Lookahead(CommonParsers.LineEnd).ThenReturn(""))
-            from __ in CommonParsers.LineEnd
-            select ParseBox(text.Trim());
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("box"))
+                .SkipAnd(keywordText)
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(ParseBox);
 
         // Menus and tooltips attached to a participant; they have no place in a static rendering.
         var ignoredParser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in OneOf(
-                Try(String("links")),
-                Try(String("link")),
-                Try(String("properties")),
-                String("details"))
-            from __ in Token(_ => _ is ' ' or '\t').SkipAtLeastOnce()
-            from rest in Token(_ => _ != '\r' && _ != '\n').ManyString()
-            from ___ in CommonParsers.LineEnd
-            select Unit.Value;
+            CommonParsers.InlineWhitespace
+                .SkipAnd(
+                    OneOf(
+                        Literals.Text("links"),
+                        Literals.Text("link"),
+                        Literals.Text("properties"),
+                        Literals.Text("details")))
+                .SkipAnd(inlineGap)
+                .SkipAnd(restOfLineText)
+                .SkipAnd(CommonParsers.LineEnd);
 
         var titleParser =
             CommonParsers.InlineWhitespace
-                .Then(String("title"))
-                .Then(CommonParsers.InlineWhitespace)
-                .Then(Token(_ => _ != '\r' && _ != '\n').ManyString())
-                .Before(CommonParsers.LineEnd);
+                .SkipAnd(Literals.Text("title"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(restOfLine)
+                .AndSkip(CommonParsers.LineEnd);
 
         // Block markers: `loop`, `alt`/`else`, `opt`, `par`/`and`, `critical`/`option`, `break` and `rect`
         // open or continue a block, and `end` closes one. The keyword has to stand alone as a word, so a
         // line that merely starts with one (`participant`, `android->>B`) is not taken for a marker.
         var blockMarkerParser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in OneOf(
-                Try(String("alt")),
-                Try(String("else")),
-                Try(String("loop")),
-                Try(String("par")),
-                Try(String("and")),
-                Try(String("option")),
-                Try(String("opt")),
-                Try(String("critical")),
-                Try(String("break")),
-                Try(String("rect")),
-                String("end")
-            )
-            from text in OneOf(
-                Token(_ => _ is ' ' or '\t').SkipAtLeastOnce()
-                    .Then(Token(_ => _ != '\r' && _ != '\n').ManyString()),
-                Lookahead(CommonParsers.LineEnd).ThenReturn(""))
-            from ___ in CommonParsers.LineEnd
-            select new BlockMarkerItem(keyword, text.Trim());
+            CommonParsers.InlineWhitespace
+                .SkipAnd(
+                    OneOf(
+                        Literals.Text("alt"),
+                        Literals.Text("else"),
+                        Literals.Text("loop"),
+                        Literals.Text("par"),
+                        Literals.Text("and"),
+                        Literals.Text("option"),
+                        Literals.Text("opt"),
+                        Literals.Text("critical"),
+                        Literals.Text("break"),
+                        Literals.Text("rect"),
+                        Literals.Text("end")
+                    ))
+                .And(keywordText)
+                .AndSkip(CommonParsers.LineEnd)
+                .Map(static (keyword, text) => new BlockMarkerItem(keyword, text));
 
         var skipLine =
-            CommonParsers.InlineWhitespace.Then(Try(CommonParsers.Comment).Or(CommonParsers.Newline));
+            CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Comment.Or(CommonParsers.Newline));
 
         var parseContent =
             OneOf(
-                Try(participantParser.Select<ISequenceContent?>(_ => new ParticipantItem(_))),
-                Try(messageParser.Select<ISequenceContent?>(_ => new MessageItem(_))),
-                Try(noteParser.Select<ISequenceContent?>(_ => new NoteItem(_))),
-                Try(activationParser.Select<ISequenceContent?>(_ => new ActivationItem(_))),
-                Try(autoNumberParser.Select<ISequenceContent?>(_ => _)),
-                Try(destroyParser.Select<ISequenceContent?>(_ => _)),
-                Try(boxParser.Select<ISequenceContent?>(_ => _)),
-                Try(ignoredParser.ThenReturn<ISequenceContent?>(null)),
-                Try(titleParser.Select<ISequenceContent?>(_ => new TitleItem(_))),
-                Try(blockMarkerParser.Select<ISequenceContent?>(_ => _)),
-                skipLine.ThenReturn<ISequenceContent?>(null)
+                participantParser.Then<ISequenceContent?>(static _ => new ParticipantItem(_)),
+                messageParser.Then<ISequenceContent?>(static _ => new MessageItem(_)),
+                noteParser.Then<ISequenceContent?>(static _ => new NoteItem(_)),
+                activationParser.Then<ISequenceContent?>(static _ => new ActivationItem(_)),
+                autoNumberParser.Then<ISequenceContent?>(static _ => _),
+                destroyParser.Then<ISequenceContent?>(static _ => _),
+                boxParser.Then<ISequenceContent?>(static _ => _),
+                ignoredParser.Then<ISequenceContent?>(static _ => null),
+                titleParser.Then<ISequenceContent?>(static _ => new TitleItem(_)),
+                blockMarkerParser.Then<ISequenceContent?>(static _ => _),
+                skipLine.Then<ISequenceContent?>(static _ => null)
             ).Many();
 
         parser =
-            from _ in CommonParsers.InlineWhitespace
-            from keyword in String("sequenceDiagram")
-            from __ in CommonParsers.InlineWhitespace
-            from ___ in CommonParsers.LineEnd
-            from content in parseContent
-            // Nothing may be left over: without this a line no rule matches ends the list quietly and the
-            // rest of the diagram is dropped instead of being reported.
-            from end in End
-            select BuildModel(content);
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("sequenceDiagram"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd)
+                .SkipAnd(parseContent)
+                // Nothing may be left over: without this a line no rule matches ends the list quietly and the
+                // rest of the diagram is dropped instead of being reported.
+                .AndSkip(CommonParsers.End)
+                .Then(BuildModel);
     }
 
     static string Unquote(string text)
@@ -540,7 +561,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
         return model;
     }
 
-    public Result<char, SequenceModel> Parse(string input) => parser.Parse(input);
+    public DiagramParseResult<SequenceModel> Parse(string input) => parser.ParseDiagram(input);
 
     interface ISequenceContent;
     readonly record struct ParticipantItem(Participant Value) : ISequenceContent;
