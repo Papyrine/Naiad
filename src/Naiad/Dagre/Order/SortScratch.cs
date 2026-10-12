@@ -21,6 +21,7 @@ sealed class SortScratch
     public readonly List<ResolvedEntry> Resolved = [];
     public readonly List<ResolvedEntry> Sortable = [];
     public readonly List<ResolvedEntry> Unsortable = [];
+    public readonly List<int> Constrained = [];
 
     /// <summary>Where the sorted nodes of a whole layer go, for the sweep to read before it sorts the next.</summary>
     public readonly List<string> Layer = [];

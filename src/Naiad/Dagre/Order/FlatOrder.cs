@@ -101,12 +101,11 @@ sealed class FlatOrder
             return null;
         }
 
-        var entries = graph.NodeEntries();
-        var count = entries.Count;
+        var count = graph.NodeCount;
 
         // Rank by rank, keeping the graph's order within each.
         var layerStart = new int[maxRank + 2];
-        foreach (var (_, node) in entries)
+        foreach (var node in graph.EnumerateNodeLabels())
         {
             // A node that spans ranks is a subgraph's border, whatever the graph says about children.
             if (node is not { Rank: { } rank, MinRank: null, MaxRank: null } ||
@@ -129,15 +128,14 @@ sealed class FlatOrder
         var names = new string[count];
         var labels = new NodeLabel[count];
         var rankOf = new int[count];
-        var numbers = new Dictionary<string, int>(count, StringComparer.Ordinal);
-        foreach (var (name, node) in entries)
+        foreach (var (name, node) in graph.EnumerateNodeEntries())
         {
             var rank = node.Rank!.Value;
             var number = next[rank]++;
             names[number] = name;
             labels[number] = node;
             rankOf[number] = rank;
-            numbers[name] = number;
+            node.Number = number;
         }
 
         var merged = new List<(int Neighbor, double Weight)>();
@@ -154,7 +152,7 @@ sealed class FlatOrder
 
             foreach (var e in incoming ? graph.InEdgesOf(names[v]) : graph.OutEdgesOf(names[v]))
             {
-                var u = numbers[incoming ? e.V : e.W];
+                var u = graph.NodeLabel(incoming ? e.V : e.W).Number;
                 var weight = graph.FindEdgeLabel(e).Weight!.Value;
                 if (rankOf[u] != neighborRank ||
                     !(weight > 0))
@@ -209,16 +207,23 @@ sealed class FlatOrder
         var inStart = new int[count + 1];
         var outStart = new int[count + 1];
         var edgeStart = new int[count + 1];
-        var inNeighbor = new List<int>(count);
-        var inWeight = new List<double>(count);
-        var outNeighbor = new List<int>(count);
-        var outWeight = new List<double>(count);
-        var edgeTarget = new List<int>(count);
-        var edgeWeight = new List<double>(count);
+
+        // Room for every edge of the graph, each of which comes into one node and goes out of one;
+        // parallel edges merge and leave some of the merged arrays unused.
+        var edgeCount = graph.EdgeCount;
+        var inNeighbor = new int[edgeCount];
+        var inWeight = new double[edgeCount];
+        var outNeighbor = new int[edgeCount];
+        var outWeight = new double[edgeCount];
+        var edgeTarget = new int[edgeCount];
+        var edgeWeight = new double[edgeCount];
+        var inCount = 0;
+        var outCount = 0;
+        var edgesCounted = 0;
 
         for (var v = 0; v < count; v++)
         {
-            inStart[v] = inNeighbor.Count;
+            inStart[v] = inCount;
             if (!Merge(v, incoming: true))
             {
                 return null;
@@ -226,11 +231,11 @@ sealed class FlatOrder
 
             foreach (var (neighbor, weight) in merged)
             {
-                inNeighbor.Add(neighbor);
-                inWeight.Add(weight);
+                inNeighbor[inCount] = neighbor;
+                inWeight[inCount++] = weight;
             }
 
-            outStart[v] = outNeighbor.Count;
+            outStart[v] = outCount;
             if (!Merge(v, incoming: false))
             {
                 return null;
@@ -238,36 +243,36 @@ sealed class FlatOrder
 
             foreach (var (neighbor, weight) in merged)
             {
-                outNeighbor.Add(neighbor);
-                outWeight.Add(weight);
+                outNeighbor[outCount] = neighbor;
+                outWeight[outCount++] = weight;
             }
 
-            edgeStart[v] = edgeTarget.Count;
+            edgeStart[v] = edgesCounted;
             foreach (var e in graph.OutEdgesOf(names[v]))
             {
-                edgeTarget.Add(numbers[e.W]);
-                edgeWeight.Add(graph.FindEdgeLabel(e).Weight!.Value);
+                edgeTarget[edgesCounted] = graph.NodeLabel(e.W).Number;
+                edgeWeight[edgesCounted++] = graph.FindEdgeLabel(e).Weight!.Value;
             }
         }
 
-        inStart[count] = inNeighbor.Count;
-        outStart[count] = outNeighbor.Count;
-        edgeStart[count] = edgeTarget.Count;
+        inStart[count] = inCount;
+        outStart[count] = outCount;
+        edgeStart[count] = edgesCounted;
 
         var flat = new FlatOrder(
             labels,
             layerStart,
-            (inStart, inNeighbor.ToArray(), inWeight.ToArray()),
-            (outStart, outNeighbor.ToArray(), outWeight.ToArray()),
-            (edgeStart, edgeTarget.ToArray(), edgeWeight.ToArray()));
+            (inStart, inNeighbor, inWeight),
+            (outStart, outNeighbor, outWeight),
+            (edgeStart, edgeTarget, edgeWeight));
 
         // The starting order is dagre's, from the graph.
-        var initial = InitOrder.Run(graph);
+        var initial = InitOrder.Run(graph, numbered: true);
         foreach (var layer in initial)
         {
             for (var position = 0; position < layer.Count; position++)
             {
-                flat.order[numbers[layer[position]]] = position;
+                flat.order[graph.NodeLabel(layer[position]).Number] = position;
             }
         }
 
