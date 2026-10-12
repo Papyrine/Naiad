@@ -48,6 +48,10 @@ sealed class NodeLabel
     public int? Lim;
     public string? Parent;
 
+    // A number given to the node by a pass that holds what it knows of the nodes in arrays. It means
+    // nothing outside that pass.
+    internal int Number;
+
     // Collected self-edges, stashed on the node while layout removes/reinserts them.
     public List<SelfEdge>? SelfEdges;
 }

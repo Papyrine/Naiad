@@ -39,9 +39,8 @@ static class Order
             shapes = [];
         }
 
-        List<string> names = [];
-        var downLayerGraphs = BuildLayers(graph, Util.Range(1, maxRank + 1), graph.InEdgesOf, nodesByRank, shapes, names);
-        var upLayerGraphs = BuildLayers(graph, Util.Range(maxRank - 1, -1, -1), graph.OutEdgesOf, nodesByRank, shapes, names);
+        var downLayerGraphs = BuildLayers(graph, Util.Range(1, maxRank + 1), graph.InEdgesOf, nodesByRank, shapes);
+        var upLayerGraphs = BuildLayers(graph, Util.Range(maxRank - 1, -1, -1), graph.OutEdgesOf, nodesByRank, shapes);
 
         AssignOrder(graph, InitOrder.Run(graph));
 
@@ -89,24 +88,27 @@ static class Order
         // the current node.
         var nodesByRank = new Dictionary<int, List<string>>();
 
-        void AddNodeToRank(int rank, string node)
+        // Counted first, so that each rank's list is made once at its final size.
+        var counts = new Dictionary<int, int>();
+        ForEachRankOfEachNode(graph, (rank, _) => counts[rank] = counts.GetValueOrDefault(rank) + 1);
+        foreach (var (rank, count) in counts)
         {
-            if (!nodesByRank.TryGetValue(rank, out var list))
-            {
-                list = [];
-                nodesByRank[rank] = list;
-            }
-
-            list.Add(node);
+            nodesByRank[rank] = new(count);
         }
 
+        ForEachRankOfEachNode(graph, (rank, node) => nodesByRank[rank].Add(node));
+        return nodesByRank;
+    }
+
+    static void ForEachRankOfEachNode(Graph graph, Action<int, string> addNodeToRank)
+    {
         // Visit the nodes in their original order in the graph, and add each
         // node to the ranks(s) that it belongs to.
         foreach (var (v, node) in graph.EnumerateNodeEntries())
         {
             if (node.Rank != null)
             {
-                AddNodeToRank(node.Rank.Value, v);
+                addNodeToRank(node.Rank.Value, v);
             }
 
             // If there is a range of ranks, add it to each, but skip the `node.rank` which
@@ -125,12 +127,10 @@ static class Order
                 if (rank != node.Rank)
                 {
                     // Don't add this node to its `node.rank` twice.
-                    AddNodeToRank(rank, v);
+                    addNodeToRank(rank, v);
                 }
             }
         }
-
-        return nodesByRank;
     }
 
     // A layer for each of `ranks`: light ones if there are `shapes` to build them on, and otherwise the
@@ -140,10 +140,15 @@ static class Order
         List<int> ranks,
         Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf,
         Dictionary<int, List<string>> nodesByRank,
-        Dictionary<int, LayerShape>? shapes,
-        List<string> names)
+        Dictionary<int, LayerShape>? shapes)
     {
         var layers = new List<SortLayer>(ranks.Count);
+        LayerEdges? edges = null;
+        if (shapes != null)
+        {
+            edges = new(graph, edgesOf);
+        }
+
         foreach (var rank in ranks)
         {
             var nodesWithRank = nodesByRank.GetValueOrDefault(rank) ?? [];
@@ -157,7 +162,7 @@ static class Order
                 // The root's name is drawn from the graph as a layer graph's would be, so the names the
                 // graph hands out afterwards are the same either way.
                 var root = BuildLayerGraph.CreateRootNode(graph);
-                layers.Add(new LightSortLayer(graph, root, shape, edgesOf, names));
+                layers.Add(new LightSortLayer(graph, root, shape, edges!));
             }
             else
             {
