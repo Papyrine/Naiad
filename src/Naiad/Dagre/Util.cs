@@ -136,7 +136,7 @@ static class Util
             layering.Add([]);
         }
 
-        foreach (var (v, node) in graph.NodeEntries())
+        foreach (var (v, node) in graph.EnumerateNodeEntries())
         {
             if (node.Rank is not { } rank)
             {
@@ -227,7 +227,7 @@ static class Util
         // The greatest rank, counting a node without one as double.Epsilon, and negative infinity for a
         // graph with no nodes at all - as taking the maximum of a list of them gives.
         var max = double.NegativeInfinity;
-        foreach (var label in graph.NodeLabels())
+        foreach (var label in graph.EnumerateNodeLabels())
         {
             max = Math.Max(max, label.Rank ?? double.Epsilon);
         }

@@ -5,19 +5,21 @@ static class Sort
     static readonly Comparison<ResolvedEntry> descendingByI = (entryV, entryW) => entryW.I.CompareTo(entryV.I);
 
     public static SortResult Run(List<ResolvedEntry> entries, bool biasRight = false) =>
-        Run(entries, biasRight, null, null, null);
+        Run(entries, biasRight, null, null, null, null);
 
     /// <summary>
     /// <paramref name="scratch"/> lends the lists the sort works in, for a caller whose entries each have
     /// an <see cref="ResolvedEntry.I"/> of their own. <paramref name="first"/> and <paramref name="last"/>,
-    /// given together, are put either side of the sorted nodes.
+    /// given together, are put either side of the sorted nodes. <paramref name="into"/> is a list to put
+    /// them in, in place of a new one.
     /// </summary>
     internal static SortResult Run(
         List<ResolvedEntry> entries,
         bool biasRight,
         SortScratch? scratch,
         string? first,
-        string? last)
+        string? last,
+        List<string>? into)
     {
         var sortable = scratch?.Sortable ?? [];
         var unsortable = scratch?.Unsortable ?? [];
@@ -52,7 +54,8 @@ static class Sort
             count += 2;
         }
 
-        var vs = new List<string>(count);
+        var vs = into ?? new List<string>(count);
+        vs.Clear();
         if (first != null)
         {
             vs.Add(first);

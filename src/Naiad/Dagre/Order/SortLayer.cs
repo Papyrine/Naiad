@@ -26,9 +26,9 @@ abstract class SortLayer
 
     /// <summary>
     /// A barycenter for each of <paramref name="movable"/> that has an edge from the rank before. The
-    /// entries are the caller's until it next asks for the same nodes.
+    /// entries may be lent from <paramref name="scratch"/>, for the caller to give back.
     /// </summary>
-    public abstract List<BarycenterEntry> Barycenters(List<string> movable);
+    public abstract List<BarycenterEntry> Barycenters(List<string> movable, SortScratch? scratch);
 
     /// <summary>The label of the first node <paramref name="v"/> has an edge from, or null if it has none.</summary>
     public abstract NodeLabel? FirstPredecessor(string v);
@@ -71,7 +71,7 @@ sealed class GraphSortLayer(Graph graph) : SortLayer
         }
     }
 
-    public override List<BarycenterEntry> Barycenters(List<string> movable) =>
+    public override List<BarycenterEntry> Barycenters(List<string> movable, SortScratch? scratch) =>
         Barycenter.Run(graph, movable);
 
     public override NodeLabel? FirstPredecessor(string v)
@@ -101,17 +101,19 @@ sealed class LayerShape
     static readonly List<string> none = [];
 
     // The nodes of the rank, in the order the graph gave them, and of those the ones under no subgraph.
+    // Either may be the list it was taken from, when it would have been a copy of it.
     public readonly List<string> Nodes;
     public readonly List<string> Top;
+
+    // Where each node is in Nodes.
+    readonly Dictionary<string, int> index;
 
     // Null in a rank no subgraph reaches.
     Dictionary<string, List<string>>? children;
     Dictionary<string, (string? Left, string? Right)>? borders;
 
-    // Made the first time they are asked for and kept: a subgraph's children without its borders, and
-    // the entries handed out for a list of nodes, which every sweep fills in again.
+    // A subgraph's children without its borders, made the first time they are asked for and kept.
     Dictionary<string, List<string>>? movable;
-    readonly Dictionary<List<string>, List<BarycenterEntry>> entries = new(1, ReferenceEqualityComparer.Instance);
 
     /// <summary>
     /// Takes from <paramref name="nodesWithRank"/> the nodes that lie in <paramref name="rank"/>, as
@@ -119,21 +121,26 @@ sealed class LayerShape
     /// </summary>
     public LayerShape(Graph graph, int rank, List<string> nodesWithRank)
     {
-        Nodes = new(nodesWithRank.Count);
-        Top = new(nodesWithRank.Count);
-        foreach (var v in nodesWithRank)
+        index = new(nodesWithRank.Count, StringComparer.Ordinal);
+        List<string>? nodes = null;
+        List<string>? top = null;
+        for (var i = 0; i < nodesWithRank.Count; i++)
         {
+            var v = nodesWithRank[i];
             var node = graph.NodeLabel(v);
             if (node.Rank != rank &&
                 (node is not { MinRank: not null, MaxRank: not null } ||
                  !(node.MinRank <= rank) || !(rank <= node.MaxRank)))
             {
+                // The first node left out: from here on the nodes are a list of their own.
+                nodes ??= nodesWithRank.GetRange(0, i);
                 continue;
             }
 
-            Nodes.Add(v);
             if (graph.Parent(v) is { } parent)
             {
+                // The first node under a subgraph: likewise for the ones under none.
+                top ??= new(nodes ?? nodesWithRank.GetRange(0, i));
                 children ??= new(StringComparer.Ordinal);
                 if (!children.TryGetValue(parent, out var siblings))
                 {
@@ -144,8 +151,11 @@ sealed class LayerShape
             }
             else
             {
-                Top.Add(v);
+                top?.Add(v);
             }
+
+            index[v] = index.Count;
+            nodes?.Add(v);
 
             if (node.MinRank != null)
             {
@@ -153,6 +163,20 @@ sealed class LayerShape
                 borders[v] = (node.BorderLeft![rank], node.BorderRight![rank]);
             }
         }
+
+        Nodes = nodes ?? nodesWithRank;
+        Top = top ?? Nodes;
+    }
+
+    /// <summary>Where <paramref name="v"/> is in <see cref="Nodes"/>, or -1 if it is not in the rank.</summary>
+    public int IndexOf(string v)
+    {
+        if (index.TryGetValue(v, out var found))
+        {
+            return found;
+        }
+
+        return -1;
     }
 
     public List<string> Children(string v) =>
@@ -202,24 +226,6 @@ sealed class LayerShape
         movable[v] = kept;
         return kept;
     }
-
-    /// <summary>An entry for each of <paramref name="nodes"/>, the same ones every time.</summary>
-    public List<BarycenterEntry> Entries(List<string> nodes)
-    {
-        if (entries.TryGetValue(nodes, out var result))
-        {
-            return result;
-        }
-
-        result = new(nodes.Count);
-        foreach (var v in nodes)
-        {
-            result.Add(new() { V = v });
-        }
-
-        entries[nodes] = result;
-        return result;
-    }
 }
 
 /// <summary>
@@ -228,9 +234,8 @@ sealed class LayerShape
 /// </summary>
 sealed class LightSortLayer : SortLayer
 {
-    // The nodes that have edges, and for each its place in the arrays below: its edges are
-    // neighbor[start[i] .. start[i + 1]), one per neighbour, in the order each neighbour was first met.
-    readonly Dictionary<string, int> withEdges;
+    // The edges of the node at place i in the shape's nodes are neighbor[start[i] .. start[i + 1]), one
+    // per neighbour, in the order each neighbour was first met.
     readonly int[] start;
     readonly NodeLabel[] neighbor;
     readonly double[] weight;
@@ -242,55 +247,49 @@ sealed class LightSortLayer : SortLayer
 
     /// <summary>
     /// Builds the layer for the rank of <paramref name="shape"/>, taking each node's edges from
-    /// <paramref name="edgesOf"/>.
+    /// <paramref name="edgesOf"/>. <paramref name="names"/> is working storage, there to be used again
+    /// for the next layer.
     /// </summary>
     public LightSortLayer(
         Graph graph,
         string root,
         LayerShape shape,
-        Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf)
+        Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf,
+        List<string> names)
     {
         Root = root;
         this.graph = graph;
         this.shape = shape;
 
-        // Counted first, so that everything below is made once at its final size.
+        // Counted first, so that the arrays are made once at their final size.
         var nodes = shape.Nodes;
         var edgeCount = 0;
-        var nodeCount = 0;
         foreach (var v in nodes)
         {
-            var before = edgeCount;
             foreach (var _ in edgesOf(v))
             {
                 edgeCount++;
             }
-
-            if (edgeCount != before)
-            {
-                nodeCount++;
-            }
         }
 
-        withEdges = new(nodeCount, StringComparer.Ordinal);
-        start = new int[nodeCount + 1];
+        start = new int[nodes.Count + 1];
         // Room for an edge to every neighbour; parallel edges merge and leave some of it unused.
         neighbor = new NodeLabel[edgeCount];
         weight = new double[edgeCount];
-        var names = new string[edgeCount];
-        var used = 0;
+        names.Clear();
 
-        foreach (var v in nodes)
+        for (var n = 0; n < nodes.Count; n++)
         {
             // This assumes we have only short edges! One edge per neighbour, its weight the sum of the
             // weights of every edge to that neighbour, added in the order the edges come.
-            var first = used;
+            var v = nodes[n];
+            var first = names.Count;
             foreach (var e in edgesOf(v))
             {
                 var u = e.V == v ? e.W : e.V;
                 var edgeWeight = graph.FindEdgeLabel(e).Weight!.Value;
                 var index = -1;
-                for (var i = first; i < used; i++)
+                for (var i = first; i < names.Count; i++)
                 {
                     if (names[i] == u)
                     {
@@ -301,10 +300,9 @@ sealed class LightSortLayer : SortLayer
 
                 if (index < 0)
                 {
-                    names[used] = u;
-                    neighbor[used] = graph.NodeLabel(u);
-                    weight[used] = edgeWeight + 0;
-                    used++;
+                    neighbor[names.Count] = graph.NodeLabel(u);
+                    weight[names.Count] = edgeWeight + 0;
+                    names.Add(u);
                 }
                 else
                 {
@@ -312,11 +310,7 @@ sealed class LightSortLayer : SortLayer
                 }
             }
 
-            if (used != first)
-            {
-                start[withEdges.Count + 1] = used;
-                withEdges[v] = withEdges.Count;
-            }
+            start[n + 1] = names.Count;
         }
     }
 
@@ -346,14 +340,23 @@ sealed class LightSortLayer : SortLayer
     public override void Borders(string v, out string? left, out string? right) =>
         shape.Borders(v, out left, out right);
 
-    public override List<BarycenterEntry> Barycenters(List<string> movable)
+    public override List<BarycenterEntry> Barycenters(List<string> movable, SortScratch? scratch)
     {
-        var result = shape.Entries(movable);
+        var result = scratch?.RentBarycenters(movable);
+        if (result == null)
+        {
+            result = new(movable.Count);
+            foreach (var v in movable)
+            {
+                result.Add(new() { V = v });
+            }
+        }
+
         foreach (var entry in result)
         {
-            entry.Barycenter = null;
-            entry.Weight = null;
-            if (!withEdges.TryGetValue(entry.V, out var index))
+            var index = shape.IndexOf(entry.V);
+            if (index < 0 ||
+                start[index] == start[index + 1])
             {
                 continue;
             }
@@ -375,12 +378,14 @@ sealed class LightSortLayer : SortLayer
 
     public override NodeLabel? FirstPredecessor(string v)
     {
-        if (withEdges.TryGetValue(v, out var index))
+        var index = shape.IndexOf(v);
+        if (index < 0 ||
+            start[index] == start[index + 1])
         {
-            return neighbor[start[index]];
+            return null;
         }
 
-        return null;
+        return neighbor[start[index]];
     }
 
     // Every node of the rank hangs under its subgraph, or under the root if it has none.

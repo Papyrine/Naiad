@@ -39,14 +39,17 @@ static class Order
             shapes = [];
         }
 
-        var downLayerGraphs = BuildLayers(graph, Util.Range(1, maxRank + 1), graph.InEdgesOf, nodesByRank, shapes);
-        var upLayerGraphs = BuildLayers(graph, Util.Range(maxRank - 1, -1, -1), graph.OutEdgesOf, nodesByRank, shapes);
+        List<string> names = [];
+        var downLayerGraphs = BuildLayers(graph, Util.Range(1, maxRank + 1), graph.InEdgesOf, nodesByRank, shapes, names);
+        var upLayerGraphs = BuildLayers(graph, Util.Range(maxRank - 1, -1, -1), graph.OutEdgesOf, nodesByRank, shapes, names);
 
         AssignOrder(graph, InitOrder.Run(graph));
 
         var bestCC = double.PositiveInfinity;
         List<List<string?>>? best = null;
-        List<List<string?>> spare = [];
+        // Two matrices, each with room for its rows: the best ordering so far, and the one being tried.
+        var spare = EmptyLayerMatrix(nodesByRank, maxRank);
+        var unused = EmptyLayerMatrix(nodesByRank, maxRank);
         // The layer graphs are sorted as dagre sorts them, entries made afresh and all.
         SortScratch? scratch = null;
         if (lightLayers)
@@ -70,7 +73,7 @@ static class Order
             {
                 lastBest = 0;
                 // The matrix just filled is kept as the best, and the one it replaces is filled next.
-                spare = best ?? [];
+                spare = best ?? unused;
                 best = layering;
                 bestCC = cc;
             }
@@ -99,7 +102,7 @@ static class Order
 
         // Visit the nodes in their original order in the graph, and add each
         // node to the ranks(s) that it belongs to.
-        foreach (var (v, node) in graph.NodeEntries())
+        foreach (var (v, node) in graph.EnumerateNodeEntries())
         {
             if (node.Rank != null)
             {
@@ -137,7 +140,8 @@ static class Order
         List<int> ranks,
         Func<string, OrderedMap<EdgeKey>.ValueEnumerable> edgesOf,
         Dictionary<int, List<string>> nodesByRank,
-        Dictionary<int, LayerShape>? shapes)
+        Dictionary<int, LayerShape>? shapes,
+        List<string> names)
     {
         var layers = new List<SortLayer>(ranks.Count);
         foreach (var rank in ranks)
@@ -153,7 +157,7 @@ static class Order
                 // The root's name is drawn from the graph as a layer graph's would be, so the names the
                 // graph hands out afterwards are the same either way.
                 var root = BuildLayerGraph.CreateRootNode(graph);
-                layers.Add(new LightSortLayer(graph, root, shape, edgesOf));
+                layers.Add(new LightSortLayer(graph, root, shape, edgesOf, names));
             }
             else
             {
@@ -162,6 +166,17 @@ static class Order
         }
 
         return layers;
+    }
+
+    static List<List<string?>> EmptyLayerMatrix(Dictionary<int, List<string>> nodesByRank, int maxRank)
+    {
+        var matrix = new List<List<string?>>(maxRank + 1);
+        for (var rank = 0; rank <= maxRank; rank++)
+        {
+            matrix.Add(new(nodesByRank.GetValueOrDefault(rank)?.Count ?? 0));
+        }
+
+        return matrix;
     }
 
     static void SweepLayerGraphs(List<SortLayer> layers, bool biasRight, SortScratch? scratch)
