@@ -1,10 +1,13 @@
 static class ResolveConflicts
 {
+    static readonly List<MappedEntry> none = [];
+
     sealed class MappedEntry
     {
         public int Indegree;
-        public List<MappedEntry> In = null!;
-        public List<MappedEntry> Out = null!;
+        // Made when there is something to put in them, which for most entries is never.
+        public List<MappedEntry>? In;
+        public List<MappedEntry>? Out;
         public List<string> Vs = null!;
         public int I;
         public double? Barycenter;
@@ -43,7 +46,12 @@ static class ResolveConflicts
             {
                 if (constraintGraph.HasNode(entries[i].V))
                 {
-                    constrained ??= [];
+                    if (constrained == null)
+                    {
+                        constrained = scratch.Constrained;
+                        constrained.Clear();
+                    }
+
                     constrained.Add(i);
                 }
             }
@@ -94,8 +102,6 @@ static class ResolveConflicts
             var tmp = new MappedEntry
             {
                 Indegree = 0,
-                In = [],
-                Out = [],
                 Vs = [entry.V],
                 I = i
             };
@@ -120,7 +126,8 @@ static class ResolveConflicts
             if (hasV && hasW)
             {
                 entryW!.Indegree++;
-                entryV!.Out.Add(entryW);
+                entryV!.Out ??= [];
+                entryV.Out.Add(entryW);
             }
         }
 
@@ -208,8 +215,8 @@ static class ResolveConflicts
             var entry = sourceSet[^1];
             sourceSet.RemoveAt(sourceSet.Count - 1);
             entries.Add(entry);
-            entry.In.Reverse();
-            foreach (var uEntry in entry.In)
+            entry.In?.Reverse();
+            foreach (var uEntry in entry.In ?? none)
             {
                 if (uEntry.Merged)
                 {
@@ -224,8 +231,9 @@ static class ResolveConflicts
                 }
             }
 
-            foreach (var wEntry in entry.Out)
+            foreach (var wEntry in entry.Out ?? none)
             {
+                wEntry.In ??= [];
                 wEntry.In.Add(entry);
                 if (--wEntry.Indegree == 0)
                 {

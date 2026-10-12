@@ -42,7 +42,8 @@ static class Order
         var downLayerGraphs = BuildLayers(graph, Util.Range(1, maxRank + 1), graph.InEdgesOf, nodesByRank, shapes);
         var upLayerGraphs = BuildLayers(graph, Util.Range(maxRank - 1, -1, -1), graph.OutEdgesOf, nodesByRank, shapes);
 
-        AssignOrder(graph, InitOrder.Run(graph));
+        // Building the light layers numbered the nodes.
+        AssignOrder(graph, InitOrder.Run(graph, numbered: lightLayers));
 
         var bestCC = double.PositiveInfinity;
         List<List<string?>>? best = null;

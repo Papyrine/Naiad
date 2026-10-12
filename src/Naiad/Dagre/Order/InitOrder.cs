@@ -1,8 +1,25 @@
 static class InitOrder
 {
-    public static List<List<string>> Run(Graph graph)
+    public static List<List<string>> Run(Graph graph) =>
+        Run(graph, numbered: false);
+
+    /// <summary>
+    /// <paramref name="numbered"/> is for a caller that has given every node of the graph a
+    /// <see cref="NodeLabel.Number"/> of its own, from zero up: the walk then marks the nodes it has
+    /// been to by number, in place of keeping a set of their names.
+    /// </summary>
+    internal static List<List<string>> Run(Graph graph, bool numbered)
     {
-        var visited = new HashSet<string>(graph.NodeCount, StringComparer.Ordinal);
+        HashSet<string>? visited = null;
+        bool[]? seen = null;
+        if (numbered)
+        {
+            seen = new bool[graph.NodeCount];
+        }
+        else
+        {
+            visited = new(graph.NodeCount, StringComparer.Ordinal);
+        }
 
         // How many of the nodes that are not subgraphs lie in each rank, up to the greatest rank among
         // them - none at all when there are no such nodes, which leaves no layers.
@@ -53,12 +70,22 @@ static class InitOrder
 
         void Visit(string v)
         {
-            if (!visited.Add(v))
+            var node = graph.NodeLabel(v);
+            if (seen != null)
+            {
+                if (seen[node.Number])
+                {
+                    return;
+                }
+
+                seen[node.Number] = true;
+            }
+            else if (!visited!.Add(v))
             {
                 return;
             }
 
-            layers[graph.NodeLabel(v).Rank!.Value].Add(v);
+            layers[node.Rank!.Value].Add(v);
             pending.Push(graph.SuccessorsOf(v).GetEnumerator());
         }
 
