@@ -1,7 +1,7 @@
 <Project>
   <ItemGroup>
     <PackageVersion Include="AngleSharp" Version="1.8.4" />
-    <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.5.0" />
+    <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.5.1" />
     <PackageVersion Include="Svg.Skia" Version="5.2.3" />
     <PackageVersion Include="Parlot" Version="1.5.12" />
     <PackageVersion Include="SkiaSharp" Version="4.153.1" />
