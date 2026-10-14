@@ -63,4 +63,4 @@ Tests use TUnit + Svg.Skia + Verify (snapshot testing). Each diagram type has a 
 
 ## Maintenance log
 
-- 2026-10-11: full performance and bug scan done (parsers, renderers, dagre layout, PNG backends). The findings were fixed in Papyrine/Naiad PRs #44 to #58.
+- 2026-10-11: full performance and bug scan done (parsers, renderers, dagre layout, PNG backends).
