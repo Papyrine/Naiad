@@ -17,4 +17,31 @@
     <ProjectReference Include="..\Naiad\Naiad.csproj" />
   </ItemGroup>
 
+  <!--
+    js/version.js: the version the footer shows (v2.0.1+38b7499), for index.html's loading screen, which
+    has to show it before .NET is running — a page the browser kept from an earlier deploy is then plain
+    to see. Written to obj and linked into wwwroot, so it is a static web asset like any other, in every
+    build and publish, and nothing generated lands in the source tree. Rewriting index.html after publish
+    instead would leave its .br/.gz beside it stale.
+  -->
+  <Target Name="WriteVersionScript"
+          BeforeTargets="ResolveProjectStaticWebAssets"
+          DependsOnTargets="InitializeSourceControlInformation">
+    <PropertyGroup>
+      <_NaiadShortSha>$(SourceRevisionId)</_NaiadShortSha>
+      <_NaiadShortSha Condition="$(SourceRevisionId.Length) &gt; 7">$(SourceRevisionId.Substring(0, 7))</_NaiadShortSha>
+      <_NaiadVersionText>v$(Version)</_NaiadVersionText>
+      <_NaiadVersionText Condition="'$(_NaiadShortSha)' != ''">$(_NaiadVersionText)+$(_NaiadShortSha)</_NaiadVersionText>
+      <_NaiadVersionScript>$(IntermediateOutputPath)version.js</_NaiadVersionScript>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(_NaiadVersionScript)"
+                      Lines="window.naiadVersion = '$(_NaiadVersionText)'%3B"
+                      Overwrite="true"
+                      WriteOnlyWhenDifferent="true" />
+    <ItemGroup>
+      <Content Include="$(_NaiadVersionScript)" Link="wwwroot\js\version.js" />
+      <FileWrites Include="$(_NaiadVersionScript)" />
+    </ItemGroup>
+  </Target>
+
 </Project>

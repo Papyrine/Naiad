@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <!-- Naiad.Web publishes with TrimMode=full, which trims this assembly too; the trim and native AOT
+         analyzers this turns on (warnings as errors) catch a hazard at this build rather than in the browser. -->
+    <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>

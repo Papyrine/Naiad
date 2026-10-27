@@ -60,6 +60,32 @@ html, body {
     to { transform: rotate(360deg); }
 }
 
+.loading-message {
+    margin-bottom: 0;
+}
+
+.loading-version {
+    margin-top: 0.25rem;
+    color: var(--muted-color);
+    font-size: 0.8rem;
+}
+
+.loading-error {
+    max-width: min(40rem, calc(100vw - 2rem));
+    margin: 0;
+    color: var(--text-color);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    text-align: center;
+    user-select: text;
+}
+
+.loading.failed .spinner {
+    display: none;
+}
+
 #blazor-error-ui {
     background: #fff3cd;
     color: #856404;

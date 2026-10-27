@@ -18,7 +18,8 @@
         <!--!--><div class="header-titles"><h1 tabindex="-1">Naiad</h1>
             <p>Render Mermaid diagrams to SVG — entirely in your browser, no server round-trip</p></div>
         <div class="header-actions"><!--!--><a class="header-link" href="https://github.com/Papyrine/Naiad" target="_blank" rel="noopener">GitHub</a>
-            <!--!--><button class="theme-toggle-btn" aria-label="Toggle theme"><!--!--><span class="icon">☀️</span><!--!--><span class="text"> Light</span></button></div></header><!--!-->
+            <!--!--><button class="theme-toggle-btn" aria-label="Toggle theme"><!--!--><span class="icon">☀️</span>
+        <!--!--><span class="text"> Light</span></button></div></header><!--!-->
 
     <!--!--><!--!--><!--!--><!--!--><!--!-->
 
@@ -44,10 +45,40 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">X</a>
     </div>
-    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
     <script src="js/interop.js"></script>
+    <!-- Written by the build (Naiad.Web.csproj's WriteVersionScript): window.naiadVersion. -->
+    <script src="js/version.js"></script>
     <script>
         window.themeManager.initializeTheme();
+
+        // The loading screen says which build it is, and why it stopped if the app cannot start: a boot
+        // failure is otherwise only in the console, which a phone does not show, and the spinner turns on.
+        // Once the app has rendered, the loading screen is gone and these listeners write nothing.
+        (() => {
+            const loading = document.querySelector('#app .loading');
+            loading.querySelector('.loading-version').textContent = window.naiadVersion ?? '';
+            const fail = reason => {
+                if (!loading.isConnected) {
+                    return;
+                }
+
+                loading.classList.add('failed');
+                loading.querySelector('.loading-message').textContent = 'Naiad could not start';
+                const error = loading.querySelector('.loading-error');
+                error.textContent = String(reason?.message ?? reason ?? 'Unknown error');
+                error.hidden = false;
+            };
+            addEventListener('error', event => fail(event.error ?? event.message));
+            addEventListener('unhandledrejection', event => fail(event.reason));
+
+            if (typeof WebAssembly !== 'object') {
+                fail('This browser has WebAssembly turned off, and Naiad runs on it. On an iPhone or iPad, Lockdown Mode turns it off.');
+                return;
+            }
+
+            Blazor.start().catch(fail);
+        })();
     </script>
 
 
