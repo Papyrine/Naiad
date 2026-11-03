@@ -74,7 +74,7 @@ static class CommonParsers
         Comment =
             Literals.Text("%%")
                 .SkipAnd(Literals.NoneOf("\r\n", minSize: 0))
-                .AndSkip(LineEnd.ZeroOrOne());
+                .AndSkip(LineEnd.Optional());
 
         Identifier =
             Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')

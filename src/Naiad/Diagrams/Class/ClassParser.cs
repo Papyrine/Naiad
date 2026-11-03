@@ -527,7 +527,7 @@ class ClassParser : IDiagramParser<ClassModel>
                 continue;
             }
 
-            var item = bodyLine.TryMatch(line.ToString(), out var parsed) ? parsed : ParseLooseMember(line);
+            var item = bodyLine.TryParseUncompiled(line.ToString(), out var parsed) ? parsed : ParseLooseMember(line);
             switch (item)
             {
                 case AnnotationItem a:

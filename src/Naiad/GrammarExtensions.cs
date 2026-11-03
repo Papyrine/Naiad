@@ -20,7 +20,7 @@ static class GrammarExtensions
     // Runs a rule over a piece of text that is parsed on its own, as the lines of a class body are. Unlike
     // Parlot's TryParse this never compiles the rule, whatever ParseContext.DefaultCompilationThreshold a
     // host application has set.
-    internal static bool TryMatch<T>(this Parser<T> parser, string input, [MaybeNullWhen(false)] out T value)
+    internal static bool TryParseUncompiled<T>(this Parser<T> parser, string input, [MaybeNullWhen(false)] out T value)
     {
         var result = new ParseResult<T>();
         if (parser.Parse(new(new(input)), ref result))

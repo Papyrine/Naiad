@@ -190,7 +190,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                     OneOf(
                         Literals.Char(';')
                             .SkipAnd(CommonParsers.InlineWhitespace)
-                            .SkipAnd(endOfLine.ZeroOrOne()),
+                            .AndSkip(endOfLine.Optional()),
                         endOfLine));
 
         // Style directive: `style NodeName fill:#color,stroke:#color` — applies an inline style to one element.
