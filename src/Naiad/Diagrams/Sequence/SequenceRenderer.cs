@@ -247,6 +247,20 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         public double Right { get; set; }
     }
 
+    // One list of elements being walked by PlanRows: the conversation itself, or one section of an open
+    // block. Depth is how many levels of block the elements placed so far hold, and Inner the deepest of
+    // the block's earlier sections.
+    sealed class WalkLevel(List<SequenceElement> elements)
+    {
+        public List<SequenceElement> Elements { get; } = elements;
+        public int Index { get; set; }
+        public int Depth { get; set; }
+        public Frame? Frame { get; init; }
+        public List<(string? Label, List<SequenceElement> Elements)>? Sections { get; init; }
+        public int Section { get; init; }
+        public int Inner { get; init; }
+    }
+
     // The sections of a block element: its body, then one per `else` / `and` / `option`. Null for
     // anything that is not a block.
     static (string? Kind, string? Fill, List<(string? Label, List<SequenceElement> Elements)> Sections)? AsBlock(
@@ -299,56 +313,79 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         plan.Height = y + headerHeight + options.Padding;
         return plan;
 
-        // Returns how many levels of block the elements hold.
-        int Walk(List<SequenceElement> elements)
+        // Walks with an explicit stack of open blocks rather than by recursion: blocks can nest as deep
+        // as the input likes, and a stack overflow cannot be caught and takes the process down.
+        void Walk(List<SequenceElement> elements)
         {
-            var depth = 0;
-            foreach (var element in elements)
+            var open = new Stack<WalkLevel>();
+            var level = new WalkLevel(elements);
+            while (true)
             {
-                if (AsBlock(element) is not (var kind, var fill, var sections))
+                if (level.Index < level.Elements.Count)
                 {
-                    Place(element);
+                    var element = level.Elements[level.Index++];
+                    if (AsBlock(element) is not (var kind, var fill, var sections))
+                    {
+                        Place(element);
+                        continue;
+                    }
+
+                    var frame = new Frame
+                    {
+                        Kind = kind,
+                        Fill = fill,
+                        Title = sections[0].Label,
+                        FirstElement = plan.Elements.Count,
+                        Top = Math.Max(y - frameLeadIn, lastBottom + frameGap)
+                    };
+                    plan.Frames.Add(frame);
+
+                    // A `rect` has no header to make room for.
+                    var header = kind is null ? frameGap : frameHeaderHeight;
+                    y = frame.Top + frameLeadIn + header;
+                    lastBottom = frame.Top + header - frameGap;
+
+                    open.Push(level);
+                    level = new(sections[0].Elements)
+                    {
+                        Frame = frame,
+                        Sections = sections
+                    };
                     continue;
                 }
 
-                var frame = new Frame
+                // The elements of this level are placed. At the top that is the whole conversation.
+                if (level is not { Frame: { } current, Sections: { } blockSections })
                 {
-                    Kind = kind,
-                    Fill = fill,
-                    Title = sections[0].Label,
-                    FirstElement = plan.Elements.Count,
-                    Top = Math.Max(y - frameLeadIn, lastBottom + frameGap)
-                };
-                plan.Frames.Add(frame);
-
-                // A `rect` has no header to make room for.
-                var header = kind is null ? frameGap : frameHeaderHeight;
-                y = frame.Top + frameLeadIn + header;
-                lastBottom = frame.Top + header - frameGap;
-
-                var inner = 0;
-                for (var i = 0; i < sections.Count; i++)
-                {
-                    if (i > 0)
-                    {
-                        var dividerY = Math.Max(y - frameLeadIn, lastBottom + frameGap);
-                        frame.Dividers.Add((dividerY, sections[i].Label));
-                        y = dividerY + frameLeadIn + frameDividerHeight;
-                        lastBottom = dividerY + frameDividerHeight - frameGap;
-                    }
-
-                    inner = Math.Max(inner, Walk(sections[i].Elements));
+                    return;
                 }
 
-                frame.EndElement = plan.Elements.Count;
-                frame.InnerDepth = inner;
-                frame.Bottom = lastBottom + frameGap;
-                lastBottom = frame.Bottom;
-                y = Math.Max(y, frame.Bottom + frameLeadIn);
-                depth = Math.Max(depth, inner + 1);
-            }
+                var inner = Math.Max(level.Inner, level.Depth);
+                var next = level.Section + 1;
+                if (next < blockSections.Count)
+                {
+                    var dividerY = Math.Max(y - frameLeadIn, lastBottom + frameGap);
+                    current.Dividers.Add((dividerY, blockSections[next].Label));
+                    y = dividerY + frameLeadIn + frameDividerHeight;
+                    lastBottom = dividerY + frameDividerHeight - frameGap;
+                    level = new(blockSections[next].Elements)
+                    {
+                        Frame = current,
+                        Sections = blockSections,
+                        Section = next,
+                        Inner = inner
+                    };
+                    continue;
+                }
 
-            return depth;
+                current.EndElement = plan.Elements.Count;
+                current.InnerDepth = inner;
+                current.Bottom = lastBottom + frameGap;
+                lastBottom = current.Bottom;
+                y = Math.Max(y, current.Bottom + frameLeadIn);
+                level = open.Pop();
+                level.Depth = Math.Max(level.Depth, inner + 1);
+            }
         }
 
         void Place(SequenceElement element)
