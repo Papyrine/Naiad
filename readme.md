@@ -335,6 +335,7 @@ var withFontAwesomeIcon = SkiaRenderer.RenderPng(
  * [Cynefin](https://mermaid.js.org/syntax/cynefin.html) (beta)
  * Info (`info`: draws the Naiad version)
  * [Agent Flow](https://mermaid.js.org/syntax/agentflow.html) (beta)
+ * [Railroad](https://mermaid.js.org/syntax/railroad.html) (beta: Mermaid's own syntax, ABNF, EBNF and PEG)
 
 
 ## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
@@ -369,6 +370,7 @@ Auto-generated documentation from the test suite.
 - [Ishikawa](Ishikawa.md)
 - [Packet](Packet.md)
 - [Radar](Radar.md)
+- [Railroad](Railroad.md)
 - [Sankey](Sankey.md)
 - [Treemap](Treemap.md)
 - [TreeView](TreeView.md)

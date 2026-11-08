@@ -63,6 +63,10 @@ public static class DiagramDocs
             // Mermaid has no syntax page for its version diagram; its examples page is the nearest.
             DiagramType.Info => new("Info", $"{baseUrl}all-examples.html"),
             DiagramType.AgentFlow => new("Agent Flow", $"{baseUrl}agentflow.html"),
+            DiagramType.Railroad => new("Railroad", $"{baseUrl}railroad.html"),
+            DiagramType.RailroadAbnf => new("Railroad (ABNF)", $"{baseUrl}railroad.html"),
+            DiagramType.RailroadEbnf => new("Railroad (EBNF)", $"{baseUrl}railroad.html"),
+            DiagramType.RailroadPeg => new("Railroad (PEG)", $"{baseUrl}railroad.html"),
             DiagramType.ZenUML => new("ZenUML", $"{baseUrl}zenuml.html"),
             _ => new(type.ToString(), baseUrl)
         };

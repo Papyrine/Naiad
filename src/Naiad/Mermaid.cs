@@ -97,6 +97,14 @@ public static class Mermaid
                 Render(new InfoParser(), new InfoRenderer(), "info diagram", input, title, options),
             DiagramType.AgentFlow =>
                 Render(new AgentFlowParser(), new AgentFlowRenderer(), "agent flow", input, title, options),
+            DiagramType.Railroad =>
+                Render(new RailroadParser(), new RailroadRenderer(), "railroad diagram", input, title, options),
+            DiagramType.RailroadAbnf =>
+                Render(new RailroadAbnfParser(), new RailroadRenderer(), "ABNF railroad diagram", input, title, options),
+            DiagramType.RailroadEbnf =>
+                Render(new RailroadEbnfParser(), new RailroadRenderer(), "EBNF railroad diagram", input, title, options),
+            DiagramType.RailroadPeg =>
+                Render(new RailroadPegParser(), new RailroadRenderer(), "PEG railroad diagram", input, title, options),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
@@ -273,6 +281,24 @@ public static class Mermaid
         else if (IsCynefinKeyword(firstLine))
         {
             type = DiagramType.Cynefin;
+        }
+        // Mermaid only knows railroad diagrams by their -beta keywords. The notation keywords share the
+        // `railroad-` prefix, so they are matched whole before the plain one.
+        else if (firstLine.StartsWith("railroad-abnf-beta", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.RailroadAbnf;
+        }
+        else if (firstLine.StartsWith("railroad-ebnf-beta", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.RailroadEbnf;
+        }
+        else if (firstLine.StartsWith("railroad-peg-beta", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.RailroadPeg;
+        }
+        else if (firstLine.StartsWith("railroad-beta", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Railroad;
         }
         else if (firstLine.StartsWith("zenuml", StringComparison.OrdinalIgnoreCase))
         {

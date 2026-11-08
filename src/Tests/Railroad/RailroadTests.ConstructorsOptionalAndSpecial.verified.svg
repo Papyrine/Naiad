@@ -1,0 +1,205 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 773.1 159.2"
+  style="max-width: 773.1px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="20"
+    y="78.4"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">statement =</text>
+  <circle
+    cx="132.4"
+    cy="78.4"
+    r="5"
+    fill="#333333" />
+  <path
+    d="M 137.4 78.4 L 152.4 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 152.4 78.4 L 172.4 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="172.4"
+    y="60"
+    width="66.2"
+    height="36.8"
+    rx="10"
+    ry="10"
+    fill="#FFFFDE"
+    stroke="#EEEEBC"
+    stroke-width="2" />
+  <text
+    x="205.5"
+    y="78.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#000021">export</text>
+  <path
+    d="M 238.6 78.4 L 258.6 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 152.4 78.4 A 10 10 0 0 0 162.4 68.4 L 162.4 50 A 10 10 0 0 1 172.4 40 L 238.6 40 A 10 10 0 0 1 248.6 50 L 248.6 68.4 A 10 10 0 0 0 258.6 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 258.6 78.4 L 268.6 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="315.55"
+    y="37.6"
+    width="104.7"
+    height="36.8"
+    fill="#ECECFF"
+    stroke="#C7C7F1"
+    stroke-width="2" />
+  <text
+    x="367.9"
+    y="56"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#131300">declaration</text>
+  <path
+    d="M 268.6 78.4 A 10 10 0 0 0 278.6 68.4 L 278.6 66 A 10 10 0 0 1 288.6 56 L 315.55 56"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 420.25 56 L 447.2 56 A 10 10 0 0 1 457.2 66 L 457.2 68.4 A 10 10 0 0 0 467.2 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="288.6"
+    y="82.4"
+    width="158.6"
+    height="36.8"
+    fill="#F9FFEC" />
+  <path
+    d="M 288.6 82.4 H 447.2 V 119.2 H 288.6 Z"
+    fill="none"
+    stroke="#E3F1C7"
+    stroke-width="2"
+    stroke-dasharray="5,3" />
+  <text
+    x="367.9"
+    y="100.8"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#131300">? any expression ?</text>
+  <path
+    d="M 268.6 78.4 A 10 10 0 0 1 278.6 88.4 L 278.6 90.8 A 10 10 0 0 0 288.6 100.8 L 288.6 100.8"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 447.2 100.8 L 447.2 100.8 A 10 10 0 0 0 457.2 90.8 L 457.2 88.4 A 10 10 0 0 1 467.2 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 467.2 78.4 L 477.2 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 477.2 78.4 L 497.2 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="497.2"
+    y="60"
+    width="27.7"
+    height="36.8"
+    rx="10"
+    ry="10"
+    fill="#FFFFDE"
+    stroke="#EEEEBC"
+    stroke-width="2" />
+  <text
+    x="511.05"
+    y="78.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#000021">;</text>
+  <path
+    d="M 524.9 78.4 L 534.9 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 534.9 78.4 L 554.9 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="554.9"
+    y="60"
+    width="143.2"
+    height="36.8"
+    fill="#ECECFF"
+    stroke="#C7C7F1"
+    stroke-width="2" />
+  <text
+    x="626.5"
+    y="78.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#131300">trailing_comment</text>
+  <path
+    d="M 698.1 78.4 L 718.1 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 534.9 78.4 A 10 10 0 0 0 544.9 68.4 L 544.9 50 A 10 10 0 0 1 554.9 40 L 698.1 40 A 10 10 0 0 1 708.1 50 L 708.1 68.4 A 10 10 0 0 0 718.1 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 718.1 78.4 L 738.1 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 477.2 78.4 A 10 10 0 0 0 487.2 68.4 L 487.2 30 A 10 10 0 0 1 497.2 20 L 718.1 20 A 10 10 0 0 1 728.1 30 L 728.1 68.4 A 10 10 0 0 0 738.1 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 738.1 78.4 L 743.1 78.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <circle
+    cx="748.1"
+    cy="78.4"
+    r="5"
+    fill="#333333" />
+</svg>

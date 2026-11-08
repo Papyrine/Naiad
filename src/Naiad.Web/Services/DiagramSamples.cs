@@ -332,6 +332,16 @@ public static class DiagramSamples
                 changes --> analyse --> lint --> ok
               end
             """),
+        new("Railroad",
+            """
+            railroad-ebnf-beta
+            title "JSON Grammar"
+            json = element ;
+            element = object | array | string | number | "true" | "false" | "null" ;
+            object = "{" [ member ( "," member )* ] "}" ;
+            array = "[" [ element ( "," element )* ] "]" ;
+            member = string ":" element ;
+            """),
     ];
 
     /// <summary>The diagram shown when the editor first loads.</summary>
