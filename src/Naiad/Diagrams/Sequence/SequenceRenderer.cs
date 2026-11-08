@@ -689,6 +689,11 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         var boxHeight = BoxHeight(model, options);
         foreach (var participant in model.Participants)
         {
+            if (participant.IsHidden)
+            {
+                continue;
+            }
+
             var x = positions[participant.Id];
             if (createdAt.TryGetValue(participant.Id, out var createdY))
             {
@@ -717,7 +722,8 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         var boxHeight = BoxHeight(model, options);
         foreach (var participant in model.Participants)
         {
-            if (skip.ContainsKey(participant.Id))
+            if (participant.IsHidden ||
+                skip.ContainsKey(participant.Id))
             {
                 continue;
             }
@@ -831,6 +837,11 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
         var defaultEnd = endY;
         foreach (var participant in model.Participants)
         {
+            if (participant.IsHidden)
+            {
+                continue;
+            }
+
             var x = positions[participant.Id];
 
             // A created participant's lifeline hangs from the box drawn where it was created.

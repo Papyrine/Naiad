@@ -16,6 +16,7 @@ Auto-generated documentation from the test suite.
 - [State](/src/test-renders/State.md)
 - [Timeline](/src/test-renders/Timeline.md)
 - [UserJourney](/src/test-renders/UserJourney.md)
+- [ZenUML](/src/test-renders/ZenUML.md)
 
 ### Beta diagram types
 
