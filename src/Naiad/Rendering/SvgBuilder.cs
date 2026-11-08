@@ -512,7 +512,8 @@ public class SvgBuilder
         string? markerStart = null,
         string? markerEnd = null,
         double? opacity = null,
-        string? cssClass = null)
+        string? cssClass = null,
+        string? style = null)
     {
         var path = new SvgPath
         {
@@ -524,7 +525,8 @@ public class SvgBuilder
             MarkerStart = markerStart,
             MarkerEnd = markerEnd,
             Opacity = opacity,
-            Class = cssClass
+            Class = cssClass,
+            Style = style
         };
         AddElement(path);
     }

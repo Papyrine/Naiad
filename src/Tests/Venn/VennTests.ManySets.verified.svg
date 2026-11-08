@@ -1,0 +1,110 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 800 450"
+  style="max-width: 800px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="400"
+    y="16"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="16px"
+    font-family="Arial, sans-serif"
+    fill="#333">Programming languages</text>
+  <path
+    d="M 202.13 330.11 A 104.89 104.89 0 1 0 411.92 330.11 A 104.89 104.89 0 1 0 202.13 330.11 Z"
+    style="fill:#5353FF;fill-opacity:0.1;stroke:#5353FF;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="277"
+    y="367.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#0000B9">Python</text>
+  <path
+    d="M 337.7 330.11 A 104.89 104.89 0 1 0 547.49 330.11 A 104.89 104.89 0 1 0 337.7 330.11 Z"
+    style="fill:#FFFF45;fill-opacity:0.1;stroke:#FFFF45;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="475.64"
+    y="367.2"
+    text-anchor="middle"
+    font-size="23.4165px"
+    font-family="Arial, sans-serif"
+    fill="#ABAB00">JavaScript</text>
+  <path
+    d="M 337.7 194.54 A 104.89 104.89 0 1 0 547.49 194.54 A 104.89 104.89 0 1 0 337.7 194.54 Z"
+    style="fill:#B5FF20;fill-opacity:0.1;stroke:#B5FF20;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="450.92"
+    y="205.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#5A8600">Rust</text>
+  <path
+    d="M 202.13 194.54 A 104.89 104.89 0 1 0 411.92 194.54 A 104.89 104.89 0 1 0 202.13 194.54 Z"
+    style="fill:#FF53FF;fill-opacity:0.1;stroke:#FF53FF;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="277"
+    y="172.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#B900B9">Go</text>
+  <path
+    d="M 435.37 120.25 A 81.25 81.25 0 1 0 597.87 120.25 A 81.25 81.25 0 1 0 435.37 120.25 Z"
+    style="fill:#53FFFF;fill-opacity:0.1;stroke:#53FFFF;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="525.92"
+    y="99.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#00B9B9">Haskell</text>
+  <text
+    x="374.81"
+    y="334.99"
+    text-anchor="middle"
+    font-size="14.2442px"
+    font-family="Arial, sans-serif"
+    fill="#333">Scripting</text>
+  <text
+    x="454.86"
+    y="269.42"
+    text-anchor="middle"
+    font-size="21.2026px"
+    font-family="Arial, sans-serif"
+    fill="#333">WebAssembly</text>
+  <text
+    x="374.81"
+    y="200.41"
+    text-anchor="middle"
+    font-size="18.3131px"
+    font-family="Arial, sans-serif"
+    fill="#333">Systems</text>
+  <text
+    x="307"
+    y="270.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#333">Tooling</text>
+  <text
+    x="487"
+    y="144.2"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#333">Type</text>
+  <text
+    x="487"
+    y="170.6"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#333">nerds</text>
+</svg>

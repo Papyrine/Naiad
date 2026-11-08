@@ -1,0 +1,77 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 800 450"
+  style="max-width: 800px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <path
+    d="M 56.71 225 A 210 210 0 1 0 476.71 225 A 210 210 0 1 0 56.71 225 Z"
+    style="fill:#5353FF;fill-opacity:0.1;stroke:#5353FF;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="190"
+    y="233.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#0000B9">Frontend</text>
+  <path
+    d="M 323.29 225 A 210 210 0 1 0 743.29 225 A 210 210 0 1 0 323.29 225 Z"
+    style="fill:#FFFF45;fill-opacity:0.1;stroke:#FFFF45;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="609"
+    y="233.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#ABAB00">Backend</text>
+  <text
+    x="400"
+    y="233.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#333">Shared</text>
+  <text
+    x="126.69"
+    y="267.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="20px"
+    font-family="Arial, sans-serif"
+    fill="#333">React</text>
+  <text
+    x="253.31"
+    y="255.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="20px"
+    font-family="Arial, sans-serif"
+    fill="#333">Design</text>
+  <text
+    x="253.31"
+    y="279.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="20px"
+    font-family="Arial, sans-serif"
+    fill="#333">Systems</text>
+  <text
+    x="610"
+    y="256"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="20px"
+    font-family="Arial, sans-serif"
+    fill="#333">API</text>
+  <text
+    x="400"
+    y="256"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="20px"
+    font-family="Arial, sans-serif"
+    fill="#333">OpenAPI</text>
+</svg>

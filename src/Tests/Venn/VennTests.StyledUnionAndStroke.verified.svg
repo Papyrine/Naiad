@@ -1,0 +1,40 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 800 450"
+  style="max-width: 800px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <path
+    d="M 56.71 225 A 210 210 0 1 0 476.71 225 A 210 210 0 1 0 56.71 225 Z"
+    style="fill:#5353FF;fill-opacity:0.1;stroke:#5353FF;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="190"
+    y="233.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#0000B9">A</text>
+  <path
+    d="M 323.29 225 A 210 210 0 1 0 743.29 225 A 210 210 0 1 0 323.29 225 Z"
+    style="fill:#FFFF45;fill-opacity:0.3;stroke:#000;stroke-width:4;stroke-opacity:0.95" />
+  <text
+    x="609"
+    y="233.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#ABAB00">B</text>
+  <path
+    d="M 400 387.28 A 210 210 0 0 1 400 62.72 A 210 210 0 0 1 400 387.28 Z"
+    style="fill:#ffd700;fill-opacity:1" />
+  <text
+    x="400"
+    y="233.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#000">Both</text>
+</svg>
