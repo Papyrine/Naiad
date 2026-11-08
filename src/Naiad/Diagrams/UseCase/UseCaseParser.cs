@@ -907,19 +907,31 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
 
         void DeclareBoundary(BoundaryStatement statement)
         {
-            var boundary = new SystemBoundary
+            // A boundary opened again under the same id adds to the first: its members join, and a title it
+            // gives replaces the earlier one. Two boundaries under one id would be one box in the layout.
+            if (boundaries.TryGetValue(statement.Name.Id, out var boundary))
             {
-                Id = statement.Name.Id,
-                Title = statement.Name.Label ?? statement.Name.Id
-            };
+                if (statement.Name.Label is not null)
+                {
+                    boundary.Title = statement.Name.Label;
+                }
+            }
+            else
+            {
+                boundary = new()
+                {
+                    Id = statement.Name.Id,
+                    Title = statement.Name.Label ?? statement.Name.Id
+                };
+                boundaries[boundary.Id] = boundary;
+                model.Boundaries.Add(boundary);
+            }
+
             boundary.Classes.AddRange(statement.Classes);
             if (statement.Metadata is not null)
             {
                 metadataStatements.Insert(0, (boundary.Id, statement.Metadata));
             }
-
-            boundaries[boundary.Id] = boundary;
-            model.Boundaries.Add(boundary);
 
             foreach (var member in statement.Members)
             {
