@@ -64,6 +64,42 @@ public class RobustnessTests
             input.AppendFormat(CultureInfo.InvariantCulture, link, i, i + 1).Append('\n');
         }
 
+        var (svg, failure) = RenderOnSmallStack(input.ToString());
+
+        await Assert.That(failure).IsNull();
+        await Assert.That(svg).IsNotNull();
+    }
+
+    // The sequence renderer planned its rows by recursing into each block, as deep as the blocks nest.
+    // ZenUML folds its braces with a stack of its own, so nothing stopped a few thousand nested `if`s
+    // from reaching that recursion and overflowing the stack.
+    [Test]
+    [Arguments("sequenceDiagram", "    alt c{0}", "    end", "    A->>B: hi")]
+    [Arguments("zenuml", "    if(c{0}) {{", "    }}", "    A.m()")]
+    public async Task DeepNesting_DoesNotOverflowTheStack(string header, string open, string close, string body)
+    {
+        const int depth = 1000;
+        var input = new StringBuilder(header).Append('\n');
+        for (var i = 0; i < depth; i++)
+        {
+            input.AppendFormat(CultureInfo.InvariantCulture, open, i).Append('\n');
+        }
+
+        input.Append(body).Append('\n');
+        for (var i = 0; i < depth; i++)
+        {
+            input.AppendFormat(CultureInfo.InvariantCulture, close).Append('\n');
+        }
+
+        var (svg, failure) = RenderOnSmallStack(input.ToString());
+
+        await Assert.That(failure).IsNull();
+        await Assert.That(svg).IsNotNull();
+    }
+
+    // A deliberately small stack makes a recursive walk's depth cheap to reach.
+    static (string? Svg, Exception? Failure) RenderOnSmallStack(string input)
+    {
         string? svg = null;
         Exception? failure = null;
         var thread = new Thread(
@@ -71,7 +107,7 @@ public class RobustnessTests
             {
                 try
                 {
-                    svg = Mermaid.Render(input.ToString());
+                    svg = Mermaid.Render(input);
                 }
                 catch (Exception exception)
                 {
@@ -81,8 +117,6 @@ public class RobustnessTests
             maxStackSize: 256 * 1024);
         thread.Start();
         thread.Join();
-
-        await Assert.That(failure).IsNull();
-        await Assert.That(svg).IsNotNull();
+        return (svg, failure);
     }
 }
