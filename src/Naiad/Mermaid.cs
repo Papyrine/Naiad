@@ -93,6 +93,8 @@ public static class Mermaid
                 Render(new UseCaseParser(), new UseCaseRenderer(), "use case diagram", input, title, options),
             DiagramType.Cynefin =>
                 Render(new CynefinParser(), new CynefinRenderer(), "Cynefin diagram", input, title, options),
+            DiagramType.Info =>
+                Render(new InfoParser(), new InfoRenderer(), "info diagram", input, title, options),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
@@ -294,6 +296,11 @@ public static class Mermaid
         {
             type = DiagramType.UseCase;
         }
+        // "info" is short and a common start of a word, so it only counts when it is the whole word.
+        else if (IsWholeKeyword(firstLine, "info"))
+        {
+            type = DiagramType.Info;
+        }
         else
         {
             type = default;
@@ -302,6 +309,11 @@ public static class Mermaid
 
         return true;
     }
+
+    // True when the input opens with the keyword followed by whitespace or nothing at all.
+    static bool IsWholeKeyword(string input, string keyword) =>
+        input.StartsWith(keyword, StringComparison.OrdinalIgnoreCase) &&
+        (input.Length == keyword.Length || char.IsWhiteSpace(input[keyword.Length]));
 
     /// <summary>
     /// Mermaid's detector for Cynefin takes only <c>cynefin-beta</c>, in lower case, followed by whitespace,
