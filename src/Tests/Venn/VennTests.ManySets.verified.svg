@@ -32,7 +32,7 @@
     x="475.64"
     y="367.2"
     text-anchor="middle"
-    font-size="23.4165px"
+    font-size="23.42px"
     font-family="Arial, sans-serif"
     fill="#ABAB00">JavaScript</text>
   <path
@@ -69,21 +69,21 @@
     x="374.81"
     y="334.99"
     text-anchor="middle"
-    font-size="14.2442px"
+    font-size="14.24px"
     font-family="Arial, sans-serif"
     fill="#333">Scripting</text>
   <text
     x="454.86"
     y="269.42"
     text-anchor="middle"
-    font-size="21.2026px"
+    font-size="21.2px"
     font-family="Arial, sans-serif"
     fill="#333">WebAssembly</text>
   <text
     x="374.81"
     y="200.41"
     text-anchor="middle"
-    font-size="18.3131px"
+    font-size="18.31px"
     font-family="Arial, sans-serif"
     fill="#333">Systems</text>
   <text
