@@ -18,7 +18,7 @@ public static class Mermaid
     {
         IconPackRegistry.MarkRendered();
         options ??= RenderOptions.Default;
-        input = StripPreamble(input.Trim(), out var title);
+        input = StripPreamble(TrimInput(input), out var title);
 
         if (!TryMatchType(input, out var diagramType))
         {
@@ -124,7 +124,7 @@ public static class Mermaid
             return false;
         }
 
-        return TryMatchType(StripPreamble(input.Trim(), out _), out type);
+        return TryMatchType(StripPreamble(TrimInput(input), out _), out type);
     }
 
     static SvgDocument Render<TModel>(
@@ -363,6 +363,13 @@ public static class Mermaid
                 firstLine[keyword.Length] == ':' ||
                 char.IsWhiteSpace(firstLine[keyword.Length]));
     }
+
+    // Text decoded from UTF-8 bytes without stripping the byte order mark starts with U+FEFF, which
+    // string.Trim does not count as white space, so the diagram type was not found behind it.
+    const char byteOrderMark = (char) 0xFEFF;
+
+    static string TrimInput(string input) =>
+        input.TrimStart(byteOrderMark).Trim();
 
     /// <summary>
     /// Removes what Mermaid allows ahead of the diagram's opening keyword: a YAML front matter block (which
