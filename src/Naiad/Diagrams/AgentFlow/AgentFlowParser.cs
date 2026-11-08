@@ -294,15 +294,14 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
             CommonParsers.Comment.Or(CommonParsers.Newline)
                 .Then(static _ => (Statement?) null);
 
-        // Keywords before the node chain, so a keyword line is never read as a node named after it.
+        // Keywords before the node chain, so a keyword line is never read as a node named after it. A line
+        // that opens or closes a block is never one of these: blocks are read as a whole below.
         var statement =
             CommonParsers.InlineWhitespace
+                .SkipAnd(Not(OneOf(flowStart, globalStart, blockEnd)))
                 .SkipAnd(
                     OneOf(
                         skipLine,
-                        flowStart.Then(static _ => (Statement?) _),
-                        globalStart.Then(static _ => (Statement?) _),
-                        blockEnd.Then(static _ => (Statement?) _),
                         connector.Then(static _ => (Statement?) _),
                         direction.Then(static _ => (Statement?) _),
                         classDef.Then(static _ => (Statement?) _),
@@ -312,6 +311,39 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                         accessibilityDescription.Then(static _ => (Statement?) _),
                         ignored,
                         chain.AndSkip(statementEnd).Then(static _ => (Statement?) _)));
+
+        // A flow or global block, its statements, and the end that closes it, flattened back into the
+        // one list of statements BuildModel reads. Reading each block to its end, rather than checking the
+        // counts afterwards, puts a stray `end` or a block left open where it is.
+        var statements = Deferred<List<Statement>>();
+
+        // Never matches. At the end of the input it says what was missing there.
+        var unclosed =
+            Always((Statement) new EndStatement())
+                .When(static (context, _) =>
+                {
+                    if (context.Scanner.Cursor.Eof)
+                    {
+                        DiagramParseContext.Failed(context, context.Scanner.Cursor.Offset, "a flow or global block is not closed by an end");
+                    }
+
+                    return false;
+                });
+        var block =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(OneOf(flowStart, globalStart))
+                .And(statements)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(blockEnd.Or(unclosed))
+                .Then(static _ =>
+                {
+                    var (start, body, end) = _;
+                    return (List<Statement>) [start, .. body, end];
+                });
+        statements.Parser =
+            block.Or(statement.Then(static _ => _ is null ? new List<Statement>() : [_]))
+                .Many()
+                .Then(static _ => _.SelectMany(_ => _).ToList());
 
         // The statements must account for the whole input, so a line no rule matches is reported rather
         // than ending the diagram early.
@@ -325,10 +357,7 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(CommonParsers.DirectionParser.Else(Direction.TopToBottom))
                 .AndSkip(statementEnd)
-                .And(
-                    statement.Many()
-                        .Then(static _ => _.OfType<Statement>().ToList())
-                        .Assert(BlocksBalance, "every flow and global block must be closed by exactly one end"))
+                .And(statements)
                 .AndSkip(endOfInput)
                 .Map(BuildModel);
     }
@@ -347,25 +376,6 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                     .Or(Literals.NoneOf(bareEnd, minSize: 0).Then(static _ => _.Span.Trim().ToString())))
             .AndSkip(Literals.Text(close))
             .Then(_ => (_, type));
-
-    static bool BlocksBalance(List<Statement> statements)
-    {
-        var depth = 0;
-        foreach (var statement in statements)
-        {
-            if (statement is FlowStartStatement or GlobalStartStatement)
-            {
-                depth++;
-            }
-            else if (statement is EndStatement &&
-                     --depth < 0)
-            {
-                return false;
-            }
-        }
-
-        return depth == 0;
-    }
 
     static string Unquote(string text)
     {
