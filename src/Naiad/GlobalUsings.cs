@@ -20,6 +20,7 @@ global using Naiad.Diagrams.EventModeling;
 global using Naiad.Diagrams.Flowchart;
 global using Naiad.Diagrams.Gantt;
 global using Naiad.Diagrams.GitGraph;
+global using Naiad.Diagrams.Info;
 global using Naiad.Diagrams.Ishikawa;
 global using Naiad.Diagrams.Kanban;
 global using Naiad.Diagrams.Mindmap;

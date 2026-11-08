@@ -1,0 +1,19 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 400 100"
+  style="max-width: 400px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="200"
+    y="50"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="32px"
+    font-family="Arial, sans-serif"
+    fill="#333"
+    class="version">Naiad v1.2.3</text>
+</svg>
