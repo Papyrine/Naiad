@@ -207,11 +207,12 @@ public class VennTests : TestBase
               set B["Beta"]:12
               set A
               union B,A["AB"]:3
-              union A , B
+              set C
+              union A , C
             """);
 
         await Assert.That(model.Title).IsEqualTo("Team overlap");
-        await Assert.That(model.Areas.Count).IsEqualTo(4);
+        await Assert.That(model.Areas.Count).IsEqualTo(5);
         await Assert.That(model.Areas[0].Key).IsEqualTo("B");
         await Assert.That(model.Areas[0].Label).IsEqualTo("Beta");
         await Assert.That(model.Areas[0].Size).IsEqualTo(12);
@@ -219,7 +220,29 @@ public class VennTests : TestBase
         await Assert.That(model.Areas[1].Size).IsEqualTo(10);
         await Assert.That(model.Areas[2].Key).IsEqualTo("A|B");
         await Assert.That(model.Areas[2].Size).IsEqualTo(3);
-        await Assert.That(model.Areas[3].Size).IsEqualTo(2.5);
+        await Assert.That(model.Areas[4].Key).IsEqualTo("A|C");
+        await Assert.That(model.Areas[4].Size).IsEqualTo(2.5);
+    }
+
+    // A set declared twice was drawn twice, a second circle and label over the first in the next colour,
+    // and the layout and the drawing each took the size from a different declaration.
+    [Test]
+    public async Task Parse_RedeclaredAreaReplacesTheEarlierOne()
+    {
+        var model = Parse(
+            """
+            venn-beta
+              set A:5
+              set B
+              set A["Alpha"]:8
+              union A,B:2
+              union B,A:3
+            """);
+
+        await Assert.That(model.Areas.Select(_ => _.Key)).IsEquivalentTo(["A", "B", "A|B"], CollectionOrdering.Matching);
+        await Assert.That(model.Areas[0].Label).IsEqualTo("Alpha");
+        await Assert.That(model.Areas[0].Size).IsEqualTo(8);
+        await Assert.That(model.Areas[2].Size).IsEqualTo(3);
     }
 
     [Test]

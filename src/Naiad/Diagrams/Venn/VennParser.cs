@@ -167,13 +167,25 @@ class VennParser : IDiagramParser<VennModel>
 
                     var sets = Sorted(area.Sets);
                     currentSets = sets;
-                    model.Areas.Add(
-                        new()
-                        {
-                            Sets = sets,
-                            Label = string.IsNullOrEmpty(area.Label) ? null : area.Label,
-                            Size = area.Size ?? 10 / Math.Pow(sets.Length, 2)
-                        });
+                    var declared = new VennArea
+                    {
+                        Sets = sets,
+                        Label = string.IsNullOrEmpty(area.Label) ? null : area.Label,
+                        Size = area.Size ?? 10 / Math.Pow(sets.Length, 2)
+                    };
+
+                    // A set or union declared again replaces the earlier declaration in its place, rather
+                    // than drawing a second circle over the first.
+                    var earlier = model.Areas.FindIndex(_ => _.Key == declared.Key);
+                    if (earlier >= 0)
+                    {
+                        model.Areas[earlier] = declared;
+                    }
+                    else
+                    {
+                        model.Areas.Add(declared);
+                    }
+
                     break;
 
                 case TextStatement text:
