@@ -196,6 +196,21 @@ public static class DiagramSamples
                 Environment
                     Too dark
             """),
+        new("ZenUML",
+            """
+            zenuml
+                title Order Service
+                @Actor Client
+                Client->OrderService.placeOrder(order) {
+                    valid = Validator.check(order)
+                    if(valid) {
+                        PaymentService.charge(order)
+                        return confirmation
+                    } else {
+                        return error
+                    }
+                }
+            """),
     ];
 
     /// <summary>The diagram shown when the editor first loads.</summary>

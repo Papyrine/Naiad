@@ -1,0 +1,188 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 440 350"
+  style="max-width: 440px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="arrowhead-dotted"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="cross"
+      refX="4"
+      refY="4"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M1,1 L7,7 M7,1 L1,7"
+        class="arrowMarkerPath"
+        fill="none" />
+    </marker>
+  </defs>
+  <text
+    x="220"
+    y="20"
+    text-anchor="middle"
+    font-size="16px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">Sync message</text>
+  <rect
+    x="170"
+    y="50"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="220"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">A</text>
+  <rect
+    x="320"
+    y="50"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="370"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">B</text>
+  <line
+    x1="220"
+    y1="90"
+    x2="220"
+    y2="290"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="370"
+    y1="90"
+    x2="370"
+    y2="290"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <rect
+    x="215"
+    y="190"
+    width="10"
+    height="50"
+    fill="#F4F4F4"
+    stroke="#666" />
+  <line
+    x1="70"
+    y1="140"
+    x2="220"
+    y2="140"
+    stroke="#333" />
+  <polygon
+    points="220,140 212,136 212,144"
+    fill="#333" />
+  <text
+    x="145"
+    y="132"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">SyncMessage</text>
+  <line
+    x1="70"
+    y1="190"
+    x2="220"
+    y2="190"
+    stroke="#333" />
+  <polygon
+    points="220,190 212,186 212,194"
+    fill="#333" />
+  <text
+    x="145"
+    y="182"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">SyncMessage(with, parameters)</text>
+  <line
+    x1="220"
+    y1="240"
+    x2="370"
+    y2="240"
+    stroke="#333" />
+  <polygon
+    points="370,240 362,236 362,244"
+    fill="#333" />
+  <text
+    x="295"
+    y="232"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">nestedSyncMessage()</text>
+  <rect
+    x="170"
+    y="290"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="220"
+    y="310"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">A</text>
+  <rect
+    x="320"
+    y="290"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="370"
+    y="310"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">B</text>
+</svg>

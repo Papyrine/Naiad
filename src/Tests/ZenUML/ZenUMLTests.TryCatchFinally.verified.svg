@@ -1,0 +1,283 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 460 452"
+  style="max-width: 460px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="arrowhead-dotted"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="cross"
+      refX="4"
+      refY="4"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M1,1 L7,7 M7,1 L1,7"
+        class="arrowMarkerPath"
+        fill="none" />
+    </marker>
+  </defs>
+  <rect
+    x="30"
+    y="20"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="80"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Consumer</text>
+  <rect
+    x="180"
+    y="20"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="230"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">API</text>
+  <rect
+    x="330"
+    y="20"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="380"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">BookingService</text>
+  <line
+    x1="80"
+    y1="60"
+    x2="80"
+    y2="392"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="230"
+    y1="60"
+    x2="230"
+    y2="392"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="380"
+    y1="60"
+    x2="380"
+    y2="392"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <rect
+    x="20"
+    y="82"
+    width="420"
+    height="280"
+    fill="none"
+    stroke="#9370DB" />
+  <path
+    d="M20,82 H101.6 V95 L94.6,102 H20 Z"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="57.3"
+    y="92"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">critical</text>
+  <text
+    x="270.8"
+    y="92"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[try]</text>
+  <line
+    x1="20"
+    y1="212"
+    x2="440"
+    y2="212"
+    stroke="#9370DB"
+    stroke-dasharray="3,3" />
+  <text
+    x="230"
+    y="225"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[catch(BookingError)]</text>
+  <line
+    x1="20"
+    y1="288"
+    x2="440"
+    y2="288"
+    stroke="#9370DB"
+    stroke-dasharray="3,3" />
+  <text
+    x="230"
+    y="301"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[finally]</text>
+  <line
+    x1="80"
+    y1="140"
+    x2="230"
+    y2="140"
+    stroke="#333" />
+  <polygon
+    points="230,140 222,136 222,144"
+    fill="#333" />
+  <text
+    x="155"
+    y="132"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">Book something</text>
+  <line
+    x1="230"
+    y1="190"
+    x2="380"
+    y2="190"
+    stroke="#333" />
+  <polygon
+    points="380,190 372,186 372,194"
+    fill="#333" />
+  <text
+    x="305"
+    y="182"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">Start booking process</text>
+  <line
+    x1="230"
+    y1="266"
+    x2="80"
+    y2="266"
+    stroke="#333" />
+  <polygon
+    points="80,266 88,262 88,270"
+    fill="#333" />
+  <text
+    x="155"
+    y="258"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">show failure</text>
+  <line
+    x1="230"
+    y1="342"
+    x2="380"
+    y2="342"
+    stroke="#333" />
+  <polygon
+    points="380,342 372,338 372,346"
+    fill="#333" />
+  <text
+    x="305"
+    y="334"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">rollback status</text>
+  <rect
+    x="30"
+    y="392"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="80"
+    y="412"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Consumer</text>
+  <rect
+    x="180"
+    y="392"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="230"
+    y="412"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">API</text>
+  <rect
+    x="330"
+    y="392"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="380"
+    y="412"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">BookingService</text>
+</svg>

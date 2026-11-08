@@ -1,0 +1,318 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 460 548"
+  style="max-width: 460px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="arrowhead-dotted"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="cross"
+      refX="4"
+      refY="4"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M1,1 L7,7 M7,1 L1,7"
+        class="arrowMarkerPath"
+        fill="none" />
+    </marker>
+  </defs>
+  <text
+    x="230"
+    y="20"
+    text-anchor="middle"
+    font-size="16px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">Reply message</text>
+  <rect
+    x="30"
+    y="50"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="80"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Client</text>
+  <rect
+    x="180"
+    y="50"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="230"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">A</text>
+  <rect
+    x="330"
+    y="50"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="380"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">B</text>
+  <line
+    x1="80"
+    y1="90"
+    x2="80"
+    y2="488"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="230"
+    y1="90"
+    x2="230"
+    y2="488"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <line
+    x1="380"
+    y1="90"
+    x2="380"
+    y2="488"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <rect
+    x="375"
+    y="190"
+    width="10"
+    height="198"
+    fill="#F4F4F4"
+    stroke="#666" />
+  <rect
+    x="225"
+    y="140"
+    width="10"
+    height="298"
+    fill="#F4F4F4"
+    stroke="#666" />
+  <rect
+    x="20"
+    y="212"
+    width="420"
+    height="196"
+    fill="none"
+    stroke="#9370DB" />
+  <path
+    d="M20,212 H70 V225 L63,232 H20 Z"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="41.5"
+    y="222"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">alt</text>
+  <text
+    x="255"
+    y="222"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">[condition]</text>
+  <line
+    x1="80"
+    y1="140"
+    x2="230"
+    y2="140"
+    stroke="#333" />
+  <polygon
+    points="230,140 222,136 222,144"
+    fill="#333" />
+  <text
+    x="155"
+    y="132"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">method()</text>
+  <line
+    x1="230"
+    y1="190"
+    x2="380"
+    y2="190"
+    stroke="#333" />
+  <polygon
+    points="380,190 372,186 372,194"
+    fill="#333" />
+  <text
+    x="305"
+    y="182"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">method()</text>
+  <line
+    x1="380"
+    y1="270"
+    x2="230"
+    y2="270"
+    stroke="#333"
+    stroke-dasharray="5,5" />
+  <polygon
+    points="230,270 238,266 238,274"
+    fill="#333" />
+  <text
+    x="305"
+    y="262"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">x1</text>
+  <path
+    d="M30,320 L272,320 L280,328 L280,360 L30,360 Z"
+    fill="#FFFFCC"
+    stroke="#AAAA33" />
+  <line
+    x1="272"
+    y1="320"
+    x2="272"
+    y2="328"
+    stroke="#AAAA33" />
+  <line
+    x1="272"
+    y1="328"
+    x2="280"
+    y2="328"
+    stroke="#AAAA33" />
+  <text
+    x="155"
+    y="340"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">return early</text>
+  <line
+    x1="230"
+    y1="388"
+    x2="80"
+    y2="388"
+    stroke="#333"
+    stroke-dasharray="5,5" />
+  <polygon
+    points="80,388 88,384 88,392"
+    fill="#333" />
+  <text
+    x="155"
+    y="380"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">x11</text>
+  <line
+    x1="230"
+    y1="438"
+    x2="80"
+    y2="438"
+    stroke="#333"
+    stroke-dasharray="5,5" />
+  <polygon
+    points="80,438 88,434 88,442"
+    fill="#333" />
+  <text
+    x="155"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">x2</text>
+  <rect
+    x="30"
+    y="488"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="80"
+    y="508"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Client</text>
+  <rect
+    x="180"
+    y="488"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="230"
+    y="508"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">A</text>
+  <rect
+    x="330"
+    y="488"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="380"
+    y="508"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">B</text>
+</svg>

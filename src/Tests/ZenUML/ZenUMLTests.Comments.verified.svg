@@ -1,0 +1,133 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 350.1 304.8"
+  style="max-width: 350.1px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <defs>
+    <marker
+      id="arrowhead"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="arrowhead-dotted"
+      refX="9"
+      refY="3.5"
+      markerWidth="10"
+      markerHeight="7"
+      orient="auto">
+      <path
+        d="M0,0 L10,3.5 L0,7 Z"
+        class="arrowMarkerPath"
+        fill="#333" />
+    </marker>
+    <marker
+      id="cross"
+      refX="4"
+      refY="4"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M1,1 L7,7 M7,1 L1,7"
+        class="arrowMarkerPath"
+        fill="none" />
+    </marker>
+  </defs>
+  <rect
+    x="170"
+    y="20"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="220"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">BookService</text>
+  <line
+    x1="220"
+    y1="60"
+    x2="220"
+    y2="244.8"
+    stroke="#999"
+    stroke-dasharray="5,5" />
+  <path
+    d="M109.9,110 L322.1,110 L330.1,118 L330.1,166.8 L109.9,166.8 Z"
+    fill="#FFFFCC"
+    stroke="#AAAA33" />
+  <line
+    x1="322.1"
+    y1="110"
+    x2="322.1"
+    y2="118"
+    stroke="#AAAA33" />
+  <line
+    x1="322.1"
+    y1="118"
+    x2="330.1"
+    y2="118"
+    stroke="#AAAA33" />
+  <text
+    x="220"
+    y="130"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">a comment on a message.</text>
+  <text
+    x="220"
+    y="146.8"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">**Markdown** is supported.</text>
+  <line
+    x1="70"
+    y1="194.8"
+    x2="220"
+    y2="194.8"
+    stroke="#333" />
+  <polygon
+    points="220,194.8 212,190.8 212,198.8"
+    fill="#333" />
+  <text
+    x="145"
+    y="186.8"
+    text-anchor="middle"
+    dominant-baseline="bottom"
+    font-size="14px"
+    font-family="Arial, sans-serif">getBook()</text>
+  <rect
+    x="170"
+    y="244.8"
+    width="100"
+    height="40"
+    rx="3"
+    ry="3"
+    fill="#ECECFF"
+    stroke="#9370DB" />
+  <text
+    x="220"
+    y="264.8"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">BookService</text>
+</svg>

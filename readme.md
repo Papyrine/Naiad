@@ -325,6 +325,7 @@ var withFontAwesomeIcon = SkiaRenderer.RenderPng(
  * [Radar](https://mermaid.js.org/syntax/radar.html) (beta)
  * [Treemap](https://mermaid.js.org/syntax/treemap.html) (beta)
  * [Ishikawa](https://mermaid.js.org/syntax/ishikawa.html) (beta)
+ * [ZenUML](https://mermaid.js.org/syntax/zenuml.html) (drawn by the sequence diagram renderer)
 
 
 ## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
@@ -345,6 +346,7 @@ Auto-generated documentation from the test suite.
 - [State](/src/test-renders/State.md)
 - [Timeline](/src/test-renders/Timeline.md)
 - [UserJourney](/src/test-renders/UserJourney.md)
+- [ZenUML](/src/test-renders/ZenUML.md)
 
 ### Beta diagram types
 
