@@ -328,6 +328,7 @@ var withFontAwesomeIcon = SkiaRenderer.RenderPng(
  * [ZenUML](https://mermaid.js.org/syntax/zenuml.html) (drawn by the sequence diagram renderer)
  * [Tree View](https://mermaid.js.org/syntax/treeView.html) (beta)
  * [Wardley Map](https://mermaid.js.org/syntax/wardley.html) (beta)
+ * [Venn](https://mermaid.js.org/syntax/venn.html) (beta)
 
 
 ## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
@@ -360,6 +361,7 @@ Auto-generated documentation from the test suite.
 - [Sankey](Sankey.md)
 - [Treemap](Treemap.md)
 - [TreeView](TreeView.md)
+- [Venn](Venn.md)
 - [Wardley](Wardley.md)
 - [XYChart](XYChart.md)<!-- endInclude -->
 

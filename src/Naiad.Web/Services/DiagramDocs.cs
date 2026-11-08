@@ -55,6 +55,7 @@ public static class DiagramDocs
             DiagramType.Ishikawa => new("Ishikawa", $"{baseUrl}ishikawa.html"),
             DiagramType.TreeView => new("Tree View", $"{baseUrl}treeView.html"),
             DiagramType.Wardley => new("Wardley Map", $"{baseUrl}wardley.html"),
+            DiagramType.Venn => new("Venn", $"{baseUrl}venn.html"),
             DiagramType.ZenUML => new("ZenUML", $"{baseUrl}zenuml.html"),
             _ => new(type.ToString(), baseUrl)
         };
