@@ -1,0 +1,485 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 381.5 634.4"
+  style="max-width: 381.5px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="190.75"
+    y="30.8"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="18px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Email Address</text>
+  <text
+    x="20"
+    y="77.6"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">address =</text>
+  <circle
+    cx="115.6"
+    cy="77.6"
+    r="5"
+    fill="#333333" />
+  <path
+    d="M 120.6 77.6 L 135.6 77.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="135.6"
+    y="59.2"
+    width="97"
+    height="36.8"
+    fill="#ECECFF"
+    stroke="#C7C7F1"
+    stroke-width="2" />
+  <text
+    x="184.1"
+    y="77.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#131300">local-part</text>
+  <path
+    d="M 232.6 77.6 L 242.6 77.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="242.6"
+    y="59.2"
+    width="27.7"
+    height="36.8"
+    rx="10"
+    ry="10"
+    fill="#FFFFDE"
+    stroke="#EEEEBC"
+    stroke-width="2" />
+  <text
+    x="256.45"
+    y="77.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#000021">@</text>
+  <path
+    d="M 270.3 77.6 L 280.3 77.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="280.3"
+    y="59.2"
+    width="66.2"
+    height="36.8"
+    fill="#ECECFF"
+    stroke="#C7C7F1"
+    stroke-width="2" />
+  <text
+    x="313.4"
+    y="77.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#131300">domain</text>
+  <path
+    d="M 346.5 77.6 L 351.5 77.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <circle
+    cx="356.5"
+    cy="77.6"
+    r="5"
+    fill="#333333" />
+  <text
+    x="20"
+    y="209.6"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">local-part =</text>
+  <circle
+    cx="140.8"
+    cy="209.6"
+    r="5"
+    fill="#333333" />
+  <path
+    d="M 145.8 209.6 L 160.8 209.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 160.8 209.6 L 180.8 209.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="200.8"
+    y="124"
+    width="58.5"
+    height="36.8"
+    fill="#ECECFF"
+    stroke="#C7C7F1"
+    stroke-width="2" />
+  <text
+    x="230.05"
+    y="142.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#131300">ALPHA</text>
+  <path
+    d="M 180.8 209.6 A 10 10 0 0 0 190.8 199.6 L 190.8 152.4 A 10 10 0 0 1 200.8 142.4 L 200.8 142.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 259.3 142.4 L 259.3 142.4 A 10 10 0 0 1 269.3 152.4 L 269.3 199.6 A 10 10 0 0 0 279.3 209.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="200.8"
+    y="168.8"
+    width="58.5"
+    height="36.8"
+    fill="#ECECFF"
+    stroke="#C7C7F1"
+    stroke-width="2" />
+  <text
+    x="230.05"
+    y="187.2"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#131300">DIGIT</text>
+  <path
+    d="M 180.8 209.6 A 10 10 0 0 0 190.8 199.6 L 190.8 197.2 A 10 10 0 0 1 200.8 187.2 L 200.8 187.2"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 259.3 187.2 L 259.3 187.2 A 10 10 0 0 1 269.3 197.2 L 269.3 199.6 A 10 10 0 0 0 279.3 209.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="216.2"
+    y="213.6"
+    width="27.7"
+    height="36.8"
+    rx="10"
+    ry="10"
+    fill="#FFFFDE"
+    stroke="#EEEEBC"
+    stroke-width="2" />
+  <text
+    x="230.05"
+    y="232"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#000021">.</text>
+  <path
+    d="M 180.8 209.6 A 10 10 0 0 1 190.8 219.6 L 190.8 222 A 10 10 0 0 0 200.8 232 L 216.2 232"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 243.9 232 L 259.3 232 A 10 10 0 0 0 269.3 222 L 269.3 219.6 A 10 10 0 0 1 279.3 209.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="216.2"
+    y="258.4"
+    width="27.7"
+    height="36.8"
+    rx="10"
+    ry="10"
+    fill="#FFFFDE"
+    stroke="#EEEEBC"
+    stroke-width="2" />
+  <text
+    x="230.05"
+    y="276.8"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#000021">-</text>
+  <path
+    d="M 180.8 209.6 A 10 10 0 0 1 190.8 219.6 L 190.8 266.8 A 10 10 0 0 0 200.8 276.8 L 216.2 276.8"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 243.9 276.8 L 259.3 276.8 A 10 10 0 0 0 269.3 266.8 L 269.3 219.6 A 10 10 0 0 1 279.3 209.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 279.3 209.6 L 299.3 209.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 279.3 209.6 A 10 10 0 0 1 289.3 219.6 L 289.3 305.2 A 10 10 0 0 1 279.3 315.2 L 180.8 315.2 A 10 10 0 0 1 170.8 305.2 L 170.8 219.6 A 10 10 0 0 1 180.8 209.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 299.3 209.6 L 304.3 209.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <circle
+    cx="309.3"
+    cy="209.6"
+    r="5"
+    fill="#333333" />
+  <text
+    x="20"
+    y="381.6"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">domain =</text>
+  <circle
+    cx="107.2"
+    cy="381.6"
+    r="5"
+    fill="#333333" />
+  <path
+    d="M 112.2 381.6 L 127.2 381.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="127.2"
+    y="363.2"
+    width="58.5"
+    height="36.8"
+    fill="#ECECFF"
+    stroke="#C7C7F1"
+    stroke-width="2" />
+  <text
+    x="156.45"
+    y="381.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#131300">label</text>
+  <path
+    d="M 185.7 381.6 L 195.7 381.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 195.7 381.6 L 215.7 381.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="215.7"
+    y="363.2"
+    width="27.7"
+    height="36.8"
+    rx="10"
+    ry="10"
+    fill="#FFFFDE"
+    stroke="#EEEEBC"
+    stroke-width="2" />
+  <text
+    x="229.55"
+    y="381.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#000021">.</text>
+  <path
+    d="M 243.4 381.6 L 253.4 381.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="253.4"
+    y="363.2"
+    width="58.5"
+    height="36.8"
+    fill="#ECECFF"
+    stroke="#C7C7F1"
+    stroke-width="2" />
+  <text
+    x="282.65"
+    y="381.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#131300">label</text>
+  <path
+    d="M 311.9 381.6 L 331.9 381.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 311.9 381.6 A 10 10 0 0 1 321.9 391.6 L 321.9 410 A 10 10 0 0 1 311.9 420 L 215.7 420 A 10 10 0 0 1 205.7 410 L 205.7 391.6 A 10 10 0 0 1 215.7 381.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 195.7 381.6 A 10 10 0 0 0 205.7 371.6 L 205.7 353.2 A 10 10 0 0 1 215.7 343.2 L 311.9 343.2 A 10 10 0 0 1 321.9 353.2 L 321.9 371.6 A 10 10 0 0 0 331.9 381.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 331.9 381.6 L 336.9 381.6"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <circle
+    cx="341.9"
+    cy="381.6"
+    r="5"
+    fill="#333333" />
+  <text
+    x="20"
+    y="511.2"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">label =</text>
+  <circle
+    cx="98.8"
+    cy="511.2"
+    r="5"
+    fill="#333333" />
+  <path
+    d="M 103.8 511.2 L 118.8 511.2"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 118.8 511.2 L 138.8 511.2"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="158.8"
+    y="448"
+    width="58.5"
+    height="36.8"
+    fill="#ECECFF"
+    stroke="#C7C7F1"
+    stroke-width="2" />
+  <text
+    x="188.05"
+    y="466.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#131300">ALPHA</text>
+  <path
+    d="M 138.8 511.2 A 10 10 0 0 0 148.8 501.2 L 148.8 476.4 A 10 10 0 0 1 158.8 466.4 L 158.8 466.4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 217.3 466.4 L 217.3 466.4 A 10 10 0 0 1 227.3 476.4 L 227.3 501.2 A 10 10 0 0 0 237.3 511.2"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="158.8"
+    y="492.8"
+    width="58.5"
+    height="36.8"
+    fill="#ECECFF"
+    stroke="#C7C7F1"
+    stroke-width="2" />
+  <text
+    x="188.05"
+    y="511.2"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#131300">DIGIT</text>
+  <path
+    d="M 138.8 511.2 L 158.8 511.2"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 217.3 511.2 L 237.3 511.2"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <rect
+    x="174.2"
+    y="537.6"
+    width="27.7"
+    height="36.8"
+    rx="10"
+    ry="10"
+    fill="#FFFFDE"
+    stroke="#EEEEBC"
+    stroke-width="2" />
+  <text
+    x="188.05"
+    y="556"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#000021">-</text>
+  <path
+    d="M 138.8 511.2 A 10 10 0 0 1 148.8 521.2 L 148.8 546 A 10 10 0 0 0 158.8 556 L 174.2 556"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 201.9 556 L 217.3 556 A 10 10 0 0 0 227.3 546 L 227.3 521.2 A 10 10 0 0 1 237.3 511.2"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 237.3 511.2 L 257.3 511.2"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 237.3 511.2 A 10 10 0 0 1 247.3 521.2 L 247.3 584.4 A 10 10 0 0 1 237.3 594.4 L 138.8 594.4 A 10 10 0 0 1 128.8 584.4 L 128.8 521.2 A 10 10 0 0 1 138.8 511.2"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 257.3 511.2 L 262.3 511.2"
+    fill="none"
+    stroke="#333333"
+    stroke-width="2" />
+  <circle
+    cx="267.3"
+    cy="511.2"
+    r="5"
+    fill="#333333" />
+</svg>

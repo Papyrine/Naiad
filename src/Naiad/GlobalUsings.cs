@@ -29,6 +29,7 @@ global using Naiad.Diagrams.Packet;
 global using Naiad.Diagrams.Pie;
 global using Naiad.Diagrams.Quadrant;
 global using Naiad.Diagrams.Radar;
+global using Naiad.Diagrams.Railroad;
 global using Naiad.Diagrams.Requirement;
 global using Naiad.Diagrams.Sankey;
 global using Naiad.Diagrams.Sequence;

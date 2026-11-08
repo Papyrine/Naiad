@@ -38,5 +38,9 @@ public enum DiagramType
     UseCase,
     Cynefin,
     Info,
-    AgentFlow
+    AgentFlow,
+    Railroad,
+    RailroadAbnf,
+    RailroadEbnf,
+    RailroadPeg
 }
