@@ -37,5 +37,6 @@ public enum DiagramType
     EventModeling,
     UseCase,
     Cynefin,
-    Info
+    Info,
+    AgentFlow
 }

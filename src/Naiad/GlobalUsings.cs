@@ -10,6 +10,7 @@ global using System.Text.RegularExpressions;
 global using System.Xml;
 global using System.Xml.Linq;
 global using Naiad;
+global using Naiad.Diagrams.AgentFlow;
 global using Naiad.Diagrams.Architecture;
 global using Naiad.Diagrams.Block;
 global using Naiad.Diagrams.C4;

@@ -1,0 +1,172 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 279.5 441"
+  style="max-width: 279.5px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad span{fill:#333;color:#333;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+#naiad .agentflowTitleText{text-anchor:middle;font-size:18px;fill:#333;}
+</style>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="0"
+      y="0"
+      width="239.5"
+      height="108"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <rect
+      x="30.8"
+      y="293"
+      width="177.9"
+      height="108"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <path
+      d="M119.75,78 L119.75,83 C119.75,88 119.75,98 119.75,108 C119.75,118 119.75,128 119.75,137.33 C119.75,146.67 119.75,155.33 119.75,159.67 L119.75,164"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M119.75,168 L115.75,160 L123.75,160 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M119.75,233 L119.75,238 C119.75,243 119.75,253 119.75,263 C119.75,273 119.75,283 119.75,292.33 C119.75,301.67 119.75,310.33 119.75,314.67 L119.75,319"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M119.75,323 L115.75,315 L123.75,315 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M59,30 H204.5 L180.5,78 H35 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="35"
+      y="30"
+      width="169.5"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 169.5px; height: 48px;">
+        <span>
+          <p>Receive request</p>
+        </span>
+      </div>
+    </foreignObject>
+    <rect
+      x="65.25"
+      y="168"
+      width="109"
+      height="65"
+      rx="10"
+      ry="10"
+      fill="#ECECFF"
+      stroke="#9370DB"
+      class="flow-collapsed" />
+    <foreignObject
+      x="65.25"
+      y="176"
+      width="109"
+      height="21"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 109px; height: 21px;">
+        <span>
+          <p>Processing</p>
+        </span>
+      </div>
+    </foreignObject>
+    <line
+      x1="73.25"
+      y1="205"
+      x2="166.25"
+      y2="205"
+      stroke="#9370DB"
+      stroke-width="0.75"
+      stroke-dasharray="3, 3" />
+    <circle
+      cx="109.75"
+      cy="215"
+      r="2.5"
+      fill="rgba(147,112,219,0.5)"
+      stroke="none"
+      class="collapsed-indicator" />
+    <circle
+      cx="119.75"
+      cy="215"
+      r="2.5"
+      fill="rgba(147,112,219,0.5)"
+      stroke="none"
+      class="collapsed-indicator" />
+    <circle
+      cx="129.75"
+      cy="215"
+      r="2.5"
+      fill="rgba(147,112,219,0.5)"
+      stroke="none"
+      class="collapsed-indicator" />
+    <path
+      d="M77.8,323 H161.7 L173.7,347 L161.7,371 H77.8 L65.8,347 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="65.8"
+      y="323"
+      width="107.9"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 107.9px; height: 48px;">
+        <span>
+          <p>Publish</p>
+        </span>
+      </div>
+    </foreignObject>
+    <text
+      x="119.75"
+      y="14"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Intake</text>
+    <text
+      x="67.9"
+      y="307"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Output</text>
+  </g>
+</svg>

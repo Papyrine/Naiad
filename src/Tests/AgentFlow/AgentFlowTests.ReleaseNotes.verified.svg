@@ -1,0 +1,249 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 716.1075 665.2"
+  style="max-width: 716.1075px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad span{fill:#333;color:#333;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+#naiad .agentflowTitleText{text-anchor:middle;font-size:18px;fill:#333;}
+</style>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="0"
+      y="108"
+      width="432.91"
+      height="252"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <rect
+      x="452.91"
+      y="246"
+      width="223.2"
+      height="271.2"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <path
+      d="M252.41,181.11 L230.27,186.93 C208.14,192.74 163.87,204.37 141.73,215.19 C119.6,226 119.6,236 119.6,245.83 C119.6,255.67 119.6,265.33 119.6,270.17 L119.6,275"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M119.6,279 L115.6,271 L123.6,271 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M325.42,186 L325.48,191 C325.53,196 325.64,206 325.7,216 C325.76,226 325.76,236 325.76,246 C325.76,256 325.76,266 325.76,271 L325.76,276"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      stroke-dasharray="3"
+      class="flowchart-link" />
+    <path
+      d="M564.51,327 L564.51,332.5 C564.51,338 564.51,349 564.51,359.5 C564.51,370 564.51,380 564.51,389.33 C564.51,398.67 564.51,407.33 564.51,411.67 L564.51,416"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M564.51,420 L560.51,412 L568.51,412 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M325.16,48 L325.16,53 C325.16,58 325.16,68 325.16,77.33 C325.16,86.67 325.16,95.33 325.16,99.67 L325.16,104"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M325.16,108 L321.16,100 L329.16,100 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M432.91,262.56 L449.08,267.53"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M452.91,268.7 L444.09,270.18 L446.44,262.53 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M564.51,487.2 L564.51,492.2 C564.51,497.2 564.51,507.2 564.51,517.2 C564.51,527.2 564.51,537.2 564.51,546.53 C564.51,555.87 564.51,564.53 564.51,568.87 L564.51,573.2"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M564.51,577.2 L560.51,569.2 L568.51,569.2 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M272.11,0 H402.21 L378.21,48 H248.11 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="248.11"
+      y="0"
+      width="154.1"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 154.1px; height: 48px;">
+        <span>
+          <p>Release brief</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M257.41,138 H392.91 Q397.91,138 397.91,143 V181 Q397.91,186 392.91,186 H257.41 Q252.41,186 252.41,181 V143 Q252.41,138 257.41,138 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="252.41"
+      y="138"
+      width="145.5"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 145.5px; height: 48px;">
+        <span>
+          <p>Draft the notes</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M35,279 H204.2 V327 H35 Z M43,279 V327 M196.2,279 V327"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="35"
+      y="279"
+      width="169.2"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 169.2px; height: 48px;">
+        <span>
+          <p>changelog_search</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M254.2,276 H397.31 V324 L397.31,318.29 L391.35,318.03 L385.38,318.03 L379.42,318.29 L373.46,318.8 L367.5,319.54 L361.53,320.47 L355.57,321.56 L349.61,322.75 L343.64,324 L337.68,325.25 L331.72,326.44 L325.76,327.53 L319.79,328.46 L313.83,329.2 L307.87,329.71 L301.9,329.97 L295.94,329.97 L289.98,329.71 L284.01,329.2 L278.05,328.46 L272.09,327.53 L266.13,326.44 L260.16,325.25 L254.2,324 Z M260.71,276 V324"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="260.71"
+      y="276"
+      width="136.61"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 136.61px; height: 48px;">
+        <span>
+          <p>Tone of voice</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M492.91,279 H636.11 Q641.11,279 641.11,284 V322 Q641.11,327 636.11,327 H492.91 Q487.91,327 487.91,322 V284 Q487.91,279 492.91,279 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="487.91"
+      y="279"
+      width="153.2"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 153.2px; height: 48px;">
+        <span>
+          <p>Check the claims</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M564.51,420 L634.02,453.6 L564.51,487.2 L495,453.6 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="495"
+      y="420"
+      width="139.02"
+      height="67.2"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 139.02px; height: 67.2px;">
+        <span>
+          <p>Accurate?</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M522.56,577.2 H606.46 L618.46,601.2 L606.46,625.2 H522.56 L510.56,601.2 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="510.56"
+      y="577.2"
+      width="107.9"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 107.9px; height: 48px;">
+        <span>
+          <p>Publish</p>
+        </span>
+      </div>
+    </foreignObject>
+    <text
+      x="216.45"
+      y="122"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Drafting Agent</text>
+    <text
+      x="564.51"
+      y="260"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Review Agent</text>
+  </g>
+</svg>

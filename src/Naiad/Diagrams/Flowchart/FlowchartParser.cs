@@ -951,7 +951,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         return rest[end..];
     }
 
-    static NodeStyle ParseStyleProps(string raw)
+    internal static NodeStyle ParseStyleProps(string raw)
     {
         var style = new NodeStyle();
         foreach (var part in raw.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))

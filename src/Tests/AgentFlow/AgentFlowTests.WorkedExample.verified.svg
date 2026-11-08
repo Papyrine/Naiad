@@ -1,0 +1,229 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 721.26 460"
+  style="max-width: 721.26px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad span{fill:#333;color:#333;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+#naiad .agentflowTitleText{text-anchor:middle;font-size:18px;fill:#333;}
+</style>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="118.9"
+      y="0"
+      width="562.36"
+      height="420"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <rect
+      x="138.9"
+      y="30"
+      width="246.9"
+      height="360"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <rect
+      x="405.8"
+      y="168"
+      width="255.46"
+      height="222"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <path
+      d="M267.91,108 L266.98,113 C266.05,118 264.2,128 263.28,138 C262.35,148 262.35,158 262.35,167.33 C262.35,176.67 262.35,185.33 262.35,189.67 L262.35,194"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M262.35,198 L258.35,190 L266.35,190 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M262.35,246 L262.35,251 C262.35,256 262.35,266 262.35,275.83 C262.35,285.67 262.35,295.33 262.35,300.17 L262.35,305"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M262.35,309 L258.35,301 L266.35,301 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M533.53,246 L533.53,251 C533.53,256 533.53,266 533.53,276 C533.53,286 533.53,296 533.53,301 L533.53,306"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      stroke-dasharray="3"
+      class="flowchart-link" />
+    <path
+      d="M385.8,183.91 L401.93,188.07"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M405.8,189.07 L397.05,190.95 L399.05,183.2 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M5,60 H78.9 Q83.9,60 83.9,65 V103 Q83.9,108 78.9,108 H5 Q0,108 0,103 V65 Q0,60 5,60 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="0"
+      y="60"
+      width="83.9"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;">
+        <span>
+          <p>LLM API</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M253.95,60 H314.75 L290.75,108 H229.95 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="229.95"
+      y="60"
+      width="84.8"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 84.8px; height: 48px;">
+        <span>
+          <p>city</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M173.9,198 H350.8 V246 H173.9 Z M181.9,198 V246 M342.8,198 V246"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="173.9"
+      y="198"
+      width="176.9"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 176.9px; height: 48px;">
+        <span>
+          <p>research_location</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M200.85,309 H323.85 V357 H200.85 Z M208.85,309 V357 M315.85,309 V357"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="200.85"
+      y="309"
+      width="123"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 123px; height: 48px;">
+        <span>
+          <p>write_copy</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M460.48,198 H606.58 V246 H460.48 Z M468.48,198 V246 M598.58,198 V246"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="460.48"
+      y="198"
+      width="146.1"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 146.1px; height: 48px;">
+        <span>
+          <p>generate_html</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M440.8,306 H626.26 V354 L626.26,348.29 L618.53,348.03 L610.81,348.03 L603.08,348.29 L595.35,348.8 L587.62,349.54 L579.9,350.47 L572.17,351.56 L564.44,352.75 L556.71,354 L548.99,355.25 L541.26,356.44 L533.53,357.53 L525.8,358.46 L518.08,359.2 L510.35,359.71 L502.62,359.97 L494.89,359.97 L487.17,359.71 L479.44,359.2 L471.71,358.46 L463.98,357.53 L456.26,356.44 L448.53,355.25 L440.8,354 Z M449.23,306 V354"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="449.23"
+      y="306"
+      width="177.03"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 177.03px; height: 48px;">
+        <span>
+          <p>Nordic Brand Guide</p>
+        </span>
+      </div>
+    </foreignObject>
+    <text
+      x="400.08"
+      y="14"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Coffee Team</text>
+    <text
+      x="262.35"
+      y="44"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Researcher</text>
+    <text
+      x="533.53"
+      y="182"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Designer</text>
+  </g>
+</svg>
