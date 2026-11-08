@@ -36,6 +36,14 @@ sealed class DiagramParseContext(string input) :
         }
     }
 
+    // Describes a failure at a known place, whatever the rules noted.
+    internal string DescribeAt(int offset, string why)
+    {
+        furthest = offset;
+        reason = why;
+        return Describe();
+    }
+
     internal string Describe()
     {
         var text = Scanner.Buffer;
