@@ -30,5 +30,6 @@ public enum DiagramType
     ZenUML,
     C4Dynamic,
     Ishikawa,
-    TreeView
+    TreeView,
+    Wardley
 }

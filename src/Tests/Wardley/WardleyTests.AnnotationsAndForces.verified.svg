@@ -1,0 +1,248 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 900 600"
+  style="max-width: 900px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="450"
+    y="24"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12.6px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Annotations</text>
+  <line
+    x1="48"
+    y1="552"
+    x2="852"
+    y2="552"
+    stroke="#333333" />
+  <line
+    x1="48"
+    y1="48"
+    x2="48"
+    y2="552"
+    stroke="#333333" />
+  <text
+    x="450"
+    y="588"
+    text-anchor="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Evolution</text>
+  <text
+    x="16"
+    y="300"
+    text-anchor="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300"
+    transform="rotate(-90 16 300)">Visibility</text>
+  <text
+    x="148.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Genesis</text>
+  <path
+    d="M 249 48 L 249 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="349.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Custom Built</text>
+  <path
+    d="M 450 48 L 450 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="550.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Product</text>
+  <path
+    d="M 651 48 L 651 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="751.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Commodity</text>
+  <line
+    x1="605.26"
+    y1="251.91"
+    x2="495.74"
+    y2="297.69"
+    stroke="#333333" />
+  <line
+    x1="484.66"
+    y1="302.31"
+    x2="375.14"
+    y2="348.09"
+    stroke="#333333" />
+  <circle
+    cx="610.8"
+    cy="249.6"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="490.2"
+    cy="300"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="369.6"
+    cy="350.4"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <text
+    x="618.8"
+    y="241.6"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">API</text>
+  <text
+    x="498.2"
+    y="292"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Cache</text>
+  <text
+    x="377.6"
+    y="342.4"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Database</text>
+  <circle
+    cx="570.6"
+    cy="249.6"
+    r="10"
+    fill="white"
+    stroke="#333333"
+    stroke-width="1.5" />
+  <text
+    x="570.6"
+    y="249.6"
+    text-anchor="middle"
+    dominant-baseline="central"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">1</text>
+  <circle
+    cx="450"
+    cy="300"
+    r="10"
+    fill="white"
+    stroke="#333333"
+    stroke-width="1.5" />
+  <text
+    x="450"
+    y="300"
+    text-anchor="middle"
+    dominant-baseline="central"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">2</text>
+  <circle
+    cx="329.4"
+    cy="350.4"
+    r="10"
+    fill="white"
+    stroke="#333333"
+    stroke-width="1.5" />
+  <text
+    x="329.4"
+    y="350.4"
+    text-anchor="middle"
+    dominant-baseline="central"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">3</text>
+  <rect
+    x="694.95"
+    y="477.4"
+    width="157.05"
+    height="74.6"
+    rx="4"
+    ry="4"
+    fill="white"
+    stroke="#333333"
+    stroke-width="1.5" />
+  <text
+    x="704.95"
+    y="503.4"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#131300">1. Critical component</text>
+  <text
+    x="704.95"
+    y="519.4"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#131300">2. Performance layer</text>
+  <text
+    x="704.95"
+    y="535.4"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#131300">3. Data persistence</text>
+  <path
+    d="M 249 108.6 L 289 108.6 L 289 100.6 L 309 123.6 L 289 146.6 L 289 138.6 L 249 138.6 Z"
+    fill="white"
+    stroke="#333333" />
+  <text
+    x="279"
+    y="153.6"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">AI Adoption</text>
+  <path
+    d="M 590.4 461.4 L 550.4 461.4 L 550.4 453.4 L 530.4 476.4 L 550.4 499.4 L 550.4 491.4 L 590.4 491.4 Z"
+    fill="white"
+    stroke="#333333" />
+  <text
+    x="560.4"
+    y="506.4"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Legacy Constraints</text>
+</svg>

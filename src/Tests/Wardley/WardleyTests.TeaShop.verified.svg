@@ -1,0 +1,225 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 900 600"
+  style="max-width: 900px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="450"
+    y="24"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12.6px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Tea Shop Value Chain</text>
+  <line
+    x1="48"
+    y1="552"
+    x2="852"
+    y2="552"
+    stroke="#333333" />
+  <line
+    x1="48"
+    y1="48"
+    x2="48"
+    y2="552"
+    stroke="#333333" />
+  <text
+    x="450"
+    y="588"
+    text-anchor="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Evolution</text>
+  <text
+    x="16"
+    y="300"
+    text-anchor="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300"
+    transform="rotate(-90 16 300)">Visibility</text>
+  <text
+    x="148.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Genesis</text>
+  <path
+    d="M 249 48 L 249 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="349.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Custom Built</text>
+  <path
+    d="M 450 48 L 450 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="550.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Product</text>
+  <path
+    d="M 651 48 L 651 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="751.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Commodity</text>
+  <line
+    x1="553.35"
+    y1="79.08"
+    x2="539.61"
+    y2="147.96"
+    stroke="#333333" />
+  <line
+    x1="543.8"
+    y1="156.53"
+    x2="693.88"
+    y2="231.79"
+    stroke="#333333" />
+  <line
+    x1="542.92"
+    y1="157.83"
+    x2="686.72"
+    y2="285.93"
+    stroke="#333333" />
+  <line
+    x1="685.25"
+    y1="290.67"
+    x2="335.35"
+    y2="334.53"
+    stroke="#333333" />
+  <line
+    x1="334.57"
+    y1="338.33"
+    x2="605.63"
+    y2="498.55"
+    stroke="#333333" />
+  <line
+    x1="329.4"
+    y1="335.28"
+    x2="538.48"
+    y2="335.28"
+    stroke="#dc3545"
+    stroke-dasharray="4 4" />
+  <path
+    d="M 538.48 335.28 L 532.48 338.28 L 532.48 332.28 Z"
+    fill="#dc3545"
+    stroke="none" />
+  <line
+    x1="610.8"
+    y1="501.6"
+    x2="755.56"
+    y2="501.6"
+    stroke="#dc3545"
+    stroke-dasharray="4 4" />
+  <path
+    d="M 755.56 501.6 L 749.56 504.6 L 749.56 498.6 Z"
+    fill="#dc3545"
+    stroke="none" />
+  <circle
+    cx="538.44"
+    cy="153.84"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="699.24"
+    cy="234.48"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="691.2"
+    cy="289.92"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="329.4"
+    cy="335.28"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="610.8"
+    cy="501.6"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <text
+    x="554.52"
+    y="70.2"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#000">Business</text>
+  <text
+    x="546.44"
+    y="145.84"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Cup of Tea</text>
+  <text
+    x="707.24"
+    y="226.48"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Tea</text>
+  <text
+    x="699.2"
+    y="281.92"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Hot Water</text>
+  <text
+    x="337.4"
+    y="327.28"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Kettle</text>
+  <text
+    x="618.8"
+    y="493.6"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Power</text>
+  <text
+    x="441.96"
+    y="400.8"
+    text-anchor="start"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Standardising power allows Kettles to evolve faster</text>
+</svg>
