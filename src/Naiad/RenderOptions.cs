@@ -13,6 +13,13 @@ public class RenderOptions
     public bool AllowHtmlElements { get; set; } = true;
 
     /// <summary>
+    /// When true, the SVG is indented one element per line for readability. Elements holding text
+    /// (labels, <c>&lt;style&gt;</c>) and <c>&lt;foreignObject&gt;</c> labels are kept on one line, so
+    /// the rendered output is unchanged. Defaults to false (compact markup).
+    /// </summary>
+    public bool PrettyPrint { get; set; }
+
+    /// <summary>
     /// PNG rasterization settings, honoured by the Naiad.Skia and Naiad.ImageSharp render backends.
     /// Ignored by <see cref="Mermaid.Render(string, RenderOptions)"/>, which only produces SVG.
     /// </summary>

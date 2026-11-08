@@ -1,0 +1,41 @@
+﻿<svg id='naiad' width='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 255.3 88' style='max-width: 255.3px;' role='graphics-document document'>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <defs>
+    <marker id='naiad_flowchart-pointEnd' class='marker' viewBox='0 0 10 10' refX='10' refY='5' markerUnits='userSpaceOnUse' markerWidth='8' markerHeight='8' orient='auto'>
+      <path d='M 0 0 L 10 5 L 0 10 z' class='arrowMarkerPath'/>
+    </marker>
+    <marker id='naiad_flowchart-pointStart' class='marker' viewBox='0 0 10 10' refX='0' refY='5' markerUnits='userSpaceOnUse' markerWidth='8' markerHeight='8' orient='auto'>
+      <path d='M 0 5 L 10 10 L 10 0 z' class='arrowMarkerPath'/>
+    </marker>
+    <marker id='naiad_flowchart-circleEnd' class='marker' viewBox='0 0 10 10' refX='11' refY='5' markerUnits='userSpaceOnUse' markerWidth='11' markerHeight='11' orient='auto'>
+      <circle cx='5' cy='5' r='5' class='arrowMarkerPath'/>
+    </marker>
+    <marker id='naiad_flowchart-circleStart' class='marker' viewBox='0 0 10 10' refX='-1' refY='5' markerUnits='userSpaceOnUse' markerWidth='11' markerHeight='11' orient='auto'>
+      <circle cx='5' cy='5' r='5' class='arrowMarkerPath'/>
+    </marker>
+    <marker id='naiad_flowchart-crossEnd' class='marker cross' viewBox='0 0 11 11' refX='12' refY='5.2' markerUnits='userSpaceOnUse' markerWidth='11' markerHeight='11' orient='auto'>
+      <path d='M 1,1 l 9,9 M 10,1 l -9,9' class='arrowMarkerPath' style='stroke-width: 2;'/>
+    </marker>
+    <marker id='naiad_flowchart-crossStart' class='marker cross' viewBox='0 0 11 11' refX='-1' refY='5.2' markerUnits='userSpaceOnUse' markerWidth='11' markerHeight='11' orient='auto'>
+      <path d='M 1,1 l 9,9 M 10,1 l -9,9' class='arrowMarkerPath' style='stroke-width: 2;'/>
+    </marker>
+  </defs>
+  <g transform='translate(20,20)'>
+    <path d='M53.1,24 L62.19,24 C71.28,24 89.47,24 107.65,24 C125.83,24 144.02,24 153.11,24 L162.2,24' fill='none' stroke='#333333' stroke-width='2' marker-end='url(#naiad_flowchart-pointEnd)' class='flowchart-link'/>
+    <rect x='88.1' y='9.5' width='39.1' height='29' fill='rgba(232,232,232,0.8)' stroke='none' class='edgeLabel'/>
+    <text x='107.65' y='24' text-anchor='middle' dominant-baseline='middle' font-size='14px' font-family='Arial, sans-serif' class='edgeLabel'>Yes</text>
+    <path d='M0,0 H53.1 V48 H0 Z' fill='#ECECFF' stroke='#9370DB'/>
+    <text x='26.55' y='24' text-anchor='middle' dominant-baseline='middle' font-size='14px' font-family='Arial, sans-serif' class='nodeLabel'>Car</text>
+    <path d='M162.2,0 H215.3 V48 H162.2 Z' fill='#ECECFF' stroke='#9370DB'/>
+    <text x='188.75' y='24' text-anchor='middle' dominant-baseline='middle' font-size='14px' font-family='Arial, sans-serif' class='nodeLabel'>End</text>
+  </g>
+</svg>
