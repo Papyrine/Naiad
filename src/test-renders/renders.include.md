@@ -8,6 +8,7 @@ Auto-generated documentation from the test suite.
 - [Flowchart](/src/test-renders/Flowchart.md)
 - [Gantt](/src/test-renders/Gantt.md)
 - [GitGraph](/src/test-renders/GitGraph.md)
+- [Info](/src/test-renders/Info.md)
 - [Kanban](/src/test-renders/Kanban.md)
 - [Mindmap](/src/test-renders/Mindmap.md)
 - [Pie](/src/test-renders/Pie.md)

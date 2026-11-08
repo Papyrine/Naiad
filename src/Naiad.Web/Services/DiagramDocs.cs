@@ -60,6 +60,8 @@ public static class DiagramDocs
             DiagramType.EventModeling => new("Event Modeling", $"{baseUrl}eventmodeling.html"),
             DiagramType.UseCase => new("Use Case", $"{baseUrl}usecase.html"),
             DiagramType.Cynefin => new("Cynefin", $"{baseUrl}cynefin.html"),
+            // Mermaid has no syntax page for its version diagram; its examples page is the nearest.
+            DiagramType.Info => new("Info", $"{baseUrl}all-examples.html"),
             DiagramType.ZenUML => new("ZenUML", $"{baseUrl}zenuml.html"),
             _ => new(type.ToString(), baseUrl)
         };
