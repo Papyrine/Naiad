@@ -255,8 +255,10 @@ public class WardleyRenderer : IDiagramRenderer<WardleyModel>
                     continue;
                 }
 
+                // Across at the height the node is drawn at, which for a pipeline's parent is the top of its
+                // box rather than its own visibility.
                 var targetX = ProjectX(trend.TargetEvolution);
-                var targetY = ProjectY(nodesById[trend.NodeId].Visibility);
+                var targetY = origin.Y;
                 var deltaX = targetX - origin.X;
                 var deltaY = targetY - origin.Y;
                 var distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);

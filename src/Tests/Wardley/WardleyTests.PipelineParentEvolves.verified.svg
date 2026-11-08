@@ -1,0 +1,165 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 900 600"
+  style="max-width: 900px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <line
+    x1="48"
+    y1="552"
+    x2="852"
+    y2="552"
+    stroke="#333333" />
+  <line
+    x1="48"
+    y1="48"
+    x2="48"
+    y2="552"
+    stroke="#333333" />
+  <text
+    x="450"
+    y="588"
+    text-anchor="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Evolution</text>
+  <text
+    x="16"
+    y="300"
+    text-anchor="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300"
+    transform="rotate(-90 16 300)">Visibility</text>
+  <text
+    x="148.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Genesis</text>
+  <path
+    d="M 249 48 L 249 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="349.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Custom Built</text>
+  <path
+    d="M 450 48 L 450 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="550.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Product</text>
+  <path
+    d="M 651 48 L 651 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="751.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Commodity</text>
+  <line
+    x1="208.8"
+    y1="350.4"
+    x2="409.8"
+    y2="350.4"
+    stroke="#333333"
+    stroke-dasharray="4 4" />
+  <rect
+    x="193.8"
+    y="338.4"
+    width="231"
+    height="24"
+    rx="4"
+    ry="4"
+    fill="none"
+    stroke="#333333"
+    stroke-width="1.5" />
+  <line
+    x1="446.7"
+    y1="128.61"
+    x2="313.04"
+    y2="331.13"
+    stroke="#333333" />
+  <line
+    x1="309.3"
+    y1="336.8"
+    x2="683.2"
+    y2="336.8"
+    stroke="#dc3545"
+    stroke-dasharray="4 4" />
+  <path
+    d="M 683.2 336.8 L 677.2 339.8 L 677.2 333.8 Z"
+    fill="#dc3545"
+    stroke="none" />
+  <rect
+    x="304.5"
+    y="332"
+    width="9.6"
+    height="9.6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="208.8"
+    cy="350.4"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="409.8"
+    cy="350.4"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <text
+    x="450"
+    y="120.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#000">User</text>
+  <text
+    x="317.3"
+    y="328.8"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Database</text>
+  <text
+    x="208.8"
+    y="374.4"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">SQL DB</text>
+  <text
+    x="409.8"
+    y="374.4"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">NoSQL</text>
+</svg>
