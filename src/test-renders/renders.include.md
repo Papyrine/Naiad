@@ -30,6 +30,7 @@ Auto-generated documentation from the test suite.
 - [Ishikawa](Ishikawa.md)
 - [Packet](Packet.md)
 - [Radar](Radar.md)
+- [Railroad](Railroad.md)
 - [Sankey](Sankey.md)
 - [Treemap](Treemap.md)
 - [TreeView](TreeView.md)
