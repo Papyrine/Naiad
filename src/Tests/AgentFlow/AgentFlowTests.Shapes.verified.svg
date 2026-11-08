@@ -1,0 +1,151 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 658.1 192"
+  style="max-width: 658.1px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad span{fill:#333;color:#333;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+#naiad .agentflowTitleText{text-anchor:middle;font-size:18px;fill:#333;}
+</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M80.5,74.5 L87.5,74.5 C94.5,74.5 108.5,74.5 119.83,74.5 C131.17,74.5 139.83,74.5 144.17,74.5 L148.5,74.5"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M152.5,74.5 L144.5,78.5 L144.5,70.5 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M245.68,50.5 L252.99,46.08 C260.29,41.67 274.89,32.83 286.53,28.42 C298.17,24 306.83,24 311.17,24 L315.5,24"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M319.5,24 L311.5,28 L311.5,20 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M450.2,24 L455.2,24 C460.2,24 470.2,24 479.53,24 C488.87,24 497.53,24 501.87,24 L506.2,24"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M510.2,24 L502.2,28 L502.2,20 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M245.68,98.5 L252.99,102.92 C260.29,107.33 274.89,116.17 287.57,120.58 C300.26,125 311.01,125 316.39,125 L321.77,125"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      stroke-dasharray="3"
+      class="flowchart-link" />
+    <path
+      d="M24,50.5 H92.5 L68.5,98.5 H0 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="0"
+      y="50.5"
+      width="92.5"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 92.5px; height: 48px;">
+        <span>
+          <p>Brief</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M157.5,50.5 H254.5 Q259.5,50.5 259.5,55.5 V93.5 Q259.5,98.5 254.5,98.5 H157.5 Q152.5,98.5 152.5,93.5 V55.5 Q152.5,50.5 157.5,50.5 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="152.5"
+      y="50.5"
+      width="107"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 107px; height: 48px;">
+        <span>
+          <p>Draft copy</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M319.5,0 H450.2 V48 H319.5 Z M327.5,0 V48 M442.2,0 V48"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="319.5"
+      y="0"
+      width="130.7"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 130.7px; height: 48px;">
+        <span>
+          <p>spell_check</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M321.77,98 H447.94 V146 L447.94,140.29 L442.68,140.03 L437.42,140.03 L432.16,140.29 L426.91,140.8 L421.65,141.54 L416.39,142.47 L411.14,143.56 L405.88,144.75 L400.62,146 L395.36,147.25 L390.11,148.44 L384.85,149.53 L379.59,150.46 L374.34,151.2 L369.08,151.71 L363.82,151.97 L358.56,151.97 L353.31,151.71 L348.05,151.2 L342.79,150.46 L337.54,149.53 L332.28,148.44 L327.02,147.25 L321.77,146 Z M327.5,98 V146"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="327.5"
+      y="98"
+      width="120.44"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 120.44px; height: 48px;">
+        <span>
+          <p>Style guide</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M522.2,0 H606.1 L618.1,24 L606.1,48 H522.2 L510.2,24 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="510.2"
+      y="0"
+      width="107.9"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 107.9px; height: 48px;">
+        <span>
+          <p>Publish</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
+</svg>

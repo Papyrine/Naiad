@@ -320,6 +320,18 @@ public static class DiagramSamples
               clear --> chaotic : "Complacency"
               chaotic --> complex : "Stabilized"
             """),
+        new("Agent Flow",
+            """
+            agentflow-beta TB
+              flow reviewer["Review Agent"]
+                changes["Gather changes"]@{ shape: input }
+                analyse["Analyse diff"]@{ shape: task }
+                lint["run_linter"]@{ shape: tool }
+                ok["Clean?"]@{ shape: decision }
+
+                changes --> analyse --> lint --> ok
+              end
+            """),
     ];
 
     /// <summary>The diagram shown when the editor first loads.</summary>

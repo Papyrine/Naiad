@@ -1,0 +1,105 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 544.1 136"
+  style="max-width: 544.1px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad span{fill:#333;color:#333;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+#naiad .agentflowTitleText{text-anchor:middle;font-size:18px;fill:#333;}
+</style>
+  <g
+    transform="translate(20,20)">
+    <text
+      x="252.05"
+      y="20"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="18px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="agentflowTitleText">Issue triage</text>
+    <g
+      transform="translate(0,48)">
+      <path
+        d="M126.7,24 L133.7,24 C140.7,24 154.7,24 166.03,24 C177.37,24 186.03,24 190.37,24 L194.7,24"
+        fill="none"
+        stroke="#333333"
+        stroke-width="2"
+        class="flowchart-link" />
+      <path
+        d="M198.7,24 L190.7,28 L190.7,20 Z"
+        fill="#333333"
+        stroke="none"
+        class="arrowheadPath" />
+      <path
+        d="M337.1,24 L342.1,24 C347.1,24 357.1,24 367.1,24 C377.1,24 387.1,24 392.1,24 L397.1,24"
+        fill="none"
+        stroke="#333333"
+        stroke-width="2"
+        stroke-dasharray="3"
+        class="flowchart-link" />
+      <path
+        d="M402.1,0 H499.1 Q504.1,0 504.1,5 V43 Q504.1,48 499.1,48 H402.1 Q397.1,48 397.1,43 V5 Q397.1,0 402.1,0 Z"
+        fill="#ECECFF"
+        stroke="#9370DB" />
+      <foreignObject
+        x="397.1"
+        y="0"
+        width="107"
+        height="48"
+        class="nodeLabel">
+        <div
+          xmlns="http://www.w3.org/1999/xhtml"
+          style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 107px; height: 48px;">
+          <span>
+            <p>GitHub API</p>
+          </span>
+        </div>
+      </foreignObject>
+      <path
+        d="M24,0 H138.7 L114.7,48 H0 Z"
+        fill="#ECECFF"
+        stroke="#9370DB" />
+      <foreignObject
+        x="0"
+        y="0"
+        width="138.7"
+        height="48"
+        class="nodeLabel">
+        <div
+          xmlns="http://www.w3.org/1999/xhtml"
+          style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 138.7px; height: 48px;">
+          <span>
+            <p>Issue title</p>
+          </span>
+        </div>
+      </foreignObject>
+      <path
+        d="M198.7,0 H337.1 V48 H198.7 Z M206.7,0 V48 M329.1,0 V48"
+        fill="#ECECFF"
+        stroke="#9370DB" />
+      <foreignObject
+        x="198.7"
+        y="0"
+        width="138.4"
+        height="48"
+        class="nodeLabel">
+        <div
+          xmlns="http://www.w3.org/1999/xhtml"
+          style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 138.4px; height: 48px;">
+          <span>
+            <p>create_issue</p>
+          </span>
+        </div>
+      </foreignObject>
+    </g>
+  </g>
+</svg>

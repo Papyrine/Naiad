@@ -1,0 +1,128 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 287.8 376"
+  style="max-width: 287.8px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad span{fill:#333;color:#333;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+#naiad .agentflowTitleText{text-anchor:middle;font-size:18px;fill:#333;}
+</style>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="0"
+      y="0"
+      width="247.8"
+      height="336"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <rect
+      x="20"
+      y="30"
+      width="207.8"
+      height="108"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <rect
+      x="23.85"
+      y="198"
+      width="200.1"
+      height="108"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <path
+      d="M123.9,138 L123.9,143 C123.9,148 123.9,158 123.9,167.33 C123.9,176.67 123.9,185.33 123.9,189.67 L123.9,194"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M123.9,198 L119.9,190 L127.9,190 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M60,60 H187.8 Q192.8,60 192.8,65 V103 Q192.8,108 187.8,108 H60 Q55,108 55,103 V65 Q55,60 60,60 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="55"
+      y="60"
+      width="137.8"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 137.8px; height: 48px;">
+        <span>
+          <p>Gather sources</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M63.85,228 H183.95 Q188.95,228 188.95,233 V271 Q188.95,276 183.95,276 H63.85 Q58.85,276 58.85,271 V233 Q58.85,228 63.85,228 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="58.85"
+      y="228"
+      width="130.1"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 130.1px; height: 48px;">
+        <span>
+          <p>Compose draft</p>
+        </span>
+      </div>
+    </foreignObject>
+    <text
+      x="123.9"
+      y="14"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Content Team</text>
+    <text
+      x="123.9"
+      y="44"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Researcher</text>
+    <text
+      x="123.9"
+      y="212"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Writer</text>
+  </g>
+</svg>

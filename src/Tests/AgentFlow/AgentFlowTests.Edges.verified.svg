@@ -1,0 +1,178 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 328 358.2"
+  style="max-width: 328px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad span{fill:#333;color:#333;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+#naiad .agentflowTitleText{text-anchor:middle;font-size:18px;fill:#333;}
+</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M135.94,54.59 L122.28,64.11 C108.61,73.63 81.28,92.66 67.62,108.93 C53.95,125.2 53.95,138.7 53.95,145.45 L53.95,152.2"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M53.95,156.2 L49.95,148.2 L57.95,148.2 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <rect
+      x="34.4"
+      y="97.2"
+      width="39.1"
+      height="29"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <foreignObject
+      x="34.4"
+      y="97.2"
+      width="39.1"
+      height="29"
+      class="edgeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.1px; height: 29px;">
+        <span>
+          <p>yes</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M166.08,67.2 L166.08,74.62 C166.08,82.03 166.08,96.87 171.81,111.19 C177.54,125.51 189,139.32 194.74,146.22 L200.47,153.12"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M203.02,156.2 L194.84,152.6 L200.99,147.49 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <rect
+      x="150.38"
+      y="97.2"
+      width="31.4"
+      height="29"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <foreignObject
+      x="150.38"
+      y="97.2"
+      width="31.4"
+      height="29"
+      class="edgeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 31.4px; height: 29px;">
+        <span>
+          <p>no</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M229.2,156.2 L231.14,148.78 C233.07,141.37 236.93,126.53 230.24,110.1 C223.54,93.66 206.29,75.63 197.66,66.61 L189.03,57.59"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M189.02,57.79 L198.02,66.79 M198.02,57.79 L189.02,66.79"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="cross" />
+    <path
+      d="M222.95,204.2 L222.95,209.2 C222.95,214.2 222.95,224.2 222.95,234.2 C222.95,244.2 222.95,254.2 222.95,259.2 L222.95,264.2"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      stroke-dasharray="3"
+      class="flowchart-link" />
+    <path
+      d="M166.08,0 L246.37,33.6 L166.08,67.2 L85.79,33.6 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="85.79"
+      y="0"
+      width="160.58"
+      height="67.2"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 160.58px; height: 67.2px;">
+        <span>
+          <p>Tests pass?</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M12,156.2 H95.9 L107.9,180.2 L95.9,204.2 H12 L-0,180.2 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="-0"
+      y="156.2"
+      width="107.9"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 107.9px; height: 48px;">
+        <span>
+          <p>Ship it</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M162.9,156.2 H283 Q288,156.2 288,161.2 V199.2 Q288,204.2 283,204.2 H162.9 Q157.9,204.2 157.9,199.2 V161.2 Q157.9,156.2 162.9,156.2 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="157.9"
+      y="156.2"
+      width="130.1"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 130.1px; height: 48px;">
+        <span>
+          <p>Fix the build</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M164.1,264.2 H281.8 V312.2 L281.8,306.49 L276.9,306.23 L271.99,306.23 L267.09,306.49 L262.18,307 L257.28,307.74 L252.38,308.67 L247.47,309.76 L242.57,310.95 L237.66,312.2 L232.76,313.45 L227.85,314.64 L222.95,315.73 L218.05,316.66 L213.14,317.4 L208.24,317.91 L203.33,318.17 L198.43,318.17 L193.53,317.91 L188.62,317.4 L183.72,316.66 L178.81,315.73 L173.91,314.64 L169,313.45 L164.1,312.2 Z M169.45,264.2 V312.2"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="169.45"
+      y="264.2"
+      width="112.35"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 112.35px; height: 48px;">
+        <span>
+          <p>Build logs</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
+</svg>

@@ -1,0 +1,211 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 351.7 460.2"
+  style="max-width: 351.7px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad span{fill:#333;color:#333;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+#naiad .agentflowTitleText{text-anchor:middle;font-size:18px;fill:#333;}
+</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M148.08,48 L148.08,53 C148.08,58 148.08,68 148.08,77.33 C148.08,86.67 148.08,95.33 148.08,99.67 L148.08,104"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M148.08,108 L144.08,100 L152.08,100 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M125.58,161.03 L114.26,170.81 C102.94,180.59 80.29,200.14 68.97,216.67 C57.65,233.2 57.65,246.7 57.65,253.45 L57.65,260.2"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M57.65,264.2 L53.65,256.2 L61.65,256.2 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <rect
+      x="34.25"
+      y="205.2"
+      width="46.8"
+      height="29"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <foreignObject
+      x="34.25"
+      y="205.2"
+      width="46.8"
+      height="29"
+      class="edgeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 46.8px; height: 29px;">
+        <span>
+          <p>left</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M170.57,161.03 L181.89,170.81 C193.21,180.59 215.86,200.14 227.18,216.67 C238.5,233.2 238.5,246.7 238.5,253.45 L238.5,260.2"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M238.5,264.2 L234.5,256.2 L242.5,256.2 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <rect
+      x="215.1"
+      y="205.2"
+      width="46.8"
+      height="29"
+      fill="rgba(232,232,232,0.8)"
+      stroke="none"
+      class="edgeLabel" />
+    <foreignObject
+      x="215.1"
+      y="205.2"
+      width="46.8"
+      height="29"
+      class="edgeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 46.8px; height: 29px;">
+        <span>
+          <p>left</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M57.65,312.2 L57.65,317.2 C57.65,322.2 57.65,332.2 68.25,343.53 C78.84,354.86 100.04,367.51 110.63,373.84 L121.23,380.17"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M124.66,382.22 L115.75,381.55 L119.85,374.68 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M238.5,312.2 L238.5,317.2 C238.5,322.2 238.5,332.2 230.13,342.2 C221.75,352.2 205.01,362.2 196.64,367.2 L188.26,372.2"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M189.34,364.37 L198.34,373.37 M198.34,364.37 L189.34,373.37"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="cross" />
+    <path
+      d="M118.83,0 H177.33 Q182.33,0 182.33,5 V43 Q182.33,48 177.33,48 H118.83 Q113.83,48 113.83,43 V5 Q113.83,0 118.83,0 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="113.83"
+      y="0"
+      width="68.5"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 68.5px; height: 48px;">
+        <span>
+          <p>Start</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M148.08,108 L201.42,141.6 L148.08,175.2 L94.74,141.6 Z"
+      fill="#fdd"
+      stroke="#c33" />
+    <foreignObject
+      x="94.74"
+      y="108"
+      width="106.68"
+      height="67.2"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 106.68px; height: 67.2px;">
+        <span>
+          <p>Route?</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M0,264.2 H115.3 V312.2 H0 Z M8,264.2 V312.2 M107.3,264.2 V312.2"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="0"
+      y="264.2"
+      width="115.3"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 115.3px; height: 48px;">
+        <span>
+          <p>Left tool</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M177.3,264.2 H299.7 L311.7,288.2 L299.7,312.2 H177.3 L165.3,288.2 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="165.3"
+      y="264.2"
+      width="146.4"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 146.4px; height: 48px;">
+        <span>
+          <p>Right action</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M129.68,372.2 H190.48 L166.48,420.2 H105.68 Z"
+      fill="#dfd"
+      stroke="#9370DB" />
+    <foreignObject
+      x="105.68"
+      y="372.2"
+      width="84.8"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 84.8px; height: 48px;">
+        <span>
+          <p>Done</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
+</svg>

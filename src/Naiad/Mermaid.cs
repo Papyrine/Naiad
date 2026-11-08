@@ -95,6 +95,8 @@ public static class Mermaid
                 Render(new CynefinParser(), new CynefinRenderer(), "Cynefin diagram", input, title, options),
             DiagramType.Info =>
                 Render(new InfoParser(), new InfoRenderer(), "info diagram", input, title, options),
+            DiagramType.AgentFlow =>
+                Render(new AgentFlowParser(), new AgentFlowRenderer(), "agent flow", input, title, options),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
@@ -300,6 +302,14 @@ public static class Mermaid
         else if (IsWholeKeyword(firstLine, "info"))
         {
             type = DiagramType.Info;
+        }
+        // Mermaid's detector is /^\s*agentflow-beta\b/: the -beta spelling only, case-sensitive, and not
+        // followed by more of a word. No other keyword starts with it or is a prefix of it.
+        else if (firstLine.StartsWith("agentflow-beta", StringComparison.Ordinal) &&
+                 (firstLine.Length == "agentflow-beta".Length ||
+                  !(char.IsLetterOrDigit(firstLine["agentflow-beta".Length]) || firstLine["agentflow-beta".Length] == '_')))
+        {
+            type = DiagramType.AgentFlow;
         }
         else
         {

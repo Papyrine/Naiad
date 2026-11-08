@@ -1,0 +1,129 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 414 262"
+  style="max-width: 414px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad span{fill:#333;color:#333;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+#naiad .agentflowTitleText{text-anchor:middle;font-size:18px;fill:#333;}
+</style>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="0"
+      y="0"
+      width="169.3"
+      height="108"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <rect
+      x="189.3"
+      y="0"
+      width="184.7"
+      height="108"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <path
+      d="M84.65,78 L84.65,83 C84.65,88 84.65,98 84.65,108 C84.65,118 84.65,128 93.29,138 C101.93,148 119.21,158 127.85,163 L136.49,168"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      stroke-dasharray="3"
+      class="flowchart-link" />
+    <path
+      d="M281.65,78 L281.65,83 C281.65,88 281.65,98 281.65,108 C281.65,118 281.65,128 273.01,138 C264.37,148 247.09,158 238.45,163 L229.81,168"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      stroke-dasharray="3"
+      class="flowchart-link" />
+    <path
+      d="M111.6,168 H254.71 V216 L254.71,210.29 L248.74,210.03 L242.78,210.03 L236.82,210.29 L230.85,210.8 L224.89,211.54 L218.93,212.47 L212.96,213.56 L207,214.75 L201.04,216 L195.08,217.25 L189.11,218.44 L183.15,219.53 L177.19,220.46 L171.22,221.2 L165.26,221.71 L159.3,221.97 L153.34,221.97 L147.37,221.71 L141.41,221.2 L135.45,220.46 L129.48,219.53 L123.52,218.44 L117.56,217.25 L111.6,216 Z M118.1,168 V216"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="118.1"
+      y="168"
+      width="136.61"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 136.61px; height: 48px;">
+        <span>
+          <p>Shared corpus</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M40,30 H129.3 Q134.3,30 134.3,35 V73 Q134.3,78 129.3,78 H40 Q35,78 35,73 V35 Q35,30 40,30 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="35"
+      y="30"
+      width="99.3"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 99.3px; height: 48px;">
+        <span>
+          <p>Summarise</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M229.3,30 H334 Q339,30 339,35 V73 Q339,78 334,78 H229.3 Q224.3,78 224.3,73 V35 Q224.3,30 229.3,30 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="224.3"
+      y="30"
+      width="114.7"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 114.7px; height: 48px;">
+        <span>
+          <p>Build index</p>
+        </span>
+      </div>
+    </foreignObject>
+    <text
+      x="84.65"
+      y="14"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Summariser</text>
+    <text
+      x="281.65"
+      y="14"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Indexer</text>
+  </g>
+</svg>

@@ -1,0 +1,146 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 271.8 491.2"
+  style="max-width: 271.8px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad span{fill:#333;color:#333;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+#naiad .agentflowTitleText{text-anchor:middle;font-size:18px;fill:#333;}
+</style>
+  <g
+    transform="translate(20,20)">
+    <rect
+      x="0"
+      y="0"
+      width="231.8"
+      height="451.2"
+      rx="10"
+      ry="10"
+      fill="none"
+      stroke="#aaaa33"
+      stroke-width="0.75"
+      class="cluster flow-cluster" />
+    <path
+      d="M115.9,78 L115.9,83 C115.9,88 115.9,98 115.9,107.33 C115.9,116.67 115.9,125.33 115.9,129.67 L115.9,134"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M115.9,138 L111.9,130 L119.9,130 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M115.9,186 L115.9,191 C115.9,196 115.9,206 115.9,215.33 C115.9,224.67 115.9,233.33 115.9,237.67 L115.9,242"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M115.9,246 L111.9,238 L119.9,238 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M115.9,294 L115.9,299 C115.9,304 115.9,314 115.9,323.33 C115.9,332.67 115.9,341.33 115.9,345.67 L115.9,350"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      class="flowchart-link" />
+    <path
+      d="M115.9,354 L111.9,346 L119.9,346 Z"
+      fill="#333333"
+      stroke="none"
+      class="arrowheadPath" />
+    <path
+      d="M59,30 H196.8 L172.8,78 H35 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="35"
+      y="30"
+      width="161.8"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 161.8px; height: 48px;">
+        <span>
+          <p>Gather changes</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M59.7,138 H172.1 Q177.1,138 177.1,143 V181 Q177.1,186 172.1,186 H59.7 Q54.7,186 54.7,181 V143 Q54.7,138 59.7,138 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="54.7"
+      y="138"
+      width="122.4"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 122.4px; height: 48px;">
+        <span>
+          <p>Analyse diff</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M54.4,246 H177.4 V294 H54.4 Z M62.4,246 V294 M169.4,246 V294"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="54.4"
+      y="246"
+      width="123"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 123px; height: 48px;">
+        <span>
+          <p>run_linter</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M115.9,354 L169.24,387.6 L115.9,421.2 L62.56,387.6 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="62.56"
+      y="354"
+      width="106.68"
+      height="67.2"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 106.68px; height: 67.2px;">
+        <span>
+          <p>Clean?</p>
+        </span>
+      </div>
+    </foreignObject>
+    <text
+      x="115.9"
+      y="14"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      class="cluster-label">Review Agent</text>
+  </g>
+</svg>
