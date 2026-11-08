@@ -230,7 +230,6 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
         var line =
             OneOf(
                 skipLine,
-                title.Then<ILine?>(static _ => _),
                 comment.Then<ILine?>(static _ => _),
                 close.Then<ILine?>(static _ => _),
                 open.Then<ILine?>(static _ => _),
@@ -240,6 +239,9 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
                 creation.Then<ILine?>(static _ => _),
                 sync.Then<ILine?>(static _ => _),
                 async.Then<ILine?>(static _ => _),
+                // After the calls, so a variable named title is assigned (`title = A.get()`) rather than
+                // taking the rest of its line as the title.
+                title.Then<ILine?>(static _ => _),
                 declaration.Then<ILine?>(static _ => _));
 
         parser =
