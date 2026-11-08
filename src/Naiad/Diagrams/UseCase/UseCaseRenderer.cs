@@ -73,21 +73,15 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
             AddShape(graph, shapes, MeasureUseCase(useCase, useCaseFontSize));
         }
 
-        foreach (var note in model.Notes)
-        {
-            if (!shapes.ContainsKey(note.TargetId))
-            {
-                continue;
-            }
-
-            var size = Measure(DisplayText(note.Text), useCaseFontSize);
-            AddShape(graph, shapes, new NoteShape(note, size.Width + boxPadding * 2, size.Height + boxPadding * 2, useCaseFontSize));
-        }
+        AddNotes();
 
         foreach (var table in model.JsonTables)
         {
             AddShape(graph, shapes, MeasureJsonTable(table, useCaseFontSize));
         }
+
+        // Then the notes on JSON tables, which had nothing to attach to above.
+        AddNotes();
 
         if (shapes.Count == 0)
         {
@@ -144,7 +138,8 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
         // A note is an ordinary node, tied to its target by a dotted line without markers.
         foreach (var note in model.Notes)
         {
-            if (!shapes.ContainsKey(note.TargetId))
+            if (!shapes.ContainsKey(note.Id) ||
+                !shapes.ContainsKey(note.TargetId))
             {
                 continue;
             }
@@ -232,6 +227,22 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
 
         builder.EndGroup();
         return builder.Build();
+
+        // Adds the notes whose target is in by now and that are not in yet.
+        void AddNotes()
+        {
+            foreach (var note in model.Notes)
+            {
+                if (shapes.ContainsKey(note.Id) ||
+                    !shapes.ContainsKey(note.TargetId))
+                {
+                    continue;
+                }
+
+                var size = Measure(DisplayText(note.Text), useCaseFontSize);
+                AddShape(graph, shapes, new NoteShape(note, size.Width + boxPadding * 2, size.Height + boxPadding * 2, useCaseFontSize));
+            }
+        }
     }
 
     static SvgDocument EmptyDiagram(RenderOptions options)

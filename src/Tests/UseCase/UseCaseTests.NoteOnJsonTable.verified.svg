@@ -1,0 +1,111 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 313.6 110"
+  style="max-width: 313.6px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <g
+      transform="translate(0,0)">
+      <path
+        d="M138.8,35 L142.97,35 C147.13,35 155.47,35 163.8,35 C172.13,35 180.47,35 184.63,35 L188.8,35"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        stroke-dasharray="3"
+        class="relationship" />
+      <rect
+        x="188.8"
+        y="0"
+        width="84.8"
+        height="70"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        class="usecase-json-table" />
+      <text
+        x="231.2"
+        y="13"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#333"
+        class="usecase-json-title">Payload</text>
+      <line
+        x1="188.8"
+        y1="26"
+        x2="273.6"
+        y2="26"
+        stroke="#9370DB" />
+      <text
+        x="196.8"
+        y="37"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">id</text>
+      <text
+        x="239.2"
+        y="37"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">1</text>
+      <line
+        x1="188.8"
+        y1="48"
+        x2="273.6"
+        y2="48"
+        stroke="#9370DB" />
+      <text
+        x="196.8"
+        y="59"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">name</text>
+      <text
+        x="239.2"
+        y="59"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">Book</text>
+      <line
+        x1="231.2"
+        y1="26"
+        x2="231.2"
+        y2="70"
+        stroke="#9370DB" />
+      <rect
+        x="0"
+        y="16"
+        width="138.8"
+        height="38"
+        fill="#fff5ad"
+        stroke="#aaaa33"
+        class="usecase-note" />
+      <text
+        x="69.4"
+        y="35"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333">Sent by the client</text>
+    </g>
+  </g>
+</svg>
