@@ -1,0 +1,197 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 869 382.4"
+  style="max-width: 869px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <g
+      transform="translate(0,0)">
+      <path
+        d="M81.6,182.63 L95.23,176.23 C108.87,169.82 136.13,157.01 162.07,150.61 C188,144.2 212.6,144.2 224.9,144.2 L237.2,144.2"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 245.2 144.2 L 237.2 148.2 L 237.2 140.2 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <rect
+        x="126.4"
+        y="133.2"
+        width="74"
+        height="22"
+        fill="rgba(232,232,232,0.8)"
+        stroke="none"
+        class="edgeLabel" />
+      <text
+        x="163.4"
+        y="144.2"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="relationship-label">opens form</text>
+      <path
+        d="M81.6,144.29 L95.23,125.08 C108.87,105.86 136.13,67.43 165.92,48.22 C195.7,29 228,29 244.15,29 L260.3,29"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 268.3 29 L 260.3 33 L 260.3 25 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <rect
+        x="106.6"
+        y="18"
+        width="113.6"
+        height="22"
+        fill="rgba(232,232,232,0.8)"
+        stroke="none"
+        class="edgeLabel" />
+      <text
+        x="163.4"
+        y="29"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="relationship-label">files R&amp;D report</text>
+      <path
+        d="M81.6,220.97 L95.23,227.37 C108.87,233.78 136.13,246.59 166.47,252.99 C196.8,259.4 230.2,259.4 246.9,259.4 L263.6,259.4"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 271.6 259.4 L 263.6 263.4 L 263.6 255.4 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M81.6,242.27 L95.23,255.79 C108.87,269.31 136.13,296.36 181.03,309.88 C225.93,323.4 288.47,323.4 345.5,323.4 C402.53,323.4 454.07,323.4 487.97,323.4 C521.87,323.4 538.13,323.4 550.43,323.4 C562.73,323.4 571.07,323.4 578.07,323.4 C585.07,323.4 590.73,323.4 593.57,323.4 L596.4,323.4"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 604.4 323.4 L 596.4 327.4 L 596.4 319.4 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <rect
+        x="481.8"
+        y="312.4"
+        width="47.6"
+        height="22"
+        fill="rgba(232,232,232,0.8)"
+        stroke="none"
+        class="edgeLabel" />
+      <text
+        x="505.6"
+        y="323.4"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="relationship-label">longer</text>
+      <g
+        class="usecase-actor"
+        transform="translate(40.8,187.3)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="40.8"
+        y="241.8"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Reviewer</text>
+      <path
+        d="M 268.3 29 A 82.7 29 0 1 0 433.7 29 A 82.7 29 0 1 0 268.3 29 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="351"
+        y="29"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">**Literal markers**</text>
+      <path
+        d="M 245.2 144.2 A 105.8 36.2 0 1 0 456.8 144.2 A 105.8 36.2 0 1 0 245.2 144.2 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="351"
+        y="137"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Formatted label</text>
+      <text
+        x="351"
+        y="151.4"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">with a physical line break</text>
+      <path
+        d="M 271.6 259.4 A 79.4 29 0 1 0 430.4 259.4 A 79.4 29 0 1 0 271.6 259.4 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="351"
+        y="259.4"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Show "quoted" text</text>
+      <rect
+        x="604.4"
+        y="304.4"
+        width="224.6"
+        height="38"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="716.7"
+        y="323.4"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Costs 19.95 EUR — VAT included!</text>
+    </g>
+  </g>
+</svg>

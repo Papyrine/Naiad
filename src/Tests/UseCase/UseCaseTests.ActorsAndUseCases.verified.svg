@@ -1,0 +1,130 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 381 372"
+  style="max-width: 381px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <g
+      transform="translate(0,0)">
+      <path
+        d="M120.1,61.88 L130.68,56.4 C141.27,50.92 162.43,39.96 179.7,34.48 C196.97,29 210.33,29 217.02,29 L223.7,29"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 231.7 29 L 223.7 33 L 223.7 25 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M158.6,271.5 L162.77,271.5 C166.93,271.5 175.27,271.5 183.38,271.5 C191.5,271.5 199.4,271.5 203.35,271.5 L207.3,271.5"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 215.3 271.5 L 207.3 275.5 L 207.3 267.5 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M120.1,104.12 L130.68,109.6 C141.27,115.08 162.43,126.04 175.85,131.52 C189.27,137 194.93,137 197.77,137 L200.6,137"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 208.6 137 L 200.6 141 L 200.6 133 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <g
+        class="usecase-actor"
+        transform="translate(79.3,68.5)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="79.3"
+        y="123"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Customer</text>
+      <g
+        class="usecase-actor"
+        transform="translate(79.3,257)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="79.3"
+        y="311.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Main administrator</text>
+      <path
+        d="M 231.7 29 A 43.1 29 0 1 0 317.9 29 A 43.1 29 0 1 0 231.7 29 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="274.8"
+        y="29"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Sign in</text>
+      <rect
+        x="215.3"
+        y="252.5"
+        width="119"
+        height="38"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="274.8"
+        y="271.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Generate report</text>
+      <path
+        d="M 208.6 137 A 66.2 29 0 1 0 341 137 A 66.2 29 0 1 0 208.6 137 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="274.8"
+        y="137"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Reset password</text>
+    </g>
+  </g>
+</svg>

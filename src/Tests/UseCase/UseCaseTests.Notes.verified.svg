@@ -1,0 +1,105 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 563.2 249"
+  style="max-width: 563.2px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <g
+      transform="translate(0,0)">
+      <path
+        d="M329.2,60.5 L343,60.5 C356.8,60.5 384.4,60.5 404.43,66.43 C424.47,72.36 436.94,84.21 443.17,90.14 L449.41,96.07"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 455.2 101.58 L 446.65 98.96 L 452.16 93.17 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M387,190 L391.17,190 C395.33,190 403.67,190 415.03,183.15 C426.4,176.31 440.8,162.61 448,155.77 L455.2,148.92"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        stroke-dasharray="3"
+        class="relationship" />
+      <path
+        d="M145.4,60.5 L149.57,60.5 C153.73,60.5 162.07,60.5 180.03,60.5 C198,60.5 225.6,60.5 239.4,60.5 L253.2,60.5"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        stroke-dasharray="3"
+        class="relationship" />
+      <g
+        class="usecase-actor"
+        transform="translate(291.2,46)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="291.2"
+        y="100.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">User</text>
+      <path
+        d="M 437 125.25 A 43.1 29 0 1 0 523.2 125.25 A 43.1 29 0 1 0 437 125.25 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="480.1"
+        y="125.25"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Sign in</text>
+      <rect
+        x="195.4"
+        y="171"
+        width="191.6"
+        height="38"
+        fill="#fff5ad"
+        stroke="#aaaa33"
+        class="usecase-note" />
+      <text
+        x="291.2"
+        y="190"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333">Requires an active session</text>
+      <rect
+        x="0"
+        y="41.5"
+        width="145.4"
+        height="38"
+        fill="#fff5ad"
+        stroke="#aaaa33"
+        class="usecase-note" />
+      <text
+        x="72.7"
+        y="60.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333">Starts the workflow</text>
+    </g>
+  </g>
+</svg>

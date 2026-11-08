@@ -89,6 +89,8 @@ public static class Mermaid
                 Render(new SwimlaneParser(), new SwimlaneRenderer(), "swimlane diagram", input, title, options),
             DiagramType.EventModeling =>
                 Render(new EventModelingParser(), new EventModelingRenderer(), "event modeling diagram", input, title, options),
+            DiagramType.UseCase =>
+                Render(new UseCaseParser(), new UseCaseRenderer(), "use case diagram", input, title, options),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
@@ -280,6 +282,11 @@ public static class Mermaid
         {
             // Mermaid knows only the `-beta` spelling, and matches it case-sensitively.
             type = DiagramType.Swimlane;
+        }
+        // Mermaid only knows the keyword with its suffix, and nothing else starts with it.
+        else if (firstLine.StartsWith("usecase-beta", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.UseCase;
         }
         else
         {

@@ -1,0 +1,342 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 452.4 308"
+  style="max-width: 452.4px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <g
+      transform="translate(0,0)">
+      <path
+        d="M139,134 L143.17,134 C147.33,134 155.67,134 162.67,134 C169.67,134 175.33,134 178.17,134 L181,134"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 189 134 L 181 138 L 181 130 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M 0 134 A 69.5 29 0 1 0 139 134 A 69.5 29 0 1 0 0 134 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="69.5"
+        y="134"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Inspect payload</text>
+      <rect
+        x="189"
+        y="0"
+        width="223.4"
+        height="268"
+        fill="#ECECFF"
+        stroke="#3572a5"
+        stroke-width="2"
+        class="usecase-json-table" />
+      <text
+        x="300.7"
+        y="13"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        font-weight="bold"
+        fill="#333"
+        class="usecase-json-title">Payload</text>
+      <line
+        x1="189"
+        y1="26"
+        x2="412.4"
+        y2="26"
+        stroke="#3572a5"
+        stroke-width="2" />
+      <text
+        x="197"
+        y="37"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">2</text>
+      <text
+        x="298.8"
+        y="37"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">second in source</text>
+      <line
+        x1="189"
+        y1="48"
+        x2="412.4"
+        y2="48"
+        stroke="#3572a5"
+        stroke-width="2" />
+      <text
+        x="197"
+        y="59"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">1</text>
+      <text
+        x="298.8"
+        y="59"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">first after 2</text>
+      <line
+        x1="189"
+        y1="70"
+        x2="412.4"
+        y2="70"
+        stroke="#3572a5"
+        stroke-width="2" />
+      <text
+        x="197"
+        y="81"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">enabled</text>
+      <text
+        x="298.8"
+        y="81"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">true</text>
+      <line
+        x1="189"
+        y1="92"
+        x2="412.4"
+        y2="92"
+        stroke="#3572a5"
+        stroke-width="2" />
+      <text
+        x="197"
+        y="103"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">count</text>
+      <text
+        x="298.8"
+        y="103"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">3</text>
+      <line
+        x1="189"
+        y1="114"
+        x2="412.4"
+        y2="114"
+        stroke="#3572a5"
+        stroke-width="2" />
+      <text
+        x="197"
+        y="125"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">missing</text>
+      <text
+        x="298.8"
+        y="125"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">null</text>
+      <line
+        x1="189"
+        y1="136"
+        x2="412.4"
+        y2="136"
+        stroke="#3572a5"
+        stroke-width="2" />
+      <text
+        x="197"
+        y="147"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">colors[0]</text>
+      <text
+        x="298.8"
+        y="147"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">Red</text>
+      <line
+        x1="189"
+        y1="158"
+        x2="412.4"
+        y2="158"
+        stroke="#3572a5"
+        stroke-width="2" />
+      <text
+        x="197"
+        y="169"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">colors[1]</text>
+      <text
+        x="298.8"
+        y="169"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">Green</text>
+      <line
+        x1="189"
+        y1="180"
+        x2="412.4"
+        y2="180"
+        stroke="#3572a5"
+        stroke-width="2" />
+      <text
+        x="197"
+        y="191"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">address.city</text>
+      <text
+        x="298.8"
+        y="191"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">Oslo</text>
+      <line
+        x1="189"
+        y1="202"
+        x2="412.4"
+        y2="202"
+        stroke="#3572a5"
+        stroke-width="2" />
+      <text
+        x="197"
+        y="213"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">items[0].name</text>
+      <text
+        x="298.8"
+        y="213"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">Book</text>
+      <line
+        x1="189"
+        y1="224"
+        x2="412.4"
+        y2="224"
+        stroke="#3572a5"
+        stroke-width="2" />
+      <text
+        x="197"
+        y="235"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">emptyObject</text>
+      <text
+        x="298.8"
+        y="235"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">{}</text>
+      <line
+        x1="189"
+        y1="246"
+        x2="412.4"
+        y2="246"
+        stroke="#3572a5"
+        stroke-width="2" />
+      <text
+        x="197"
+        y="257"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-key">emptyArray</text>
+      <text
+        x="298.8"
+        y="257"
+        text-anchor="start"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-json-value">[]</text>
+      <line
+        x1="290.8"
+        y1="26"
+        x2="290.8"
+        y2="268"
+        stroke="#3572a5"
+        stroke-width="2" />
+    </g>
+  </g>
+</svg>

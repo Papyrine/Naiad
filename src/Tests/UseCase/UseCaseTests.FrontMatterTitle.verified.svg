@@ -1,0 +1,93 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 304 246"
+  style="max-width: 304px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <text
+      x="132"
+      y="20"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="18px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#333">Account access</text>
+    <g
+      transform="translate(0,40)">
+      <path
+        d="M81.6,49.52 L85.77,46.1 C89.93,42.68 98.27,35.84 109.12,32.42 C119.97,29 133.33,29 140.02,29 L146.7,29"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 154.7 29 L 146.7 33 L 146.7 25 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M81.6,116.48 L85.77,119.9 C89.93,123.32 98.27,130.16 105.27,133.58 C112.27,137 117.93,137 120.77,137 L123.6,137"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 131.6 137 L 123.6 141 L 123.6 133 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <g
+        class="usecase-actor"
+        transform="translate(40.8,68.5)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="40.8"
+        y="123"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Customer</text>
+      <path
+        d="M 154.7 29 A 43.1 29 0 1 0 240.9 29 A 43.1 29 0 1 0 154.7 29 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="197.8"
+        y="29"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Sign in</text>
+      <path
+        d="M 131.6 137 A 66.2 29 0 1 0 264 137 A 66.2 29 0 1 0 131.6 137 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="197.8"
+        y="137"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Reset password</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,150 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 351.3 674"
+  style="max-width: 351.3px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <g
+      transform="translate(0,0)">
+      <path
+        d="M147.05,60.5 L156.99,60.5 C166.93,60.5 186.82,60.5 206.03,97.2 C225.25,133.91 243.79,207.32 253.06,244.02 L262.34,280.72"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 264.29 288.48 L 258.46 281.7 L 266.21 279.74 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M147.05,231.5 L156.99,231.5 C166.93,231.5 186.82,231.5 203.55,240.46 C220.28,249.41 233.85,267.33 240.64,276.28 L247.43,285.24"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 252.26 291.61 L 244.24 287.65 L 250.62 282.82 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M150.9,402.5 L160.2,402.5 C169.5,402.5 188.1,402.5 204.19,393.54 C220.28,384.59 233.85,366.67 240.64,357.72 L247.43,348.76"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 252.26 342.39 L 250.62 351.18 L 244.24 346.35 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M181.7,573.5 L185.87,573.5 C190.03,573.5 198.37,573.5 211.81,536.8 C225.25,500.09 243.79,426.68 253.06,389.98 L262.34,353.28"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 264.29 345.52 L 266.21 354.26 L 258.46 352.3 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <g
+        class="usecase-actor"
+        transform="translate(90.85,46)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="90.85"
+        y="100.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Normal actor</text>
+      <g
+        class="usecase-actor"
+        transform="translate(90.85,217)">
+        <circle
+          cx="0"
+          cy="-23"
+          r="9"
+          fill="none"
+          stroke="#9370DB"
+          stroke-width="2" />
+        <path
+          d="M -22 -10 H 22 V 0 H 6 L 22 17 L 13 28 L 0 13 L -13 28 L -22 17 L -6 0 H -22 Z"
+          fill="none"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="90.85"
+        y="271.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Hollow actor</text>
+      <g
+        class="usecase-actor"
+        transform="translate(90.85,388)">
+        <path
+          d="M 0 -34 C 7.18 -34 13 -28.18 13 -21 C 13 -13.82 7.18 -8 0 -8 C -7.18 -8 -13 -13.82 -13 -21 C -13 -28.18 -7.18 -34 0 -34 Z M -24 25 C -24 7 -14 -3 0 -3 C 14 -3 24 7 24 25 C 24 28 21 30 18 30 H -18 C -21 30 -24 28 -24 25 Z"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="90.85"
+        y="442.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Awesome actor</text>
+      <g
+        class="usecase-actor"
+        transform="translate(90.85,559)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="90.85"
+        y="613.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Missing icon fallback</text>
+      <path
+        d="M 231.7 317 A 39.8 29 0 1 0 311.3 317 A 39.8 29 0 1 0 231.7 317 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="271.5"
+        y="317"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Manage</text>
+    </g>
+  </g>
+</svg>
