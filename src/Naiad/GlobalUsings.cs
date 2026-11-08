@@ -31,6 +31,7 @@ global using Naiad.Diagrams.Sequence;
 global using Naiad.Diagrams.State;
 global using Naiad.Diagrams.Timeline;
 global using Naiad.Diagrams.Treemap;
+global using Naiad.Diagrams.TreeView;
 global using Naiad.Diagrams.UserJourney;
 global using Naiad.Diagrams.XYChart;
 global using Parlot;
