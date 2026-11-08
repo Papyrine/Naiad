@@ -33,5 +33,6 @@ public enum DiagramType
     TreeView,
     Wardley,
     Venn,
-    Swimlane
+    Swimlane,
+    EventModeling
 }

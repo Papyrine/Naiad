@@ -1,0 +1,172 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1067.8 507.6"
+  style="max-width: 1067.8px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <rect
+    x="20"
+    y="20"
+    width="1027.8"
+    height="130"
+    rx="3"
+    ry="3"
+    fill="rgb(250,250,250)"
+    stroke="rgb(240,240,240)" />
+  <text
+    x="50"
+    y="50"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">UI/Automation</text>
+  <rect
+    x="20"
+    y="160"
+    width="1027.8"
+    height="187.6"
+    rx="3"
+    ry="3"
+    fill="rgb(250,250,250)"
+    stroke="rgb(240,240,240)" />
+  <text
+    x="50"
+    y="190"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Command/Read Model</text>
+  <rect
+    x="20"
+    y="357.6"
+    width="1027.8"
+    height="130"
+    rx="3"
+    ry="3"
+    fill="rgb(250,250,250)"
+    stroke="rgb(240,240,240)" />
+  <text
+    x="50"
+    y="387.6"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Events</text>
+  <rect
+    x="270"
+    y="35"
+    width="468.4"
+    height="100"
+    rx="3"
+    ry="3"
+    fill="white"
+    stroke="#dbdada" />
+  <text
+    x="504.2"
+    y="76.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">ACustomerFacingCheckoutScreenWithAVeryLongNameThatH</text>
+  <text
+    x="504.2"
+    y="93.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">asToWrapSomewhere</text>
+  <rect
+    x="668.4"
+    y="175"
+    width="292"
+    height="157.6"
+    rx="3"
+    ry="3"
+    fill="#bcd6fe"
+    stroke="#679ac3" />
+  <text
+    x="814.4"
+    y="203.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">PlaceOrder</text>
+  <text
+    x="688.4"
+    y="237"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">"customer": {</text>
+  <text
+    x="688.4"
+    y="253.8"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">  "name": "Alice",</text>
+  <text
+    x="688.4"
+    y="270.6"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">  "email": "alice@example.com"</text>
+  <text
+    x="688.4"
+    y="287.4"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">},</text>
+  <text
+    x="688.4"
+    y="304.2"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">"items": 3</text>
+  <rect
+    x="890.4"
+    y="372.6"
+    width="132.4"
+    height="100"
+    rx="3"
+    ry="3"
+    fill="#ffb778"
+    stroke="#c19a0f" />
+  <text
+    x="956.6"
+    y="422.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">OrderPlaced</text>
+  <path
+    d="M582.27 135 L765.73 175"
+    fill="none"
+    stroke="#000"
+    class="em-relation" />
+  <path
+    d="M765.73 175 L755.22 176.29 L756.71 169.45 Z"
+    fill="#000000" />
+  <path
+    d="M863.07 332.6 L934.53 372.6"
+    fill="none"
+    stroke="#000"
+    class="em-relation" />
+  <path
+    d="M934.53 372.6 L924.1 370.77 L927.52 364.66 Z"
+    fill="#000000" />
+</svg>

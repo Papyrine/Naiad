@@ -87,6 +87,8 @@ public static class Mermaid
                 Render(new VennParser(), new VennRenderer(), "Venn diagram", input, title, options),
             DiagramType.Swimlane =>
                 Render(new SwimlaneParser(), new SwimlaneRenderer(), "swimlane diagram", input, title, options),
+            DiagramType.EventModeling =>
+                Render(new EventModelingParser(), new EventModelingRenderer(), "event modeling diagram", input, title, options),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
@@ -255,6 +257,10 @@ public static class Mermaid
         else if (firstLine.StartsWith("ishikawa", StringComparison.OrdinalIgnoreCase))
         {
             type = DiagramType.Ishikawa;
+        }
+        else if (firstLine.StartsWith("eventmodeling", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.EventModeling;
         }
         else if (firstLine.StartsWith("zenuml", StringComparison.OrdinalIgnoreCase))
         {

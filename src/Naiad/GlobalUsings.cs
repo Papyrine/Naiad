@@ -15,6 +15,7 @@ global using Naiad.Diagrams.Block;
 global using Naiad.Diagrams.C4;
 global using Naiad.Diagrams.Class;
 global using Naiad.Diagrams.EntityRelationship;
+global using Naiad.Diagrams.EventModeling;
 global using Naiad.Diagrams.Flowchart;
 global using Naiad.Diagrams.Gantt;
 global using Naiad.Diagrams.GitGraph;
