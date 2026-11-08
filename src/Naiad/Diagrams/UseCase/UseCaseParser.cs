@@ -394,7 +394,9 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
 
     /// <summary>
     /// A quoted declaration with no identifier of its own gets one from its label, each character that
-    /// cannot be in an identifier becoming <c>_</c>: <c>"Reset password"</c> is <c>Reset_password</c>.
+    /// cannot be in an identifier becoming <c>_</c>: <c>"Reset password"</c> is <c>Reset_password</c>. Letters
+    /// and digits of any script are kept, so two labels in another script do not both come out as the same
+    /// run of underscores and merge into one element.
     /// </summary>
     static string IdFromLabel(string label)
     {
@@ -402,7 +404,7 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
         var builder = new StringBuilder(text.Length);
         foreach (var character in text)
         {
-            builder.Append(char.IsAsciiLetterOrDigit(character) || character == '_' ? character : '_');
+            builder.Append(char.IsLetterOrDigit(character) || character == '_' ? character : '_');
         }
 
         return builder.ToString();
