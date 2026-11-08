@@ -211,6 +211,16 @@ public static class DiagramSamples
                     }
                 }
             """),
+        new("Tree View",
+            """
+            treeView-beta
+                my-project/
+                    src/
+                        index.js ## entry point
+                        App.tsx :::highlight
+                    package.json
+                    README.md
+            """),
     ];
 
     /// <summary>The diagram shown when the editor first loads.</summary>
