@@ -1,0 +1,20 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 800 450"
+  style="max-width: 800px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <path
+    d="M 190 225 A 210 210 0 1 0 610 225 A 210 210 0 1 0 190 225 Z"
+    style="fill:#5353FF;fill-opacity:0.1;stroke:#5353FF;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="400"
+    y="233.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#0000B9">Everything</text>
+</svg>

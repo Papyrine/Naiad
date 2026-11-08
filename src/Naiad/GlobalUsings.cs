@@ -33,6 +33,7 @@ global using Naiad.Diagrams.Timeline;
 global using Naiad.Diagrams.Treemap;
 global using Naiad.Diagrams.TreeView;
 global using Naiad.Diagrams.UserJourney;
+global using Naiad.Diagrams.Venn;
 global using Naiad.Diagrams.Wardley;
 global using Naiad.Diagrams.XYChart;
 global using Parlot;

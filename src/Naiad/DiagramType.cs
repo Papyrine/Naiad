@@ -31,5 +31,6 @@ public enum DiagramType
     C4Dynamic,
     Ishikawa,
     TreeView,
-    Wardley
+    Wardley,
+    Venn
 }

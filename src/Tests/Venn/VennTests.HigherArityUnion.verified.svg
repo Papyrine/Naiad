@@ -1,0 +1,47 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 800 450"
+  style="max-width: 800px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <path
+    d="M 178.51 299.25 A 135.75 135.75 0 1 0 450.01 299.25 A 135.75 135.75 0 1 0 178.51 299.25 Z"
+    style="fill:#5353FF;fill-opacity:0.1;stroke:#5353FF;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="268"
+    y="333.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#0000B9">Desirable</text>
+  <path
+    d="M 349.99 299.25 A 135.75 135.75 0 1 0 621.49 299.25 A 135.75 135.75 0 1 0 349.99 299.25 Z"
+    style="fill:#FFFF45;fill-opacity:0.1;stroke:#FFFF45;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="531"
+    y="333.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#ABAB00">Feasible</text>
+  <path
+    d="M 264.25 150.75 A 135.75 135.75 0 1 0 535.75 150.75 A 135.75 135.75 0 1 0 264.25 150.75 Z"
+    style="fill:#B5FF20;fill-opacity:0.1;stroke:#B5FF20;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="400"
+    y="106.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#5A8600">Viable</text>
+  <text
+    x="400"
+    y="253.9"
+    text-anchor="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Innovation</text>
+</svg>

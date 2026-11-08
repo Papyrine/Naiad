@@ -28,5 +28,6 @@ Auto-generated documentation from the test suite.
 - [Sankey](Sankey.md)
 - [Treemap](Treemap.md)
 - [TreeView](TreeView.md)
+- [Venn](Venn.md)
 - [Wardley](Wardley.md)
 - [XYChart](XYChart.md)

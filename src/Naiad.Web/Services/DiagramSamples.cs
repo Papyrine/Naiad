@@ -238,6 +238,18 @@ public static class DiagramSamples
             Kettle -> Power
             evolve Kettle 0.62
             """),
+        new("Venn",
+            """
+            venn-beta
+            title What makes a good feature
+            set Desirable
+            set Viable
+            set Feasible
+            union Desirable,Viable["Marketable"]
+            union Viable,Feasible["Sustainable"]
+            union Desirable,Feasible["Buildable"]
+            union Desirable,Viable,Feasible["Ship it"]
+            """),
     ];
 
     /// <summary>The diagram shown when the editor first loads.</summary>

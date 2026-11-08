@@ -83,6 +83,8 @@ public static class Mermaid
                 Render(new TreeViewParser(), new TreeViewRenderer(), "tree view", input, title, options),
             DiagramType.Wardley =>
                 Render(new WardleyParser(), new WardleyRenderer(), "Wardley map", input, title, options),
+            DiagramType.Venn =>
+                Render(new VennParser(), new VennRenderer(), "Venn diagram", input, title, options),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
@@ -260,6 +262,11 @@ public static class Mermaid
         else if (firstLine.StartsWith("wardley-beta", StringComparison.OrdinalIgnoreCase))
         {
             type = DiagramType.Wardley;
+        }
+        // Mermaid only recognises the -beta spelling, so plain `venn` is not taken.
+        else if (firstLine.StartsWith("venn-beta", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Venn;
         }
         else
         {

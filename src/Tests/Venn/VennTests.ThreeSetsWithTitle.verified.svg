@@ -1,0 +1,76 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 800 450"
+  style="max-width: 800px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="400"
+    y="16"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="16px"
+    font-family="Arial, sans-serif"
+    fill="#333">What makes a good feature</text>
+  <path
+    d="M 191.17 307.01 A 127.99 127.99 0 1 0 447.15 307.01 A 127.99 127.99 0 1 0 191.17 307.01 Z"
+    style="fill:#5353FF;fill-opacity:0.1;stroke:#5353FF;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="276"
+    y="339.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#0000B9">Desirable</text>
+  <path
+    d="M 352.85 307.01 A 127.99 127.99 0 1 0 608.83 307.01 A 127.99 127.99 0 1 0 352.85 307.01 Z"
+    style="fill:#FFFF45;fill-opacity:0.1;stroke:#FFFF45;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="523"
+    y="339.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#ABAB00">Feasible</text>
+  <path
+    d="M 272.01 166.99 A 127.99 127.99 0 1 0 527.99 166.99 A 127.99 127.99 0 1 0 272.01 166.99 Z"
+    style="fill:#B5FF20;fill-opacity:0.1;stroke:#B5FF20;stroke-width:2.5;stroke-opacity:0.95" />
+  <text
+    x="399"
+    y="125.4"
+    text-anchor="middle"
+    font-size="24px"
+    font-family="Arial, sans-serif"
+    fill="#5A8600">Viable</text>
+  <text
+    x="400"
+    y="341.89"
+    text-anchor="middle"
+    font-size="16.8221px"
+    font-family="Arial, sans-serif"
+    fill="#333">Buildable</text>
+  <text
+    x="465.21"
+    y="227.54"
+    text-anchor="middle"
+    font-size="15.8158px"
+    font-family="Arial, sans-serif"
+    fill="#333">Sustainable</text>
+  <text
+    x="334.79"
+    y="228.09"
+    text-anchor="middle"
+    font-size="17.3978px"
+    font-family="Arial, sans-serif"
+    fill="#333">Marketable</text>
+  <text
+    x="400"
+    y="266.6"
+    text-anchor="middle"
+    font-size="18.8557px"
+    font-family="Arial, sans-serif"
+    fill="#333">Ship it</text>
+</svg>
