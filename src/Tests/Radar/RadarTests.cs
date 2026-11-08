@@ -108,4 +108,16 @@ public class RadarTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // With no range between min and max there is nothing to scale a value by, and dividing by that range
+    // made every point of the curve NaN.
+    [Test]
+    [Arguments("all zero, no max", "radar-beta\n    axis a, b, c\n    curve x{0, 0, 0}")]
+    [Arguments("max equal to min", "radar-beta\n    axis a, b, c\n    curve x{5, 5, 5}\n    max 5\n    min 5")]
+    public async Task NoRange_DrawsTheCurveAtTheCentre(string name, string input)
+    {
+        var svg = Mermaid.Render(input);
+
+        await Assert.That(svg).DoesNotContain("NaN").Because(name);
+    }
 }

@@ -185,8 +185,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         for (var i = 0; i < Math.Min(curve.Values.Count, axisCount); i++)
         {
             var value = curve.Values[i];
-            var normalizedValue = (value - minValue) / (maxValue - minValue);
-            var radius = chartRadius * normalizedValue;
+            var radius = chartRadius * Normalize(value, minValue, maxValue);
 
             var angle = 2 * Math.PI * i / axisCount - Math.PI / 2;
             var x = cx + radius * Math.Cos(angle);
@@ -215,8 +214,7 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
         for (var i = 0; i < Math.Min(curve.Values.Count, axisCount); i++)
         {
             var value = curve.Values[i];
-            var normalizedValue = (value - minValue) / (maxValue - minValue);
-            var radius = chartRadius * normalizedValue;
+            var radius = chartRadius * Normalize(value, minValue, maxValue);
 
             var angle = 2 * Math.PI * i / axisCount - Math.PI / 2;
             var x = cx + radius * Math.Cos(angle);
@@ -224,6 +222,19 @@ public class RadarRenderer : IDiagramRenderer<RadarModel>
 
             builder.AddCircle(x, y, 4, fill: color, stroke: "white", strokeWidth: 1);
         }
+    }
+
+    // Where a value sits between the centre (min) and the rim (max). With no range between them - every
+    // value 0 and no max given, or a max that is not above the min - there is nothing to scale by, and
+    // dividing by it made every point NaN; the curve is drawn at the centre instead.
+    static double Normalize(double value, double minValue, double maxValue)
+    {
+        if (maxValue <= minValue)
+        {
+            return 0;
+        }
+
+        return (value - minValue) / (maxValue - minValue);
     }
 
     static void DrawLegend(SvgBuilder builder, List<RadarCurve> curves, double x, double y, RenderOptions options)
