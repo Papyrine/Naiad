@@ -380,6 +380,24 @@ public class AgentFlowTests : TestBase
         await Assert.That(model.GetNode("agent")).IsNull();
     }
 
+    // A connector under a flow's id was a node and a subgraph at once, and the layout left the node at the
+    // origin, outside the frame. The id names the flow, as it does anywhere a node could go.
+    [Test]
+    public async Task Parse_ConnectorWithAFlowsIdNamesTheFlow()
+    {
+        var model = Parse(
+            """
+            agentflow-beta
+            connector F
+            flow F
+              a --> b
+            end
+            """);
+
+        await Assert.That(model.GetNode("F")).IsNull();
+        await Assert.That(model.GetContainer("F")).IsNotNull();
+    }
+
     [Test]
     public async Task Parse_RejectsUnclosedFlow()
     {
