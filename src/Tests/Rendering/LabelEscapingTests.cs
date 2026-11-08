@@ -64,4 +64,25 @@ public class LabelEscapingTests
 
         await Assert.That(builder.ToString()).Contains("<p>kept &amp; intact</p>");
     }
+
+    // Style values (from style, classDef, linkStyle and sequence rect colours) land in attribute values.
+    // A quote in one used to end the attribute, so the rest of the value became attributes or elements of
+    // its own: an event handler, or a whole <script> through the coloured link markers.
+    [Test]
+    [Arguments("style", "flowchart LR\n    A --> B\n    style A fill:red' onload='alert(1),stroke:\"x\"<y>&z")]
+    [Arguments("classDef", "flowchart LR\n    A:::bad --> B\n    classDef bad fill:red' onload='alert(1)")]
+    [Arguments("linkStyle", "flowchart LR\n    A --> B\n    linkStyle 0 stroke:red'/><script>alert(1)</script><x a='")]
+    [Arguments("sequence rect", "sequenceDiagram\n    rect red' onload='alert(1)\n    A->>B: hi\n    end")]
+    [Arguments("use case style", "usecase-beta\n    actor A\n    style A fill:red' onload='alert(1)")]
+    public async Task StyleValue_CannotBreakOutOfTheAttribute(string name, string input)
+    {
+        var svg = Mermaid.Render(input);
+
+        var document = XDocument.Parse(svg);
+        var injected = document
+            .Descendants()
+            .Where(_ => _.Name.LocalName == "script" || _.Attribute("onload") is not null)
+            .ToList();
+        await Assert.That(injected).IsEmpty().Because(name);
+    }
 }

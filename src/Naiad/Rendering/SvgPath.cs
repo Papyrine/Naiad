@@ -17,12 +17,12 @@ public class SvgPath : SvgElement
 
         if (Fill is not null)
         {
-            builder.Append($" fill='{Fill}'");
+            builder.AppendAttribute("fill", Fill);
         }
 
         if (Stroke is not null)
         {
-            builder.Append($" stroke='{Stroke}'");
+            builder.AppendAttribute("stroke", Stroke);
         }
 
         // stroke-width 1 is the SVG default — omit it.
@@ -33,17 +33,17 @@ public class SvgPath : SvgElement
 
         if (StrokeDasharray is not null)
         {
-            builder.Append($" stroke-dasharray='{StrokeDasharray}'");
+            builder.AppendAttribute("stroke-dasharray", StrokeDasharray);
         }
 
         if (MarkerStart is not null)
         {
-            builder.Append($" marker-start='{MarkerStart}'");
+            builder.AppendAttribute("marker-start", MarkerStart);
         }
 
         if (MarkerEnd is not null)
         {
-            builder.Append($" marker-end='{MarkerEnd}'");
+            builder.AppendAttribute("marker-end", MarkerEnd);
         }
 
         if (Opacity.HasValue)

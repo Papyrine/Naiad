@@ -13,22 +13,22 @@ public abstract class SvgElement
     {
         if (Id is not null)
         {
-            builder.Append($" id='{Id}'");
+            builder.AppendAttribute("id", Id);
         }
 
         if (Class is not null)
         {
-            builder.Append($" class='{Class}'");
+            builder.AppendAttribute("class", Class);
         }
 
         if (Style is not null)
         {
-            builder.Append($" style='{Style}'");
+            builder.AppendAttribute("style", Style);
         }
 
         if (Transform is not null)
         {
-            builder.Append($" transform='{Transform}'");
+            builder.AppendAttribute("transform", Transform);
         }
     }
 }

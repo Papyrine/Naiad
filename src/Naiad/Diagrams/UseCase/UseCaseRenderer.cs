@@ -731,6 +731,8 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
         var scale = box / Math.Max(packIcon.Width, packIcon.Height);
         var left = -packIcon.Width * scale / 2;
         var top = -packIcon.Height * scale / 2;
+        // The colour can come from a user `style`, so escape it like any other attribute value.
+        color = SvgXml.EscapeAttribute(color);
         builder.AddRawSvg(
             string.Create(
                 CultureInfo.InvariantCulture,
