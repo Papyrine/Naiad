@@ -39,6 +39,7 @@ class VennParser : IDiagramParser<VennModel>
             space.SkipAnd(Literals.Char(':'))
                 .SkipAnd(space)
                 .SkipAnd(CommonParsers.SignedDecimal)
+                .Assert(static _ => _ >= 0, "a size cannot be negative")
                 .Optional();
 
         var setStatement =

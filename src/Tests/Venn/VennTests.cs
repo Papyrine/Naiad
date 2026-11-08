@@ -317,6 +317,18 @@ public class VennTests : TestBase
         await Assert.That(result.Success).IsFalse();
     }
 
+    // A negative size has no circle: the radius is the square root of the size, so one negative set made
+    // every coordinate of the layout NaN.
+    [Test]
+    [Arguments("set", "venn-beta\n  set A:-5\n  set B", "a size cannot be negative at line 2, col 8")]
+    [Arguments("union", "venn-beta\n  set A:5\n  set B:4\n  union A,B:-1", "a size cannot be negative at line 4, col 12")]
+    public async Task Parse_NegativeSizeFails(string name, string input, string error)
+    {
+        var result = new VennParser().Parse(input);
+
+        await Assert.That(result.Error).IsEqualTo(error).Because(name);
+    }
+
     [Test]
     public async Task DetectsType()
     {
