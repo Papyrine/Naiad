@@ -28,6 +28,7 @@ global using Naiad.Diagrams.Radar;
 global using Naiad.Diagrams.Requirement;
 global using Naiad.Diagrams.Sankey;
 global using Naiad.Diagrams.Sequence;
+global using Naiad.Diagrams.Swimlane;
 global using Naiad.Diagrams.State;
 global using Naiad.Diagrams.Timeline;
 global using Naiad.Diagrams.Treemap;

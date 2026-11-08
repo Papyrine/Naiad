@@ -32,5 +32,6 @@ public enum DiagramType
     Ishikawa,
     TreeView,
     Wardley,
-    Venn
+    Venn,
+    Swimlane
 }
