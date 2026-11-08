@@ -1,0 +1,128 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 620.6 161"
+  style="max-width: 620.6px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <g
+      transform="translate(0,0)">
+      <rect
+        x="431.4"
+        y="6.5"
+        width="149.2"
+        height="108"
+        fill="#ffffde"
+        stroke="#536878"
+        class="boundary-body" />
+      <path
+        d="M81.6,60.5 L85.77,60.5 C89.93,60.5 98.27,60.5 115.52,60.5 C132.77,60.5 158.93,60.5 185.1,60.5 C211.27,60.5 237.43,60.5 253.35,60.5 C269.27,60.5 274.93,60.5 277.77,60.5 L280.6,60.5"
+        fill="none"
+        stroke="#06c"
+        stroke-width="3"
+        class="relationship" />
+      <path
+        d="M 288.6 60.5 L 280.6 64.5 L 280.6 56.5 Z"
+        fill="#06c"
+        stroke="#06c" />
+      <rect
+        x="131.6"
+        y="49.5"
+        width="107"
+        height="22"
+        fill="rgba(232,232,232,0.8)"
+        stroke="none"
+        class="edgeLabel" />
+      <text
+        x="185.1"
+        y="60.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="relationship-label">starts checkout</text>
+      <path
+        d="M381.4,60.5 L385.57,60.5 C389.73,60.5 398.07,60.5 406.4,60.5 C414.73,60.5 423.07,60.5 430.07,60.5 C437.07,60.5 442.73,60.5 445.57,60.5 L448.4,60.5"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 456.4 60.5 L 448.4 64.5 L 448.4 56.5 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <g
+        class="usecase-actor"
+        transform="translate(40.8,46)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#7f8ea3"
+          stroke-width="3" />
+      </g>
+      <text
+        x="40.8"
+        y="100.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Customer</text>
+      <path
+        d="M 288.6 60.5 A 46.4 29 0 1 0 381.4 60.5 A 46.4 29 0 1 0 288.6 60.5 Z"
+        fill="#fde"
+        stroke="#c33"
+        stroke-width="4"
+        class="usecase-element" />
+      <text
+        x="335"
+        y="60.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Checkout</text>
+      <rect
+        x="456.4"
+        y="41.5"
+        width="99.2"
+        height="38"
+        fill="#ECECFF"
+        stroke="#7f8ea3"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="506"
+        y="60.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Edit profile</text>
+      <rect
+        x="475.05"
+        y="8.5"
+        width="61.9"
+        height="21"
+        fill="#ffffde"
+        stroke="none" />
+      <text
+        x="506"
+        y="19"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="system-boundary-title">Account</text>
+    </g>
+  </g>
+</svg>

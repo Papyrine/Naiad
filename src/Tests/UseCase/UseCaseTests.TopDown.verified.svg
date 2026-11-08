@@ -1,0 +1,179 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 418.2 449"
+  style="max-width: 418.2px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <g
+      transform="translate(0,0)">
+      <rect
+        x="0"
+        y="163"
+        width="378.2"
+        height="246"
+        fill="#ffffde"
+        stroke="#aaaa33"
+        class="boundary-body" />
+      <path
+        d="M110.72,121 L110.24,125.17 C109.75,129.33 108.77,137.67 108.29,146 C107.8,154.33 107.8,162.67 107.8,169.67 C107.8,176.67 107.8,182.33 107.8,185.17 L107.8,188"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 107.8 196 L 103.8 188 L 111.8 188 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M158.6,99.45 L166.73,107.21 C174.85,114.97 191.1,130.48 199.23,142.41 C207.35,154.33 207.35,162.67 213.83,171.23 C220.32,179.8 233.28,188.6 239.77,193 L246.25,197.4"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 252.87 201.9 L 244 200.71 L 248.5 194.1 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M286.9,254 L286.9,260 C286.9,266 286.9,278 286.9,288.67 C286.9,299.33 286.9,308.67 286.9,313.33 L286.9,318"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        stroke-dasharray="3"
+        class="relationship" />
+      <path
+        d="M 286.9 326 L 282.9 318 L 290.9 318 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <rect
+        x="253.2"
+        y="279"
+        width="67.4"
+        height="22"
+        fill="rgba(232,232,232,0.8)"
+        stroke="none"
+        class="edgeLabel" />
+      <text
+        x="286.9"
+        y="290"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="relationship-label">«include»</text>
+      <path
+        d="M322.55,121 L322.55,125.17 C322.55,129.33 322.55,137.67 322.55,146 C322.55,154.33 322.55,162.67 320.36,170.14 C318.18,177.62 313.81,184.25 311.62,187.56 L309.43,190.87"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 305.03 197.54 L 306.1 188.66 L 312.77 193.07 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <g
+        class="usecase-actor"
+        transform="translate(117.8,46)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="117.8"
+        y="100.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Customer</text>
+      <g
+        class="usecase-actor"
+        transform="translate(322.55,46)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="322.55"
+        y="100.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Clerk</text>
+      <path
+        d="M 35 225 A 72.8 29 0 1 0 180.6 225 A 72.8 29 0 1 0 35 225 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="107.8"
+        y="225"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Browse catalogue</text>
+      <path
+        d="M 230.6 225 A 56.3 29 0 1 0 343.2 225 A 56.3 29 0 1 0 230.6 225 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="286.9"
+        y="225"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Place order</text>
+      <path
+        d="M 257 355 A 29.9 29 0 1 0 316.8 355 A 29.9 29 0 1 0 257 355 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="286.9"
+        y="355"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Pay</text>
+      <rect
+        x="169.7"
+        y="165"
+        width="38.8"
+        height="21"
+        fill="#ffffde"
+        stroke="none" />
+      <text
+        x="189.1"
+        y="175.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="system-boundary-title">Shop</text>
+    </g>
+  </g>
+</svg>

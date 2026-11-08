@@ -34,5 +34,6 @@ public enum DiagramType
     Wardley,
     Venn,
     Swimlane,
-    EventModeling
+    EventModeling,
+    UseCase
 }

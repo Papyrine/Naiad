@@ -1,0 +1,162 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 807.1 235"
+  style="max-width: 807.1px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <g
+      transform="translate(0,4)">
+      <rect
+        x="0"
+        y="-4"
+        width="135.5"
+        height="31"
+        fill="#ffffde"
+        stroke="#aaaa33"
+        class="boundary-tab" />
+      <rect
+        x="0"
+        y="27"
+        width="534.7"
+        height="164"
+        fill="#ffffde"
+        stroke="#aaaa33"
+        class="boundary-body" />
+      <rect
+        x="584.7"
+        y="27.5"
+        width="89.3"
+        height="31"
+        fill="#ffffde"
+        stroke="#aaaa33"
+        class="boundary-tab" />
+      <rect
+        x="584.7"
+        y="58.5"
+        width="182.4"
+        height="101"
+        fill="#ffffde"
+        stroke="#aaaa33"
+        class="boundary-body" />
+      <path
+        d="M145.1,95.5 L149.27,95.5 C153.43,95.5 161.77,95.5 168.77,95.5 C175.77,95.5 181.43,95.5 184.27,95.5 L187.1,95.5"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 195.1 95.5 L 187.1 99.5 L 187.1 91.5 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M347.3,95.5 L351.47,95.5 C355.63,95.5 363.97,95.5 370.97,95.5 C377.97,95.5 383.63,95.5 386.47,95.5 L389.3,95.5"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 397.3 95.5 L 389.3 99.5 L 389.3 91.5 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M509.7,95.5 L513.87,95.5 C518.03,95.5 526.37,95.5 534.7,95.5 C543.03,95.5 551.37,95.5 559.7,95.5 C568.03,95.5 576.37,95.5 583.37,95.5 C590.37,95.5 596.03,95.5 598.87,95.5 L601.7,95.5"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 609.7 95.5 L 601.7 99.5 L 601.7 91.5 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <g
+        class="usecase-actor"
+        transform="translate(85.05,81)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="85.05"
+        y="135.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Payment clerk</text>
+      <path
+        d="M 195.1 95.5 A 76.1 29 0 1 0 347.3 95.5 A 76.1 29 0 1 0 195.1 95.5 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="271.2"
+        y="95.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Authorize payment</text>
+      <rect
+        x="397.3"
+        y="76.5"
+        width="112.4"
+        height="38"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="453.5"
+        y="95.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Create receipt</text>
+      <path
+        d="M 609.7 95.5 A 66.2 29 0 1 0 742.1 95.5 A 66.2 29 0 1 0 609.7 95.5 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="675.9"
+        y="95.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Monthly report</text>
+      <text
+        x="67.75"
+        y="11.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="system-boundary-title">Payment service</text>
+      <text
+        x="629.35"
+        y="43"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="system-boundary-title">Reporting</text>
+    </g>
+  </g>
+</svg>

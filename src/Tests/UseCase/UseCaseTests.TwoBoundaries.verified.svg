@@ -1,0 +1,213 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 642 398"
+  style="max-width: 642px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <g
+      transform="translate(0,0)">
+      <rect
+        x="131.6"
+        y="0"
+        width="470.4"
+        height="180"
+        fill="#ffffde"
+        stroke="#aaaa33"
+        class="boundary-body" />
+      <rect
+        x="131.6"
+        y="211.5"
+        width="182.4"
+        height="128"
+        fill="#ffffde"
+        stroke="#aaaa33"
+        class="boundary-body" />
+      <path
+        d="M81.6,71.76 L85.77,68.46 C89.93,65.17 98.27,58.59 106.6,55.29 C114.93,52 123.27,52 142.63,52 C162,52 192.4,52 222.8,52 C253.2,52 283.6,52 308.58,52 C333.57,52 353.13,52 371.68,52.8 C390.22,53.6 407.75,55.2 416.51,56 L425.27,56.8"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 433.24 57.52 L 424.91 60.78 L 425.63 52.81 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M81.6,111.44 L85.77,112.2 C89.93,112.96 98.27,114.48 106.6,115.24 C114.93,116 123.27,116 133.57,116 C143.87,116 156.13,116 162.27,116 L168.4,116"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 176.4 116 L 168.4 120 L 168.4 112 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M65.76,164.5 L72.57,181 C79.37,197.5 92.99,230.5 103.96,247 C114.93,263.5 123.27,263.5 130.74,263.94 C138.22,264.37 144.84,265.24 148.16,265.68 L151.47,266.11"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 159.4 267.16 L 150.94 270.08 L 151.99 262.15 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M78.8,297.5 L83.43,297.5 C88.07,297.5 97.33,297.5 106.13,297.5 C114.93,297.5 123.27,297.5 131.67,296.48 C140.08,295.45 148.56,293.41 152.79,292.39 L157.03,291.36"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 164.81 289.49 L 157.97 295.25 L 156.1 287.48 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <path
+        d="M269.2,116 L276.67,116 C284.13,116 299.07,116 316.32,116 C333.57,116 353.13,116 374.98,111.23 C396.83,106.46 420.96,96.92 433.03,92.14 L445.09,87.37"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        stroke-dasharray="3"
+        class="relationship" />
+      <path
+        d="M 452.53 84.43 L 446.57 91.09 L 443.62 83.65 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <rect
+        x="339"
+        y="105"
+        width="67.4"
+        height="22"
+        fill="rgba(232,232,232,0.8)"
+        stroke="none"
+        class="edgeLabel" />
+      <text
+        x="372.7"
+        y="116"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="relationship-label">«include»</text>
+      <g
+        class="usecase-actor"
+        transform="translate(40.8,89.5)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="40.8"
+        y="144"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Customer</text>
+      <g
+        class="usecase-actor"
+        transform="translate(40.8,283)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="40.8"
+        y="337.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">Support</text>
+      <path
+        d="M 431.4 64 A 72.8 29 0 1 0 577 64 A 72.8 29 0 1 0 431.4 64 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="504.2"
+        y="64"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Browse catalogue</text>
+      <path
+        d="M 176.4 116 A 46.4 29 0 1 0 269.2 116 A 46.4 29 0 1 0 176.4 116 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="222.8"
+        y="116"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Checkout</text>
+      <path
+        d="M 156.6 275.5 A 66.2 29 0 1 0 289 275.5 A 66.2 29 0 1 0 156.6 275.5 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="222.8"
+        y="275.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Track delivery</text>
+      <rect
+        x="324.3"
+        y="2"
+        width="85"
+        height="21"
+        fill="#ffffde"
+        stroke="none" />
+      <text
+        x="366.8"
+        y="12.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="system-boundary-title">Storefront</text>
+      <rect
+        x="180.3"
+        y="213.5"
+        width="85"
+        height="21"
+        fill="#ffffde"
+        stroke="none" />
+      <text
+        x="222.8"
+        y="224"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="system-boundary-title">Fulfilment</text>
+    </g>
+  </g>
+</svg>
