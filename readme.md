@@ -330,6 +330,7 @@ var withFontAwesomeIcon = SkiaRenderer.RenderPng(
  * [Wardley Map](https://mermaid.js.org/syntax/wardley.html) (beta)
  * [Venn](https://mermaid.js.org/syntax/venn.html) (beta)
  * [Swimlane](https://mermaid.js.org/syntax/swimlanes.html) (beta)
+ * [Event Modeling](https://mermaid.js.org/syntax/eventmodeling.html)
 
 
 ## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
@@ -338,6 +339,7 @@ Auto-generated documentation from the test suite.
 - [C4](/src/test-renders/C4.md)
 - [Class](/src/test-renders/Class.md)
 - [EntityRelationship](/src/test-renders/EntityRelationship.md)
+- [EventModeling](/src/test-renders/EventModeling.md)
 - [Flowchart](/src/test-renders/Flowchart.md)
 - [Gantt](/src/test-renders/Gantt.md)
 - [GitGraph](/src/test-renders/GitGraph.md)

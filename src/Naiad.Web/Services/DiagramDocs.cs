@@ -57,6 +57,7 @@ public static class DiagramDocs
             DiagramType.Wardley => new("Wardley Map", $"{baseUrl}wardley.html"),
             DiagramType.Venn => new("Venn", $"{baseUrl}venn.html"),
             DiagramType.Swimlane => new("Swimlane", $"{baseUrl}swimlanes.html"),
+            DiagramType.EventModeling => new("Event Modeling", $"{baseUrl}eventmodeling.html"),
             DiagramType.ZenUML => new("ZenUML", $"{baseUrl}zenuml.html"),
             _ => new(type.ToString(), baseUrl)
         };

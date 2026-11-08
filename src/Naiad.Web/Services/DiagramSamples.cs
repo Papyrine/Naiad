@@ -272,6 +272,20 @@ public static class DiagramSamples
             fix --> answer
             answer --> receive
             """),
+        new("Event Modeling",
+            """
+            eventmodeling
+            title Shopping cart
+            tf 01 ui CartUI
+            tf 02 cmd AddItem { description: string, price: number }
+            tf 03 evt ItemAdded
+            tf 04 rmo CartItems
+            tf 05 ui CartUI
+            tf 06 cmd RemoveItem
+            tf 07 evt ItemRemoved
+            tf 08 rmo CartItems ->> 03 ->> 07
+            tf 09 ui CheckoutUI
+            """),
     ];
 
     /// <summary>The diagram shown when the editor first loads.</summary>

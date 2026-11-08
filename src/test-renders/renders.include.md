@@ -4,6 +4,7 @@ Auto-generated documentation from the test suite.
 - [C4](/src/test-renders/C4.md)
 - [Class](/src/test-renders/Class.md)
 - [EntityRelationship](/src/test-renders/EntityRelationship.md)
+- [EventModeling](/src/test-renders/EventModeling.md)
 - [Flowchart](/src/test-renders/Flowchart.md)
 - [Gantt](/src/test-renders/Gantt.md)
 - [GitGraph](/src/test-renders/GitGraph.md)
