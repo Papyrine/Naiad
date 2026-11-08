@@ -60,10 +60,9 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
             Literals.NoneOf("\r\n", minSize: 0)
                 .AsTrimmedString();
 
-        // A parenthesised condition or argument list, kept without its parentheses.
-        var parenthesised =
-            Between(Literals.Char('('), Literals.NoneOf(")\r\n", minSize: 0), Literals.Char(')'))
-                .AsTrimmedString();
+        // A parenthesised condition or argument list, kept without its parentheses. It may hold calls and
+        // strings of its own: `if(user.isValid())`, `save(order.getId())`, `m("a)b")`.
+        var parenthesised = new ParenthesisedParser();
 
         var openBrace = gap.SkipAnd(Literals.Char('{'));
 
@@ -595,6 +594,85 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
         {
             branches.Add(branch);
             return branch;
+        }
+    }
+
+    /// <summary>
+    /// <c>(</c>, then everything up to the <c>)</c> that matches it on the same line, which is left out along
+    /// with the opening one and the space inside them. Parentheses nest, and a quoted string may hold
+    /// either kind, with a backslash escaping its quote. A quote that is never closed on the line is just a
+    /// character, as the apostrophe in <c>if(it's raining)</c> is.
+    /// </summary>
+    sealed class ParenthesisedParser : Parser<string>
+    {
+        public override bool Parse(ParseContext context, ref ParseResult<string> result)
+        {
+            var cursor = context.Scanner.Cursor;
+            var span = cursor.Span;
+            if (span.IsEmpty ||
+                span[0] != '(')
+            {
+                return false;
+            }
+
+            var close = Close(span, quotes: true);
+            if (close < 0)
+            {
+                close = Close(span, quotes: false);
+                if (close < 0)
+                {
+                    return false;
+                }
+            }
+
+            var start = cursor.Offset;
+            var inner = span[1..close].Trim().ToString();
+            cursor.Advance(close + 1);
+            result.Set(start, start + close + 1, inner);
+            return true;
+        }
+
+        // Where the parenthesis that opens the text closes, or -1 if it does not on this line.
+        static int Close(ReadOnlySpan<char> span, bool quotes)
+        {
+            var depth = 0;
+            char? quote = null;
+            for (var index = 0; index < span.Length; index++)
+            {
+                var c = span[index];
+                if (c is '\r' or '\n')
+                {
+                    return -1;
+                }
+
+                if (quote is not null)
+                {
+                    if (c == '\\')
+                    {
+                        index++;
+                    }
+                    else if (c == quote)
+                    {
+                        quote = null;
+                    }
+
+                    continue;
+                }
+
+                switch (c)
+                {
+                    case '"' or '\'' when quotes:
+                        quote = c;
+                        break;
+                    case '(':
+                        depth++;
+                        break;
+                    case ')' when --depth == 0:
+                        return index;
+                }
+            }
+
+            return -1;
         }
     }
 }

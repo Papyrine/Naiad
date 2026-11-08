@@ -171,6 +171,30 @@ public class ZenUMLTests : TestBase
         await Assert.That(model.Participants.Any(static _ => _.IsHidden)).IsFalse();
     }
 
+    // A condition or argument list ended at the first `)`, so one holding a call or a string with a `)`
+    // in it failed to parse.
+    [Test]
+    public async Task Parse_ParenthesesNestAndHoldStrings()
+    {
+        var model = Parse(
+            """
+            zenuml
+                if(user.isValid()) {
+                  A.save(order.getId(), "a)b")
+                }
+                while(it's raining) {
+                  A.wait('(')
+                }
+            """);
+
+        var alt = model.Elements.OfType<Alt>().Single();
+        await Assert.That(alt.Condition).IsEqualTo("user.isValid()");
+        await Assert.That(Describe(alt.Elements)).IsEqualTo("_STARTER_->A:save(order.getId(), \"a)b\")");
+        var loop = model.Elements.OfType<Loop>().Single();
+        await Assert.That(loop.Label).IsEqualTo("it's raining");
+        await Assert.That(Describe(loop.Elements)).IsEqualTo("_STARTER_->A:wait('(')");
+    }
+
     [Test]
     public async Task Parse_StarterIsHiddenAndFirst()
     {
