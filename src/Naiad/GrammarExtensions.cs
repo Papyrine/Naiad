@@ -9,9 +9,18 @@ static class GrammarExtensions
     {
         var context = new DiagramParseContext(input);
         var result = new ParseResult<TModel>();
-        if (parser.Parse(context, ref result))
+        try
         {
-            return new(result.Value);
+            if (parser.Parse(context, ref result))
+            {
+                return new(result.Value);
+            }
+        }
+        catch (ParseException)
+        {
+            // Parlot's stack guard: the input nests deeper than a recursive rule can follow on the stack
+            // that is left. It is a failed parse like any other, not an exception from inside Parlot.
+            return new(context.DescribeAt(context.Scanner.Cursor.Offset, "the input is nested too deeply"));
         }
 
         return new(context.Describe());

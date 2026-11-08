@@ -69,4 +69,16 @@ public class ParseErrorTests
         await Assert.That(result.Error).IsNull();
         await Assert.That(result.Value.Sections.Count).IsEqualTo(1);
     }
+
+    // Parlot's stack guard throws its own ParseException when the input nests deeper than a recursive rule
+    // can follow, which escaped Render as an exception from inside Parlot rather than a parse failure.
+    [Test]
+    public async Task InputNestedTooDeeply_IsAParseFailure()
+    {
+        var input = $"railroad-ebnf-beta\nr = {new string('(', 5000)}a{new string(')', 5000)} ;";
+
+        var exception = await Assert.That(() => Mermaid.Render(input)).Throws<MermaidParseException>();
+
+        await Assert.That(exception!.Message).StartsWith("Failed to parse EBNF railroad diagram: the input is nested too deeply at line 2, col ");
+    }
 }
