@@ -211,6 +211,21 @@ public class UseCaseTests : TestBase
         return VerifySvg(input);
     }
 
+    // Notes were measured before JSON tables, so a note on a table was left out while the line tying it to
+    // the table was still added, and drawing that line threw.
+    [Test]
+    public Task NoteOnJsonTable()
+    {
+        const string input =
+            """
+            usecase-beta
+            json Payload@{ "id": 1, "name": "Book" }
+            note for Payload "Sent by the client"
+            """;
+
+        return VerifySvg(input);
+    }
+
     [Test]
     public Task Styling()
     {
