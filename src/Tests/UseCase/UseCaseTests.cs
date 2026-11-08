@@ -509,6 +509,19 @@ public class UseCaseTests : TestBase
             .IsEquivalentTo(["b=2", "a.c[0]=true", "a.c[1]=null", "e={}"], CollectionOrdering.Matching);
     }
 
+    // A numeric entity naming a surrogate is no character, and turning it into one threw.
+    [Test]
+    public async Task Parse_SurrogateEntityIsKeptAsWritten()
+    {
+        var model = Parse(
+            """
+            usecase-beta
+            A("a#55296;b #65;")
+            """);
+
+        await Assert.That(model.UseCases.Single().Label).IsEqualTo("a#55296;b A");
+    }
+
     // Each layer wins over the one before: the default class, the named classes in order, then `style`.
     [Test]
     public async Task Parse_StylePrecedence()

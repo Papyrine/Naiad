@@ -426,7 +426,13 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
                 var name = _.Groups[1].Value;
                 if (int.TryParse(name, NumberStyles.None, CultureInfo.InvariantCulture, out var code))
                 {
-                    return code is > 0 and <= 0x10FFFF ? char.ConvertFromUtf32(code) : _.Value;
+                    // Not 0, and not a surrogate, which is half of a pair and no character by itself.
+                    if (code > 0 && Rune.IsValid(code))
+                    {
+                        return char.ConvertFromUtf32(code);
+                    }
+
+                    return _.Value;
                 }
 
                 var decoded = WebUtility.HtmlDecode($"&{name};");
