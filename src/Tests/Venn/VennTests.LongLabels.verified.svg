@@ -67,35 +67,35 @@
     x="400"
     y="200.44"
     text-anchor="middle"
-    font-size="19.2195px"
+    font-size="19.22px"
     font-family="Arial, sans-serif"
     fill="#333">Continuous</text>
   <text
     x="400"
     y="221.59"
     text-anchor="middle"
-    font-size="19.2195px"
+    font-size="19.22px"
     font-family="Arial, sans-serif"
     fill="#333">delivery</text>
   <text
     x="400"
     y="242.73"
     text-anchor="middle"
-    font-size="19.2195px"
+    font-size="19.22px"
     font-family="Arial, sans-serif"
     fill="#333">pipelines</text>
   <text
     x="400"
     y="263.87"
     text-anchor="middle"
-    font-size="19.2195px"
+    font-size="19.22px"
     font-family="Arial, sans-serif"
     fill="#333">and</text>
   <text
     x="400"
     y="285.01"
     text-anchor="middle"
-    font-size="19.2195px"
+    font-size="19.22px"
     font-family="Arial, sans-serif"
     fill="#333">observability</text>
   <text

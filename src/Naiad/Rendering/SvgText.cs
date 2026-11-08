@@ -51,7 +51,7 @@ public class SvgText : SvgElement
 
             if (FontSize is not null)
             {
-                builder.Append($" font-size='{FontSize}px'");
+                builder.Append(CultureInfo.InvariantCulture, $" font-size='{FontSize:0.##}px'");
             }
 
             if (FontFamily is not null)

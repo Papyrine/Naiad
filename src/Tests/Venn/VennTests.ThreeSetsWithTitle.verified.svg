@@ -49,28 +49,28 @@
     x="400"
     y="341.89"
     text-anchor="middle"
-    font-size="16.8221px"
+    font-size="16.82px"
     font-family="Arial, sans-serif"
     fill="#333">Buildable</text>
   <text
     x="465.21"
     y="227.54"
     text-anchor="middle"
-    font-size="15.8158px"
+    font-size="15.82px"
     font-family="Arial, sans-serif"
     fill="#333">Sustainable</text>
   <text
     x="334.79"
     y="228.09"
     text-anchor="middle"
-    font-size="17.3978px"
+    font-size="17.4px"
     font-family="Arial, sans-serif"
     fill="#333">Marketable</text>
   <text
     x="400"
     y="266.6"
     text-anchor="middle"
-    font-size="18.8557px"
+    font-size="18.86px"
     font-family="Arial, sans-serif"
     fill="#333">Ship it</text>
 </svg>
