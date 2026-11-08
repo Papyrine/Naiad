@@ -286,6 +286,23 @@ public static class DiagramSamples
             tf 08 rmo CartItems ->> 03 ->> 07
             tf 09 ui CheckoutUI
             """),
+        new("Use Case",
+            """
+            usecase-beta
+            direction LR
+            actor Customer
+            actor Admin
+            systemBoundary "Online shop"
+              Browse("Browse products")
+              Checkout("Place order")
+              Payment("Pay")
+              Manage("Manage catalogue")
+            end
+            Customer --> Browse
+            Customer --> Checkout
+            Admin --> Manage
+            Checkout ..> : include Payment
+            """),
     ];
 
     /// <summary>The diagram shown when the editor first loads.</summary>

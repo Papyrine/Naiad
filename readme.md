@@ -331,6 +331,7 @@ var withFontAwesomeIcon = SkiaRenderer.RenderPng(
  * [Venn](https://mermaid.js.org/syntax/venn.html) (beta)
  * [Swimlane](https://mermaid.js.org/syntax/swimlanes.html) (beta)
  * [Event Modeling](https://mermaid.js.org/syntax/eventmodeling.html)
+ * [Use Case](https://mermaid.js.org/syntax/usecase.html) (beta)
 
 
 ## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
@@ -365,6 +366,7 @@ Auto-generated documentation from the test suite.
 - [Sankey](Sankey.md)
 - [Treemap](Treemap.md)
 - [TreeView](TreeView.md)
+- [UseCase](UseCase.md)
 - [Venn](Venn.md)
 - [Wardley](Wardley.md)
 - [XYChart](XYChart.md)<!-- endInclude -->

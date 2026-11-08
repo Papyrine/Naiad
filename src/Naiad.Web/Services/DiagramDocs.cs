@@ -58,6 +58,7 @@ public static class DiagramDocs
             DiagramType.Venn => new("Venn", $"{baseUrl}venn.html"),
             DiagramType.Swimlane => new("Swimlane", $"{baseUrl}swimlanes.html"),
             DiagramType.EventModeling => new("Event Modeling", $"{baseUrl}eventmodeling.html"),
+            DiagramType.UseCase => new("Use Case", $"{baseUrl}usecase.html"),
             DiagramType.ZenUML => new("ZenUML", $"{baseUrl}zenuml.html"),
             _ => new(type.ToString(), baseUrl)
         };
