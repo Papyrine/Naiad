@@ -334,11 +334,13 @@ var withFontAwesomeIcon = SkiaRenderer.RenderPng(
  * [Use Case](https://mermaid.js.org/syntax/usecase.html) (beta)
  * [Cynefin](https://mermaid.js.org/syntax/cynefin.html) (beta)
  * Info (`info`: draws the Naiad version)
+ * [Agent Flow](https://mermaid.js.org/syntax/agentflow.html) (beta)
 
 
 ## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
 
 Auto-generated documentation from the test suite.
+- [AgentFlow](/src/test-renders/AgentFlow.md)
 - [C4](/src/test-renders/C4.md)
 - [Class](/src/test-renders/Class.md)
 - [EntityRelationship](/src/test-renders/EntityRelationship.md)

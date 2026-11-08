@@ -62,6 +62,7 @@ public static class DiagramDocs
             DiagramType.Cynefin => new("Cynefin", $"{baseUrl}cynefin.html"),
             // Mermaid has no syntax page for its version diagram; its examples page is the nearest.
             DiagramType.Info => new("Info", $"{baseUrl}all-examples.html"),
+            DiagramType.AgentFlow => new("Agent Flow", $"{baseUrl}agentflow.html"),
             DiagramType.ZenUML => new("ZenUML", $"{baseUrl}zenuml.html"),
             _ => new(type.ToString(), baseUrl)
         };
