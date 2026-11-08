@@ -23,17 +23,17 @@ public class SvgText : SvgElement
         {
             if (Transform is not null)
             {
-                builder.Append($" transform='{Transform}'");
+                builder.AppendAttribute("transform", Transform);
             }
 
             if (Class is not null)
             {
-                builder.Append($" class='{Class}'");
+                builder.AppendAttribute("class", Class);
             }
 
             if (Style is not null)
             {
-                builder.Append($" style='{Style}'");
+                builder.AppendAttribute("style", Style);
             }
         }
         else
@@ -41,12 +41,12 @@ public class SvgText : SvgElement
             builder.Append(CultureInfo.InvariantCulture, $" x='{X:0.##}' y='{Y:0.##}'");
             if (TextAnchor is not null)
             {
-                builder.Append($" text-anchor='{TextAnchor}'");
+                builder.AppendAttribute("text-anchor", TextAnchor);
             }
 
             if (DominantBaseline is not null)
             {
-                builder.Append($" dominant-baseline='{DominantBaseline}'");
+                builder.AppendAttribute("dominant-baseline", DominantBaseline);
             }
 
             if (FontSize is not null)
@@ -56,18 +56,18 @@ public class SvgText : SvgElement
 
             if (FontFamily is not null)
             {
-                builder.Append($" font-family='{FontFamily}'");
+                builder.AppendAttribute("font-family", FontFamily);
             }
 
             // "normal" is the default weight — omit it, keeping only meaningful weights (e.g. bold).
             if (FontWeight is not null and not "normal")
             {
-                builder.Append($" font-weight='{FontWeight}'");
+                builder.AppendAttribute("font-weight", FontWeight);
             }
 
             if (Fill is not null)
             {
-                builder.Append($" fill='{Fill}'");
+                builder.AppendAttribute("fill", Fill);
             }
 
             CommonAttributes(builder);
@@ -80,49 +80,8 @@ public class SvgText : SvgElement
         else
         {
             builder.Append('>');
-            AppendEscapedXml(builder, Content);
+            SvgXml.AppendText(builder, Content);
             builder.Append("</text>");
-        }
-    }
-
-    static void AppendEscapedXml(StringBuilder builder, string text)
-    {
-        // Fast path: if no escaping needed, append directly without scanning twice.
-        var start = 0;
-        for (var i = 0; i < text.Length; i++)
-        {
-            var c = text[i];
-            var replacement = c switch
-            {
-                '&' => "&amp;",
-                '<' => "&lt;",
-                '>' => "&gt;",
-                '"' => "&quot;",
-                '\'' => "&apos;",
-                _ => null
-            };
-
-            if (replacement is null)
-            {
-                continue;
-            }
-
-            if (i > start)
-            {
-                builder.Append(text, start, i - start);
-            }
-
-            builder.Append(replacement);
-            start = i + 1;
-        }
-
-        if (start == 0)
-        {
-            builder.Append(text);
-        }
-        else if (start < text.Length)
-        {
-            builder.Append(text, start, text.Length - start);
         }
     }
 }

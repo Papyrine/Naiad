@@ -21,22 +21,23 @@ public class SvgMarker
 
     public void ToXml(StringBuilder builder)
     {
-        builder.Append($"<marker id='{Id}'");
+        builder.Append("<marker");
+        builder.AppendAttribute("id", Id);
 
         if (ClassName is not null)
         {
-            builder.Append($" class='{ClassName}'");
+            builder.AppendAttribute("class", ClassName);
         }
 
         if (ViewBox is not null)
         {
-            builder.Append($" viewBox='{ViewBox}'");
+            builder.AppendAttribute("viewBox", ViewBox);
         }
 
         builder.Append(CultureInfo.InvariantCulture, $" refX='{RefX:0.##}' refY='{RefY:0.##}'");
         if (MarkerUnits is not null)
         {
-            builder.Append($" markerUnits='{MarkerUnits}'");
+            builder.AppendAttribute("markerUnits", MarkerUnits);
         }
 
         builder.Append(CultureInfo.InvariantCulture, $" markerWidth='{MarkerWidth:0.##}' markerHeight='{MarkerHeight:0.##}'");
@@ -49,7 +50,7 @@ public class SvgMarker
         // Markers that name a fill carry it on the content element. The rasterizers read Fill off this
         // model, so leaving it out of the markup would have them draw a colour the SVG never shows.
         // Markers without one (the flowchart set) are left to the `.marker` CSS rule instead.
-        var fill = Fill is null ? "" : $" fill='{Fill}'";
+        var fill = Fill is null ? "" : $" fill='{SvgXml.EscapeAttribute(Fill)}'";
         if (UseCircle)
         {
             builder.Append(CultureInfo.InvariantCulture, $"<circle cx='{CircleCx:0.##}' cy='{CircleCy:0.##}' r='{CircleR:0.##}' class='arrowMarkerPath'{fill}{style}/>");

@@ -23,7 +23,7 @@ public class SvgDocument
 
         if (!string.IsNullOrEmpty(DiagramClass))
         {
-            builder.Append($" class='{DiagramClass}'");
+            builder.AppendAttribute("class", DiagramClass);
         }
 
         builder.Append($" viewBox='{ViewBox}'");
@@ -33,7 +33,7 @@ public class SvgDocument
 
         if (!string.IsNullOrEmpty(AriaRoledescription))
         {
-            builder.Append($" aria-roledescription='{AriaRoledescription}'");
+            builder.AppendAttribute("aria-roledescription", AriaRoledescription);
         }
 
         builder.Append('>');

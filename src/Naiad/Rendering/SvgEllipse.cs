@@ -15,12 +15,12 @@ public class SvgEllipse : SvgElement
 
         if (Fill is not null)
         {
-            builder.Append($" fill='{Fill}'");
+            builder.AppendAttribute("fill", Fill);
         }
 
         if (Stroke is not null)
         {
-            builder.Append($" stroke='{Stroke}'");
+            builder.AppendAttribute("stroke", Stroke);
         }
 
         CommonAttributes(builder);

@@ -16,7 +16,7 @@ public class SvgLine : SvgElement
 
         if (Stroke is not null)
         {
-            builder.Append($" stroke='{Stroke}'");
+            builder.AppendAttribute("stroke", Stroke);
         }
 
         // stroke-width 1 is the SVG default — omit it.
@@ -27,7 +27,7 @@ public class SvgLine : SvgElement
 
         if (StrokeDasharray is not null)
         {
-            builder.Append($" stroke-dasharray='{StrokeDasharray}'");
+            builder.AppendAttribute("stroke-dasharray", StrokeDasharray);
         }
 
         CommonAttributes(builder);
