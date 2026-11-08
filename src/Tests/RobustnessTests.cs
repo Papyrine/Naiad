@@ -33,6 +33,20 @@ public class RobustnessTests
         await Assert.That(svg).DoesNotContain("NaN");
     }
 
+    // A subgraph holding only empty subgraphs had no leaf to stand in for it, so an edge to it was ranked
+    // against the compound node itself and the layout threw.
+    [Test]
+    [Arguments("edge in", "flowchart TB\n    subgraph S1\n        subgraph S2\n        end\n    end\n    a --> S1")]
+    [Arguments("edge out", "flowchart TB\n    subgraph S1\n        subgraph S2\n        end\n    end\n    S1 --> a")]
+    [Arguments("two deep", "flowchart LR\n    subgraph S1\n        subgraph S2\n            subgraph S3\n            end\n        end\n    end\n    a --> S1 --> b")]
+    public async Task Flowchart_EdgeToSubgraphOfEmptySubgraphs_Renders(string name, string input)
+    {
+        var svg = Mermaid.Render(input);
+
+        await Assert.That(svg).Contains("class='cluster'").Because(name);
+        await Assert.That(svg).DoesNotContain("NaN").Because(name);
+    }
+
     [Test]
     public async Task Architecture_DuplicateServiceId_IsRejectedWithAReason()
     {

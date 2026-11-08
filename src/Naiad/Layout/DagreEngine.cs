@@ -343,8 +343,17 @@ class DagreEngine : ILayoutEngine
     // A collapsed subgraph is a leaf itself: the nodes inside it are not in this layout.
     static string? FirstLeaf(Subgraph subgraph, string? except, HashSet<Subgraph> collapsed)
     {
-        if (collapsed.Contains(subgraph))
+        // So is an empty one, nested or not. Falling through would leave a subgraph holding only empty
+        // subgraphs with no leaf, and the edge would be ranked against that compound node, which dagre
+        // cannot do.
+        if (collapsed.Contains(subgraph) ||
+            subgraph is { NodeIds.Count: 0, NestedSubgraphs.Count: 0 })
         {
+            if (subgraph.Id == except)
+            {
+                return null;
+            }
+
             return subgraph.Id;
         }
 
