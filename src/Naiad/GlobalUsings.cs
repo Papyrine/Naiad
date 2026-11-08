@@ -1,4 +1,5 @@
 ﻿global using System.Diagnostics;
+global using System.Buffers;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Globalization;
 global using System.Net;

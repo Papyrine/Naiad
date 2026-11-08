@@ -361,6 +361,7 @@ public static class Mermaid
 
         var builder = new StringBuilder();
         svg.ToXml(builder);
-        return builder.ToString();
+        var markup = builder.ToString();
+        return options.PrettyPrint ? SvgPrettyPrinter.Format(markup) : markup;
     }
 }

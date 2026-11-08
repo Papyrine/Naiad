@@ -50,11 +50,15 @@ var svg = Mermaid.Render(
     {
         Padding = 20,
         FontSize = 14,
-        FontFamily = "Arial, sans-serif"
+        FontFamily = "Arial, sans-serif",
+        // indent the SVG markup, one element per line (default false: compact)
+        PrettyPrint = true
     });
 ```
-<sup><a href='/src/Tests/Snippets.cs#L18-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-RenderOptions' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L18-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-RenderOptions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+
+`PrettyPrint` only adds whitespace between elements: text labels, `<style>` and `<foreignObject>` HTML labels are kept on one line, so the rendered diagram is unchanged.
 
 
 ## PNG output
@@ -77,7 +81,7 @@ SkiaRenderer.RenderPng(input, "diagram.png");
 var imageSharpPng = ImageSharpRenderer.RenderPng(input);
 ImageSharpRenderer.RenderPng(input, "diagram.png");
 ```
-<sup><a href='/src/Tests/Snippets.cs#L33-L41' title='Snippet source file'>snippet source</a> | <a href='#snippet-RenderToPng' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L35-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-RenderToPng' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Both renderers accept the same `RenderOptions` as `Mermaid.Render`, plus a `Png` section controlling rasterization:
@@ -101,7 +105,7 @@ SkiaRenderer.RenderPng(
         }
     });
 ```
-<sup><a href='/src/Tests/Snippets.cs#L46-L62' title='Snippet source file'>snippet source</a> | <a href='#snippet-PngOptions' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L48-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-PngOptions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `RenderPng` also has an overload that writes to a `Stream`.
@@ -229,7 +233,7 @@ IconPack.Load("logos.json");
 using var stream = File.OpenRead("logos.json");
 IconPack.Load(stream);
 ```
-<sup><a href='/src/Tests/Snippets.cs#L66-L72' title='Snippet source file'>snippet source</a> | <a href='#snippet-LoadIconPack' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L68-L74' title='Snippet source file'>snippet source</a> | <a href='#snippet-LoadIconPack' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Pack files are published as [`@iconify-json/*`](https://icon-sets.iconify.design/) packages (the `icons.json` file), e.g. `@iconify-json/logos`. `Load` registers the pack under its prefix and returns it. Register all packs once at startup — calling `IconPack.Load` after the first `Mermaid.Render` throws a `MermaidException`.
@@ -263,7 +267,7 @@ Mermaid.Render(
         Storage ::icon(logos:aws-s3)
     """);
 ```
-<sup><a href='/src/Tests/Snippets.cs#L77-L101' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconUsage' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L79-L103' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconUsage' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Single-color icons (e.g. `mdi`, `tabler`) inherit the surrounding color; multi-color icons (e.g. `logos`) keep their own palette.
@@ -292,7 +296,7 @@ var withFontAwesomeIcon = SkiaRenderer.RenderPng(
         A[fa:fa-bell Alerts]
     """);
 ```
-<sup><a href='/src/Tests/Snippets.cs#L106-L125' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconsInPng' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets.cs#L108-L127' title='Snippet source file'>snippet source</a> | <a href='#snippet-IconsInPng' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

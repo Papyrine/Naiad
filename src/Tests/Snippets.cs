@@ -22,7 +22,9 @@ static class Snippets
             {
                 Padding = 20,
                 FontSize = 14,
-                FontFamily = "Arial, sans-serif"
+                FontFamily = "Arial, sans-serif",
+                // indent the SVG markup, one element per line (default false: compact)
+                PrettyPrint = true
             });
         // end-snippet
         Console.WriteLine(svg);
