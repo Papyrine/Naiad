@@ -378,6 +378,26 @@ public class WardleyTests : TestBase
         await Assert.That(trend.TargetEvolution).IsEqualTo(0.8);
     }
 
+    // An evolve names a pipeline component by its label, as a link does. It looked the name up as an id
+    // only, and a component's id has its pipeline's name in front, so the evolve was dropped.
+    [Test]
+    public async Task Parse_EvolvePipelineComponent()
+    {
+        var model = Parse(
+            """
+            wardley-beta
+            component Database [0.40, 0.60]
+            pipeline Database {
+              component "File System" [0.25]
+            }
+            evolve "File System" 0.7
+            """);
+
+        var trend = model.Trends.Single();
+        await Assert.That(trend.NodeId).IsEqualTo("Database_File System");
+        await Assert.That(trend.TargetEvolution).IsEqualTo(0.7);
+    }
+
     [Test]
     public async Task Parse_StagesNotesAnnotationsAndForces()
     {

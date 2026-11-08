@@ -418,7 +418,8 @@ class WardleyParser : IDiagramParser<WardleyModel>
         // replaces its earlier trend.
         foreach (var evolveItem in content.OfType<EvolveItem>())
         {
-            var nodeId = evolveItem.Name.Trim();
+            // By id or label, as a link names its node, so a pipeline component can be evolved too.
+            var nodeId = ResolveNodeId(evolveItem.Name.Trim());
             if (!nodes.ContainsKey(nodeId))
             {
                 continue;
@@ -497,7 +498,7 @@ class WardleyParser : IDiagramParser<WardleyModel>
             return node;
         }
 
-        // A link names a node by its id, or failing that by its label, which is how a pipeline component
+        // A link or an evolve names a node by its id, or failing that by its label, which is how a pipeline component
         // (whose id has its pipeline's name in front) is reached.
         string ResolveNodeId(string name)
         {
