@@ -241,6 +241,19 @@ public class FlowchartFeatureTests
         await Assert.That(HtmlText.HasEmphasis("<p>plain<br/>text</p>")).IsFalse();
     }
 
+    // A numeric entity naming a surrogate, or a number past the last code point, is no character, and
+    // turning it into one threw. It is kept as written instead.
+    [Test]
+    [Arguments("&#55296;")]
+    [Arguments("&#xDFFF;")]
+    [Arguments("&#1114112;")]
+    public async Task HtmlLines_KeepAnEntityThatIsNoCharacter(string entity)
+    {
+        var lines = HtmlText.ExtractLines($"<p>a{entity}b</p>");
+
+        await Assert.That(lines).IsEquivalentTo(new[] { $"a{entity}b" });
+    }
+
     // Both PNG backends draw a markdown label: the bold word puts down more ink than the same word plain.
     [Test]
     public async Task Png_DrawsBoldHeavierThanPlain()

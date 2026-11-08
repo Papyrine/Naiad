@@ -173,7 +173,7 @@ static partial class HtmlText
             var parsed = numeric.StartsWith('x') || numeric.StartsWith('X')
                 ? int.TryParse(numeric[1..], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var hex) ? hex : -1
                 : int.TryParse(numeric, NumberStyles.Integer, CultureInfo.InvariantCulture, out var dec) ? dec : -1;
-            if (parsed >= 0)
+            if (Rune.IsValid(parsed))
             {
                 return char.ConvertFromUtf32(parsed);
             }
