@@ -29,5 +29,6 @@ public enum DiagramType
     Treemap,
     ZenUML,
     C4Dynamic,
-    Ishikawa
+    Ishikawa,
+    TreeView
 }

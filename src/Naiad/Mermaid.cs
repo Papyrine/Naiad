@@ -79,6 +79,8 @@ public static class Mermaid
                 Render(new ZenUMLParser(), new SequenceRenderer(), "ZenUML diagram", input, title, options),
             DiagramType.Ishikawa =>
                 Render(new IshikawaParser(), new IshikawaRenderer(), "Ishikawa diagram", input, title, options),
+            DiagramType.TreeView =>
+                Render(new TreeViewParser(), new TreeViewRenderer(), "tree view", input, title, options),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
@@ -232,6 +234,12 @@ public static class Mermaid
                  firstLine.StartsWith("radar", StringComparison.OrdinalIgnoreCase))
         {
             type = DiagramType.Radar;
+        }
+        // Mermaid only knows the tree view by its -beta keyword. It shares its first four letters with
+        // treemap, but neither keyword starts with the other, so their order here does not matter.
+        else if (firstLine.StartsWith("treeView-beta", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.TreeView;
         }
         else if (firstLine.StartsWith("treemap-beta", StringComparison.OrdinalIgnoreCase) ||
                  firstLine.StartsWith("treemap", StringComparison.OrdinalIgnoreCase))

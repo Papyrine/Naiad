@@ -1,0 +1,109 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 172.4 200.8"
+  style="max-width: 172.4px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <line
+    x1="25"
+    y1="60.2"
+    x2="35"
+    y2="60.2"
+    stroke="black" />
+  <line
+    x1="40"
+    y1="87"
+    x2="50"
+    y2="87"
+    stroke="black" />
+  <line
+    x1="55"
+    y1="113.8"
+    x2="65"
+    y2="113.8"
+    stroke="black" />
+  <line
+    x1="55"
+    y1="100.4"
+    x2="55"
+    y2="114.3"
+    stroke="black" />
+  <line
+    x1="40"
+    y1="140.6"
+    x2="50"
+    y2="140.6"
+    stroke="black" />
+  <line
+    x1="40"
+    y1="167.4"
+    x2="50"
+    y2="167.4"
+    stroke="black" />
+  <line
+    x1="40"
+    y1="73.6"
+    x2="40"
+    y2="167.9"
+    stroke="black" />
+  <line
+    x1="25"
+    y1="46.8"
+    x2="25"
+    y2="60.7"
+    stroke="black" />
+  <text
+    x="25"
+    y="33.4"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="black"
+    style="white-space:pre">/</text>
+  <text
+    x="40"
+    y="60.2"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="black"
+    style="white-space:pre">my-project</text>
+  <text
+    x="55"
+    y="87"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="black"
+    style="white-space:pre">src</text>
+  <text
+    x="70"
+    y="113.8"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="black"
+    style="white-space:pre">index.js</text>
+  <text
+    x="55"
+    y="140.6"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="black"
+    style="white-space:pre">package.json</text>
+  <text
+    x="55"
+    y="167.4"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="black"
+    style="white-space:pre">README.md</text>
+</svg>

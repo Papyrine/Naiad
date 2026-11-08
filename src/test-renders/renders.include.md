@@ -27,4 +27,5 @@ Auto-generated documentation from the test suite.
 - [Radar](Radar.md)
 - [Sankey](Sankey.md)
 - [Treemap](Treemap.md)
+- [TreeView](TreeView.md)
 - [XYChart](XYChart.md)
