@@ -35,5 +35,6 @@ public enum DiagramType
     Venn,
     Swimlane,
     EventModeling,
-    UseCase
+    UseCase,
+    Cynefin
 }
