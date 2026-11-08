@@ -882,10 +882,7 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
             }
 
             ApplySuffixes(name.Id, item.Suffixes, actor.Classes, _ => actor.Stereotype = _);
-            if (boundaryId is not null)
-            {
-                actor.BoundaryId = boundaryId;
-            }
+            actor.BoundaryId ??= boundaryId;
         }
 
         // An entity is held back until every statement is read: `actor A` further down still makes `A`
@@ -954,9 +951,11 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
             }
         }
 
-        static void AddMember(SystemBoundary boundary, string id)
+        // An element listed in two boundaries stays in the first, which is also the one its BoundaryId
+        // names. Sitting in two sibling boxes at once, it pulled them over each other.
+        void AddMember(SystemBoundary boundary, string id)
         {
-            if (!boundary.MemberIds.Contains(id))
+            if (!model.Boundaries.Exists(_ => _.MemberIds.Contains(id)))
             {
                 boundary.MemberIds.Add(id);
             }

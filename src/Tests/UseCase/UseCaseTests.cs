@@ -530,6 +530,31 @@ public class UseCaseTests : TestBase
         await Assert.That(boundary.MemberIds).IsEquivalentTo(["A", "B"], CollectionOrdering.Matching);
     }
 
+    // An element listed in two boundaries was a member of both, while its BoundaryId named the first, and
+    // the layout drew the two boxes over each other around it.
+    [Test]
+    public async Task Parse_ElementInTwoBoundariesStaysInTheFirst()
+    {
+        var model = Parse(
+            """
+            usecase-beta
+            systemBoundary S1
+              A
+              actor U
+            end
+            systemBoundary S2
+              A
+              B
+              actor U
+            end
+            """);
+
+        await Assert.That(model.Boundaries[0].MemberIds).IsEquivalentTo(["A", "U"], CollectionOrdering.Matching);
+        await Assert.That(model.Boundaries[1].MemberIds).IsEquivalentTo(["B"], CollectionOrdering.Matching);
+        await Assert.That(model.UseCases.Single(_ => _.Id == "A").BoundaryId).IsEqualTo("S1");
+        await Assert.That(model.Actors.Single().BoundaryId).IsEqualTo("S1");
+    }
+
     [Test]
     public async Task Parse_NotesAndJson()
     {
