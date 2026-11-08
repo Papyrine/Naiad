@@ -43,6 +43,23 @@ public class ParseErrorTests
         "a line too long to quote whole",
         "pie\n\"Dogs\" : 386\nthis line is not a slice of the pie and it runs on for a while",
         "Failed to parse pie chart: unexpected 'this line is not a slice of the pie and...' at line 3, col 1")]
+    // The parser reads from the keyword on; the place is counted in the whole text it was given.
+    [Arguments(
+        "after front matter, an init block and a comment",
+        "---\ntitle: Hello\n---\n%%{init: {\"theme\":\"dark\"}}%%\n%% a comment\nflowchart LR\n    A --> B\n    C -> D",
+        "Failed to parse flowchart: unexpected '-> D' at line 8, col 7")]
+    [Arguments(
+        "after leading blank lines",
+        "\n\n  pie\n\"Dogs\" : 386 extra",
+        "Failed to parse pie chart: unexpected 'extra' at line 4, col 14")]
+    [Arguments(
+        "on the keyword's line, after an init block",
+        "%%{init: {}}%% pie ???",
+        "Failed to parse pie chart: unexpected '???' at line 1, col 20")]
+    [Arguments(
+        "with CRLF line ends",
+        "%% a comment\r\nflowchart LR\r\n    A --> B ???",
+        "Failed to parse flowchart: unexpected '???' at line 3, col 13")]
     public async Task Message_NamesThePlaceAndWhatWasFound(string name, string input, string expected)
     {
         var exception = await Assert.That(() => Mermaid.Render(input)).Throws<MermaidParseException>().Because(name);
