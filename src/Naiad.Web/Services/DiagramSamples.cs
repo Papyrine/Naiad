@@ -250,6 +250,28 @@ public static class DiagramSamples
             union Desirable,Feasible["Buildable"]
             union Desirable,Viable,Feasible["Ship it"]
             """),
+        new("Swimlane",
+            """
+            swimlane-beta LR
+            subgraph customer [Customer]
+                request[Request service]
+                receive[Receive update]
+            end
+            subgraph support [Support]
+                triage[Triage request]
+                answer[Send answer]
+            end
+            subgraph engineering [Engineering]
+                investigate[Investigate issue]
+                fix[Prepare fix]
+            end
+            request --> triage
+            triage -->|Known issue| answer
+            triage -->|Needs code change| investigate
+            investigate --> fix
+            fix --> answer
+            answer --> receive
+            """),
     ];
 
     /// <summary>The diagram shown when the editor first loads.</summary>

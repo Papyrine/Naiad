@@ -14,6 +14,7 @@ Auto-generated documentation from the test suite.
 - [Requirement](/src/test-renders/Requirement.md)
 - [Sequence](/src/test-renders/Sequence.md)
 - [State](/src/test-renders/State.md)
+- [Swimlane](/src/test-renders/Swimlane.md)
 - [Timeline](/src/test-renders/Timeline.md)
 - [UserJourney](/src/test-renders/UserJourney.md)
 - [ZenUML](/src/test-renders/ZenUML.md)

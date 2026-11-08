@@ -1,15 +1,22 @@
 class FlowchartParser : IDiagramParser<FlowchartModel>
 {
-    static Parser<FlowchartModel> parser;
-
-    // The head that may close a link, and the one that may open a two-headed link.
+    // The head that may close a link, and the one that may open a two-headed link. Declared ahead of the
+    // grammar, which the initialiser below builds from them.
     static readonly Parser<char> linkHead =
         OneOf(Literals.Char('>'), Literals.Char('o'), Literals.Char('x'));
 
     static readonly Parser<char> linkHeadStart =
         OneOf(Literals.Char('<'), Literals.Char('o'), Literals.Char('x'));
 
-    static FlowchartParser()
+    static readonly Parser<FlowchartModel> parser =
+        CreateGrammar<FlowchartModel>(Literals.Text("flowchart").Or(Literals.Text("graph")));
+
+    /// <summary>
+    /// Builds the flowchart grammar behind a given opening keyword. Swimlane diagrams are written in exactly
+    /// this syntax under their own keyword, as in Mermaid, which parses them with the flowchart parser.
+    /// </summary>
+    internal static Parser<TModel> CreateGrammar<TModel>(Parser<string> keyword)
+        where TModel : FlowchartModel, new()
     {
         // Node shape parsers - returns (label, shape)
         var doubleCircleShape = Shape("(((", ")))", NodeShape.DoubleCircle, ")");
@@ -325,16 +332,16 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         var endOfInput =
             CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.End);
 
-        parser =
+        return
             CommonParsers.InlineWhitespace
-                .SkipAnd(Literals.Text("flowchart").Or(Literals.Text("graph")))
+                .SkipAnd(keyword)
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(flowchartDirection.Else(Direction.TopToBottom))
                 .AndSkip(statementEnd)
                 .And(item.Many())
                 .AndSkip(endOfInput)
                 .Map((direction, statements) =>
-                    BuildModel(direction, statements.OfType<FlowStatement>().ToList()));
+                    BuildModel<TModel>(direction, statements.OfType<FlowStatement>().ToList()));
     }
 
     // A node shape: its opening token, its text, its closing token. The text is either a quoted string -
@@ -600,9 +607,10 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         text[0] == '"' &&
         text[^1] == '"';
 
-    static FlowchartModel BuildModel(Direction direction, List<FlowStatement> statements)
+    static TModel BuildModel<TModel>(Direction direction, List<FlowStatement> statements)
+        where TModel : FlowchartModel, new()
     {
-        var model = new FlowchartModel
+        var model = new TModel
         {
             Direction = direction
         };
@@ -802,10 +810,16 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
 
             // A node belongs to the subgraph it first appears inside,
             // even if it was first referenced outside one.
-            if (subgraphStack.Count > 0 &&
-                assignedToSubgraph.Add(node.Id))
+            if (subgraphStack.Count > 0)
             {
-                subgraphStack.Peek().NodeIds.Add(node.Id);
+                if (assignedToSubgraph.Add(node.Id))
+                {
+                    subgraphStack.Peek().NodeIds.Add(node.Id);
+                }
+                else if (!subgraphStack.Peek().NodeIds.Contains(node.Id))
+                {
+                    subgraphStack.Peek().LostMember = true;
+                }
             }
         }
 

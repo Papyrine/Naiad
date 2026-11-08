@@ -23,8 +23,60 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
     public SvgDocument Render(FlowchartModel model, RenderOptions options)
     {
-        // Calculate node sizes based on text
+        MeasureNodes(model.Nodes, options);
+        SizeEmptySubgraphs(model.Subgraphs, options);
+        MeasureEdgeLabels(model.Edges, options);
+
+        // Run layout
+        var layoutOptions = new LayoutOptions
+        {
+            Direction = model.Direction,
+            NodeSeparation = 50,
+            RankSeparation = 70,
+            SubgraphDirections = true
+        };
+        var layoutResult = layoutEngine.BuildLayout(model, layoutOptions);
+
+        ClipEdgesToShapes(model);
+
+        // Build SVG
+        var builder = new SvgBuilder();
+        builder.Options(options);
+        builder.Size(layoutResult.Width, layoutResult.Height);
+        builder.Padding(options.Padding);
+
+        var coloredMarkers = AddEdgeMarkers(builder, model.Edges);
+
+        // Add Mermaid CSS styles
+        builder.AddStyles(MermaidStyles.FlowchartStyles);
+
+        // Render subgraph boxes first (behind everything), outermost first.
+        RenderSubgraphBoxes(builder, model.Subgraphs);
+
+        // Render edges first (behind nodes)
+        foreach (var edge in model.Edges)
+        {
+            RenderEdge(builder, edge, options.FontSize, coloredMarkers);
+        }
+
+        // Render nodes
         foreach (var node in model.Nodes)
+        {
+            RenderNode(builder, node);
+        }
+
+        // Titles go last: an edge crossing into a subgraph passes through the title band, and painting the
+        // edge over the text left the title unreadable.
+        RenderSubgraphTitles(builder, model.Subgraphs, options);
+
+        return builder.Build();
+    }
+
+    // Sizes each node around its label, then to suit its shape. Shared with the swimlane renderer, which
+    // draws the same nodes.
+    internal static void MeasureNodes(IEnumerable<Node> nodes, RenderOptions options)
+    {
+        foreach (var node in nodes)
         {
             var label = DisplayText(node.Label ?? node.Id);
             var (textForMeasure, iconCount) = AnalyzeLabel(label);
@@ -57,11 +109,12 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
                 node.Width += ShapePathGenerator.SubroutineBarInset * 2;
             }
         }
+    }
 
-        SizeEmptySubgraphs(model.Subgraphs, options);
-
-        // Reserve space for edge labels so the layout keeps a rank gap clear for them.
-        foreach (var edge in model.Edges)
+    // Reserve space for edge labels so the layout keeps a rank gap clear for them.
+    internal static void MeasureEdgeLabels(IEnumerable<Edge> edges, RenderOptions options)
+    {
+        foreach (var edge in edges)
         {
             if (string.IsNullOrEmpty(edge.Label))
             {
@@ -72,27 +125,13 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             edge.LabelWidth = labelSize.Width + 16;
             edge.LabelHeight = labelSize.Height + 8;
         }
+    }
 
-        // Run layout
-        var layoutOptions = new LayoutOptions
-        {
-            Direction = model.Direction,
-            NodeSeparation = 50,
-            RankSeparation = 70,
-            SubgraphDirections = true
-        };
-        var layoutResult = layoutEngine.BuildLayout(model, layoutOptions);
-
-        ClipEdgesToShapes(model);
-
-        // Build SVG
-        var builder = new SvgBuilder();
-        builder.Options(options);
-        builder.Size(layoutResult.Width, layoutResult.Height);
-        builder.Padding(options.Padding);
-
+    // Adds the edge heads the edges use, returning the marker suffix for each colour a `linkStyle` gives.
+    internal static Dictionary<string, string> AddEdgeMarkers(SvgBuilder builder, List<Edge> edges)
+    {
         // The arrow/circle/cross markers are only referenced by edges; skip the defs entirely when there are none.
-        if (model.Edges.Count > 0)
+        if (edges.Count > 0)
         {
             builder.AddMermaidArrowMarker();
             builder.AddMermaidCircleMarker();
@@ -101,7 +140,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
         // One more set of heads for each colour a `linkStyle` gives a link, keyed by that colour.
         var coloredMarkers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var edge in model.Edges)
+        foreach (var edge in edges)
         {
             if (edge.Style?.Stroke is { } stroke &&
                 !coloredMarkers.ContainsKey(stroke))
@@ -112,29 +151,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             }
         }
 
-        // Add Mermaid CSS styles
-        builder.AddStyles(MermaidStyles.FlowchartStyles);
-
-        // Render subgraph boxes first (behind everything), outermost first.
-        RenderSubgraphBoxes(builder, model.Subgraphs);
-
-        // Render edges first (behind nodes)
-        foreach (var edge in model.Edges)
-        {
-            RenderEdge(builder, edge, options.FontSize, coloredMarkers);
-        }
-
-        // Render nodes
-        foreach (var node in model.Nodes)
-        {
-            RenderNode(builder, node);
-        }
-
-        // Titles go last: an edge crossing into a subgraph passes through the title band, and painting the
-        // edge over the text left the title unreadable.
-        RenderSubgraphTitles(builder, model.Subgraphs, options);
-
-        return builder.Build();
+        return coloredMarkers;
     }
 
     /// <summary>
@@ -212,7 +229,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
     // A markdown string is measured, and falls back to plain text, without its markers.
     [return: NotNullIfNotNull(nameof(label))]
-    static string? DisplayText(string? label)
+    internal static string? DisplayText(string? label)
     {
         if (label is not null &&
             MarkdownLabel.IsMarkdown(label))
@@ -262,7 +279,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
-    static void RenderSubgraphBox(SvgBuilder builder, Subgraph graph)
+    internal static void RenderSubgraphBox(SvgBuilder builder, Subgraph graph)
     {
         var bounds = graph.Bounds;
         var style = graph.Style;
@@ -279,7 +296,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             cssClass: "cluster");
     }
 
-    static void RenderSubgraphTitle(SvgBuilder builder, Subgraph graph, RenderOptions options)
+    internal static void RenderSubgraphTitle(SvgBuilder builder, Subgraph graph, RenderOptions options)
     {
         // The title band has room for one line, so a `<br/>` in it becomes a space.
         var title = LabelLines.Flatten(DisplayText(graph.Title ?? graph.Id));
@@ -316,7 +333,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             cssClass: "cluster-label");
     }
 
-    static void RenderNode(SvgBuilder builder, Node node)
+    internal static void RenderNode(SvgBuilder builder, Node node)
     {
         var x = node.Position.X - node.Width / 2;
         var y = node.Position.Y - node.Height / 2;
@@ -355,7 +372,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             className: "nodeLabel");
     }
 
-    static void RenderEdge(SvgBuilder builder, Edge edge, double fontSize, Dictionary<string, string> coloredMarkers)
+    internal static void RenderEdge(SvgBuilder builder, Edge edge, double fontSize, Dictionary<string, string> coloredMarkers, string? pathData = null)
     {
         if (edge.Points.Count < 2 ||
             edge.Type == EdgeType.Invisible)
@@ -363,7 +380,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             return;
         }
 
-        var pathData = EdgePath.Build(edge.Points);
+        pathData ??= EdgePath.Build(edge.Points);
 
         // A `linkStyle` wins over what the link's own spelling asks for.
         var style = edge.Style;
@@ -560,7 +577,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             $"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {icon.Width:0.##} {icon.Height:0.##}' style='width:1em;height:1em;vertical-align:-0.125em'>{icon.Body}</svg>");
 
     // A label is as wide as its longest line and one line pitch taller for each `<br/>` it holds.
-    static Size MeasureText(string text, double fontSize)
+    internal static Size MeasureText(string text, double fontSize)
     {
         var width = LabelLines.WidestLength(text.Trim()) * fontSize * 0.55;
         var height = fontSize * (1.5 + SvgBuilder.LineHeightFactor * (LabelLines.Count(text) - 1));

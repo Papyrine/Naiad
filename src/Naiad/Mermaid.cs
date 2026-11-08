@@ -85,6 +85,8 @@ public static class Mermaid
                 Render(new WardleyParser(), new WardleyRenderer(), "Wardley map", input, title, options),
             DiagramType.Venn =>
                 Render(new VennParser(), new VennRenderer(), "Venn diagram", input, title, options),
+            DiagramType.Swimlane =>
+                Render(new SwimlaneParser(), new SwimlaneRenderer(), "swimlane diagram", input, title, options),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
@@ -267,6 +269,11 @@ public static class Mermaid
         else if (firstLine.StartsWith("venn-beta", StringComparison.OrdinalIgnoreCase))
         {
             type = DiagramType.Venn;
+        }
+        else if (firstLine.StartsWith("swimlane-beta", StringComparison.Ordinal))
+        {
+            // Mermaid knows only the `-beta` spelling, and matches it case-sensitively.
+            type = DiagramType.Swimlane;
         }
         else
         {
