@@ -1,0 +1,410 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 960 878.6"
+  style="max-width: 960px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(40, 40)">
+    <rect
+      x="0"
+      y="0"
+      width="440"
+      height="399.3"
+      fill="#E8F5E9"
+      style="fill-opacity: 0.4" />
+    <rect
+      x="440"
+      y="0"
+      width="440"
+      height="399.3"
+      fill="#E3F2FD"
+      style="fill-opacity: 0.4" />
+    <rect
+      x="0"
+      y="399.3"
+      width="440"
+      height="399.3"
+      fill="#FBE9E7"
+      style="fill-opacity: 0.4" />
+    <rect
+      x="440"
+      y="399.3"
+      width="440"
+      height="399.3"
+      fill="#FFF8E1"
+      style="fill-opacity: 0.4" />
+    <path
+      d="M432.19,0 C437.56,57.04 431.94,57.04 437.31,114.09 C436.87,171.13 446.06,171.13 445.62,228.17 C451,285.21 434.61,285.21 440,342.26 C428.59,399.3 447.29,399.3 435.88,456.34 C437.58,513.39 437.17,513.39 438.87,570.43 C435.11,627.47 450.65,627.47 446.89,684.51 C450.57,741.56 436.38,741.56 440.07,798.6"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      stroke-dasharray="6 3" />
+    <path
+      d="M0,406.51 C62.86,407.25 62.86,393.73 125.71,394.47 C188.57,390.05 188.57,396.93 251.43,392.51 C314.29,393.48 314.29,391.97 377.14,392.95 C440,386.4 440,412.58 502.86,406.04 C565.71,416.32 565.71,384.5 628.57,394.79 C691.43,383.61 691.43,416.09 754.29,404.91 C817.14,409.82 817.14,402.05 880,406.96"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      stroke-dasharray="6 3" />
+    <path
+      d="M440,399.3 C466.4,479.16 400.4,618.92 453.2,698.78 C413.6,738.71 447.92,778.64 440,798.6"
+      fill="none"
+      stroke="#8B0000"
+      stroke-width="4" />
+    <path
+      d="M308,399.3 A132,119.79 0 1,1 572,399.3 A132,119.79 0 1,1 308,399.3 Z"
+      fill="#F3E5F5"
+      opacity="0.5" />
+    <path
+      d="M308,399.3 A132,119.79 0 1,1 572,399.3 A132,119.79 0 1,1 308,399.3 Z"
+      fill="none"
+      stroke="#333333"
+      stroke-width="1.5"
+      stroke-dasharray="4 2" />
+    <text
+      x="220"
+      y="169.65"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#131300">Complex</text>
+    <text
+      x="220"
+      y="189.65"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Probe → Sense → Respond</text>
+    <text
+      x="220"
+      y="204.65"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Emergent Practices</text>
+    <text
+      x="660"
+      y="169.65"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#131300">Complicated</text>
+    <text
+      x="660"
+      y="189.65"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Sense → Analyse → Respond</text>
+    <text
+      x="660"
+      y="204.65"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Good Practices</text>
+    <text
+      x="220"
+      y="568.95"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#131300">Chaotic</text>
+    <text
+      x="220"
+      y="588.95"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Act → Sense → Respond</text>
+    <text
+      x="220"
+      y="603.95"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Novel Practices</text>
+    <text
+      x="660"
+      y="568.95"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#131300">Clear</text>
+    <text
+      x="660"
+      y="588.95"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Sense → Categorise → Respond</text>
+    <text
+      x="660"
+      y="603.95"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Best Practices</text>
+    <text
+      x="440"
+      y="330.3"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#131300">Confusion</text>
+    <text
+      x="440"
+      y="348.3"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Disorder</text>
+    <rect
+      x="160.5"
+      y="224.65"
+      width="119"
+      height="26"
+      rx="4"
+      ry="4"
+      fill="#E8F5E9"
+      stroke="#333333"
+      style="fill-opacity: 0.95" />
+    <text
+      x="220"
+      y="237.65"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Discovery spike</text>
+    <rect
+      x="163.8"
+      y="254.65"
+      width="112.4"
+      height="26"
+      rx="4"
+      ry="4"
+      fill="#E8F5E9"
+      stroke="#333333"
+      style="fill-opacity: 0.95" />
+    <text
+      x="220"
+      y="267.65"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">A/B experiment</text>
+    <rect
+      x="147.3"
+      y="284.65"
+      width="145.4"
+      height="26"
+      rx="4"
+      ry="4"
+      fill="#E8F5E9"
+      stroke="#333333"
+      style="fill-opacity: 0.95" />
+    <text
+      x="220"
+      y="297.65"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Customer interviews</text>
+    <rect
+      x="180.3"
+      y="314.65"
+      width="79.4"
+      height="26"
+      rx="4"
+      ry="4"
+      fill="#E8F5E9"
+      stroke="#333333"
+      style="fill-opacity: 0.95" />
+    <text
+      x="220"
+      y="327.65"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Prototype</text>
+    <rect
+      x="150.6"
+      y="344.65"
+      width="138.8"
+      height="26"
+      rx="4"
+      ry="4"
+      fill="#E8F5E9"
+      stroke="#333333"
+      style="fill-opacity: 0.95" />
+    <text
+      x="220"
+      y="357.65"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Safe-to-fail probe</text>
+    <rect
+      x="465.2"
+      y="224.65"
+      width="389.6"
+      height="26"
+      rx="4"
+      ry="4"
+      fill="#E3F2FD"
+      stroke="#333333"
+      style="fill-opacity: 0.95" />
+    <text
+      x="660"
+      y="237.65"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">A considerably longer item label that needs a wide badge</text>
+    <rect
+      x="190.2"
+      y="623.95"
+      width="59.6"
+      height="26"
+      rx="4"
+      ry="4"
+      fill="#FBE9E7"
+      stroke="#333333"
+      style="fill-opacity: 0.95" />
+    <text
+      x="220"
+      y="636.95"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Outage</text>
+    <rect
+      x="626.9"
+      y="623.95"
+      width="66.2"
+      height="26"
+      rx="4"
+      ry="4"
+      fill="#FFF8E1"
+      stroke="#333333"
+      style="fill-opacity: 0.95" />
+    <text
+      x="660"
+      y="636.95"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Runbook</text>
+    <rect
+      x="393.7"
+      y="362.3"
+      width="92.6"
+      height="26"
+      rx="4"
+      ry="4"
+      fill="#F3E5F5"
+      stroke="#333333"
+      style="fill-opacity: 0.95" />
+    <text
+      x="440"
+      y="375.3"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Unknown one</text>
+    <rect
+      x="393.7"
+      y="392.3"
+      width="92.6"
+      height="26"
+      rx="4"
+      ry="4"
+      fill="#F3E5F5"
+      stroke="#333333"
+      style="fill-opacity: 0.95" />
+    <text
+      x="440"
+      y="405.3"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Unknown two</text>
+    <rect
+      x="387.1"
+      y="422.3"
+      width="105.8"
+      height="26"
+      rx="4"
+      ry="4"
+      fill="#F3E5F5"
+      stroke="#333333"
+      style="fill-opacity: 0.95" />
+    <text
+      x="440"
+      y="435.3"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">Unknown three</text>
+    <rect
+      x="406.9"
+      y="452.3"
+      width="66.2"
+      height="26"
+      rx="4"
+      ry="4"
+      fill="#F3E5F5"
+      stroke="#333333"
+      style="fill-opacity: 0.6; stroke-dasharray: 3 2" />
+    <text
+      x="440"
+      y="465.3"
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="12px"
+      font-family="Arial, sans-serif"
+      fill="#333">+2 more</text>
+  </g>
+</svg>

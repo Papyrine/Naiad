@@ -14,6 +14,7 @@ global using Naiad.Diagrams.Architecture;
 global using Naiad.Diagrams.Block;
 global using Naiad.Diagrams.C4;
 global using Naiad.Diagrams.Class;
+global using Naiad.Diagrams.Cynefin;
 global using Naiad.Diagrams.EntityRelationship;
 global using Naiad.Diagrams.EventModeling;
 global using Naiad.Diagrams.Flowchart;

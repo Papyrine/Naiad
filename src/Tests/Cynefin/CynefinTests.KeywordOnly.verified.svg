@@ -1,0 +1,194 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 880 680"
+  style="max-width: 880px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(40, 40)">
+    <rect
+      x="0"
+      y="0"
+      width="400"
+      height="300"
+      fill="#E8F5E9"
+      style="fill-opacity: 0.4" />
+    <rect
+      x="400"
+      y="0"
+      width="400"
+      height="300"
+      fill="#E3F2FD"
+      style="fill-opacity: 0.4" />
+    <rect
+      x="0"
+      y="300"
+      width="400"
+      height="300"
+      fill="#FBE9E7"
+      style="fill-opacity: 0.4" />
+    <rect
+      x="400"
+      y="300"
+      width="400"
+      height="300"
+      fill="#FFF8E1"
+      style="fill-opacity: 0.4" />
+    <path
+      d="M392.19,0 C397.56,42.86 391.94,42.86 397.31,85.71 C396.87,128.57 406.06,128.57 405.62,171.43 C411,214.29 394.61,214.29 400,257.14 C388.59,300 407.29,300 395.88,342.86 C397.58,385.71 397.17,385.71 398.87,428.57 C395.11,471.43 410.65,471.43 406.89,514.29 C410.57,557.14 396.38,557.14 400.07,600"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      stroke-dasharray="6 3" />
+    <path
+      d="M0,307.21 C57.14,307.95 57.14,294.43 114.29,295.17 C171.43,290.75 171.43,297.63 228.57,293.21 C285.71,294.18 285.71,292.67 342.86,293.65 C400,287.1 400,313.28 457.14,306.74 C514.29,317.02 514.29,285.2 571.43,295.49 C628.57,284.31 628.57,316.79 685.71,305.61 C742.86,310.52 742.86,302.75 800,307.66"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      stroke-dasharray="6 3" />
+    <path
+      d="M400,300 C424,360 364,465 412,525 C376,555 407.2,585 400,600"
+      fill="none"
+      stroke="#8B0000"
+      stroke-width="4" />
+    <path
+      d="M280,300 A120,90 0 1,1 520,300 A120,90 0 1,1 280,300 Z"
+      fill="#F3E5F5"
+      opacity="0.5" />
+    <path
+      d="M280,300 A120,90 0 1,1 520,300 A120,90 0 1,1 280,300 Z"
+      fill="none"
+      stroke="#333333"
+      stroke-width="1.5"
+      stroke-dasharray="4 2" />
+    <text
+      x="200"
+      y="120"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#131300">Complex</text>
+    <text
+      x="200"
+      y="140"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Probe → Sense → Respond</text>
+    <text
+      x="200"
+      y="155"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Emergent Practices</text>
+    <text
+      x="600"
+      y="120"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#131300">Complicated</text>
+    <text
+      x="600"
+      y="140"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Sense → Analyse → Respond</text>
+    <text
+      x="600"
+      y="155"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Good Practices</text>
+    <text
+      x="200"
+      y="420"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#131300">Chaotic</text>
+    <text
+      x="200"
+      y="440"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Act → Sense → Respond</text>
+    <text
+      x="200"
+      y="455"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Novel Practices</text>
+    <text
+      x="600"
+      y="420"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#131300">Clear</text>
+    <text
+      x="600"
+      y="440"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Sense → Categorise → Respond</text>
+    <text
+      x="600"
+      y="455"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Best Practices</text>
+    <text
+      x="400"
+      y="290"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      font-weight="bold"
+      fill="#131300">Confusion</text>
+    <text
+      x="400"
+      y="308"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="11px"
+      font-family="Arial, sans-serif"
+      fill="#333"
+      style="font-style: italic">Disorder</text>
+  </g>
+</svg>

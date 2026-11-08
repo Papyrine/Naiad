@@ -91,6 +91,8 @@ public static class Mermaid
                 Render(new EventModelingParser(), new EventModelingRenderer(), "event modeling diagram", input, title, options),
             DiagramType.UseCase =>
                 Render(new UseCaseParser(), new UseCaseRenderer(), "use case diagram", input, title, options),
+            DiagramType.Cynefin =>
+                Render(new CynefinParser(), new CynefinRenderer(), "Cynefin diagram", input, title, options),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
@@ -264,6 +266,10 @@ public static class Mermaid
         {
             type = DiagramType.EventModeling;
         }
+        else if (IsCynefinKeyword(firstLine))
+        {
+            type = DiagramType.Cynefin;
+        }
         else if (firstLine.StartsWith("zenuml", StringComparison.OrdinalIgnoreCase))
         {
             type = DiagramType.ZenUML;
@@ -295,6 +301,19 @@ public static class Mermaid
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Mermaid's detector for Cynefin takes only <c>cynefin-beta</c>, in lower case, followed by whitespace,
+    /// a colon or the end of the input; the plain <c>cynefin</c> is not a diagram.
+    /// </summary>
+    static bool IsCynefinKeyword(string firstLine)
+    {
+        const string keyword = "cynefin-beta";
+        return firstLine.StartsWith(keyword, StringComparison.Ordinal) &&
+               (firstLine.Length == keyword.Length ||
+                firstLine[keyword.Length] == ':' ||
+                char.IsWhiteSpace(firstLine[keyword.Length]));
     }
 
     /// <summary>
