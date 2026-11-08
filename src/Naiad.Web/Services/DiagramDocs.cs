@@ -59,6 +59,7 @@ public static class DiagramDocs
             DiagramType.Swimlane => new("Swimlane", $"{baseUrl}swimlanes.html"),
             DiagramType.EventModeling => new("Event Modeling", $"{baseUrl}eventmodeling.html"),
             DiagramType.UseCase => new("Use Case", $"{baseUrl}usecase.html"),
+            DiagramType.Cynefin => new("Cynefin", $"{baseUrl}cynefin.html"),
             DiagramType.ZenUML => new("ZenUML", $"{baseUrl}zenuml.html"),
             _ => new(type.ToString(), baseUrl)
         };
