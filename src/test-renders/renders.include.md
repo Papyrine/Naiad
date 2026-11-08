@@ -21,6 +21,7 @@ Auto-generated documentation from the test suite.
 
 - [Architecture](Architecture.md)
 - [Block](Block.md)
+- [Ishikawa](Ishikawa.md)
 - [Packet](Packet.md)
 - [Radar](Radar.md)
 - [Sankey](Sankey.md)

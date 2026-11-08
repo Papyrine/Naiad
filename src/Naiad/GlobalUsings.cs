@@ -18,6 +18,7 @@ global using Naiad.Diagrams.EntityRelationship;
 global using Naiad.Diagrams.Flowchart;
 global using Naiad.Diagrams.Gantt;
 global using Naiad.Diagrams.GitGraph;
+global using Naiad.Diagrams.Ishikawa;
 global using Naiad.Diagrams.Kanban;
 global using Naiad.Diagrams.Mindmap;
 global using Naiad.Diagrams.Packet;

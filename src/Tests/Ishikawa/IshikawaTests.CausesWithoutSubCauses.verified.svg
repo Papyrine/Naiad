@@ -1,0 +1,109 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 375.12 181.83"
+  style="max-width: 375.12px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <line
+    x1="40"
+    y1="90.91"
+    x2="227.8"
+    y2="90.91"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 227.8 54.11 L 227.8 127.71 Q 482.44 90.91 227.8 54.11 Z"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="283.85"
+    y="90.91"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Server outage</text>
+  <line
+    x1="177.81"
+    y1="90.91"
+    x2="170.85"
+    y2="41.4"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 177.81 90.91 L 170.2 79.87 L 182.08 78.2 Z"
+    fill="#333333" />
+  <rect
+    x="131.6"
+    y="20"
+    width="78.5"
+    height="20.8"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="170.85"
+    y="30.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Power</text>
+  <line
+    x1="177.81"
+    y1="90.91"
+    x2="170.85"
+    y2="140.43"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 177.81 90.91 L 182.08 103.63 L 170.2 101.96 Z"
+    fill="#333333" />
+  <rect
+    x="123.9"
+    y="141.03"
+    width="93.9"
+    height="20.8"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="170.85"
+    y="151.43"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Network</text>
+  <line
+    x1="77.76"
+    y1="90.91"
+    x2="70.8"
+    y2="41.4"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 77.76 90.91 L 70.15 79.87 L 82.03 78.2 Z"
+    fill="#333333" />
+  <rect
+    x="20"
+    y="20"
+    width="101.6"
+    height="20.8"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="70.8"
+    y="30.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Hardware</text>
+</svg>

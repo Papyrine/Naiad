@@ -1,0 +1,191 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 454.6666 577.93"
+  style="max-width: 454.6666px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <line
+    x1="20"
+    y1="454.01"
+    x2="307.35"
+    y2="454.01"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 307.35 417.21 L 307.35 490.81 Q 561.99 454.01 307.35 417.21 Z"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="363.4"
+    y="454.01"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Late delivery</text>
+  <line
+    x1="254.29"
+    y1="454.01"
+    x2="196.31"
+    y2="41.4"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 254.29 454.01 L 246.68 442.96 L 258.57 441.29 Z"
+    fill="#333333" />
+  <rect
+    x="141.66"
+    y="20"
+    width="109.3"
+    height="20.8"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="196.31"
+    y="30.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Logistics</text>
+  <line
+    x1="244.63"
+    y1="385.24"
+    x2="214.63"
+    y2="385.24"
+    stroke="#333333" />
+  <path
+    d="M 244.63 385.24 L 238.63 388.24 L 238.63 382.24 Z"
+    fill="#333333" />
+  <text
+    x="214.63"
+    y="385.24"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Routing</text>
+  <line
+    x1="234.96"
+    y1="316.47"
+    x2="169.96"
+    y2="316.47"
+    stroke="#333333" />
+  <path
+    d="M 234.96 316.47 L 228.96 319.47 L 228.96 313.47 Z"
+    fill="#333333" />
+  <text
+    x="169.96"
+    y="316.47"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Carrier</text>
+  <line
+    x1="202.46"
+    y1="316.47"
+    x2="173.47"
+    y2="110.17"
+    stroke="#333333" />
+  <path
+    d="M 202.46 316.47 L 198.66 310.95 L 204.6 310.12 Z"
+    fill="#333333" />
+  <text
+    x="173.47"
+    y="110.17"
+    text-anchor="end"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Truck breakdown</text>
+  <line
+    x1="192.8"
+    y1="247.71"
+    x2="127.8"
+    y2="247.71"
+    stroke="#333333" />
+  <path
+    d="M 192.8 247.71 L 186.8 250.71 L 186.8 244.71 Z"
+    fill="#333333" />
+  <text
+    x="127.8"
+    y="240.36"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">No maintenance</text>
+  <text
+    x="127.8"
+    y="255.06"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">schedule</text>
+  <line
+    x1="160.3"
+    y1="247.71"
+    x2="150.64"
+    y2="178.94"
+    stroke="#333333" />
+  <path
+    d="M 160.3 247.71 L 156.49 242.18 L 162.44 241.35 Z"
+    fill="#333333" />
+  <text
+    x="150.64"
+    y="178.94"
+    text-anchor="end"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Budget cuts</text>
+  <line
+    x1="254.29"
+    y1="454.01"
+    x2="242.7"
+    y2="536.53"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 254.29 454.01 L 258.57 466.73 L 246.68 465.06 Z"
+    fill="#333333" />
+  <rect
+    x="188.05"
+    y="537.13"
+    width="109.3"
+    height="20.8"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="242.7"
+    y="547.53"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Warehouse</text>
+  <line
+    x1="248.5"
+    y1="495.27"
+    x2="218.5"
+    y2="495.27"
+    stroke="#333333" />
+  <path
+    d="M 248.5 495.27 L 242.5 498.27 L 242.5 492.27 Z"
+    fill="#333333" />
+  <text
+    x="218.5"
+    y="495.27"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Picking errors</text>
+</svg>

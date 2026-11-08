@@ -1,0 +1,108 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 341.2122 615.03"
+  style="max-width: 341.2122px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <line
+    x1="20"
+    y1="536.53"
+    x2="249.21"
+    y2="536.53"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 249.21 499.73 L 249.21 573.33 Q 393.21 536.53 249.21 499.73 Z"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="282.21"
+    y="536.53"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Problem</text>
+  <line
+    x1="177.19"
+    y1="536.53"
+    x2="107.61"
+    y2="41.4"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 177.19 536.53 L 169.58 525.49 L 181.46 523.82 Z"
+    fill="#333333" />
+  <rect
+    x="60.66"
+    y="20"
+    width="93.9"
+    height="20.8"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="107.61"
+    y="30.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Cause A</text>
+  <line
+    x1="142.4"
+    y1="288.97"
+    x2="112.4"
+    y2="288.97"
+    stroke="#333333" />
+  <path
+    d="M 142.4 288.97 L 136.4 291.97 L 136.4 285.97 Z"
+    fill="#333333" />
+  <text
+    x="112.4"
+    y="288.97"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Sub-cause A1</text>
+  <line
+    x1="177.19"
+    y1="536.53"
+    x2="173.01"
+    y2="566.28"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 177.19 536.53 L 181.46 549.25 L 169.58 547.58 Z"
+    fill="#333333" />
+  <rect
+    x="106.81"
+    y="559.53"
+    width="132.4"
+    height="35.5"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="173.01"
+    y="569.93"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Cause B</text>
+  <text
+    x="173.01"
+    y="584.63"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">on two lines</text>
+</svg>

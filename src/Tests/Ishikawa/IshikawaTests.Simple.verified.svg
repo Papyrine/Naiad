@@ -1,0 +1,228 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 456.1906 577.93"
+  style="max-width: 456.1906px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <line
+    x1="20"
+    y1="338.48"
+    x2="318.11"
+    y2="338.48"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 318.11 301.68 L 318.11 375.28 Q 554.27 338.48 318.11 301.68 Z"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="370.31"
+    y="338.48"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Blurry Photo</text>
+  <line
+    x1="298.11"
+    y1="338.48"
+    x2="256.36"
+    y2="41.4"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 298.11 338.48 L 290.5 327.43 L 302.38 325.76 Z"
+    fill="#333333" />
+  <rect
+    x="209.41"
+    y="20"
+    width="93.9"
+    height="20.8"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="256.36"
+    y="30.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Process</text>
+  <line
+    x1="284.19"
+    y1="239.45"
+    x2="254.19"
+    y2="239.45"
+    stroke="#333333" />
+  <path
+    d="M 284.19 239.45 L 278.19 242.45 L 278.19 236.45 Z"
+    fill="#333333" />
+  <text
+    x="254.19"
+    y="232.1"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Shutter speed</text>
+  <text
+    x="254.19"
+    y="246.8"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">too slow</text>
+  <line
+    x1="270.28"
+    y1="140.43"
+    x2="240.28"
+    y2="140.43"
+    stroke="#333333" />
+  <path
+    d="M 270.28 140.43 L 264.28 143.43 L 264.28 137.43 Z"
+    fill="#333333" />
+  <text
+    x="240.28"
+    y="140.43"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Out of focus</text>
+  <line
+    x1="298.11"
+    y1="338.48"
+    x2="270.28"
+    y2="536.53"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 298.11 338.48 L 302.38 351.2 L 290.5 349.53 Z"
+    fill="#333333" />
+  <rect
+    x="234.88"
+    y="537.13"
+    width="70.8"
+    height="20.8"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="270.28"
+    y="547.53"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">User</text>
+  <line
+    x1="284.19"
+    y1="437.51"
+    x2="254.19"
+    y2="437.51"
+    stroke="#333333" />
+  <path
+    d="M 284.19 437.51 L 278.19 440.51 L 278.19 434.51 Z"
+    fill="#333333" />
+  <text
+    x="254.19"
+    y="437.51"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Shaky hands</text>
+  <line
+    x1="147.88"
+    y1="338.48"
+    x2="106.12"
+    y2="41.4"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 147.88 338.48 L 140.26 327.43 L 152.15 325.76 Z"
+    fill="#333333" />
+  <rect
+    x="51.47"
+    y="20"
+    width="109.3"
+    height="20.8"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="106.12"
+    y="30.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Equipment</text>
+  <line
+    x1="127"
+    y1="189.94"
+    x2="97"
+    y2="189.94"
+    stroke="#333333" />
+  <path
+    d="M 127 189.94 L 121 192.94 L 121 186.94 Z"
+    fill="#333333" />
+  <text
+    x="97"
+    y="189.94"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Dirty lens</text>
+  <line
+    x1="147.88"
+    y1="338.48"
+    x2="120.04"
+    y2="536.53"
+    stroke="#333333"
+    stroke-width="2" />
+  <path
+    d="M 147.88 338.48 L 152.15 351.2 L 140.26 349.53 Z"
+    fill="#333333" />
+  <rect
+    x="57.69"
+    y="537.13"
+    width="124.7"
+    height="20.8"
+    fill="#ECECFF"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="120.04"
+    y="547.53"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Environment</text>
+  <line
+    x1="133.96"
+    y1="437.51"
+    x2="103.96"
+    y2="437.51"
+    stroke="#333333" />
+  <path
+    d="M 133.96 437.51 L 127.96 440.51 L 127.96 434.51 Z"
+    fill="#333333" />
+  <text
+    x="103.96"
+    y="437.51"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Too dark</text>
+</svg>
