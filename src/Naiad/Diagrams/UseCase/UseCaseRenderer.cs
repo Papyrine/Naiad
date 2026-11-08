@@ -90,9 +90,11 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
 
         foreach (var boundary in model.Boundaries)
         {
+            // The layout keeps nodes and subgraphs in one namespace, and an actor may share a boundary's id.
+            // A space is in no element id, so this one is the boundary's alone.
             var subgraph = new Subgraph
             {
-                Id = boundary.Id,
+                Id = $"boundary {boundary.Id}",
                 Title = boundary.Title
             };
             subgraph.NodeIds.AddRange(boundary.MemberIds.Where(shapes.ContainsKey));

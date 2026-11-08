@@ -226,6 +226,24 @@ public class UseCaseTests : TestBase
         return VerifySvg(input);
     }
 
+    // The layout kept the boundary and the actor under one id, so the actor was placed on the boundary's
+    // corner and its edge looped round the use case.
+    [Test]
+    public Task ActorSharingABoundaryId()
+    {
+        const string input =
+            """
+            usecase-beta
+            actor A
+            systemBoundary A
+              B("Book")
+            end
+            A --> B
+            """;
+
+        return VerifySvg(input);
+    }
+
     [Test]
     public Task Styling()
     {
