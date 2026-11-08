@@ -28,5 +28,6 @@ public enum DiagramType
     Radar,
     Treemap,
     ZenUML,
-    C4Dynamic
+    C4Dynamic,
+    Ishikawa
 }

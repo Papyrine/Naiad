@@ -75,6 +75,8 @@ public static class Mermaid
                 Render(new RadarParser(), new RadarRenderer(), "radar diagram", input, title, options),
             DiagramType.Treemap =>
                 Render(new TreemapParser(), new TreemapRenderer(), "treemap diagram", input, title, options),
+            DiagramType.Ishikawa =>
+                Render(new IshikawaParser(), new IshikawaRenderer(), "Ishikawa diagram", input, title, options),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
@@ -233,6 +235,10 @@ public static class Mermaid
                  firstLine.StartsWith("treemap", StringComparison.OrdinalIgnoreCase))
         {
             type = DiagramType.Treemap;
+        }
+        else if (firstLine.StartsWith("ishikawa", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Ishikawa;
         }
         else
         {

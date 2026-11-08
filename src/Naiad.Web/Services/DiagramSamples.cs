@@ -180,6 +180,22 @@ public static class DiagramSamples
             "Section B"
                 "Item 3": 50
             """),
+        new("Ishikawa",
+            """
+            ishikawa-beta
+                Blurry Photo
+                Process
+                    Out of focus
+                    Shutter speed too slow
+                User
+                    Shaky hands
+                Equipment
+                    Lens
+                        Dirty lens
+                        Damaged lens
+                Environment
+                    Too dark
+            """),
     ];
 
     /// <summary>The diagram shown when the editor first loads.</summary>

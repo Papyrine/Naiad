@@ -324,6 +324,7 @@ var withFontAwesomeIcon = SkiaRenderer.RenderPng(
  * [Architecture](https://mermaid.js.org/syntax/architecture.html) (beta)
  * [Radar](https://mermaid.js.org/syntax/radar.html) (beta)
  * [Treemap](https://mermaid.js.org/syntax/treemap.html) (beta)
+ * [Ishikawa](https://mermaid.js.org/syntax/ishikawa.html) (beta)
 
 
 ## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
@@ -349,6 +350,7 @@ Auto-generated documentation from the test suite.
 
 - [Architecture](Architecture.md)
 - [Block](Block.md)
+- [Ishikawa](Ishikawa.md)
 - [Packet](Packet.md)
 - [Radar](Radar.md)
 - [Sankey](Sankey.md)

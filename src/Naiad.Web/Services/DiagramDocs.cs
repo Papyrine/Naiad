@@ -52,6 +52,7 @@ public static class DiagramDocs
             DiagramType.Packet => new("Packet", $"{baseUrl}packet.html"),
             DiagramType.Radar => new("Radar", $"{baseUrl}radar.html"),
             DiagramType.Treemap => new("Treemap", $"{baseUrl}treemap.html"),
+            DiagramType.Ishikawa => new("Ishikawa", $"{baseUrl}ishikawa.html"),
             DiagramType.ZenUML => new("ZenUML", $"{baseUrl}zenuml.html"),
             _ => new(type.ToString(), baseUrl)
         };
