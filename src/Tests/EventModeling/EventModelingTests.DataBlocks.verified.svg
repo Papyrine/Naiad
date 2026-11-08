@@ -1,0 +1,264 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 950.2 498"
+  style="max-width: 950.2px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <rect
+    x="20"
+    y="20"
+    width="910.2"
+    height="130"
+    rx="3"
+    ry="3"
+    fill="rgb(250,250,250)"
+    stroke="rgb(240,240,240)" />
+  <text
+    x="50"
+    y="50"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">UI/Automation</text>
+  <rect
+    x="20"
+    y="160"
+    width="910.2"
+    height="154"
+    rx="3"
+    ry="3"
+    fill="rgb(250,250,250)"
+    stroke="rgb(240,240,240)" />
+  <text
+    x="50"
+    y="190"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Command/Read Model</text>
+  <rect
+    x="20"
+    y="324"
+    width="910.2"
+    height="154"
+    rx="3"
+    ry="3"
+    fill="rgb(250,250,250)"
+    stroke="rgb(240,240,240)" />
+  <text
+    x="50"
+    y="354"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Events</text>
+  <rect
+    x="270"
+    y="35"
+    width="100"
+    height="100"
+    rx="3"
+    ry="3"
+    fill="white"
+    stroke="#dbdada" />
+  <text
+    x="320"
+    y="85"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">CartUI</text>
+  <rect
+    x="300"
+    y="175"
+    width="208"
+    height="124"
+    rx="3"
+    ry="3"
+    fill="#bcd6fe"
+    stroke="#679ac3" />
+  <text
+    x="404"
+    y="203.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">AddItem</text>
+  <text
+    x="320"
+    y="237"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">description: 'john'</text>
+  <text
+    x="320"
+    y="253.8"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">image: 'avatar_john'</text>
+  <text
+    x="320"
+    y="270.6"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">price: 20.4</text>
+  <rect
+    x="438"
+    y="339"
+    width="199.6"
+    height="124"
+    rx="3"
+    ry="3"
+    fill="#ffb778"
+    stroke="#c19a0f" />
+  <text
+    x="537.8"
+    y="367.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">ItemAdded</text>
+  <text
+    x="458"
+    y="401"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">description: string</text>
+  <text
+    x="458"
+    y="417.8"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">image: string</text>
+  <text
+    x="458"
+    y="434.6"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">price: number</text>
+  <rect
+    x="567.6"
+    y="175"
+    width="208"
+    height="124"
+    rx="3"
+    ry="3"
+    fill="#bcd6fe"
+    stroke="#679ac3" />
+  <text
+    x="671.6"
+    y="203.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">AddItem</text>
+  <text
+    x="587.6"
+    y="237"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">description: 'jack'</text>
+  <text
+    x="587.6"
+    y="253.8"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">image: 'avatar_jack'</text>
+  <text
+    x="587.6"
+    y="270.6"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">price: 12.5</text>
+  <rect
+    x="705.6"
+    y="339"
+    width="199.6"
+    height="124"
+    rx="3"
+    ry="3"
+    fill="#ffb778"
+    stroke="#c19a0f" />
+  <text
+    x="805.4"
+    y="367.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">ItemAdded</text>
+  <text
+    x="725.6"
+    y="401"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">description: string</text>
+  <text
+    x="725.6"
+    y="417.8"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">image: string</text>
+  <text
+    x="725.6"
+    y="434.6"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="monospace"
+    fill="#333">price: number</text>
+  <path
+    d="M336.67 135 L369.33 175"
+    fill="none"
+    stroke="#000"
+    class="em-relation" />
+  <path
+    d="M369.33 175 L360.3 169.47 L365.72 165.04 Z"
+    fill="#000000" />
+  <path
+    d="M438.67 299 L504.53 339"
+    fill="none"
+    stroke="#000"
+    class="em-relation" />
+  <path
+    d="M504.53 339 L494.17 336.8 L497.8 330.82 Z"
+    fill="#000000" />
+  <path
+    d="M571.07 339 L636.93 299"
+    fill="none"
+    stroke="#000"
+    class="em-relation" />
+  <path
+    d="M636.93 299 L630.2 307.18 L626.57 301.2 Z"
+    fill="#000000" />
+  <path
+    d="M706.27 299 L772.13 339"
+    fill="none"
+    stroke="#000"
+    class="em-relation" />
+  <path
+    d="M772.13 339 L761.77 336.8 L765.4 330.82 Z"
+    fill="#000000" />
+</svg>

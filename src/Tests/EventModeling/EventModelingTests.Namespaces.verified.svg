@@ -1,0 +1,214 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 899.4 590"
+  style="max-width: 899.4px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <rect
+    x="20"
+    y="20"
+    width="859.4"
+    height="130"
+    rx="3"
+    ry="3"
+    fill="rgb(250,250,250)"
+    stroke="rgb(240,240,240)" />
+  <text
+    x="50"
+    y="50"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">UI/A: Inventory</text>
+  <rect
+    x="20"
+    y="160"
+    width="859.4"
+    height="130"
+    rx="3"
+    ry="3"
+    fill="rgb(250,250,250)"
+    stroke="rgb(240,240,240)" />
+  <text
+    x="50"
+    y="190"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">C/RM: Inventory</text>
+  <rect
+    x="20"
+    y="300"
+    width="859.4"
+    height="130"
+    rx="3"
+    ry="3"
+    fill="rgb(250,250,250)"
+    stroke="rgb(240,240,240)" />
+  <text
+    x="50"
+    y="330"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Stream: Inventory</text>
+  <rect
+    x="20"
+    y="440"
+    width="859.4"
+    height="130"
+    rx="3"
+    ry="3"
+    fill="rgb(250,250,250)"
+    stroke="rgb(240,240,240)" />
+  <text
+    x="50"
+    y="470"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Stream: External</text>
+  <rect
+    x="270"
+    y="315"
+    width="174.4"
+    height="100"
+    rx="3"
+    ry="3"
+    fill="#ffb778"
+    stroke="#c19a0f" />
+  <text
+    x="357.2"
+    y="365"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">InventoryChanged</text>
+  <rect
+    x="374.4"
+    y="455"
+    width="174.4"
+    height="100"
+    rx="3"
+    ry="3"
+    fill="#ffb778"
+    stroke="#c19a0f" />
+  <text
+    x="461.6"
+    y="505"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">InventoryChanged</text>
+  <rect
+    x="478.8"
+    y="35"
+    width="115.6"
+    height="100"
+    rx="3"
+    ry="3"
+    fill="#edb3f6"
+    stroke="#b88cbf" />
+  <text
+    x="536.6"
+    y="85"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Restocker</text>
+  <rect
+    x="524.4"
+    y="175"
+    width="100"
+    height="100"
+    rx="3"
+    ry="3"
+    fill="#bcd6fe"
+    stroke="#679ac3" />
+  <text
+    x="574.4"
+    y="225"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Restock</text>
+  <rect
+    x="554.4"
+    y="315"
+    width="115.6"
+    height="100"
+    rx="3"
+    ry="3"
+    fill="#ffb778"
+    stroke="#c19a0f" />
+  <text
+    x="612.2"
+    y="365"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Restocked</text>
+  <rect
+    x="680"
+    y="315"
+    width="174.4"
+    height="100"
+    rx="3"
+    ry="3"
+    fill="#ffb778"
+    stroke="#c19a0f" />
+  <text
+    x="767.2"
+    y="365"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">InventoryChanged</text>
+  <path
+    d="M490.67 455 L517.33 135"
+    fill="none"
+    stroke="#000"
+    class="em-relation" />
+  <path
+    d="M517.33 135 L519.99 145.26 L513.01 144.67 Z"
+    fill="#000000" />
+  <path
+    d="M555.87 135 L557.73 175"
+    fill="none"
+    stroke="#000"
+    class="em-relation" />
+  <path
+    d="M557.73 175 L553.77 165.17 L560.76 164.85 Z"
+    fill="#000000" />
+  <path
+    d="M591.07 275 L592.93 315"
+    fill="none"
+    stroke="#000"
+    class="em-relation" />
+  <path
+    d="M592.93 315 L588.97 305.17 L595.96 304.85 Z"
+    fill="#000000" />
+  <path
+    d="M591.07 275 L738.13 315"
+    fill="none"
+    stroke="#000"
+    class="em-relation" />
+  <path
+    d="M738.13 315 L727.57 315.75 L729.4 309 Z"
+    fill="#000000" />
+</svg>
