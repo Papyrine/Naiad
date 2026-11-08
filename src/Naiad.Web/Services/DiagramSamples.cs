@@ -221,6 +221,23 @@ public static class DiagramSamples
                     package.json
                     README.md
             """),
+        new("Wardley Map",
+            """
+            wardley-beta
+            title Tea Shop
+            anchor Business [0.95, 0.63]
+            component Cup of Tea [0.79, 0.61]
+            component Tea [0.63, 0.81]
+            component Hot Water [0.52, 0.80]
+            component Kettle [0.43, 0.35]
+            component Power [0.10, 0.70]
+            Business -> Cup of Tea
+            Cup of Tea -> Tea
+            Cup of Tea -> Hot Water
+            Hot Water -> Kettle
+            Kettle -> Power
+            evolve Kettle 0.62
+            """),
     ];
 
     /// <summary>The diagram shown when the editor first loads.</summary>

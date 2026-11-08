@@ -81,6 +81,8 @@ public static class Mermaid
                 Render(new IshikawaParser(), new IshikawaRenderer(), "Ishikawa diagram", input, title, options),
             DiagramType.TreeView =>
                 Render(new TreeViewParser(), new TreeViewRenderer(), "tree view", input, title, options),
+            DiagramType.Wardley =>
+                Render(new WardleyParser(), new WardleyRenderer(), "Wardley map", input, title, options),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
@@ -253,6 +255,11 @@ public static class Mermaid
         else if (firstLine.StartsWith("zenuml", StringComparison.OrdinalIgnoreCase))
         {
             type = DiagramType.ZenUML;
+        }
+        // Mermaid only knows Wardley maps by their beta keyword so far.
+        else if (firstLine.StartsWith("wardley-beta", StringComparison.OrdinalIgnoreCase))
+        {
+            type = DiagramType.Wardley;
         }
         else
         {

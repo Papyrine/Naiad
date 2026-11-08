@@ -1,0 +1,143 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 900 600"
+  style="max-width: 900px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="450"
+    y="24"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12.6px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Custom Widths</text>
+  <line
+    x1="48"
+    y1="552"
+    x2="852"
+    y2="552"
+    stroke="#333333" />
+  <line
+    x1="48"
+    y1="48"
+    x2="48"
+    y2="552"
+    stroke="#333333" />
+  <text
+    x="450"
+    y="588"
+    text-anchor="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Evolution</text>
+  <text
+    x="16"
+    y="300"
+    text-anchor="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300"
+    transform="rotate(-90 16 300)">Visibility</text>
+  <text
+    x="128.4"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Genesis</text>
+  <path
+    d="M 208.8 48 L 208.8 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="289.2"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Custom</text>
+  <path
+    d="M 369.6 48 L 369.6 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="510.3"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Product</text>
+  <path
+    d="M 651 48 L 651 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="751.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Commodity</text>
+  <circle
+    cx="168.6"
+    cy="174"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="329.4"
+    cy="199.2"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="570.6"
+    cy="224.4"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="771.6"
+    cy="249.6"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <text
+    x="176.6"
+    y="166"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Novel</text>
+  <text
+    x="337.4"
+    y="191.2"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Bespoke</text>
+  <text
+    x="578.6"
+    y="216.4"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Product</text>
+  <text
+    x="779.6"
+    y="241.6"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Utility</text>
+</svg>

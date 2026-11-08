@@ -1,0 +1,250 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 900 600"
+  style="max-width: 900px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="450"
+    y="24"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12.6px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Link Types</text>
+  <line
+    x1="48"
+    y1="552"
+    x2="852"
+    y2="552"
+    stroke="#333333" />
+  <line
+    x1="48"
+    y1="48"
+    x2="48"
+    y2="552"
+    stroke="#333333" />
+  <text
+    x="450"
+    y="588"
+    text-anchor="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Evolution</text>
+  <text
+    x="16"
+    y="300"
+    text-anchor="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300"
+    transform="rotate(-90 16 300)">Visibility</text>
+  <text
+    x="148.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Genesis</text>
+  <path
+    d="M 249 48 L 249 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="349.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Custom Built</text>
+  <path
+    d="M 450 48 L 450 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="550.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Product</text>
+  <path
+    d="M 651 48 L 651 552"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="751.5"
+    y="568"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Commodity</text>
+  <line
+    x1="806.37"
+    y1="100.95"
+    x2="656.43"
+    y2="171.45"
+    stroke="#333333" />
+  <line
+    x1="645.92"
+    y1="177.19"
+    x2="535.48"
+    y2="246.41"
+    stroke="#333333" />
+  <path
+    d="M 535.48 246.41 L 538.39 241.64 L 541.05 245.88 Z"
+    fill="#333333"
+    stroke="none" />
+  <line
+    x1="533.87"
+    y1="254.49"
+    x2="687.73"
+    y2="471.51"
+    stroke="#333333" />
+  <line
+    x1="524.53"
+    y1="248.37"
+    x2="415.67"
+    y2="225.63"
+    stroke="#333333" />
+  <path
+    d="M 415.67 225.63 L 421.08 224.2 L 420.06 229.1 Z"
+    fill="#333333"
+    stroke="none" />
+  <path
+    d="M 524.53 248.37 L 519.12 249.8 L 520.14 244.9 Z"
+    fill="#333333"
+    stroke="none" />
+  <line
+    x1="414.27"
+    y1="228.4"
+    x2="686.73"
+    y2="472.4"
+    stroke="#333333" />
+  <path
+    d="M 686.73 472.4 L 681.34 470.92 L 684.67 467.2 Z"
+    fill="#333333"
+    stroke="none" />
+  <line
+    x1="525.08"
+    y1="252.38"
+    x2="294.52"
+    y2="372.82"
+    stroke="#333333"
+    stroke-dasharray="6 6" />
+  <line
+    x1="295.02"
+    y1="377.06"
+    x2="685.38"
+    y2="474.94"
+    stroke="#333333" />
+  <path
+    d="M 295.02 377.06 L 300.48 375.85 L 299.26 380.7 Z"
+    fill="#333333"
+    stroke="none" />
+  <text
+    x="617.33"
+    y="358.37"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300"
+    transform="rotate(54.66 617.33 358.37)">persists</text>
+  <text
+    x="555.84"
+    y="344.44"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300"
+    transform="rotate(41.85 555.84 344.44)">backup</text>
+  <circle
+    cx="811.8"
+    cy="98.4"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="651"
+    cy="174"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="530.4"
+    cy="249.6"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="409.8"
+    cy="224.4"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="691.2"
+    cy="476.4"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="289.2"
+    cy="375.6"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <text
+    x="819.8"
+    y="90.4"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">User</text>
+  <text
+    x="659"
+    y="166"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">App</text>
+  <text
+    x="538.4"
+    y="241.6"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">API</text>
+  <text
+    x="417.8"
+    y="216.4"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Cache</text>
+  <text
+    x="699.2"
+    y="468.4"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Database</text>
+  <text
+    x="297.2"
+    y="367.6"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Queue</text>
+</svg>

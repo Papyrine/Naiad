@@ -1,0 +1,440 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1147 800"
+  style="max-width: 1147px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="550"
+    y="24"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12.6px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Software Platform Strategy</text>
+  <line
+    x1="48"
+    y1="752"
+    x2="1052"
+    y2="752"
+    stroke="#333333" />
+  <line
+    x1="48"
+    y1="48"
+    x2="48"
+    y2="752"
+    stroke="#333333" />
+  <text
+    x="550"
+    y="788"
+    text-anchor="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Evolution</text>
+  <text
+    x="16"
+    y="400"
+    text-anchor="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300"
+    transform="rotate(-90 16 400)">Visibility</text>
+  <text
+    x="173.5"
+    y="768"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Genesis</text>
+  <path
+    d="M 299 48 L 299 752"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="424.5"
+    y="768"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Custom</text>
+  <path
+    d="M 550 48 L 550 752"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="675.5"
+    y="768"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Product</text>
+  <path
+    d="M 801 48 L 801 752"
+    stroke="#000"
+    stroke-dasharray="5 5"
+    opacity="0.8" />
+  <text
+    x="926.5"
+    y="768"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Commodity</text>
+  <line
+    x1="996.89"
+    y1="121.84"
+    x2="906.31"
+    y2="185.36"
+    stroke="#333333" />
+  <line
+    x1="996.89"
+    y1="121.84"
+    x2="856.11"
+    y2="220.56"
+    stroke="#333333" />
+  <line
+    x1="895.74"
+    y1="190.79"
+    x2="706.26"
+    y2="257.21"
+    stroke="#333333" />
+  <line
+    x1="845.36"
+    y1="225.37"
+    x2="706.44"
+    y2="257.83"
+    stroke="#333333" />
+  <line
+    x1="695.69"
+    y1="262.64"
+    x2="605.11"
+    y2="326.16"
+    stroke="#333333" />
+  <line
+    x1="695.69"
+    y1="262.64"
+    x2="504.71"
+    y2="396.56"
+    stroke="#333333" />
+  <line
+    x1="505.58"
+    y1="401.62"
+    x2="996.02"
+    y2="539.18"
+    stroke="#333333" />
+  <line
+    x1="700.6"
+    y1="259.2"
+    x2="893.4"
+    y2="259.2"
+    stroke="#dc3545"
+    stroke-dasharray="4 4" />
+  <path
+    d="M 893.4 259.2 L 887.4 262.2 L 887.4 256.2 Z"
+    fill="#dc3545"
+    stroke="none" />
+  <line
+    x1="499.8"
+    y1="400"
+    x2="793"
+    y2="400"
+    stroke="#dc3545"
+    stroke-dasharray="4 4" />
+  <path
+    d="M 793 400 L 787 403 L 787 397 Z"
+    fill="#dc3545"
+    stroke="none" />
+  <circle
+    cx="901.4"
+    cy="188.8"
+    r="12"
+    fill="#eee"
+    stroke="#000" />
+  <circle
+    cx="901.4"
+    cy="188.8"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="851.2"
+    cy="224"
+    r="12"
+    fill="#eee"
+    stroke="#000" />
+  <circle
+    cx="851.2"
+    cy="224"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="700.6"
+    cy="259.2"
+    r="12"
+    fill="#ccc"
+    stroke="#333333" />
+  <circle
+    cx="700.6"
+    cy="259.2"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="600.2"
+    cy="329.6"
+    r="12"
+    fill="#666"
+    stroke="#333333" />
+  <circle
+    cx="600.2"
+    cy="329.6"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <circle
+    cx="499.8"
+    cy="400"
+    r="12"
+    fill="#ccc"
+    stroke="#333333" />
+  <circle
+    cx="499.8"
+    cy="400"
+    r="6"
+    fill="white"
+    stroke="#333333" />
+  <line
+    x1="536.8"
+    y1="394"
+    x2="536.8"
+    y2="406"
+    stroke="#333333"
+    stroke-width="6" />
+  <circle
+    cx="1001.8"
+    cy="540.8"
+    r="12"
+    fill="white"
+    stroke="#333333" />
+  <line
+    x1="1001.8"
+    y1="533.6"
+    x2="995.56"
+    y2="544.4"
+    stroke="#333333" />
+  <line
+    x1="995.56"
+    y1="544.4"
+    x2="1008.04"
+    y2="544.4"
+    stroke="#333333" />
+  <line
+    x1="1008.04"
+    y1="544.4"
+    x2="1001.8"
+    y2="533.6"
+    stroke="#333333" />
+  <circle
+    cx="1001.8"
+    cy="533.6"
+    r="4.2"
+    fill="white"
+    stroke="#333333"
+    stroke-width="2" />
+  <circle
+    cx="995.56"
+    cy="544.4"
+    r="4.2"
+    fill="white"
+    stroke="#333333"
+    stroke-width="2" />
+  <circle
+    cx="1008.04"
+    cy="544.4"
+    r="4.2"
+    fill="white"
+    stroke="#333333"
+    stroke-width="2" />
+  <text
+    x="1001.8"
+    y="115.4"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#000">Customer</text>
+  <text
+    x="919.4"
+    y="170.8"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Mobile App</text>
+  <text
+    x="791.2"
+    y="234"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Web App</text>
+  <text
+    x="718.6"
+    y="241.2"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">API Gateway</text>
+  <text
+    x="618.2"
+    y="311.6"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Auth Service</text>
+  <text
+    x="517.8"
+    y="382"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Database</text>
+  <text
+    x="1019.8"
+    y="522.8"
+    text-anchor="start"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Cloud Platform</text>
+  <circle
+    cx="871.28"
+    cy="202.88"
+    r="10"
+    fill="white"
+    stroke="#333333"
+    stroke-width="1.5" />
+  <text
+    x="871.28"
+    y="202.88"
+    text-anchor="middle"
+    dominant-baseline="central"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">1</text>
+  <circle
+    cx="650.4"
+    cy="259.2"
+    r="10"
+    fill="white"
+    stroke="#333333"
+    stroke-width="1.5" />
+  <text
+    x="650.4"
+    y="259.2"
+    text-anchor="middle"
+    dominant-baseline="central"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">2</text>
+  <circle
+    cx="449.6"
+    cy="400"
+    r="10"
+    fill="white"
+    stroke="#333333"
+    stroke-width="1.5" />
+  <text
+    x="449.6"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="central"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">3</text>
+  <rect
+    x="248.8"
+    y="677.4"
+    width="151"
+    height="74.6"
+    rx="4"
+    ry="4"
+    fill="white"
+    stroke="#333333"
+    stroke-width="1.5" />
+  <text
+    x="258.8"
+    y="703.4"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#131300">1. User touchpoints</text>
+  <text
+    x="258.8"
+    y="719.4"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#131300">2. Integration layer</text>
+  <text
+    x="258.8"
+    y="735.4"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    fill="#131300">3. Data persistence</text>
+  <text
+    x="951.6"
+    y="153.6"
+    text-anchor="start"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Build mobile-first experience</text>
+  <text
+    x="550"
+    y="329.6"
+    text-anchor="start"
+    font-size="11px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Migrate to cloud-native database</text>
+  <path
+    d="M 901.4 596.2 L 941.4 596.2 L 941.4 588.2 L 961.4 611.2 L 941.4 634.2 L 941.4 626.2 L 901.4 626.2 Z"
+    fill="white"
+    stroke="#333333" />
+  <text
+    x="931.4"
+    y="641.2"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Cloud Native</text>
+  <path
+    d="M 459.4 420.2 L 419.4 420.2 L 419.4 412.2 L 399.4 435.2 L 419.4 458.2 L 419.4 450.2 L 459.4 450.2 Z"
+    fill="white"
+    stroke="#333333" />
+  <text
+    x="429.4"
+    y="465.2"
+    text-anchor="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#131300">Legacy Data</text>
+</svg>
