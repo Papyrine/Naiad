@@ -40,6 +40,24 @@ public class ERParserTests
         await Assert.That(model.Relationships.Single().ToEntity).IsEqualTo("Order (open)");
     }
 
+    // An attribute had to end its line, so a body written on one line (`CUSTOMER { string name }`) was
+    // rejected at its `}`. Mermaid's lexer skips any white space between attributes.
+    [Test]
+    public async Task OneLineBody_IsRead()
+    {
+        var model = new ERParser().Parse(
+            """
+            erDiagram
+                CUSTOMER { string name }
+                ORDER { int id PK "the id" string note }
+                CUSTOMER ||--o{ ORDER : places
+            """).Value;
+
+        await Assert.That(model.Entities[0].Attributes.Single().Name).IsEqualTo("name");
+        var order = model.Entities[1].Attributes;
+        await Assert.That(string.Join("|", order.Select(_ => $"{_.Type} {_.Name} {_.Comment}"))).IsEqualTo("int id the id|string note ");
+    }
+
     [Test]
     public async Task SeveralKeys_AreAllKept()
     {
