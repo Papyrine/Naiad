@@ -85,7 +85,8 @@ static class IconPackRegistry
         var prefix = span[..colon];
         var name = span[(colon + 1)..];
         if (packLookup.TryGetValue(prefix, out var pack) &&
-            pack.GetAlternateLookup<CharSpan>().TryGetValue(name, out var icon))
+            pack.GetAlternateLookup<CharSpan>()
+                .TryGetValue(name, out var icon))
         {
             return icon;
         }
