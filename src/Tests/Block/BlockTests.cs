@@ -98,4 +98,24 @@ public class BlockTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // The elements of every line were read as one list running to the end of the input, so a comment after
+    // a line of elements failed the whole diagram, and a later `columns 2` was read as two blocks.
+    [Test]
+    public async Task StatementsBetweenLinesOfElements_AreRead()
+    {
+        var result = new BlockParser().Parse(
+            """
+            block-beta
+                a b c
+                %% a comment
+                d
+                columns 2
+                e["Last"]
+            """);
+
+        await Assert.That(result.Error).IsNull();
+        await Assert.That(string.Join(",", result.Value.Elements.Select(_ => _.Id))).IsEqualTo("a,b,c,d,e");
+        await Assert.That(result.Value.Columns).IsEqualTo(2);
+    }
 }
