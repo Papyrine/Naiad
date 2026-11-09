@@ -405,6 +405,40 @@ public class AgentFlowTests : TestBase
         await Assert.That(result.Success).IsFalse();
     }
 
+    // The blocks were counted only after every line had been read, and that failure was reported at the
+    // start of the statements, where the end of the input outranked it. The error now names the stray
+    // `end`, or the block left open, where it is.
+    [Test]
+    [Arguments("a stray end", "agentflow-beta\na --> b\nend\nc --> d", "unexpected 'end' at line 3, col 1")]
+    [Arguments("an end before any block", "agentflow-beta\nend\nflow", "unexpected 'end' at line 2, col 1")]
+    [Arguments("a flow left open", "agentflow-beta\nflow F\n  a --> b\n", "a flow or global block is not closed by an end at line 4, col 1")]
+    [Arguments("a nested flow left open", "agentflow-beta\nflow F\n  flow G\n    a --> b\n  end", "a flow or global block is not closed by an end at line 5, col 6")]
+    [Arguments("a bad line inside a flow", "agentflow-beta\nflow F\n  a --> b\n  ???\nend", "unexpected '???' at line 4, col 3")]
+    public async Task Parse_UnbalancedBlockIsReportedWhereItIs(string name, string input, string error)
+    {
+        var result = new AgentFlowParser().Parse(input);
+
+        await Assert.That(result.Error).IsEqualTo(error).Because(name);
+    }
+
+    // A node may still be named after a block keyword when the line is not a block statement.
+    [Test]
+    public async Task Parse_KeywordNamedNodesInAChain()
+    {
+        var model = Parse(
+            """
+            agentflow-beta
+              end --> flow
+              flow F
+                global --> end
+              end
+            """);
+
+        await Assert.That(model.Nodes.Select(_ => _.Id)).Contains("end");
+        await Assert.That(model.Nodes.Select(_ => _.Id)).Contains("flow");
+        await Assert.That(model.Nodes.Select(_ => _.Id)).Contains("global");
+    }
+
     [Test]
     public async Task DetectsType()
     {
