@@ -31,23 +31,28 @@ class UserJourneyParser : IDiagramParser<UserJourneyModel>
                     Literals.NoneOf(",\r\n").AsTrimmedString())
                 .Then(static _ => _.ToList());
 
-        // Task: Task Name: 5: Me, Cat
+        // Task: Task Name: 5: Me, Cat. Mermaid splits the line on its colons, so blanks may come before
+        // either one, and the actors may be left out.
         var taskParser =
             CommonParsers.InlineWhitespace
                 .SkipAnd(Literals.NoneOf(":\r\n").AsTrimmedString())
                 .AndSkip(Literals.Char(':'))
                 .AndSkip(CommonParsers.InlineWhitespace)
                 .And(CommonParsers.UnsignedInt)
-                .AndSkip(Literals.Char(':'))
                 .AndSkip(CommonParsers.InlineWhitespace)
-                .And(actorListParser)
+                .And(
+                    Literals.Char(':')
+                        .SkipAnd(CommonParsers.InlineWhitespace)
+                        .SkipAnd(actorListParser)
+                        .Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(CommonParsers.LineEnd)
                 .Map((name, score, actors) =>
                     new JourneyTask
                     {
                         Name = name,
                         Score = score,
-                        Actors = actors
+                        Actors = actors.HasValue ? actors.Value : []
                     });
 
         // Skip line (comments, empty lines)
