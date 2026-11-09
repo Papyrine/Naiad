@@ -9,6 +9,16 @@ public static class Mermaid
     }
 
     /// <summary>
+    /// Lays out Mermaid <paramref name="input"/> as source: the diagram's body indented under its header and
+    /// each block (<c>subgraph</c>, <c>loop</c>/<c>alt</c>, <c>{ … }</c>, <c>section</c>) indented within it;
+    /// trailing whitespace and runs of blank lines removed. Front matter and multi-line strings are kept as
+    /// written, and a diagram that reads structure from indentation (mindmap, kanban, …) is returned
+    /// unchanged. Nothing is parsed, so this never throws on markup that would not render.
+    /// </summary>
+    public static string Format(string input) =>
+        MermaidFormatter.Format(input);
+
+    /// <summary>
     /// Renders to the in-memory <see cref="SvgDocument"/> rather than serialised markup. This is the
     /// seam the PNG render packages (Naiad.Skia, Naiad.ImageSharp) rasterize, so they share the exact
     /// parse → layout → model pipeline that produces the SVG and differ only in how the document is
@@ -17,7 +27,30 @@ public static class Mermaid
     internal static SvgDocument RenderToSvgDocument(string input, RenderOptions? options = null)
     {
         IconPackRegistry.MarkRendered();
-        options ??= RenderOptions.Default;
+        return Run(input, options ?? RenderOptions.Default, parseOnly: false)!;
+    }
+
+    /// <summary>
+    /// Whether <paramref name="input"/> parses as a diagram Naiad knows: the same front matter, directive and
+    /// grammar handling as rendering, stopping before layout. Unlike rendering this does not freeze the icon
+    /// pack registry.
+    /// </summary>
+    internal static bool Parses(string input)
+    {
+        try
+        {
+            Run(input, RenderOptions.Default, parseOnly: true);
+            return true;
+        }
+        catch (MermaidException)
+        {
+            return false;
+        }
+    }
+
+    // Parses and, unless parseOnly, renders. Returns null only when parseOnly.
+    static SvgDocument? Run(string input, RenderOptions options, bool parseOnly)
+    {
         var source = input;
         input = TrimInput(input);
         var body = StripFrontMatter(input.AsSpan().TrimStart(), out var frontMatter).ToString();
@@ -36,83 +69,83 @@ public static class Mermaid
         return diagramType switch
         {
             DiagramType.Pie =>
-                Render(new PieParser(), new PieRenderer(), "pie chart", input, title, config, skipped, options),
+                Render(new PieParser(), new PieRenderer(), "pie chart", input, title, config, skipped, options, parseOnly),
             DiagramType.Flowchart =>
-                Render(new FlowchartParser(), new FlowchartRenderer(), "flowchart", input, title, config, skipped, options),
+                Render(new FlowchartParser(), new FlowchartRenderer(), "flowchart", input, title, config, skipped, options, parseOnly),
             DiagramType.Sequence =>
-                Render(new SequenceParser(), new SequenceRenderer(), "sequence diagram", input, title, config, skipped, options),
+                Render(new SequenceParser(), new SequenceRenderer(), "sequence diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.Class =>
-                Render(new ClassParser(), new ClassRenderer(), "class diagram", input, title, config, skipped, options),
+                Render(new ClassParser(), new ClassRenderer(), "class diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.State =>
-                Render(new StateParser(), new StateRenderer(), "state diagram", input, title, config, skipped, options),
+                Render(new StateParser(), new StateRenderer(), "state diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.EntityRelationship =>
-                Render(new ERParser(), new ERRenderer(), "ER diagram", input, title, config, skipped, options),
+                Render(new ERParser(), new ERRenderer(), "ER diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.GitGraph =>
-                Render(new GitGraphParser(config), new GitGraphRenderer(), "git graph", input, title, config, skipped, options),
+                Render(new GitGraphParser(config), new GitGraphRenderer(), "git graph", input, title, config, skipped, options, parseOnly),
             DiagramType.Gantt =>
-                Render(new GanttParser(), new GanttRenderer(), "gantt chart", input, title, config, skipped, options),
+                Render(new GanttParser(), new GanttRenderer(), "gantt chart", input, title, config, skipped, options, parseOnly),
             DiagramType.Mindmap =>
-                Render(new MindmapParser(), new MindmapRenderer(), "mindmap", input, title, config, skipped, options),
+                Render(new MindmapParser(), new MindmapRenderer(), "mindmap", input, title, config, skipped, options, parseOnly),
             DiagramType.Timeline =>
-                Render(new TimelineParser(), new TimelineRenderer(), "timeline", input, title, config, skipped, options),
+                Render(new TimelineParser(), new TimelineRenderer(), "timeline", input, title, config, skipped, options, parseOnly),
             DiagramType.UserJourney =>
-                Render(new UserJourneyParser(), new UserJourneyRenderer(), "user journey", input, title, config, skipped, options),
+                Render(new UserJourneyParser(), new UserJourneyRenderer(), "user journey", input, title, config, skipped, options, parseOnly),
             DiagramType.Quadrant =>
-                Render(new QuadrantParser(), new QuadrantRenderer(), "quadrant chart", input, title, config, skipped, options),
+                Render(new QuadrantParser(), new QuadrantRenderer(), "quadrant chart", input, title, config, skipped, options, parseOnly),
             DiagramType.XYChart =>
-                Render(new XYChartParser(), new XYChartRenderer(), "XY chart", input, title, config, skipped, options),
+                Render(new XYChartParser(), new XYChartRenderer(), "XY chart", input, title, config, skipped, options, parseOnly),
             DiagramType.Sankey =>
-                Render(new SankeyParser(), new SankeyRenderer(), "Sankey diagram", input, title, config, skipped, options),
+                Render(new SankeyParser(), new SankeyRenderer(), "Sankey diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.Block =>
-                Render(new BlockParser(), new BlockRenderer(), "block diagram", input, title, config, skipped, options),
+                Render(new BlockParser(), new BlockRenderer(), "block diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.Kanban =>
-                Render(new KanbanParser(), new KanbanRenderer(), "kanban board", input, title, config, skipped, options),
+                Render(new KanbanParser(), new KanbanRenderer(), "kanban board", input, title, config, skipped, options, parseOnly),
             DiagramType.Packet =>
-                Render(new PacketParser(), new PacketRenderer(), "packet diagram", input, title, config, skipped, options),
+                Render(new PacketParser(), new PacketRenderer(), "packet diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.C4Context or
                 DiagramType.C4Container or
                 DiagramType.C4Component or
                 DiagramType.C4Dynamic or
                 DiagramType.C4Deployment =>
-                Render(new C4Parser(), new C4Renderer(), "C4 diagram", input, title, config, skipped, options),
+                Render(new C4Parser(), new C4Renderer(), "C4 diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.Requirement =>
-                Render(new RequirementParser(), new RequirementRenderer(), "requirement diagram", input, title, config, skipped, options),
+                Render(new RequirementParser(), new RequirementRenderer(), "requirement diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.Architecture =>
-                Render(new ArchitectureParser(), new ArchitectureRenderer(), "architecture diagram", input, title, config, skipped, options),
+                Render(new ArchitectureParser(), new ArchitectureRenderer(), "architecture diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.Radar =>
-                Render(new RadarParser(), new RadarRenderer(), "radar diagram", input, title, config, skipped, options),
+                Render(new RadarParser(), new RadarRenderer(), "radar diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.Treemap =>
-                Render(new TreemapParser(), new TreemapRenderer(), "treemap diagram", input, title, config, skipped, options),
+                Render(new TreemapParser(), new TreemapRenderer(), "treemap diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.ZenUML =>
-                Render(new ZenUMLParser(), new SequenceRenderer(), "ZenUML diagram", input, title, config, skipped, options),
+                Render(new ZenUMLParser(), new SequenceRenderer(), "ZenUML diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.Ishikawa =>
-                Render(new IshikawaParser(), new IshikawaRenderer(), "Ishikawa diagram", input, title, config, skipped, options),
+                Render(new IshikawaParser(), new IshikawaRenderer(), "Ishikawa diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.TreeView =>
-                Render(new TreeViewParser(), new TreeViewRenderer(), "tree view", input, title, config, skipped, options),
+                Render(new TreeViewParser(), new TreeViewRenderer(), "tree view", input, title, config, skipped, options, parseOnly),
             DiagramType.Wardley =>
-                Render(new WardleyParser(), new WardleyRenderer(), "Wardley map", input, title, config, skipped, options),
+                Render(new WardleyParser(), new WardleyRenderer(), "Wardley map", input, title, config, skipped, options, parseOnly),
             DiagramType.Venn =>
-                Render(new VennParser(), new VennRenderer(), "Venn diagram", input, title, config, skipped, options),
+                Render(new VennParser(), new VennRenderer(), "Venn diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.Swimlane =>
-                Render(new SwimlaneParser(), new SwimlaneRenderer(), "swimlane diagram", input, title, config, skipped, options),
+                Render(new SwimlaneParser(), new SwimlaneRenderer(), "swimlane diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.EventModeling =>
-                Render(new EventModelingParser(), new EventModelingRenderer(), "event modeling diagram", input, title, config, skipped, options),
+                Render(new EventModelingParser(), new EventModelingRenderer(), "event modeling diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.UseCase =>
-                Render(new UseCaseParser(), new UseCaseRenderer(), "use case diagram", input, title, config, skipped, options),
+                Render(new UseCaseParser(), new UseCaseRenderer(), "use case diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.Cynefin =>
-                Render(new CynefinParser(), new CynefinRenderer(), "Cynefin diagram", input, title, config, skipped, options),
+                Render(new CynefinParser(), new CynefinRenderer(), "Cynefin diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.Info =>
-                Render(new InfoParser(), new InfoRenderer(), "info diagram", input, title, config, skipped, options),
+                Render(new InfoParser(), new InfoRenderer(), "info diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.AgentFlow =>
-                Render(new AgentFlowParser(), new AgentFlowRenderer(), "agent flow", input, title, config, skipped, options),
+                Render(new AgentFlowParser(), new AgentFlowRenderer(), "agent flow", input, title, config, skipped, options, parseOnly),
             DiagramType.Railroad =>
-                Render(new RailroadParser(), new RailroadRenderer(), "railroad diagram", input, title, config, skipped, options),
+                Render(new RailroadParser(), new RailroadRenderer(), "railroad diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.RailroadAbnf =>
-                Render(new RailroadAbnfParser(), new RailroadRenderer(), "ABNF railroad diagram", input, title, config, skipped, options),
+                Render(new RailroadAbnfParser(), new RailroadRenderer(), "ABNF railroad diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.RailroadEbnf =>
-                Render(new RailroadEbnfParser(), new RailroadRenderer(), "EBNF railroad diagram", input, title, config, skipped, options),
+                Render(new RailroadEbnfParser(), new RailroadRenderer(), "EBNF railroad diagram", input, title, config, skipped, options, parseOnly),
             DiagramType.RailroadPeg =>
-                Render(new RailroadPegParser(), new RailroadRenderer(), "PEG railroad diagram", input, title, config, skipped, options),
+                Render(new RailroadPegParser(), new RailroadRenderer(), "PEG railroad diagram", input, title, config, skipped, options, parseOnly),
             _ => throw new MermaidException($"Unsupported diagram type: {diagramType}")
         };
     }
@@ -124,20 +157,30 @@ public static class Mermaid
     /// empty input or markup whose first line names no known diagram, so callers such as the live editor
     /// can label whatever is currently being typed.
     /// </summary>
-    public static bool TryDetectType(string? input, out DiagramType type)
+    public static bool TryDetectType(string? input, out DiagramType type) =>
+        TryFindDiagram(input, out type, out _);
+
+    /// <summary>
+    /// <see cref="TryDetectType"/>, also giving where in <paramref name="input"/> the diagram's keyword
+    /// starts: past any byte order mark, white space, front matter, init blocks and comments.
+    /// </summary>
+    internal static bool TryFindDiagram(string? input, out DiagramType type, out int start)
     {
+        start = 0;
         if (string.IsNullOrWhiteSpace(input))
         {
             type = default;
             return false;
         }
 
-        input = TrimInput(input);
-        var body = StripFrontMatter(input.AsSpan().TrimStart(), out _);
-        return TryMatchType(SkipDirectivesAndComments(body, input), out type);
+        var trimmed = TrimInput(input);
+        var body = StripFrontMatter(trimmed.AsSpan().TrimStart(), out _);
+        var rest = SkipDirectivesAndComments(body, trimmed);
+        start = input.TrimEnd().Length - rest.Length;
+        return TryMatchType(rest, out type);
     }
 
-    static SvgDocument Render<TModel>(
+    static SvgDocument? Render<TModel>(
         IDiagramParser<TModel> parser,
         IDiagramRenderer<TModel> renderer,
         string description,
@@ -145,7 +188,8 @@ public static class Mermaid
         string? frontMatterTitle,
         MermaidConfig config,
         string skipped,
-        RenderOptions options)
+        RenderOptions options,
+        bool parseOnly)
         where TModel : DiagramBase
     {
         var result = parser.Parse(input);
@@ -153,6 +197,11 @@ public static class Mermaid
         if (!result.Success)
         {
             throw new MermaidParseException($"Failed to parse {description}: {Relocate(result.Error, skipped)}");
+        }
+
+        if (parseOnly)
+        {
+            return null;
         }
 
         // A title given in front matter stands in when the diagram text sets none of its own.
