@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components.Routing;
 
 namespace Naiad.Web.Pages;
 
-public partial class Index : IDisposable
+public partial class Index : IAsyncDisposable
 {
     // Re-render this long after the last keystroke. Keeps a fast typist from triggering a parse on every
     // character while still feeling live.
@@ -43,7 +43,7 @@ public partial class Index : IDisposable
 
     // A link pasted into an open tab changes only the fragment: no reload, so open it here too.
     void OnLocationChanged(object? sender, LocationChangedEventArgs args) =>
-        InvokeAsync(() =>
+        InvokeAsync(async () =>
         {
             var fragment = FragmentOf(args.Location);
             if (fragment == sharedFragment ||
@@ -52,12 +52,22 @@ public partial class Index : IDisposable
                 return;
             }
 
-            debounce?.Cancel();
+            await CancelDebounce();
             sharedFragment = fragment;
             source = shared;
             Render();
             StateHasChanged();
         });
+
+    Task CancelDebounce()
+    {
+        if (debounce is { } pending)
+        {
+            return pending.CancelAsync();
+        }
+
+        return Task.CompletedTask;
+    }
 
     /// <summary>
     /// Keeps the address bar a link to the current diagram while it is small enough to fit, so copying the
@@ -88,11 +98,16 @@ public partial class Index : IDisposable
         source = args.Value?.ToString() ?? "";
 
         // Coalesce bursts of keystrokes: cancel the pending render and start a fresh timer. Only the
-        // last keystroke in a burst survives to call Render.
-        debounce?.Cancel();
-        debounce?.Dispose();
+        // last keystroke in a burst survives to call Render. Swap in the new source before awaiting the
+        // cancel, so a keystroke arriving during that await cancels the new one rather than the old.
+        var previous = debounce;
         var cancelSource = new CancelSource();
         debounce = cancelSource;
+        if (previous != null)
+        {
+            await previous.CancelAsync();
+            previous.Dispose();
+        }
 
         try
         {
@@ -110,7 +125,7 @@ public partial class Index : IDisposable
     async Task LoadSample(DiagramSample sample)
     {
         // A picked sample replaces the editor content and renders immediately — no debounce wait.
-        debounce?.Cancel();
+        await CancelDebounce();
         source = sample.Source;
         Render();
         await UpdateShareLinkAsync();
@@ -223,10 +238,10 @@ public partial class Index : IDisposable
         }
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
         Navigation.LocationChanged -= OnLocationChanged;
-        debounce?.Cancel();
+        await CancelDebounce();
         debounce?.Dispose();
     }
 }
