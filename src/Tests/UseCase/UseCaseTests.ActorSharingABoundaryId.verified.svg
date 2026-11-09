@@ -1,0 +1,83 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 282.4 168"
+  style="max-width: 282.4px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <g
+    transform="translate(20,20)">
+    <g
+      transform="translate(0,0)">
+      <rect
+        x="126"
+        y="0"
+        width="116.4"
+        height="128"
+        fill="#ffffde"
+        stroke="#aaaa33"
+        class="boundary-body" />
+      <path
+        d="M76,64 L80.17,64 C84.33,64 92.67,64 101,64 C109.33,64 117.67,64 124.67,64 C131.67,64 137.33,64 140.17,64 L143,64"
+        fill="none"
+        stroke="#333333"
+        stroke-width="1.5"
+        class="relationship" />
+      <path
+        d="M 151 64 L 143 68 L 143 60 Z"
+        fill="#333333"
+        stroke="#333333" />
+      <g
+        class="usecase-actor"
+        transform="translate(38,49.5)">
+        <path
+          d="M 0 -12 C 6.627 -12 12 -17.373 12 -24 C 12 -30.627 6.627 -36 0 -36 C -6.627 -36 -12 -30.627 -12 -24 C -12 -17.373 -6.627 -12 0 -12 Z M 0 -12 V 8 M -17 -5 H 17 M 0 8 L -15 28 M 0 8 L 15 28"
+          fill="#ECECFF"
+          stroke="#9370DB"
+          stroke-width="2" />
+      </g>
+      <text
+        x="38"
+        y="104"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="actor-label">A</text>
+      <path
+        d="M 151 64 A 33.2 29 0 1 0 217.4 64 A 33.2 29 0 1 0 151 64 Z"
+        fill="#ECECFF"
+        stroke="#9370DB"
+        stroke-width="2"
+        class="usecase-element" />
+      <text
+        x="184.2"
+        y="64"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="12px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="usecase-label">Book</text>
+      <rect
+        x="176.35"
+        y="2"
+        width="15.7"
+        height="21"
+        fill="#ffffde"
+        stroke="none" />
+      <text
+        x="184.2"
+        y="12.5"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="14px"
+        font-family="Arial, sans-serif"
+        fill="#333"
+        class="system-boundary-title">A</text>
+    </g>
+  </g>
+</svg>
