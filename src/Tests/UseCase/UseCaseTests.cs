@@ -509,6 +509,27 @@ public class UseCaseTests : TestBase
         await Assert.That(model.UseCases.Select(_ => _.Id)).IsEquivalentTo(["Authorize"]);
     }
 
+    // A boundary opened twice under one id was two boundaries, which the layout then took as one box and
+    // drew the second as an empty box at the origin.
+    [Test]
+    public async Task Parse_BoundaryOpenedAgainAddsToTheFirst()
+    {
+        var model = Parse(
+            """
+            usecase-beta
+            systemBoundary S
+              A
+            end
+            systemBoundary S["Shop"]
+              B
+            end
+            """);
+
+        var boundary = model.Boundaries.Single();
+        await Assert.That(boundary.Title).IsEqualTo("Shop");
+        await Assert.That(boundary.MemberIds).IsEquivalentTo(["A", "B"], CollectionOrdering.Matching);
+    }
+
     [Test]
     public async Task Parse_NotesAndJson()
     {
