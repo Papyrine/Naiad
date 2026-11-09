@@ -98,10 +98,12 @@ public partial class Index : IAsyncDisposable
         source = args.Value?.ToString() ?? "";
 
         // Coalesce bursts of keystrokes: cancel the pending render and start a fresh timer. Only the
-        // last keystroke in a burst survives to call Render. Swap in the new source before awaiting the
-        // cancel, so a keystroke arriving during that await cancels the new one rather than the old.
+        // last keystroke in a burst survives to call Render. Swap in the new source and take its token
+        // before awaiting the cancel: a keystroke arriving during that await cancels and disposes this
+        // source, and a token read afterwards would throw rather than report the cancellation.
         var previous = debounce;
         var cancelSource = new CancelSource();
+        var token = cancelSource.Token;
         debounce = cancelSource;
         if (previous != null)
         {
@@ -111,7 +113,7 @@ public partial class Index : IAsyncDisposable
 
         try
         {
-            await Task.Delay(debounceMilliseconds, cancelSource.Token);
+            await Task.Delay(debounceMilliseconds, token);
         }
         catch (TaskCanceledException)
         {
