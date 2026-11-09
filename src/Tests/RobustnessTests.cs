@@ -111,6 +111,36 @@ public class RobustnessTests
         await Assert.That(svg).IsNotNull();
     }
 
+    // Block composites nest by recursion, in the grammar and in the layout. Nesting deeper than the stack
+    // allows is turned down as a parse error rather than taking the process down.
+    [Test]
+    public async Task Block_DeepNesting_DoesNotOverflowTheStack()
+    {
+        const int depth = 1000;
+        var input = new StringBuilder("block\n");
+        for (var i = 0; i < depth; i++)
+        {
+            input.Append("block\n");
+        }
+
+        input.Append("A\n");
+        for (var i = 0; i < depth; i++)
+        {
+            input.Append("end\n");
+        }
+
+        var (svg, failure) = RenderOnSmallStack(input.ToString());
+
+        if (failure is null)
+        {
+            await Assert.That(svg).IsNotNull();
+        }
+        else
+        {
+            await Assert.That(failure).IsTypeOf<MermaidParseException>();
+        }
+    }
+
     // A deliberately small stack makes a recursive walk's depth cheap to reach.
     static (string? Svg, Exception? Failure) RenderOnSmallStack(string input)
     {

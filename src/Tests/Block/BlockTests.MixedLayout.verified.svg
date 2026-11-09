@@ -2,94 +2,112 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 520 220"
-  style="max-width: 520px;"
+  viewBox="0 0 407.6 167"
+  style="max-width: 407.6px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <rect
-    x="30"
-    y="30"
-    width="460"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#E3F2FD"
-    stroke="#333" />
-  <text
-    x="260"
-    y="50"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Header</text>
-  <rect
-    x="30"
-    y="90"
-    width="100"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#E8F5E9"
-    stroke="#333" />
-  <text
-    x="80"
-    y="110"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Nav</text>
-  <rect
-    x="150"
-    y="90"
-    width="220"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#FFF3E0"
-    stroke="#333" />
-  <text
-    x="260"
-    y="110"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Content</text>
-  <rect
-    x="390"
-    y="90"
-    width="100"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#F3E5F5"
-    stroke="#333" />
-  <text
-    x="440"
-    y="110"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Sidebar</text>
-  <rect
-    x="30"
-    y="150"
-    width="460"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#FCE4EC"
-    stroke="#333" />
-  <text
-    x="260"
-    y="170"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Footer</text>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M0,0 H367.6 V37 H0 Z"
+      fill="#E3F2FD"
+      stroke="#333" />
+    <foreignObject
+      x="0"
+      y="0"
+      width="367.6"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 367.6px; height: 37px;">
+        <span>
+          <p>Header</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M0,45 H85.9 V82 H0 Z"
+      fill="#E8F5E9"
+      stroke="#333" />
+    <foreignObject
+      x="0"
+      y="45"
+      width="85.9"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 85.9px; height: 37px;">
+        <span>
+          <p>Nav</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M93.9,45 H273.7 V82 H93.9 Z"
+      fill="#FFF3E0"
+      stroke="#333" />
+    <foreignObject
+      x="93.9"
+      y="45"
+      width="179.8"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 179.8px; height: 37px;">
+        <span>
+          <p>Content</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M281.7,45 H367.6 V82 H281.7 Z"
+      fill="#F3E5F5"
+      stroke="#333" />
+    <foreignObject
+      x="281.7"
+      y="45"
+      width="85.9"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 85.9px; height: 37px;">
+        <span>
+          <p>Sidebar</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M0,90 H367.6 V127 H0 Z"
+      fill="#FCE4EC"
+      stroke="#333" />
+    <foreignObject
+      x="0"
+      y="90"
+      width="367.6"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 367.6px; height: 37px;">
+        <span>
+          <p>Footer</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
 </svg>

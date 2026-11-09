@@ -2,94 +2,112 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 640 100"
-  style="max-width: 640px;"
+  viewBox="0 0 270.5 77"
+  style="max-width: 270.5px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <rect
-    x="30"
-    y="30"
-    width="100"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#E3F2FD"
-    stroke="#333" />
-  <text
-    x="80"
-    y="50"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">a</text>
-  <rect
-    x="150"
-    y="30"
-    width="100"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#E8F5E9"
-    stroke="#333" />
-  <text
-    x="200"
-    y="50"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">b</text>
-  <rect
-    x="270"
-    y="30"
-    width="100"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#FFF3E0"
-    stroke="#333" />
-  <text
-    x="320"
-    y="50"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">c</text>
-  <rect
-    x="390"
-    y="30"
-    width="100"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#F3E5F5"
-    stroke="#333" />
-  <text
-    x="440"
-    y="50"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">d</text>
-  <rect
-    x="510"
-    y="30"
-    width="100"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#FCE4EC"
-    stroke="#333" />
-  <text
-    x="560"
-    y="50"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">e</text>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M0,0 H39.7 V37 H0 Z"
+      fill="#E3F2FD"
+      stroke="#333" />
+    <foreignObject
+      x="0"
+      y="0"
+      width="39.7"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.7px; height: 37px;">
+        <span>
+          <p>a</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M47.7,0 H87.4 V37 H47.7 Z"
+      fill="#E8F5E9"
+      stroke="#333" />
+    <foreignObject
+      x="47.7"
+      y="0"
+      width="39.7"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.7px; height: 37px;">
+        <span>
+          <p>b</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M95.4,0 H135.1 V37 H95.4 Z"
+      fill="#FFF3E0"
+      stroke="#333" />
+    <foreignObject
+      x="95.4"
+      y="0"
+      width="39.7"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.7px; height: 37px;">
+        <span>
+          <p>c</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M143.1,0 H182.8 V37 H143.1 Z"
+      fill="#F3E5F5"
+      stroke="#333" />
+    <foreignObject
+      x="143.1"
+      y="0"
+      width="39.7"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.7px; height: 37px;">
+        <span>
+          <p>d</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M190.8,0 H230.5 V37 H190.8 Z"
+      fill="#FCE4EC"
+      stroke="#333" />
+    <foreignObject
+      x="190.8"
+      y="0"
+      width="39.7"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 39.7px; height: 37px;">
+        <span>
+          <p>e</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
 </svg>

@@ -1,0 +1,149 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 336.8 229.18"
+  style="max-width: 336.8px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M0,0 H93.6 V57.73 H0 Z"
+      fill="#696"
+      stroke="#333" />
+    <foreignObject
+      x="0"
+      y="0"
+      width="93.6"
+      height="57.73"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 93.6px; height: 57.73px;">
+        <span>
+          <p>Frontend</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M144.4,32.86 L152.4,32.86 L152.4,36.86 L160.4,28.86 L152.4,20.86 L152.4,24.86 L144.4,24.86 Z"
+      fill="#E8F5E9"
+      stroke="#333" />
+    <foreignObject
+      x="136.4"
+      y="20.86"
+      width="24"
+      height="16"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 24px; height: 16px;">
+        <span>
+          <p></p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M203.2,0 H296.8 V57.73 H203.2 Z"
+      fill="#969"
+      stroke="#333" />
+    <foreignObject
+      x="203.2"
+      y="0"
+      width="93.6"
+      height="57.73"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 93.6px; height: 57.73px;">
+        <span>
+          <p>Backend</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M250,102.59 L238,98.59 L246,98.59 L246,90.59 L254,90.59 L254,98.59 L262,98.59 Z"
+      fill="#F3E5F5"
+      stroke="#333" />
+    <foreignObject
+      x="238"
+      y="86.59"
+      width="24"
+      height="16"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 24px; height: 16px;">
+        <span>
+          <p></p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M0,131.45 H93.6 V189.18 H0 Z"
+      fill="#FCE4EC"
+      stroke="#333" />
+    <foreignObject
+      x="0"
+      y="131.45"
+      width="93.6"
+      height="57.73"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 93.6px; height: 57.73px;">
+        <span>
+          <p>Disk</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M144.4,168.32 L144.4,164.32 L152.4,164.32 L152.4,156.32 L144.4,156.32 L144.4,152.32 L136.4,160.32 Z"
+      fill="#E0F7FA"
+      stroke="#333" />
+    <foreignObject
+      x="136.4"
+      y="152.32"
+      width="24"
+      height="16"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 24px; height: 16px;">
+        <span>
+          <p></p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M203.2,142.16 A46.8,10.7 0 0 0 296.8,142.16 A46.8,10.7 0 0 0 203.2,142.16 L203.2,178.48 A46.8,10.7 0 0 0 296.8,178.48 L296.8,142.16"
+      fill="#969"
+      stroke="#333" />
+    <foreignObject
+      x="203.2"
+      y="142.16"
+      width="93.6"
+      height="47.02"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 93.6px; height: 47.02px;">
+        <span>
+          <p>Database</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
+</svg>

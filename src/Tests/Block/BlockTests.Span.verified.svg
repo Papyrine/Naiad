@@ -2,60 +2,76 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 400 160"
-  style="max-width: 400px;"
+  viewBox="0 0 290.6 122"
+  style="max-width: 290.6px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <rect
-    x="30"
-    y="30"
-    width="220"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#E3F2FD"
-    stroke="#333" />
-  <text
-    x="140"
-    y="50"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Wide Block</text>
-  <rect
-    x="270"
-    y="30"
-    width="100"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#E8F5E9"
-    stroke="#333" />
-  <text
-    x="320"
-    y="50"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Normal</text>
-  <rect
-    x="30"
-    y="90"
-    width="340"
-    height="40"
-    rx="4"
-    ry="4"
-    fill="#FFF3E0"
-    stroke="#333" />
-  <text
-    x="200"
-    y="110"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Full Width</text>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M0,0 H164.4 V37 H0 Z"
+      fill="#E3F2FD"
+      stroke="#333" />
+    <foreignObject
+      x="0"
+      y="0"
+      width="164.4"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 164.4px; height: 37px;">
+        <span>
+          <p>Wide Block</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M172.4,0 H250.6 V37 H172.4 Z"
+      fill="#E8F5E9"
+      stroke="#333" />
+    <foreignObject
+      x="172.4"
+      y="0"
+      width="78.2"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 78.2px; height: 37px;">
+        <span>
+          <p>Normal</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M0,45 H250.6 V82 H0 Z"
+      fill="#FFF3E0"
+      stroke="#333" />
+    <foreignObject
+      x="0"
+      y="45"
+      width="250.6"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 250.6px; height: 37px;">
+        <span>
+          <p>Full Width</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
 </svg>

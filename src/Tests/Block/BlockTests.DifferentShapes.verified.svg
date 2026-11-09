@@ -2,98 +2,130 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 400 193.65"
-  style="max-width: 400px;"
+  viewBox="0 0 359.9 229.8"
+  style="max-width: 359.9px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
-  <rect
-    x="30"
-    y="30"
-    width="100"
-    height="56.83"
-    rx="4"
-    ry="4"
-    fill="#E3F2FD"
-    stroke="#333" />
-  <text
-    x="80"
-    y="58.41"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Rectangle</text>
-  <rect
-    x="150"
-    y="30"
-    width="100"
-    height="56.83"
-    rx="8"
-    ry="8"
-    fill="#E8F5E9"
-    stroke="#333" />
-  <text
-    x="200"
-    y="58.41"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Rounded</text>
-  <rect
-    x="270"
-    y="30"
-    width="100"
-    height="56.83"
-    rx="28.41"
-    ry="28.41"
-    fill="#FFF3E0"
-    stroke="#333" />
-  <text
-    x="320"
-    y="58.41"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Stadium</text>
-  <circle
-    cx="80"
-    cy="135.24"
-    r="28.41"
-    fill="#F3E5F5"
-    stroke="#333" />
-  <text
-    x="80"
-    y="135.24"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Circle</text>
-  <path
-    d="M 200 106.83 L 250 135.24 L 200 163.65 L 150 135.24 Z"
-    fill="#FCE4EC"
-    stroke="#333" />
-  <text
-    x="200"
-    y="135.24"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Diamond</text>
-  <path
-    d="M 285 106.83 L 355 106.83 L 370 135.24 L 355 163.65 L 285 163.65 L 270 135.24 Z"
-    fill="#E0F7FA"
-    stroke="#333" />
-  <text
-    x="320"
-    y="135.24"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13px"
-    font-family="Arial, sans-serif"
-    fill="#333">Hexagon</text>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M0,0 H101.3 V90.9 H0 Z"
+      fill="#E3F2FD"
+      stroke="#333" />
+    <foreignObject
+      x="0"
+      y="0"
+      width="101.3"
+      height="90.9"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 101.3px; height: 90.9px;">
+        <span>
+          <p>Rectangle</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M114.3,0 H205.6 Q210.6,0 210.6,5 V85.9 Q210.6,90.9 205.6,90.9 H114.3 Q109.3,90.9 109.3,85.9 V5 Q109.3,0 114.3,0 Z"
+      fill="#E8F5E9"
+      stroke="#333" />
+    <foreignObject
+      x="109.3"
+      y="0"
+      width="101.3"
+      height="90.9"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 101.3px; height: 90.9px;">
+        <span>
+          <p>Rounded</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M264.05,0 H274.45 A45.45,45.45 0 0 1 274.45,90.9 H264.05 A45.45,45.45 0 0 1 264.05,0 Z"
+      fill="#FFF3E0"
+      stroke="#333" />
+    <foreignObject
+      x="218.6"
+      y="0"
+      width="101.3"
+      height="90.9"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 101.3px; height: 90.9px;">
+        <span>
+          <p>Stadium</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M50.65,114.98 A29.37,29.37 0 1 1 50.65,173.72 A29.37,29.37 0 1 1 50.65,114.98 Z"
+      fill="#F3E5F5"
+      stroke="#333" />
+    <foreignObject
+      x="21.28"
+      y="114.98"
+      width="58.75"
+      height="58.75"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 58.75px; height: 58.75px;">
+        <span>
+          <p>Circle</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M159.95,98.9 L205.4,144.35 L159.95,189.8 L114.5,144.35 Z"
+      fill="#FCE4EC"
+      stroke="#333" />
+    <foreignObject
+      x="114.5"
+      y="98.9"
+      width="90.9"
+      height="90.9"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 90.9px; height: 90.9px;">
+        <span>
+          <p>Diamond</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M225.85,98.9 L312.65,98.9 L319.9,144.35 L312.65,189.8 L225.85,189.8 L218.6,144.35 Z"
+      fill="#E0F7FA"
+      stroke="#333" />
+    <foreignObject
+      x="218.6"
+      y="98.9"
+      width="101.3"
+      height="90.9"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 101.3px; height: 90.9px;">
+        <span>
+          <p>Hexagon</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
 </svg>

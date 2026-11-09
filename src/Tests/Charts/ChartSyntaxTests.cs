@@ -169,7 +169,7 @@ public class ChartSyntaxTests
 
         // Five columns' worth of blocks side by side: every block has the same y.
         var svg = Mermaid.Render("block-beta\n  a b\n  c:2 d");
-        var tops = Regex.Matches(svg, @"<rect[^>]* y=.([\d.]+).")
+        var tops = Regex.Matches(svg, @"<foreignObject[^>]* y=.([\d.]+).")
             .Select(_ => _.Groups[1].Value)
             .Distinct()
             .ToList();

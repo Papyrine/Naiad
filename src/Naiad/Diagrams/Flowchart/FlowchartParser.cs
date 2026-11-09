@@ -426,7 +426,8 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
     }
 
     // The head at the far end decides the type; an opening head only counts when it matches that one.
-    static EdgeType LinkType(char? start, EdgeStyle style, char? head) =>
+    // Shared by the block grammar, whose links are spelled the same way.
+    internal static EdgeType LinkType(char? start, EdgeStyle style, char? head) =>
         (head, style) switch
         {
             ('>', _) when start == '<' => EdgeType.BiDirectional,
