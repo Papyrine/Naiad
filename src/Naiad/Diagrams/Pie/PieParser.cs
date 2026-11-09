@@ -28,9 +28,31 @@ class PieParser : IDiagramParser<PieModel>
         var showDataParser =
             Literals.Text("showData").Then(true).Else(false);
 
-        var skipLine =
+        // The accessibility title and description, which change nothing that is drawn.
+        var accessibilityLine =
             CommonParsers.InlineWhitespace
-                .SkipAnd(CommonParsers.Comment.Or(CommonParsers.Newline));
+                .SkipAnd(
+                    OneOf(Literals.Text("accTitle"), Literals.Text("accDescr"))
+                        .WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1)))
+                .SkipAnd(restOfLine)
+                .SkipAnd(CommonParsers.LineEnd);
+
+        // `accDescr { ... }` may run over several lines.
+        var multiLineDescription =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("accDescr"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(Literals.Char('{'))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd);
+
+        var skipLine =
+            OneOf(
+                multiLineDescription,
+                accessibilityLine,
+                CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Comment.Or(CommonParsers.Newline)));
 
         // Inline title: pie title My Title (on same line)
         var inlineTitleParser =

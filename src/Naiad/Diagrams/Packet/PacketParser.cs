@@ -44,6 +44,35 @@ class PacketParser : IDiagramParser<PacketModel>
                         Label = label
                     });
 
+        // title My Packet
+        var titleParser =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("title"))
+                .SkipAnd(Literals.AnyOf(" \t"))
+                .SkipAnd(unquotedLabel)
+                .AndSkip(CommonParsers.LineEnd)
+                .Then(static _ => new TitleLine(_));
+
+        // The accessibility title and description, which change nothing that is drawn.
+        var accessibilityLine =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(
+                    OneOf(Literals.Text("accTitle"), Literals.Text("accDescr"))
+                        .WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1)))
+                .SkipAnd(Literals.NoneOf("\r\n", minSize: 0))
+                .SkipAnd(CommonParsers.LineEnd);
+
+        // `accDescr { ... }` may run over several lines.
+        var multiLineDescription =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("accDescr"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(Literals.Char('{'))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd);
+
         // Skip line (comments, empty lines)
         var skipLine =
             CommonParsers.InlineWhitespace
@@ -51,8 +80,11 @@ class PacketParser : IDiagramParser<PacketModel>
 
         var contentItem =
             OneOf(
-                fieldParser.Then<RawField?>(static _ => _),
-                skipLine.Then<RawField?>(static _ => null)
+                fieldParser.Then<object?>(static _ => _),
+                titleParser.Then<object?>(static _ => _),
+                multiLineDescription.Then<object?>(static _ => null),
+                accessibilityLine.Then<object?>(static _ => null),
+                skipLine.Then<object?>(static _ => null)
             );
 
         parser =
@@ -62,8 +94,15 @@ class PacketParser : IDiagramParser<PacketModel>
                 .SkipAnd(CommonParsers.LineEnd)
                 .SkipAnd(contentItem.Many())
                 .AndSkip(CommonParsers.End)
-                .Then(static _ => BuildModel(_.OfType<RawField>().ToList()));
+                .Then(static _ =>
+                {
+                    var model = BuildModel(_.OfType<RawField>().ToList());
+                    model.Title = _.OfType<TitleLine>().LastOrDefault()?.Text;
+                    return model;
+                });
     }
+
+    sealed record TitleLine(string Text);
 
     // Resolve each raw field to absolute bit positions and validate the sequence the way Mermaid does:
     // fields must tile the packet contiguously from bit 0 with no gaps, overlaps, or reversed ranges.
