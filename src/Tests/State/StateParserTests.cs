@@ -216,6 +216,22 @@ public class StateParserTests
         await Assert.That(model.Transitions[1].Label).IsEqualTo("go");
     }
 
+    // The class took any hyphen, so the arrow of a transition with no space before it went into the class
+    // and what was left (`>B`) failed to parse.
+    [Test]
+    public async Task StyleClassBeforeAnArrow_LeavesTheArrow()
+    {
+        var result = new StateParser().Parse(
+            """
+            stateDiagram-v2
+                A:::cls-->B
+                B:::two-words-->C
+            """);
+
+        await Assert.That(result.Error).IsNull();
+        await Assert.That(string.Join(",", result.Value.Transitions.Select(_ => $"{_.FromId}>{_.ToId}"))).IsEqualTo("A>B,B>C");
+    }
+
     [Test]
     public async Task SquareBracketTypes_AndTrailingWhitespace()
     {

@@ -24,9 +24,13 @@ class StateParser : IDiagramParser<StateModel>
 
         // `Moving:::fast` attaches a style class to a state wherever the state is named. The class is read
         // and dropped: styling is not drawn, but the state it sits on still is.
+        // A hyphen is in the name only between two of its other characters, so the dashes of a link that
+        // follows with no space (`A:::cls-->B`) are left to the link.
+        var styleClassChars =
+            Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_');
         var styleClass =
             Literals.Text(":::")
-                .SkipAnd(Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ is '_' or '-'));
+                .SkipAnd(styleClassChars.And(ZeroOrMany(Literals.Char('-').And(styleClassChars))));
 
         var stateIdentifier = bareIdentifier.AndSkip(styleClass.Optional());
 

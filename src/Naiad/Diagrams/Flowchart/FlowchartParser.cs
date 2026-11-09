@@ -87,7 +87,9 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             nodeId
                 .And(nodeShapeParser.Optional())
                 .And(shapeAttributes.Optional())
-                .And(Literals.Text(":::").SkipAnd(CommonParsers.Identifier).Optional())
+                // The class name follows the id's rule for hyphens, so a link with no space before it
+                // (`A:::foo-->B`) keeps its dashes.
+                .And(Literals.Text(":::").SkipAnd(nodeId).Optional())
                 .Map(BuildNode);
 
         // `A & B` - several nodes sharing the links on either side of the group.
