@@ -36,6 +36,17 @@ public class MermaidTests
         await Assert.That(type).IsEqualTo(DiagramType.Flowchart);
     }
 
+    // Text decoded from UTF-8 bytes keeps a byte order mark, which string.Trim leaves in place.
+    [Test]
+    public async Task ByteOrderMark_IsSkipped()
+    {
+        var input = (char) 0xFEFF + "flowchart LR\n    A --> B";
+
+        await Assert.That(Mermaid.TryDetectType(input, out var type)).IsTrue();
+        await Assert.That(type).IsEqualTo(DiagramType.Flowchart);
+        await Assert.That(Mermaid.Render(input)).Contains("flowchart-link");
+    }
+
     [Test]
     public async Task TryDetectType_EmptyOrUnknown_ReturnsFalse()
     {
