@@ -1,5 +1,3 @@
-using Naiad.Diagrams.Class;
-
 // The accessibility title and description (`accTitle: ...`, `accDescr: ...` and the multi-line
 // `accDescr { ... }`) are valid in every Mermaid diagram. They change nothing that is drawn here, but a
 // diagram that holds them must still parse, and they must not be read as something else.

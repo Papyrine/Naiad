@@ -40,7 +40,7 @@ class RailroadPegParser : IDiagramParser<RailroadModel>
                         {
                             '?' => new RailroadOptional(_.Item1),
                             '*' => new RailroadRepetition(_.Item1, 0, null),
-                            _ => (RailroadExpression) new RailroadRepetition(_.Item1, 1, null)
+                            _ => new RailroadRepetition(_.Item1, 1, null)
                         };
                     });
 

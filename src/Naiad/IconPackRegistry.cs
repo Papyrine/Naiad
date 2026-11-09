@@ -5,7 +5,13 @@ static class IconPackRegistry
 {
     public readonly record struct PackIcon(string Body, double Width, double Height);
 
-    static readonly Dictionary<string, IReadOnlyDictionary<string, PackIcon>> packs = new();
+    static readonly Dictionary<string, Dictionary<string, PackIcon>> packs = new(StringComparer.Ordinal);
+
+    // Lets Resolve look up the prefix and name of a "prefix:name" reference as
+    // slices of it, without allocating a string for either.
+    static readonly Dictionary<string, Dictionary<string, PackIcon>>.AlternateLookup<CharSpan> packLookup =
+        packs.GetAlternateLookup<CharSpan>();
+
     static bool rendered;
 
     // Marks that rendering has begun, after which packs are frozen.
@@ -75,10 +81,11 @@ static class IconPackRegistry
             return null;
         }
 
-        var prefix = reference[..colon];
-        var name = reference[(colon + 1)..];
-        if (packs.TryGetValue(prefix, out var pack) &&
-            pack.TryGetValue(name, out var icon))
+        var span = reference.AsSpan();
+        var prefix = span[..colon];
+        var name = span[(colon + 1)..];
+        if (packLookup.TryGetValue(prefix, out var pack) &&
+            pack.GetAlternateLookup<CharSpan>().TryGetValue(name, out var icon))
         {
             return icon;
         }

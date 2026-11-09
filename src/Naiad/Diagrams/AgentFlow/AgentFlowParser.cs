@@ -152,8 +152,8 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
         var chain =
             nodeGroup
                 .And(linkedGroup.Many())
-                .Map(static (first, rest) =>
-                    (Statement) new ChainStatement(
+                .Map(static Statement (first, rest) =>
+                    new ChainStatement(
                         [first, .. rest.Select(static _ => _.Nodes)],
                         rest.Select(static _ => _.Link).ToList()));
 
@@ -198,8 +198,8 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                 .And(label.Optional())
                 .And(metadata.Optional())
                 .AndSkip(statementEnd)
-                .Map(static (id, title, body) =>
-                    (Statement) new FlowStartStatement(
+                .Map(static Statement (id, title, body) =>
+                    new FlowStartStatement(
                         id.HasValue ? id.Value : null,
                         title.HasValue ? title.Value : null,
                         body.HasValue ? body.Value : null));
@@ -207,12 +207,12 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
         var globalStart =
             Keyword("global")
                 .AndSkip(statementEnd)
-                .Then(static _ => (Statement) new GlobalStartStatement());
+                .Then(static Statement (_) => new GlobalStartStatement());
 
         var blockEnd =
             Keyword("end")
                 .AndSkip(statementEnd)
-                .Then(static _ => (Statement) new EndStatement());
+                .Then(static Statement (_) => new EndStatement());
 
         var connector =
             Keyword("connector")
@@ -221,8 +221,8 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                 .And(label.Optional())
                 .And(metadata.Optional())
                 .AndSkip(statementEnd)
-                .Map(static (id, title, body) =>
-                    (Statement) new ConnectorStatement(
+                .Map(static Statement (id, title, body) =>
+                    new ConnectorStatement(
                         id,
                         title.HasValue ? title.Value : null,
                         body.HasValue ? body.Value : null));
@@ -232,7 +232,7 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(CommonParsers.DirectionParser)
                 .AndSkip(statementEnd)
-                .Then(static _ => (Statement) new DirectionStatement(_));
+                .Then(static Statement (_) => new DirectionStatement(_));
 
         var classDef =
             Keyword("classDef")
@@ -241,7 +241,7 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                 .AndSkip(CommonParsers.RequiredWhitespace)
                 .And(restOfLine)
                 .AndSkip(CommonParsers.LineEnd)
-                .Map(static (names, properties) => (Statement) new ClassDefStatement(names, properties));
+                .Map(static Statement (names, properties) => new ClassDefStatement(names, properties));
 
         var classAssign =
             Keyword("class")
@@ -250,7 +250,7 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                 .AndSkip(CommonParsers.RequiredWhitespace)
                 .And(nonWhitespaceToken)
                 .AndSkip(statementEnd)
-                .Map(static (ids, className) => (Statement) new ClassAssignStatement(ids, className.TrimEnd(';')));
+                .Map(static Statement (ids, className) => new ClassAssignStatement(ids, className.TrimEnd(';')));
 
         var style =
             Keyword("style")
@@ -259,7 +259,7 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                 .AndSkip(CommonParsers.RequiredWhitespace)
                 .And(restOfLine)
                 .AndSkip(CommonParsers.LineEnd)
-                .Map(static (id, properties) => (Statement) new StyleStatement(id, properties));
+                .Map(static Statement (id, properties) => new StyleStatement(id, properties));
 
         var accessibilityTitle =
             Literals.Text("accTitle")
@@ -267,7 +267,7 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                 .SkipAnd(Literals.Char(':'))
                 .SkipAnd(restOfLine)
                 .AndSkip(CommonParsers.LineEnd)
-                .Then(static _ => (Statement) new AccessibilityStatement(_.Trim(), null));
+                .Then(static Statement (_) => new AccessibilityStatement(_.Trim(), null));
 
         var accessibilityDescription =
             Literals.Text("accDescr")
@@ -281,18 +281,18 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                                 .AndSkip(Literals.Char('}'))
                                 .AndSkip(CommonParsers.InlineWhitespace)))
                 .AndSkip(CommonParsers.LineEnd)
-                .Then(static _ => (Statement) new AccessibilityStatement(null, _.Trim()));
+                .Then(static Statement (_) => new AccessibilityStatement(null, _.Trim()));
 
         // Valid lines that change nothing in what is drawn here: link styling and interaction.
         var ignored =
             Keyword("linkStyle").Or(Keyword("click"))
                 .SkipAnd(restOfLineText)
                 .SkipAnd(CommonParsers.LineEnd)
-                .Then(static _ => (Statement?) null);
+                .Then(static Statement? (_) => null);
 
         var skipLine =
             CommonParsers.Comment.Or(CommonParsers.Newline)
-                .Then(static _ => (Statement?) null);
+                .Then(static Statement? (_) => null);
 
         // Keywords before the node chain, so a keyword line is never read as a node named after it. A line
         // that opens or closes a block is never one of these: blocks are read as a whole below.
@@ -302,15 +302,15 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                 .SkipAnd(
                     OneOf(
                         skipLine,
-                        connector.Then(static _ => (Statement?) _),
-                        direction.Then(static _ => (Statement?) _),
-                        classDef.Then(static _ => (Statement?) _),
-                        classAssign.Then(static _ => (Statement?) _),
-                        style.Then(static _ => (Statement?) _),
-                        accessibilityTitle.Then(static _ => (Statement?) _),
-                        accessibilityDescription.Then(static _ => (Statement?) _),
+                        connector.Then(static Statement? (_) => _),
+                        direction.Then(static Statement? (_) => _),
+                        classDef.Then(static Statement? (_) => _),
+                        classAssign.Then(static Statement? (_) => _),
+                        style.Then(static Statement? (_) => _),
+                        accessibilityTitle.Then(static Statement? (_) => _),
+                        accessibilityDescription.Then(static Statement? (_) => _),
                         ignored,
-                        chain.AndSkip(statementEnd).Then(static _ => (Statement?) _)));
+                        chain.AndSkip(statementEnd).Then(static Statement? (_) => _)));
 
         // A flow or global block, its statements, and the end that closes it, flattened back into the
         // one list of statements BuildModel reads. Reading each block to its end, rather than checking the
@@ -319,7 +319,7 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
 
         // Never matches. At the end of the input it says what was missing there.
         var unclosed =
-            Always((Statement) new EndStatement())
+            Always<Statement>(new EndStatement())
                 .When(static (context, _) =>
                 {
                     if (context.Scanner.Cursor.Eof)
@@ -714,8 +714,7 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
             // `x@{ … }` on its own, where x names a flow or an edge, gives that its metadata instead of
             // declaring a node.
             if (chain.Links.Count == 0 &&
-                chain.Groups[0] is [{ Label: null, Type: null } lone] &&
-                lone.Metadata.Count > 0)
+                chain.Groups[0] is [{ Label: null, Type: null, Metadata.Count: > 0 } lone])
             {
                 if (containerIds.Contains(lone.Id))
                 {

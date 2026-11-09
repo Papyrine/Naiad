@@ -545,8 +545,8 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     static string? IconTokenToHtml(string token)
     {
         var colon = token.IndexOf(':');
-        var prefix = token[..colon];
-        var name = token[(colon + 1)..];
+        var prefix = token.AsSpan(..colon);
+        var name = token.AsSpan((colon + 1)..);
 
         // FontAwesome: fa/fab/fas/far + fa-name. Prefer registered geometry — inline SVG the PNG
         // rasterizer can actually draw — and fall back to the webfont <i> (which only resolves in a

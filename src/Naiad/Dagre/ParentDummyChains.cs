@@ -98,8 +98,11 @@ static class ParentDummyChains
         }
 
         wPath.Reverse();
-        var path = new List<string?>(vPath);
-        path.AddRange(wPath);
+        List<string?> path =
+        [
+            .. vPath,
+            .. wPath
+        ];
         return new()
         {
             Path = path,

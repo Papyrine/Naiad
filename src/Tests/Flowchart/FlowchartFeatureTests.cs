@@ -256,7 +256,7 @@ public class FlowchartFeatureTests
     {
         var lines = HtmlText.ExtractLines($"<p>a{entity}b</p>");
 
-        await Assert.That(lines).IsEquivalentTo(new[] { $"a{entity}b" });
+        await Assert.That(lines).IsEquivalentTo([$"a{entity}b"]);
     }
 
     // Both PNG backends draw a markdown label: the bold word puts down more ink than the same word plain.

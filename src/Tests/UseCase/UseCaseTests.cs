@@ -386,10 +386,7 @@ public class UseCaseTests : TestBase
     [Test]
     public Task Empty()
     {
-        const string input =
-            """
-            usecase-beta
-            """;
+        const string input = "usecase-beta";
 
         return VerifySvg(input);
     }

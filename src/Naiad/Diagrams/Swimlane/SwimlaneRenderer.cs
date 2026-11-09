@@ -97,7 +97,7 @@ public class SwimlaneRenderer : IDiagramRenderer<SwimlaneModel>
         var placed = new HashSet<string>(StringComparer.Ordinal);
         foreach (var subgraph in model.Subgraphs)
         {
-            var title = LabelLines.Flatten(FlowchartRenderer.DisplayText(subgraph.Title ?? subgraph.Id)) ?? "";
+            var title = LabelLines.Flatten(FlowchartRenderer.DisplayText(subgraph.Title ?? subgraph.Id));
             var lane = new Lane(subgraph, title, FlowchartRenderer.MeasureText(title, options.FontSize).Width);
             foreach (var id in MemberIds(subgraph))
             {
@@ -352,36 +352,23 @@ public class SwimlaneRenderer : IDiagramRenderer<SwimlaneModel>
     /// down Y and the lanes stand side by side along X. <see cref="ToPage"/> turns a point into the page's
     /// coordinates.
     /// </summary>
-    sealed class LaneLayout
+    sealed class LaneLayout(SwimlaneModel model, List<Lane> lanes, bool horizontal, bool reversed, RenderOptions options)
     {
-        readonly SwimlaneModel model;
-        readonly bool reversed;
-
         // Every node's box in flow space, by id, and the ranks as spans along the flow.
-        readonly Dictionary<string, Rect> boxes = new(StringComparer.Ordinal);
-        readonly Dictionary<string, Rect> subgraphBoxes = new(StringComparer.Ordinal);
-        readonly List<(double Top, double Bottom)> ranks = [];
+        Dictionary<string, Rect> boxes = new(StringComparer.Ordinal);
+        Dictionary<string, Rect> subgraphBoxes = new(StringComparer.Ordinal);
+        List<(double Top, double Bottom)> ranks = [];
 
         // How far the flow runs and how wide the lanes come to, in flow space.
         double flowLength;
         double crossLength;
 
-        public LaneLayout(SwimlaneModel model, List<Lane> lanes, bool horizontal, bool reversed, RenderOptions options)
-        {
-            this.model = model;
-            this.reversed = reversed;
-            Lanes = lanes;
-            Horizontal = horizontal;
-            BandSize = options.FontSize * 1.5 + titlePadding * 2;
-            TitleHeight = string.IsNullOrEmpty(model.Title) ? 0 : options.FontSize * 2.5;
-        }
-
-        public List<Lane> Lanes { get; }
-        public bool Horizontal { get; }
+        public List<Lane> Lanes { get; } = lanes;
+        public bool Horizontal { get; } = horizontal;
 
         // The thickness of a lane's title band, and the height of the diagram title above everything.
-        public double BandSize { get; }
-        public double TitleHeight { get; }
+        public double BandSize { get; } = options.FontSize * 1.5 + titlePadding * 2;
+        public double TitleHeight { get; } = string.IsNullOrEmpty(model.Title) ? 0 : options.FontSize * 2.5;
 
         public double Width => Horizontal ? flowLength : crossLength;
         public double Height => TitleHeight + (Horizontal ? crossLength : flowLength);
@@ -408,7 +395,7 @@ public class SwimlaneRenderer : IDiagramRenderer<SwimlaneModel>
 
             return Horizontal
                 ? new(along, point.X + TitleHeight)
-                : new(point.X, along + TitleHeight);
+                : point with { Y = along + TitleHeight };
         }
 
         /// <summary>
@@ -455,7 +442,7 @@ public class SwimlaneRenderer : IDiagramRenderer<SwimlaneModel>
             foreach (var key in rankKeys)
             {
                 var members = nodes.Where(_ => Math.Round(rankCenters[_]) == key).ToList();
-                var half = members.Max(_ => Along(_)) / 2;
+                var half = members.Max(Along) / 2;
                 ranks.Add((key - half, key + half));
             }
 
@@ -611,11 +598,11 @@ public class SwimlaneRenderer : IDiagramRenderer<SwimlaneModel>
             if (Math.Abs(start.X - end.X) < Math.Abs(start.Y - end.Y))
             {
                 var middle = (start.Y + end.Y) / 2;
-                return [start, new(start.X, middle), new(end.X, middle), end];
+                return [start, start with { Y = middle }, end with { Y = middle }, end];
             }
 
             var center = (start.X + end.X) / 2;
-            return [start, new(center, start.Y), new(center, end.Y), end];
+            return [start, start with { X = center }, end with { X = center }, end];
         }
 
         static List<Position> SelfLoop(Rect box)
@@ -947,8 +934,21 @@ public class SwimlaneRenderer : IDiagramRenderer<SwimlaneModel>
 
         static double Coordinate(Position point, bool acrossFace) => acrossFace ? point.X : point.Y;
 
-        static Position Shift(Position point, double offset, bool acrossFace) =>
-            acrossFace ? new(point.X + offset, point.Y) : new(point.X, point.Y + offset);
+        static Position Shift(Position point, double offset, bool acrossFace)
+        {
+            if (acrossFace)
+            {
+                return point with
+                {
+                    X = point.X + offset
+                };
+            }
+
+            return point with
+            {
+                Y = point.Y + offset
+            };
+        }
 
         /// <summary>
         /// The routes end on the box around a node. A diamond or circle does not fill its box, so an end
@@ -985,10 +985,10 @@ public class SwimlaneRenderer : IDiagramRenderer<SwimlaneModel>
             var inset = halfDepth - depth;
             points[index] = face switch
             {
-                Face.Top => new(end.X, end.Y + inset),
-                Face.Bottom => new(end.X, end.Y - inset),
-                Face.Left => new(end.X + inset, end.Y),
-                _ => new(end.X - inset, end.Y)
+                Face.Top => end with { Y = end.Y + inset },
+                Face.Bottom => end with { Y = end.Y - inset },
+                Face.Left => end with { X = end.X + inset },
+                _ => end with { X = end.X - inset }
             };
         }
 
@@ -1050,7 +1050,15 @@ public class SwimlaneRenderer : IDiagramRenderer<SwimlaneModel>
                 .Where(_ => _ >= low && _ <= high && !borders.Exists(border => Math.Abs(border - _) < half - 0.01))
                 .OrderBy(_ => Math.Abs(_ - middle.X))
                 .ToList();
-            return places.Count == 0 ? middle : new(places[0], middle.Y);
+            if (places.Count == 0)
+            {
+                return middle;
+            }
+
+            return middle with
+            {
+                X = places[0]
+            };
         }
 
         // The point halfway along a route, and the index of the stretch it lies on.

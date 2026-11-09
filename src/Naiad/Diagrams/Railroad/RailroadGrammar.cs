@@ -61,7 +61,7 @@ static class RailroadGrammar
             .AndSkip(Literals.Char(quote))
             .Then(static _ => Unescape(_.Span));
 
-    static string Unescape(ReadOnlySpan<char> content)
+    static string Unescape(CharSpan content)
     {
         if (!content.Contains('\\'))
         {
@@ -135,7 +135,7 @@ static class RailroadGrammar
             .Then(static _ => _.LastOrDefault(static _ => _ is not null));
     }
 
-    static string TitleText(ReadOnlySpan<char> text, bool unescape)
+    static string TitleText(CharSpan text, bool unescape)
     {
         if (text.Length >= 2 &&
             text[0] is '"' or '\'' &&

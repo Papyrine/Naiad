@@ -534,7 +534,7 @@ static class VennLayout
         radius * radius * Math.Acos(1 - width / radius) - (radius - width) * Math.Sqrt(width * (2 * radius - width));
 
     static double Distance(Circle first, Circle second) =>
-        Distance(new Point(first.X, first.Y), new Point(second.X, second.Y));
+        Distance(new(first.X, first.Y), new Point(second.X, second.Y));
 
     static double Distance(Point point, Circle circle) =>
         Distance(point, new Point(circle.X, circle.Y));

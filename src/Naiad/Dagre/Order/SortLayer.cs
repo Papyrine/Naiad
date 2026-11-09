@@ -253,7 +253,7 @@ sealed class LayerEdges
             {
                 var u = e.V == v ? e.W : e.V;
                 var edgeWeight = graph.FindEdgeLabel(e).Weight!.Value;
-                var index = -1;
+                int index;
                 if (names.Count < indexedFrom)
                 {
                     index = names.IndexOf(u);

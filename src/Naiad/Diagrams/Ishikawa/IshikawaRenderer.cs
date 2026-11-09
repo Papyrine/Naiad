@@ -106,7 +106,7 @@ public class IshikawaRenderer : IDiagramRenderer<IshikawaModel>
             spineX = Math.Min(startX, canvas.TextLeft);
         }
 
-        canvas.FillSlot(spine, new Line(spineX, spineY, 0, spineY, 2, Arrow: false));
+        canvas.FillSlot(spine, new(spineX, spineY, 0, spineY, 2, Arrow: false));
         return canvas.Build(options);
     }
 
@@ -141,7 +141,7 @@ public class IshikawaRenderer : IDiagramRenderer<IshikawaModel>
         var height = Math.Max(40, textHeight * 2 + 40);
 
         canvas.Add(new Head(spineY, width, height));
-        canvas.AddText(new Label(width / 2 + 3, spineY, lines, "middle", "middle", Bold: true), trackLeft: false);
+        canvas.AddText(new(width / 2 + 3, spineY, lines, "middle", "middle", Bold: true), trackLeft: false);
     }
 
     /// <summary>
@@ -185,7 +185,7 @@ public class IshikawaRenderer : IDiagramRenderer<IshikawaModel>
         var labelY = endY + 11 * direction;
         var boxLeft = endX - cause.BoxHalfWidth;
         canvas.Add(new Box(boxLeft, labelY - cause.Height / 2 - 2, cause.BoxHalfWidth * 2, cause.Height + 4));
-        canvas.AddText(new Label(endX, labelY, cause.Lines, "middle", "middle", Bold: false));
+        canvas.AddText(new(endX, labelY, cause.Lines, "middle", "middle", Bold: false));
 
         if (children.Count == 0)
         {
@@ -224,7 +224,7 @@ public class IshikawaRenderer : IDiagramRenderer<IshikawaModel>
                 boneY0 = y;
                 boneX1 = boneX0 - (entry.ChildCount > 0 ? boneBase + entry.ChildCount * bonePerChild : boneStub);
                 canvas.Add(new Line(boneX0, y, boneX1, y, 1, Arrow: true));
-                canvas.AddText(new Label(boneX1, y, entry.Lines, "end", "middle", Bold: false));
+                canvas.AddText(new(boneX1, y, entry.Lines, "end", "middle", Bold: false));
             }
             else
             {
@@ -235,7 +235,7 @@ public class IshikawaRenderer : IDiagramRenderer<IshikawaModel>
                 boneY0 = parent.Y0;
                 boneX1 = boneX0 - cosAngle * ((y - boneY0) / diagonalY);
                 canvas.Add(new Line(boneX0, boneY0, boneX1, y, 1, Arrow: true));
-                canvas.AddText(new Label(boneX1, y, entry.Lines, "end", oddBaseline, Bold: false));
+                canvas.AddText(new(boneX1, y, entry.Lines, "end", oddBaseline, Bold: false));
             }
 
             if (entry.ChildCount > 0)

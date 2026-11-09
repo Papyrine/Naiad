@@ -132,7 +132,7 @@ static partial class HtmlText
                 var semicolon = text.IndexOf(';', i);
                 if (semicolon > i)
                 {
-                    var entity = text[(i + 1)..semicolon];
+                    var entity = text.AsSpan((i + 1)..semicolon);
                     if (Entity(entity) is { } resolved)
                     {
                         builder.Append(resolved);
@@ -149,7 +149,7 @@ static partial class HtmlText
         return builder.ToString();
     }
 
-    static string? Entity(string entity)
+    static string? Entity(CharSpan entity)
     {
         switch (entity)
         {
@@ -170,7 +170,7 @@ static partial class HtmlText
         if (entity.StartsWith('#'))
         {
             var numeric = entity[1..];
-            var parsed = numeric.StartsWith('x') || numeric.StartsWith('X')
+            var parsed = numeric is ['x' or 'X', ..]
                 ? int.TryParse(numeric[1..], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var hex) ? hex : -1
                 : int.TryParse(numeric, NumberStyles.Integer, CultureInfo.InvariantCulture, out var dec) ? dec : -1;
             if (Rune.IsValid(parsed))

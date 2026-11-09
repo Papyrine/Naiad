@@ -352,9 +352,12 @@ public class WardleyRenderer : IDiagramRenderer<WardleyModel>
 
                 // Mermaid puts a pipeline component's label where any other component's goes, which is
                 // across the top edge of the pipeline's box. It is centred below the box instead.
-                if (node.Kind == WardleyNodeKind.PipelineComponent &&
-                    node.LabelOffsetX is null &&
-                    node.LabelOffsetY is null)
+                if (node is
+                    {
+                        Kind: WardleyNodeKind.PipelineComponent,
+                        LabelOffsetX: null,
+                        LabelOffsetY: null
+                    })
                 {
                     AddText(nodeX, nodeY + pipelineBoxHeight / 2 + labelFontSize + 2, node.Label, labelFontSize, "middle");
                     continue;

@@ -85,7 +85,7 @@ public class AgentFlowRenderer(ILayoutEngine? layoutEngine = null) :
         ClipEdgesToShapes(graph);
 
         var title = string.IsNullOrWhiteSpace(model.Title) ? null : model.Title.Trim();
-        var titleWidth = title is null ? 0 : title.Length * titleFontSize * charWidthFactor;
+        var titleWidth = title?.Length * titleFontSize * charWidthFactor ?? 0;
         var offsetY = title is null ? 0 : titleBand;
         var width = Math.Max(layout.Width, titleWidth);
         var offsetX = (width - layout.Width) / 2;

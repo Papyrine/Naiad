@@ -289,7 +289,7 @@ public class CynefinRenderer : IDiagramRenderer<CynefinModel>
 
         layout.Badges.AddRange(badges);
 
-        var block = Rect.Union(texts.Select(static _ => _.Bounds).Concat(badges.Select(static _ => _.Bounds)).ToList());
+        var block = Rect.Union([.. texts.Select(static _ => _.Bounds), .. badges.Select(static _ => _.Bounds)]);
         var halfBlockWidth = Math.Max(centerX - block.X, block.Right - centerX) + ellipseClearance;
         var halfBlockHeight = Math.Max(centerY - block.Y, block.Bottom - centerY) + ellipseClearance;
 

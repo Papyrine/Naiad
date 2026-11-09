@@ -112,7 +112,7 @@ class EventModelingParser : IDiagramParser<EventModelingModel>
                 .And(frameData.Optional())
                 .AndSkip(lineEnd)
                 .Then(
-                    static _ =>
+                    static object (_) =>
                     {
                         var ((isReset, line), id, kind, entityIdentifier, sources, reference, data) = _;
                         var frameValue = new EventModelingFrame
@@ -127,7 +127,7 @@ class EventModelingParser : IDiagramParser<EventModelingModel>
                             Line = line
                         };
                         frameValue.SourceFrameIds.AddRange(sources);
-                        return (object) frameValue;
+                        return frameValue;
                     });
 
         // A data block's opening brace may be on the line after its name.
@@ -144,7 +144,7 @@ class EventModelingParser : IDiagramParser<EventModelingModel>
                 .SkipAnd(identifier)
                 .And(blockData)
                 .Then(
-                    static _ => (object) new EventModelingDataBlock
+                    static object (_) => new EventModelingDataBlock
                     {
                         Name = _.Item1,
                         DataType = _.Item2.Item1.OrNull(),
@@ -157,7 +157,7 @@ class EventModelingParser : IDiagramParser<EventModelingModel>
                 .SkipAnd(frameId)
                 .And(blockData)
                 .Then(
-                    static _ => (object) new EventModelingNote
+                    static object (_) => new EventModelingNote
                     {
                         FrameId = _.Item1,
                         DataType = _.Item2.Item1.OrNull(),
@@ -201,7 +201,7 @@ class EventModelingParser : IDiagramParser<EventModelingModel>
                     inlineSpace.SkipAnd(Literals.NoneOf("\r\n", minSize: 0)).AsTrimmedString()
                         .Or(Literals.Text("").Then(static _ => "")))
                 .AndSkip(CommonParsers.LineEnd)
-                .Then(static _ => (object) new TitleStatement(_));
+                .Then(static object (_) => new TitleStatement(_));
 
         // Accessibility titles and descriptions are accepted and left out: an SVG of this diagram has nowhere
         // they are shown.

@@ -265,10 +265,7 @@ public class WardleyTests : TestBase
     [Test]
     public Task Empty()
     {
-        const string input =
-            """
-            wardley-beta
-            """;
+        const string input = "wardley-beta";
 
         return VerifySvg(input);
     }
@@ -329,7 +326,7 @@ public class WardleyTests : TestBase
             """);
 
         await Assert.That(model.Links.Count).IsEqualTo(8);
-        await Assert.That(model.Links.All(_ => _.Source == "A" && _.Target == "real-time B")).IsTrue();
+        await Assert.That(model.Links.All(_ => _ is { Source: "A", Target: "real-time B" })).IsTrue();
         await Assert.That(model.Links[2].Dashed).IsTrue();
         await Assert.That(model.Links[3].Flow).IsEqualTo(WardleyFlow.Forward);
         await Assert.That(model.Links[4].Flow).IsEqualTo(WardleyFlow.Backward);

@@ -1,5 +1,3 @@
-using System.Reflection;
-
 namespace Naiad.Diagrams.Info;
 
 /// <summary>

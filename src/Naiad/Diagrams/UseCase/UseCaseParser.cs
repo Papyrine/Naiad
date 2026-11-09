@@ -99,7 +99,7 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
         var entityName =
             identifier.And(bracketLabel.Optional())
                 .Then(static _ => _.Item2.HasValue
-                    ? new NamePart(_.Item1, _.Item2.Value.label, _.Item2.Value.shape)
+                    ? new(_.Item1, _.Item2.Value.label, _.Item2.Value.shape)
                     : new NamePart(_.Item1, null, null))
                 .Or(quotedLabel.Then(static _ => new NamePart(IdFromLabel(_), _, UseCaseShape.Ellipse)));
 
@@ -647,7 +647,7 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
             return true;
         }
 
-        static bool StartsReserved(ReadOnlySpan<char> text)
+        static bool StartsReserved(CharSpan text)
         {
             foreach (var sequence in reservedSequences)
             {
@@ -890,8 +890,20 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
         void DeclareEntity(NodeReference reference, string? boundaryId, bool declarationOnly)
         {
             if (declarationOnly &&
-                reference.Name is { Label: null, Shape: null } &&
-                reference.Suffixes is { Metadata: { } properties, Stereotype: null, Classes.Count: 0 })
+                reference is
+                {
+                    Name:
+                    {
+                        Label: null,
+                        Shape: null
+                    },
+                    Suffixes:
+                    {
+                        Metadata: { } properties,
+                        Stereotype: null,
+                        Classes.Count: 0
+                    }
+                })
             {
                 metadataStatements.Add((reference.Name.Id, properties));
                 Reference(reference.Name.Id);

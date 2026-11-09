@@ -17,6 +17,10 @@ class C4Parser : IDiagramParser<C4Model>
         ["ComponentQueue"] = C4ElementType.ComponentQueue
     };
 
+    // Looks up an `_Ext` keyword by the slice before its suffix, without allocating it.
+    static readonly Dictionary<string, C4ElementType>.AlternateLookup<CharSpan> elementTypeLookup =
+        elementTypes.GetAlternateLookup<CharSpan>();
+
     static readonly Dictionary<string, C4BoundaryType> boundaryTypes = new(StringComparer.OrdinalIgnoreCase)
     {
         ["Boundary"] = C4BoundaryType.Generic,
@@ -205,12 +209,13 @@ class C4Parser : IDiagramParser<C4Model>
 
     static bool TryGetElementType(string keyword, out C4ElementType type)
     {
+        var span = keyword.AsSpan();
         if (IsExternal(keyword))
         {
-            keyword = keyword[..^4];
+            span = span[..^4];
         }
 
-        return elementTypes.TryGetValue(keyword, out type);
+        return elementTypeLookup.TryGetValue(span, out type);
     }
 
     static bool IsIgnored(string keyword)

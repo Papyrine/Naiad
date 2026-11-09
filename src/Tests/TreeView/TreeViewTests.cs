@@ -170,10 +170,7 @@ public class TreeViewTests : TestBase
     [Test]
     public Task KeywordOnly()
     {
-        const string input =
-            """
-            treeView-beta
-            """;
+        const string input = "treeView-beta";
 
         return VerifySvg(input);
     }

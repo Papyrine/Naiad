@@ -1,5 +1,3 @@
-using Naiad.Diagrams.Treemap;
-
 public class TreemapTests : TestBase
 {
     [Test]

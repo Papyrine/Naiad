@@ -175,10 +175,7 @@ public class EventModelingTests : TestBase
     [Test]
     public Task Empty()
     {
-        const string input =
-            """
-            eventmodeling
-            """;
+        const string input = "eventmodeling";
 
         return VerifySvg(input);
     }

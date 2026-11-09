@@ -166,7 +166,7 @@ class CynefinParser : IDiagramParser<CynefinModel>
         return model;
     }
 
-    static string StripComment(ReadOnlySpan<char> text)
+    static string StripComment(CharSpan text)
     {
         var comment = text.IndexOf("%%");
         return (comment < 0 ? text : text[..comment]).Trim().ToString();
@@ -176,7 +176,7 @@ class CynefinParser : IDiagramParser<CynefinModel>
     /// Resolves backslash escapes as Langium's string converter does: the usual control characters by
     /// letter, and any other escaped character as itself.
     /// </summary>
-    static string Unescape(ReadOnlySpan<char> text)
+    static string Unescape(CharSpan text)
     {
         if (!text.Contains('\\'))
         {

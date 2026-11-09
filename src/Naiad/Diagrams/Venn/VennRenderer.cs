@@ -149,7 +149,9 @@ public class VennRenderer : IDiagramRenderer<VennModel>
         }
 
         var empty = new HashSet<string>(
-            areas.Where(_ => _.IsSet && _.Size == 0).Select(_ => _.Sets[0]),
+            areas
+                .Where(_ => _ is { IsSet: true, Size: 0 })
+                .Select(_ => _.Sets[0]),
             StringComparer.Ordinal);
         var known = new HashSet<string>(areas.Where(_ => _.IsSet).Select(_ => _.Sets[0]), StringComparer.Ordinal);
         return areas

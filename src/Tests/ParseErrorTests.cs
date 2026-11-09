@@ -92,7 +92,7 @@ public class ParseErrorTests
     [Test]
     public async Task InputNestedTooDeeply_IsAParseFailure()
     {
-        var input = $"railroad-ebnf-beta\nr = {new string('(', 5000)}a{new string(')', 5000)} ;";
+        var input = $"railroad-ebnf-beta\nr = {new('(', 5000)}a{new(')', 5000)} ;";
 
         var exception = await Assert.That(() => Mermaid.Render(input)).Throws<MermaidParseException>();
 

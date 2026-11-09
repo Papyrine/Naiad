@@ -329,7 +329,6 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
         var width = Math.Max(titleWidth, keyColumn + valueColumn);
 
         // A title wider than the two columns widens the value column rather than leaving a gap.
-        valueColumn = width - keyColumn;
         var height = jsonTitleHeight + table.Rows.Count * jsonRowHeight;
         return new(table, width, height, keyColumn, fontSize);
     }
@@ -418,7 +417,7 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
         return new(left, top, width, bounds.Bottom - top, band, tabWidth);
     }
 
-    static Naiad.Rect Extent(IEnumerable<Shape> shapes, IEnumerable<BoundaryFrame> frames, IEnumerable<Edge> edges)
+    static Rect Extent(IEnumerable<Shape> shapes, IEnumerable<BoundaryFrame> frames, IEnumerable<Edge> edges)
     {
         var minX = double.MaxValue;
         var minY = double.MaxValue;

@@ -87,13 +87,13 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
                     .SkipAnd(Literals.Text("if"))
                     .SkipAnd(gap)
                     .SkipAnd(parenthesised)
-                    .Then(static _ => (keyword: "else if", condition: (string?) _)),
-                Literals.Text("else").Then(static _ => (keyword: "else", condition: (string?) null)),
+                    .Then(static _ => (keyword: "else if", condition: (string?)_)),
+                Literals.Text("else").Then(static _ => (keyword: "else", condition: (string?)null)),
                 Literals.Text("catch")
                     .SkipAnd(gap)
                     .SkipAnd(parenthesised.Optional())
                     .Then(static _ => (keyword: "catch", condition: _.OrNull())),
-                Literals.Text("finally").Then(static _ => (keyword: "finally", condition: (string?) null)));
+                Literals.Text("finally").Then(static _ => (keyword: "finally", condition: (string?)null)));
 
         var close =
             gap.SkipAnd(Literals.Char('}'))
@@ -137,8 +137,8 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
             gap.SkipAnd(Literals.Text("return"))
                 .SkipAnd(
                     requiredGap.SkipAnd(restOfLine)
-                        .Then(static _ => _.Length == 0 ? null : (string?) _)
-                        .Or(gap.Then(static _ => (string?) null)))
+                        .Then(static _ => _.Length == 0 ? null : (string?)_)
+                        .Or(gap.Then(static string? (_) => null)))
                 .AndSkip(CommonParsers.LineEnd)
                 .Then<ILine>(static _ => new ReturnLine(_));
 
@@ -548,8 +548,11 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
             }
 
             var frame = frames.Pop();
-            if (frame.Call is { } call &&
-                !frame.Returned)
+            if (frame is
+                {
+                    Call: { } call,
+                    Returned: false
+                })
             {
                 // The block ends the call's activation, answering it if its result is kept and no return
                 // inside a fragment has answered it already.
@@ -578,19 +581,25 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
             var condition = closeLine.Condition is { Length: > 0 } text ? text : null;
             var body = (frame.Fragment, closeLine.Continuation) switch
             {
-                (Alt alt, "else" or "else if") => AddBranch(alt.ElseBranches, new AltElse
-                {
-                    Condition = condition
-                }).Elements,
-                (Critical critical, "catch") => AddBranch(critical.OptionBranches, new CriticalOption
-                {
-                    Label = condition is null ? "catch" : $"catch({condition})"
-                }).Elements,
-                (Critical critical, "finally") => AddBranch(critical.OptionBranches, new CriticalOption
-                {
-                    Label = "finally"
-                }).Elements,
-                _ => (List<SequenceElement>?) null
+                (Alt alt, "else" or "else if") => AddBranch(
+                    alt.ElseBranches,
+                    new()
+                    {
+                        Condition = condition
+                    }).Elements,
+                (Critical critical, "catch") => AddBranch(
+                    critical.OptionBranches,
+                    new()
+                    {
+                        Label = condition is null ? "catch" : $"catch({condition})"
+                    }).Elements,
+                (Critical critical, "finally") => AddBranch(
+                    critical.OptionBranches,
+                    new()
+                    {
+                        Label = "finally"
+                    }).Elements,
+                _ => null
             };
 
             if (body is null)
@@ -648,7 +657,7 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
         }
 
         // Where the parenthesis that opens the text closes, or -1 if it does not on this line.
-        static int Close(ReadOnlySpan<char> span, bool quotes)
+        static int Close(CharSpan span, bool quotes)
         {
             var depth = 0;
             char? quote = null;
