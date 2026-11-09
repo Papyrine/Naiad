@@ -1,5 +1,3 @@
-namespace Naiad;
-
 static class SvgXml
 {
     // The control characters XML 1.0 does not allow anywhere, even as character references: all of C0

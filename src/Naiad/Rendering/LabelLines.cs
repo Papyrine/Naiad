@@ -1,5 +1,3 @@
-namespace Naiad;
-
 /// <summary>
 /// Mermaid lets a label force a line break with <c>&lt;br&gt;</c>, <c>&lt;br/&gt;</c> or
 /// <c>&lt;br /&gt;</c>. Renderers measure and draw labels line by line, so they share this one reading of

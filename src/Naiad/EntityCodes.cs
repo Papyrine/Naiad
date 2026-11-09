@@ -1,5 +1,3 @@
-namespace Naiad;
-
 /// <summary>
 /// Mermaid's entity codes, <c>#quot;</c>, <c>#9829;</c> and <c>#40;</c>: how a label holds a character the
 /// syntax reserves, or one that is awkward to type. A name HTML knows or a decimal code point is replaced by

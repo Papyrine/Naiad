@@ -1,5 +1,3 @@
-namespace Naiad;
-
 /// <summary>
 /// The colour functions Mermaid's themes are written with, ported from the khroma library they come from,
 /// so a theme's colours come out as Mermaid's do, down to how they are written: a colour changed in hue,

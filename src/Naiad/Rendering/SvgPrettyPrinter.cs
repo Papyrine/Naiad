@@ -1,5 +1,3 @@
-namespace Naiad;
-
 // Indents serialised SVG markup, one element per line. Works on the markup rather than re-parsing it so
 // attribute order, quoting and number formatting stay exactly as emitted. Elements holding text (labels,
 // <style>) and <foreignObject> (HTML labels, where added whitespace would change the layout) are kept

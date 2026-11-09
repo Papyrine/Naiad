@@ -1,5 +1,3 @@
-namespace Naiad;
-
 // What a diagram is parsed with. Parlot backs out of a rule that fails and keeps no record of how far it
 // got, so a failed parse on its own says only that it failed. The rules that know they are giving up - a
 // statement its line does not end after, a list of statements that stops short of the end of the input -

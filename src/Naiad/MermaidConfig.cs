@@ -1,5 +1,3 @@
-namespace Naiad;
-
 /// <summary>
 /// The configuration a diagram was given ahead of its text: the <c>config</c> mapping of its front matter,
 /// with every <c>%%{init: ...}%%</c> (or <c>%%{initialize: ...}%%</c>) directive merged over it, as

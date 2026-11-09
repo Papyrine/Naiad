@@ -1,5 +1,3 @@
-namespace Naiad;
-
 /// <summary>
 /// Reads the configuration Mermaid takes ahead of a diagram: the YAML of a front matter block and the
 /// JSON of a <c>%%{init: ...}%%</c> directive. Values come back as maps (string keys, compared
