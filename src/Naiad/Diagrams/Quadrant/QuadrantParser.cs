@@ -15,35 +15,28 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
                 .SkipAnd(restOfLine)
                 .AndSkip(CommonParsers.LineEnd);
 
-        // X-axis: x-axis Low --> High
-        var xAxisParser =
+        // An axis: `x-axis Low --> High`, or just `x-axis Low`. The first label runs up to the arrow on its
+        // own line, hyphens and all (`Semi-low --> Very-high`).
+        Parser<(string first, string second)> Axis(string keyword) =>
             CommonParsers.InlineWhitespace
-                .SkipAnd(TextIgnoreCase("x-axis"))
+                .SkipAnd(TextIgnoreCase(keyword))
                 .SkipAnd(CommonParsers.RequiredWhitespace)
                 .SkipAnd(
-                    Literals.NoneOf("-").AsString()
-                        .When(static (_, text) => !text.TrimEnd().EndsWith('-'))
-                        .Or(Literals.NoneOf("\r\n-", minSize: 0).AsString()))
-                .AndSkip(Literals.Text("-->"))
-                .AndSkip(CommonParsers.InlineWhitespace)
-                .And(restOfLine)
-                .AndSkip(CommonParsers.LineEnd)
-                .Map((left, right) => (left: left.Trim().TrimEnd('-').Trim(), right));
+                    LineBefore(Literals.Text("-->"))
+                        .AndSkip(Literals.Text("-->"))
+                        .AndSkip(CommonParsers.InlineWhitespace)
+                        .And(restOfLine)
+                        .Then(static _ => (first: _.Item1.Span.Trim().ToString(), second: _.Item2))
+                        .Or(restOfLine.Then(static _ => (first: _, second: ""))))
+                .AndSkip(CommonParsers.LineEnd);
+
+        // X-axis: x-axis Low --> High
+        var xAxisParser =
+            Axis("x-axis").Then(static _ => (left: _.first, right: _.second));
 
         // Y-axis: y-axis Low --> High
         var yAxisParser =
-            CommonParsers.InlineWhitespace
-                .SkipAnd(TextIgnoreCase("y-axis"))
-                .SkipAnd(CommonParsers.RequiredWhitespace)
-                .SkipAnd(
-                    Literals.NoneOf("-").AsString()
-                        .When(static (_, text) => !text.TrimEnd().EndsWith('-'))
-                        .Or(Literals.NoneOf("\r\n-", minSize: 0).AsString()))
-                .AndSkip(Literals.Text("-->"))
-                .AndSkip(CommonParsers.InlineWhitespace)
-                .And(restOfLine)
-                .AndSkip(CommonParsers.LineEnd)
-                .Map((bottom, top) => (bottom: bottom.Trim().TrimEnd('-').Trim(), top));
+            Axis("y-axis").Then(static _ => (bottom: _.first, top: _.second));
 
         // Quadrant labels: quadrant-1 Label
         var quadrantLabelParser =

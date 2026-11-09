@@ -109,6 +109,26 @@ public class QuadrantTests : TestBase
         return VerifySvg(input);
     }
 
+    // The first label stopped at its first hyphen, so `Semi-low --> Very-high` failed, and an axis with only
+    // its first label, which Mermaid allows, was rejected.
+    [Test]
+    public async Task AxisLabels_HoldHyphensAndMayStandAlone()
+    {
+        var result = new QuadrantParser().Parse(
+            """
+            quadrantChart
+                x-axis Semi-low --> Very-high
+                y-axis Low
+                Point: [0.5, 0.5]
+            """);
+
+        await Assert.That(result.Error).IsNull();
+        await Assert.That(result.Value.XAxisLeft).IsEqualTo("Semi-low");
+        await Assert.That(result.Value.XAxisRight).IsEqualTo("Very-high");
+        await Assert.That(result.Value.YAxisBottom).IsEqualTo("Low");
+        await Assert.That(result.Value.YAxisTop).IsEqualTo("");
+    }
+
     [Test]
     public async Task RejectsOutOfGrammarCoordinates()
     {
