@@ -11,6 +11,38 @@ public class GanttDateTests
 
     static DateTime Day(int year, int month, int day) => new(year, month, day);
 
+    // Statements that change nothing drawn here were taken for tasks when they held a colon, so
+    // `accTitle: Hello` became a bar named accTitle that stretched the axis, and were rejected otherwise.
+    [Test]
+    public async Task IgnoredStatements_AreNotTasks()
+    {
+        const string input =
+            """
+            gantt
+                dateFormat YYYY-MM-DD
+                accTitle: Hello
+                accDescr: A description
+                accDescr {
+                    over: lines
+                }
+                todayMarker off
+                tickInterval 1week
+                weekday monday
+                weekend friday
+                includes 2024-01-06
+                inclusiveEndDates
+                topAxis
+                section S
+                    Task a :a1, 2024-01-01, 3d
+                click a1 href "https://example.com"
+                click a1 call callback()
+            """;
+
+        var tasks = Schedule(input);
+
+        await Assert.That(tasks.Select(_ => _.Name)).IsEquivalentTo(["Task a"]);
+    }
+
     // The first example in Mermaid's gantt documentation. "another task" has no start of its own; it used
     // to be put at today's date, which stretched the chart from 2014 to the present.
     [Test]

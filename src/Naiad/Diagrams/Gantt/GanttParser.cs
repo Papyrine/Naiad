@@ -68,6 +68,53 @@ class GanttParser : IDiagramParser<GanttModel>
                 .AndSkip(CommonParsers.LineEnd)
                 .Map(static (name, parts) => new TaskItem(name, parts));
 
+        // Valid statements that change nothing drawn here: the accessibility title and description,
+        // interaction, and settings this renderer does not act on. They come before the task rule, which
+        // would otherwise take any of them holding a colon (`accTitle: x`, `click a href "https://..."`)
+        // for a task, and reject the rest.
+        var weekday =
+            OneOf(
+                TextIgnoreCase("monday"),
+                TextIgnoreCase("tuesday"),
+                TextIgnoreCase("wednesday"),
+                TextIgnoreCase("thursday"),
+                TextIgnoreCase("friday"),
+                TextIgnoreCase("saturday"),
+                TextIgnoreCase("sunday"));
+
+        var ignoredLine =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(
+                    OneOf(
+                        OneOf(TextIgnoreCase("accTitle"), TextIgnoreCase("accDescr"))
+                            .WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1))
+                            .SkipAnd(restOfLine),
+                        OneOf(
+                                TextIgnoreCase("click"),
+                                TextIgnoreCase("todayMarker"),
+                                TextIgnoreCase("tickInterval"),
+                                TextIgnoreCase("includes"))
+                            .SkipAnd(CommonParsers.RequiredWhitespace)
+                            .SkipAnd(restOfLine),
+                        OneOf(TextIgnoreCase("weekday"), TextIgnoreCase("weekend"))
+                            .SkipAnd(CommonParsers.RequiredWhitespace)
+                            .SkipAnd(weekday)
+                            .SkipAnd(CommonParsers.InlineWhitespace),
+                        OneOf(TextIgnoreCase("inclusiveEndDates"), TextIgnoreCase("topAxis"))
+                            .SkipAnd(CommonParsers.InlineWhitespace)))
+                .SkipAnd(CommonParsers.LineEnd);
+
+        // `accDescr { ... }` may run over several lines.
+        var multiLineDescription =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(TextIgnoreCase("accDescr"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(Literals.Char('{'))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd);
+
         // Skip line (comments, empty lines)
         var skipLine =
             CommonParsers.InlineWhitespace
@@ -81,6 +128,8 @@ class GanttParser : IDiagramParser<GanttModel>
                 axisFormatParser.Then<IGanttContent?>(static _ => new AxisFormatItem(_)),
                 excludesParser.Then<IGanttContent?>(static _ => new ExcludesItem(_)),
                 sectionParser.Then<IGanttContent?>(static _ => new SectionItem(_)),
+                multiLineDescription.Then<IGanttContent?>(static _ => null),
+                ignoredLine.Then<IGanttContent?>(static _ => null),
                 taskParser.Then<IGanttContent?>(static _ => _),
                 skipLine.Then<IGanttContent?>(static _ => null)
             );
