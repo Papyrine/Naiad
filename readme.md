@@ -338,7 +338,8 @@ var withFontAwesomeIcon = SkiaRenderer.RenderPng(
  * [Railroad](https://mermaid.js.org/syntax/railroad.html) (beta: Mermaid's own syntax, ABNF, EBNF and PEG)
 
 
-## Test Renders<!-- include: renders. path: /src/test-renders/renders.include.md -->
+<!-- include: renders. path: /src/test-renders/renders.include.md -->
+## Test Renders
 
 Auto-generated documentation from the test suite.
 - [AgentFlow](/src/test-renders/AgentFlow.md)
