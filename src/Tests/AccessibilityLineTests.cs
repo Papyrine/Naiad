@@ -11,6 +11,10 @@ public class AccessibilityLineTests
     [Arguments("requirement, multi-line", "requirementDiagram\n    accDescr {\n        over\n        lines\n    }\n    requirement r {\n        id: 1\n    }")]
     [Arguments("sequence", "sequenceDiagram\n    accTitle: My title\n    accDescr: A description\n    A->>B: hi")]
     [Arguments("sequence, multi-line", "sequenceDiagram\n    accDescr {\n        over\n        lines\n    }\n    A->>B: hi")]
+    [Arguments("pie", "pie\n    accTitle: Pets\n    accDescr: A description\n    \"Dogs\" : 386")]
+    [Arguments("pie, multi-line", "pie\n    accDescr {\n        over\n        lines\n    }\n    \"Dogs\" : 386")]
+    [Arguments("packet", "packet-beta\n    accTitle: Header\n    accDescr: A description\n    0-15: \"Source Port\"")]
+    [Arguments("packet, multi-line", "packet-beta\n    accDescr {\n        over\n        lines\n    }\n    0-15: \"Source Port\"")]
     public async Task Diagram_WithAccessibilityLines_Renders(string name, string input)
     {
         var svg = Mermaid.Render(input);
@@ -27,5 +31,15 @@ public class AccessibilityLineTests
         var result = new ClassParser().Parse("classDiagram\n    accTitle: Class title\n    accDescr: A description\n    A <|-- B");
 
         await Assert.That(result.Value.Classes.Select(_ => _.Id)).IsEquivalentTo(["A", "B"]);
+    }
+
+    // A packet diagram's `title` line, which Mermaid draws and the renderer here does too, was rejected.
+    [Test]
+    public async Task Packet_TitleIsRead()
+    {
+        var result = new PacketParser().Parse("packet-beta\n    title TCP Packet\n    0-15: \"Source Port\"");
+
+        await Assert.That(result.Error).IsNull();
+        await Assert.That(result.Value.Title).IsEqualTo("TCP Packet");
     }
 }
