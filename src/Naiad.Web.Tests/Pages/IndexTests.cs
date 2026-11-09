@@ -36,6 +36,30 @@ public class IndexTests : BunitTestContext
     }
 
     [Test]
+    public async Task SharedLink_OpensItsDiagram()
+    {
+        var navigation = Services.GetRequiredService<NavigationManager>();
+        navigation.NavigateTo("/#" + ShareLink.Encode("pie\n    \"Shared\" : 1"));
+
+        var cut = Render<Naiad.Web.Pages.Index>();
+
+        await Assert.That(cut.Find(".code-editor").GetAttribute("value")).IsEqualTo("pie\n    \"Shared\" : 1");
+        await Assert.That(cut.Find(".doc-link").TextContent).Contains("Pie");
+    }
+
+    [Test]
+    public async Task SharedLink_PastedIntoOpenTab_OpensItsDiagram()
+    {
+        var cut = Render<Naiad.Web.Pages.Index>();
+
+        var navigation = Services.GetRequiredService<NavigationManager>();
+        navigation.NavigateTo("/#" + ShareLink.Encode("pie\n    \"Pasted\" : 1"));
+
+        cut.WaitForState(() => cut.Markup.Contains("Pasted"));
+        await Assert.That(cut.Find(".doc-link").TextContent).Contains("Pie");
+    }
+
+    [Test]
     public async Task InitialRender_HasTwoEnabledDownloadButtons()
     {
         var cut = Render<Naiad.Web.Pages.Index>();

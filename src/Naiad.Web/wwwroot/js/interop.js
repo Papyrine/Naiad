@@ -72,6 +72,14 @@ window.appInfo = {
     }
 };
 
+window.shareLink = {
+    // Sets the URL fragment without adding a history entry or a navigation. Empty clears it.
+    replaceHash: function (fragment) {
+        const url = location.pathname + location.search + (fragment ? '#' + fragment : '');
+        history.replaceState(history.state, '', url);
+    }
+};
+
 window.themeManager = {
     applyTheme: function (themeName) {
         document.documentElement.setAttribute('data-theme', themeName.toLowerCase());

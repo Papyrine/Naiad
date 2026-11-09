@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Components.Routing;
+
 namespace Naiad.Web.Pages;
 
 public partial class Index : IDisposable
@@ -18,9 +20,65 @@ public partial class Index : IDisposable
     RenderStats? stats;
     CancelSource? debounce;
 
-    // Render once synchronously so the first paint already shows the default sample's diagram.
-    protected override void OnInitialized() =>
+    // The fragment the address bar holds, so a source already in the URL is neither reopened nor rewritten.
+    string? sharedFragment;
+
+    // Render once synchronously so the first paint already shows the diagram: the one a shared link
+    // carries, otherwise the default sample's.
+    protected override void OnInitialized()
+    {
+        var fragment = FragmentOf(Navigation.Uri);
+        if (ShareLink.TryDecode(fragment, out var shared))
+        {
+            sharedFragment = fragment;
+            source = shared;
+        }
+
+        Navigation.LocationChanged += OnLocationChanged;
         Render();
+    }
+
+    static string FragmentOf(string uri) =>
+        new Uri(uri).Fragment.TrimStart('#');
+
+    // A link pasted into an open tab changes only the fragment: no reload, so open it here too.
+    void OnLocationChanged(object? sender, LocationChangedEventArgs args) =>
+        InvokeAsync(() =>
+        {
+            var fragment = FragmentOf(args.Location);
+            if (fragment == sharedFragment ||
+                !ShareLink.TryDecode(fragment, out var shared))
+            {
+                return;
+            }
+
+            debounce?.Cancel();
+            sharedFragment = fragment;
+            source = shared;
+            Render();
+            StateHasChanged();
+        });
+
+    /// <summary>
+    /// Keeps the address bar a link to the current diagram while it is small enough to fit, so copying the
+    /// URL shares it. The default sample, an empty editor, or a source too large to fit clears the fragment.
+    /// </summary>
+    async Task UpdateShareLinkAsync()
+    {
+        string? fragment = null;
+        if (source != DiagramSamples.Default.Source)
+        {
+            fragment = ShareLink.Encode(source);
+        }
+
+        if (fragment == sharedFragment)
+        {
+            return;
+        }
+
+        sharedFragment = fragment;
+        await JsRuntime.InvokeVoidAsync("shareLink.replaceHash", fragment ?? "");
+    }
 
     protected override async Task OnInitializedAsync() =>
         userAgent = await JsRuntime.InvokeAsync<string?>("appInfo.userAgent");
@@ -46,14 +104,16 @@ public partial class Index : IDisposable
         }
 
         Render();
+        await UpdateShareLinkAsync();
     }
 
-    void LoadSample(DiagramSample sample)
+    async Task LoadSample(DiagramSample sample)
     {
         // A picked sample replaces the editor content and renders immediately — no debounce wait.
         debounce?.Cancel();
         source = sample.Source;
         Render();
+        await UpdateShareLinkAsync();
     }
 
     void Render()
@@ -165,6 +225,7 @@ public partial class Index : IDisposable
 
     public void Dispose()
     {
+        Navigation.LocationChanged -= OnLocationChanged;
         debounce?.Cancel();
         debounce?.Dispose();
     }
