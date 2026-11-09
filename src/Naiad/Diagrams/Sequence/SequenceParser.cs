@@ -196,6 +196,26 @@ class SequenceParser : IDiagramParser<SequenceModel>
                 .SkipAnd(restOfLineText)
                 .SkipAnd(CommonParsers.LineEnd);
 
+        // The accessibility title and description, which change nothing that is drawn.
+        var accessibilityLine =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(
+                    OneOf(Literals.Text("accTitle"), Literals.Text("accDescr"))
+                        .WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1)))
+                .SkipAnd(restOfLineText)
+                .SkipAnd(CommonParsers.LineEnd);
+
+        // `accDescr { ... }` may run over several lines.
+        var multiLineDescription =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("accDescr"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(Literals.Char('{'))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd);
+
         var titleParser =
             CommonParsers.InlineWhitespace
                 .SkipAnd(Literals.Text("title"))
@@ -239,6 +259,8 @@ class SequenceParser : IDiagramParser<SequenceModel>
                 destroyParser.Then<ISequenceContent?>(static _ => _),
                 boxParser.Then<ISequenceContent?>(static _ => _),
                 ignoredParser.Then<ISequenceContent?>(static _ => null),
+                multiLineDescription.Then<ISequenceContent?>(static _ => null),
+                accessibilityLine.Then<ISequenceContent?>(static _ => null),
                 titleParser.Then<ISequenceContent?>(static _ => new TitleItem(_)),
                 blockMarkerParser.Then<ISequenceContent?>(static _ => _),
                 skipLine.Then<ISequenceContent?>(static _ => null)

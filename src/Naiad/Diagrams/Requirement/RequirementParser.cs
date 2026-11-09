@@ -159,6 +159,17 @@ class RequirementParser : IDiagramParser<RequirementModel>
                 .SkipAnd(restOfLineText)
                 .SkipAnd(CommonParsers.LineEnd);
 
+        // `accDescr { ... }` may run over several lines.
+        var multiLineDescription =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("accDescr"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(Literals.Char('{'))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd);
+
         var skipLine =
             CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Comment)
                 .Or(CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.Newline));
@@ -167,6 +178,7 @@ class RequirementParser : IDiagramParser<RequirementModel>
             OneOf(
                 requirementBlockParser.Then<IRequirementContent?>(static _ => new RequirementBlockItem(_)),
                 elementBlockParser.Then<IRequirementContent?>(static _ => new ElementBlockItem(_)),
+                multiLineDescription.Then<IRequirementContent?>(static _ => null),
                 ignoredLine.Then<IRequirementContent?>(static _ => null),
                 relationParser.Then<IRequirementContent?>(static _ => new RelationItem(_)),
                 reverseRelationParser.Then<IRequirementContent?>(static _ => new RelationItem(_)),
