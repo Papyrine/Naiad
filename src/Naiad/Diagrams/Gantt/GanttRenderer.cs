@@ -44,6 +44,17 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         var maxDate = tasks.Max(_ => _.ComputedEnd);
         var totalDays = (maxDate - minDate).Days + 1;
 
+        // `gantt.displayMode: compact` (or a front matter `displayMode: compact`) lets tasks of a section
+        // that do not overlap share a row. The rows then hold several tasks, so their names are only on
+        // the bars, not down the left.
+        var compact = model.Config.GetString("gantt", "displayMode") == "compact";
+        var taskRows = new Dictionary<GanttTask, int>();
+        var sectionRows = new Dictionary<GanttSection, int>();
+        foreach (var section in model.Sections)
+        {
+            sectionRows[section] = AssignRows(section.Tasks, compact, taskRows);
+        }
+
         // Calculate dimensions
         var totalRows = 0;
         foreach (var section in model.Sections)
@@ -53,7 +64,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
                 totalRows++; // Section header
             }
 
-            totalRows += section.Tasks.Count;
+            totalRows += sectionRows[section];
         }
 
         var hasTitle = !string.IsNullOrEmpty(model.Title);
@@ -122,12 +133,54 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             // Tasks
             foreach (var task in section.Tasks)
             {
-                DrawTask(builder, task, minDate, currentRow, offsetX, offsetY, chartWidth, options);
-                currentRow++;
+                DrawTask(builder, task, minDate, currentRow + taskRows[task], offsetX, offsetY, chartWidth, !compact, options);
             }
+
+            currentRow += sectionRows[section];
         }
 
         return builder.Build();
+    }
+
+    /// <summary>
+    /// Gives each task of a section its row within the section, and returns how many rows that takes: one
+    /// per task, or in compact mode as Mermaid lays it out, taking the tasks by start (then as declared)
+    /// and putting each on the first row whose last task has ended by then.
+    /// </summary>
+    static int AssignRows(List<GanttTask> sectionTasks, bool compact, Dictionary<GanttTask, int> rows)
+    {
+        if (!compact)
+        {
+            for (var index = 0; index < sectionTasks.Count; index++)
+            {
+                rows[sectionTasks[index]] = index;
+            }
+
+            return sectionTasks.Count;
+        }
+
+        var rowEnds = new List<DateTime>();
+        var byStart = sectionTasks
+            .Select((task, index) => (task, index))
+            .OrderBy(_ => _.task.ComputedStart)
+            .ThenBy(_ => _.index);
+        foreach (var (task, _) in byStart)
+        {
+            var row = rowEnds.FindIndex(_ => task.ComputedStart >= _);
+            if (row < 0)
+            {
+                row = rowEnds.Count;
+                rowEnds.Add(task.ComputedEnd);
+            }
+            else
+            {
+                rowEnds[row] = task.ComputedEnd;
+            }
+
+            rows[task] = row;
+        }
+
+        return rowEnds.Count;
     }
 
     static void DrawAxis(SvgBuilder builder, DateTime startDate, int totalDays, double offsetX, double offsetY,
@@ -210,6 +263,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         double offsetX,
         double offsetY,
         double chartWidth,
+        bool nameOnLeft,
         RenderOptions options)
     {
         var y = offsetY + row * rowHeight;
@@ -220,14 +274,17 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         var taskWidth = durationDays * dayWidth;
 
         // Task name on the left
-        builder.AddText(
-            options.Padding + 10,
-            y + rowHeight / 2,
-            task.Name,
-            anchor: "start",
-            baseline: "middle",
-            fontSize: options.FontSize,
-            fontFamily: options.FontFamily);
+        if (nameOnLeft)
+        {
+            builder.AddText(
+                options.Padding + 10,
+                y + rowHeight / 2,
+                task.Name,
+                anchor: "start",
+                baseline: "middle",
+                fontSize: options.FontSize,
+                fontFamily: options.FontFamily);
+        }
 
         // Determine task color
         var color = task.Status switch

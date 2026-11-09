@@ -1,0 +1,299 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 620 490"
+  style="max-width: 620px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="310"
+    y="35"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="18px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">Different Colors in xyChart</text>
+  <line
+    x1="80"
+    y1="410"
+    x2="580"
+    y2="410"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="410"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">0</text>
+  <line
+    x1="80"
+    y1="350"
+    x2="580"
+    y2="350"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="350"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">10</text>
+  <line
+    x1="80"
+    y1="290"
+    x2="580"
+    y2="290"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="290"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">20</text>
+  <line
+    x1="80"
+    y1="230"
+    x2="580"
+    y2="230"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="230"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">30</text>
+  <line
+    x1="80"
+    y1="170"
+    x2="580"
+    y2="170"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="170"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">40</text>
+  <line
+    x1="80"
+    y1="110"
+    x2="580"
+    y2="110"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="110"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">50</text>
+  <text
+    x="142.5"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Category 1</text>
+  <text
+    x="267.5"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Category 2</text>
+  <text
+    x="392.5"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Category 3</text>
+  <text
+    x="517.5"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Category 4</text>
+  <g
+    transform="rotate(-90, 35, 260)">
+    <text
+      x="35"
+      y="260"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333">valuesY</text>
+  </g>
+  <text
+    x="330"
+    y="455"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">categoriesX</text>
+  <path
+    d="M 142.5 350 L 267.5 290 L 392.5 230 L 517.5 170"
+    fill="none"
+    stroke="#000000"
+    stroke-width="2" />
+  <circle
+    cx="142.5"
+    cy="350"
+    r="4"
+    fill="#000000"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="267.5"
+    cy="290"
+    r="4"
+    fill="#000000"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="392.5"
+    cy="230"
+    r="4"
+    fill="#000000"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="517.5"
+    cy="170"
+    r="4"
+    fill="#000000"
+    stroke="#fff"
+    stroke-width="2" />
+  <path
+    d="M 142.5 320 L 267.5 260 L 392.5 200 L 517.5 140"
+    fill="none"
+    stroke="#0000FF"
+    stroke-width="2" />
+  <circle
+    cx="142.5"
+    cy="320"
+    r="4"
+    fill="#0000FF"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="267.5"
+    cy="260"
+    r="4"
+    fill="#0000FF"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="392.5"
+    cy="200"
+    r="4"
+    fill="#0000FF"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="517.5"
+    cy="140"
+    r="4"
+    fill="#0000FF"
+    stroke="#fff"
+    stroke-width="2" />
+  <path
+    d="M 142.5 380 L 267.5 320 L 392.5 260 L 517.5 200"
+    fill="none"
+    stroke="#00FF00"
+    stroke-width="2" />
+  <circle
+    cx="142.5"
+    cy="380"
+    r="4"
+    fill="#00FF00"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="267.5"
+    cy="320"
+    r="4"
+    fill="#00FF00"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="392.5"
+    cy="260"
+    r="4"
+    fill="#00FF00"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="517.5"
+    cy="200"
+    r="4"
+    fill="#00FF00"
+    stroke="#fff"
+    stroke-width="2" />
+  <path
+    d="M 142.5 290 L 267.5 230 L 392.5 170 L 517.5 110"
+    fill="none"
+    stroke="#FF0000"
+    stroke-width="2" />
+  <circle
+    cx="142.5"
+    cy="290"
+    r="4"
+    fill="#FF0000"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="267.5"
+    cy="230"
+    r="4"
+    fill="#FF0000"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="392.5"
+    cy="170"
+    r="4"
+    fill="#FF0000"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="517.5"
+    cy="110"
+    r="4"
+    fill="#FF0000"
+    stroke="#fff"
+    stroke-width="2" />
+  <line
+    x1="80"
+    y1="110"
+    x2="80"
+    y2="410"
+    stroke="#333"
+    stroke-width="2" />
+  <line
+    x1="80"
+    y1="410"
+    x2="580"
+    y2="410"
+    stroke="#333"
+    stroke-width="2" />
+</svg>

@@ -87,4 +87,47 @@ public class SankeyTests : TestBase
 
         return VerifySvg(input);
     }
+
+    [Test]
+    public Task HideValues()
+    {
+        const string input =
+            """
+            ---
+            config:
+              sankey:
+                showValues: false
+            ---
+            sankey-beta
+            A,X,10
+            A,Y,15
+            B,X,20
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // Values carry the configured prefix and suffix; nodeColors picks the colour of the nodes it names.
+    [Test]
+    public Task PrefixSuffixAndNodeColors()
+    {
+        const string input =
+            """
+            ---
+            config:
+              sankey:
+                prefix: '$'
+                suffix: 'k'
+                nodeColors:
+                  A: '#d62728'
+                  X: '#7f7f7f'
+            ---
+            sankey-beta
+            A,X,10
+            A,Y,15
+            B,X,20
+            """;
+
+        return VerifySvg(input);
+    }
 }

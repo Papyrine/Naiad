@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 265.25 99"
-  style="max-width: 265.25px;"
+  viewBox="0 0 252 122.95"
+  style="max-width: 252px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -19,7 +19,7 @@
   <line
     x1="100"
     y1="45"
-    x2="221"
+    x2="220"
     y2="45"
     stroke="#4CAF50"
     stroke-width="2" />
@@ -30,69 +30,81 @@
     fill="#4CAF50"
     stroke="#4CAF50"
     stroke-width="2" />
-  <rect
-    x="75.75"
-    y="63"
-    width="48.5"
-    height="16"
-    rx="3"
-    ry="3"
-    fill="#F4F4F4"
-    stroke="#CCC" />
-  <text
-    x="100"
-    y="71"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="10px"
-    font-family="Arial, sans-serif"
-    fill="#333">commit0</text>
+  <g
+    class="commit-label"
+    transform="translate(100,63) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">commit0</text>
+  </g>
   <circle
-    cx="160.5"
+    cx="160"
     cy="45"
     r="12"
     fill="#4CAF50"
     stroke="#4CAF50"
     stroke-width="2" />
-  <rect
-    x="136.25"
-    y="63"
-    width="48.5"
-    height="16"
-    rx="3"
-    ry="3"
-    fill="#F4F4F4"
-    stroke="#CCC" />
-  <text
-    x="160.5"
-    y="71"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="10px"
-    font-family="Arial, sans-serif"
-    fill="#333">commit1</text>
+  <g
+    class="commit-label"
+    transform="translate(160,63) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">commit1</text>
+  </g>
   <circle
-    cx="221"
+    cx="220"
     cy="45"
     r="12"
     fill="#4CAF50"
     stroke="#4CAF50"
     stroke-width="2" />
-  <rect
-    x="196.75"
-    y="63"
-    width="48.5"
-    height="16"
-    rx="3"
-    ry="3"
-    fill="#F4F4F4"
-    stroke="#CCC" />
-  <text
-    x="221"
-    y="71"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="10px"
-    font-family="Arial, sans-serif"
-    fill="#333">commit2</text>
+  <g
+    class="commit-label"
+    transform="translate(220,63) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">commit2</text>
+  </g>
 </svg>

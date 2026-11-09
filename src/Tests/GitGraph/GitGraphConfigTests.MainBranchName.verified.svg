@@ -1,0 +1,434 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 767.9515 314.95"
+  style="max-width: 767.9515px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="25"
+    y="57"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#4CAF50">MetroLine1</text>
+  <text
+    x="25"
+    y="147"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#2196F3">MetroLine2</text>
+  <text
+    x="25"
+    y="237"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#FF9800">MetroLine3</text>
+  <line
+    x1="135.95"
+    y1="57"
+    x2="735.95"
+    y2="57"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <line
+    x1="255.95"
+    y1="147"
+    x2="315.95"
+    y2="147"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <line
+    x1="375.95"
+    y1="237"
+    x2="435.95"
+    y2="237"
+    stroke="#FF9800"
+    stroke-width="2" />
+  <path
+    d="M 195.95 57 C 225.95 57, 225.95 147, 255.95 147"
+    fill="none"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <path
+    d="M 315.95 147 C 345.95 147, 345.95 237, 375.95 237"
+    fill="none"
+    stroke="#FF9800"
+    stroke-width="2" />
+  <path
+    d="M 435.95 237 C 495.95 237, 495.95 57, 555.95 57"
+    fill="none"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <path
+    d="M 315.95 147 C 495.95 147, 495.95 57, 675.95 57"
+    fill="none"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <circle
+    cx="135.95"
+    cy="57"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(135.95,75) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">NewYork</text>
+  </g>
+  <circle
+    cx="195.95"
+    cy="57"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(195.95,75) rotate(-45)">
+    <rect
+      x="-43"
+      y="-8"
+      width="43"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-21.5"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">Dallas</text>
+  </g>
+  <circle
+    cx="255.95"
+    cy="147"
+    r="12"
+    fill="#2196F3"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(255.95,165) rotate(-45)">
+    <rect
+      x="-65"
+      y="-8"
+      width="65"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-32.5"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">LosAngeles</text>
+  </g>
+  <circle
+    cx="315.95"
+    cy="147"
+    r="12"
+    fill="#2196F3"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(315.95,165) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">Chicago</text>
+  </g>
+  <circle
+    cx="375.95"
+    cy="237"
+    r="12"
+    fill="#FF9800"
+    stroke="#FF9800"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(375.95,255) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">Phoenix</text>
+  </g>
+  <rect
+    x="423.95"
+    y="225"
+    width="24"
+    height="24"
+    rx="3"
+    ry="3"
+    fill="#FFD700"
+    stroke="#FF9800"
+    stroke-width="3" />
+  <g
+    class="commit-label"
+    transform="translate(435.95,255) rotate(-45)">
+    <rect
+      x="-43"
+      y="-8"
+      width="43"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-21.5"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">Denver</text>
+  </g>
+  <circle
+    cx="495.95"
+    cy="57"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(495.95,75) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">Atlanta</text>
+  </g>
+  <circle
+    cx="555.95"
+    cy="57"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <circle
+    cx="555.95"
+    cy="57"
+    r="7"
+    fill="#fff"
+    stroke="#4CAF50"
+    stroke-width="1.5" />
+  <g
+    class="commit-label"
+    transform="translate(555.95,75) rotate(-45)">
+    <rect
+      x="-43"
+      y="-8"
+      width="43"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-21.5"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">merge7</text>
+  </g>
+  <circle
+    cx="615.95"
+    cy="57"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(615.95,75) rotate(-45)">
+    <rect
+      x="-37.5"
+      y="-8"
+      width="37.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-18.75"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">Miami</text>
+  </g>
+  <circle
+    cx="675.95"
+    cy="57"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <circle
+    cx="675.95"
+    cy="57"
+    r="7"
+    fill="#fff"
+    stroke="#4CAF50"
+    stroke-width="1.5" />
+  <g
+    class="commit-label"
+    transform="translate(675.95,75) rotate(-45)">
+    <rect
+      x="-43"
+      y="-8"
+      width="43"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-21.5"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">merge9</text>
+  </g>
+  <rect
+    x="634.65"
+    y="20"
+    width="82.6"
+    height="20"
+    rx="3"
+    ry="3"
+    fill="#FFF9C4"
+    stroke="#FBC02D" />
+  <text
+    x="675.95"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">MY JUNCTION</text>
+  <circle
+    cx="735.95"
+    cy="57"
+    r="12"
+    fill="#fff"
+    stroke="#4CAF50"
+    stroke-width="3" />
+  <line
+    x1="729.35"
+    y1="50.4"
+    x2="742.55"
+    y2="63.6"
+    stroke="#4CAF50"
+    stroke-width="2.5" />
+  <line
+    x1="729.35"
+    y1="63.6"
+    x2="742.55"
+    y2="50.4"
+    stroke="#4CAF50"
+    stroke-width="2.5" />
+  <g
+    class="commit-label"
+    transform="translate(735.95,75) rotate(-45)">
+    <rect
+      x="-76"
+      y="-8"
+      width="76"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-38"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">SanFrancisco</text>
+  </g>
+</svg>

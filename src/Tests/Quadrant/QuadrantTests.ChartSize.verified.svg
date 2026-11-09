@@ -1,0 +1,171 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 700 400"
+  style="max-width: 700px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <rect
+    x="31"
+    y="45"
+    width="332"
+    height="162"
+    fill="#F1F1FF" />
+  <rect
+    x="363"
+    y="45"
+    width="332"
+    height="162"
+    fill="#ECECFF" />
+  <rect
+    x="31"
+    y="207"
+    width="332"
+    height="162"
+    fill="#F6F6FF" />
+  <rect
+    x="363"
+    y="207"
+    width="332"
+    height="162"
+    fill="#FBFBFF" />
+  <text
+    x="529"
+    y="58"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="16px"
+    font-family="Arial, sans-serif"
+    fill="#131300">We should expand</text>
+  <text
+    x="197"
+    y="58"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="16px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Need to promote</text>
+  <text
+    x="197"
+    y="220"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="16px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Re-evaluate</text>
+  <text
+    x="529"
+    y="220"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="16px"
+    font-family="Arial, sans-serif"
+    fill="#131300">May be improved</text>
+  <rect
+    x="31"
+    y="45"
+    width="664"
+    height="324"
+    fill="none"
+    stroke="#C7C7F1"
+    stroke-width="2" />
+  <line
+    x1="363"
+    y1="45"
+    x2="363"
+    y2="369"
+    stroke="#C7C7F1" />
+  <line
+    x1="31"
+    y1="207"
+    x2="695"
+    y2="207"
+    stroke="#C7C7F1" />
+  <circle
+    cx="230.2"
+    cy="174.6"
+    r="5"
+    fill="#333" />
+  <text
+    x="230.2"
+    y="185.6"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Campaign A</text>
+  <circle
+    cx="329.8"
+    cy="294.48"
+    r="5"
+    fill="#333" />
+  <text
+    x="329.8"
+    y="305.48"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Campaign B</text>
+  <circle
+    cx="409.48"
+    cy="145.44"
+    r="5"
+    fill="#333" />
+  <text
+    x="409.48"
+    y="156.44"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Campaign C</text>
+  <text
+    x="197"
+    y="382"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="16px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Low Reach</text>
+  <text
+    x="529"
+    y="382"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="16px"
+    font-family="Arial, sans-serif"
+    fill="#131300">High Reach</text>
+  <g
+    transform="rotate(-90, 13, 126)">
+    <text
+      x="13"
+      y="126"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      fill="#131300">High Engagement</text>
+  </g>
+  <g
+    transform="rotate(-90, 13, 288)">
+    <text
+      x="13"
+      y="288"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="16px"
+      font-family="Arial, sans-serif"
+      fill="#131300">Low Engagement</text>
+  </g>
+  <text
+    x="350"
+    y="20"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="20px"
+    font-family="Arial, sans-serif"
+    fill="#131300">Reach and engagement of campaigns</text>
+</svg>

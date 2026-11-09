@@ -43,9 +43,24 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             return emptyBuilder.Build();
         }
 
+        // `sankey.showValues: false` labels each node with its name alone; `prefix` and `suffix` go either
+        // side of a value, and `nodeColors` maps node names to the colours they are drawn in.
+        var showValues = model.Config.GetBool("sankey", "showValues") ?? true;
+        var prefix = model.Config.GetString("sankey", "prefix") ?? "";
+        var suffix = model.Config.GetString("sankey", "suffix") ?? "";
+        var customColors = model.Config.GetMap("sankey", "nodeColors");
+
         // Build node structure
         var nodes = BuildNodes(model);
         AssignColumns(nodes, model);
+
+        // Each node's colour: its own if configured, else the next in the palette.
+        var colors = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var name in nodes.Keys)
+        {
+            colors[name] = customColors?.GetValueOrDefault(name) as string ??
+                           nodeColors[colors.Count % nodeColors.Length];
+        }
 
         // Calculate scale
         var maxColumn = nodes.Values.Max(_ => _.Column);
@@ -91,13 +106,6 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         // Draw links first (behind nodes)
         var sourceOffsets = new Dictionary<string, double>();
         var targetOffsets = new Dictionary<string, double>();
-        // Index each node's column position once for link colouring (was an O(N) ToArray()+IndexOf per link).
-        var nodeColorIndices = new Dictionary<string, int>(StringComparer.Ordinal);
-        var colorIdx = 0;
-        foreach (var key in nodes.Keys)
-        {
-            nodeColorIndices[key] = colorIdx++;
-        }
 
         foreach (var link in model.Links)
         {
@@ -120,23 +128,21 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             var targetX = options.Padding + targetNode.Column * columnSpacing;
 
             var pathData = CreateLinkPath(sourceX, sourceY, targetX, targetY, band);
-            var colorIndex = nodeColorIndices[link.Source] % nodeColors.Length;
 
             // Translucent, as Mermaid draws them: node labels lie over the ribbons, and overlapping
             // ribbons stay distinguishable where they cross.
             builder.AddPath(
                 pathData,
-                fill: nodeColors[colorIndex],
+                fill: colors[link.Source],
                 stroke: "none",
                 opacity: linkOpacity);
         }
 
         // Draw nodes
-        var nodeIndex = 0;
         foreach (var (name, node) in nodes)
         {
             var x = options.Padding + node.Column * columnSpacing;
-            var color = nodeColors[nodeIndex % nodeColors.Length];
+            var color = colors[name];
 
             builder.AddRect(
                 x,
@@ -154,9 +160,16 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             var anchor = labelOnRight ? "start" : "end";
             var centerY = node.Y + node.Height / 2;
 
+            // The name sits above the value, or centred on the bar when there is no value.
+            var nameY = centerY;
+            if (showValues)
+            {
+                nameY -= 6;
+            }
+
             builder.AddText(
                 labelX,
-                centerY - 6,
+                nameY,
                 name,
                 anchor: anchor,
                 baseline: "middle",
@@ -165,17 +178,18 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
                 fill: "#333");
 
             // Mermaid's sankey shows node values by default.
-            builder.AddText(
-                labelX,
-                centerY + 8,
-                FormatValue(Math.Max(node.InputValue, node.OutputValue)),
-                anchor: anchor,
-                baseline: "middle",
-                fontSize: options.FontSize - 3,
-                fontFamily: options.FontFamily,
-                fill: "#666");
-
-            nodeIndex++;
+            if (showValues)
+            {
+                builder.AddText(
+                    labelX,
+                    centerY + 8,
+                    prefix + FormatValue(Math.Max(node.InputValue, node.OutputValue)) + suffix,
+                    anchor: anchor,
+                    baseline: "middle",
+                    fontSize: options.FontSize - 3,
+                    fontFamily: options.FontFamily,
+                    fill: "#666");
+            }
         }
 
         return builder.Build();

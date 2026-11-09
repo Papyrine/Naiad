@@ -209,4 +209,67 @@ public class XYChartTests: TestBase
 
         return VerifySvg(input);
     }
+
+    // Mermaid's docs example: the chart sized to 900 by 600, with each bar's value written on it.
+    [Test]
+    public Task SizeAndDataLabels()
+    {
+        const string input =
+            """
+            ---
+            config:
+              xyChart:
+                width: 900
+                height: 600
+                showDataLabel: true
+            ---
+            xychart
+                title "Sales Revenue"
+                x-axis [jan, feb, mar, apr, may, jun]
+                y-axis "Revenue (in $)" 4000 --> 11000
+                bar [5000, 6000, 7500, 8200, 9500, 10500]
+                line [5000, 6000, 7500, 8200, 9500, 10500]
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task DataLabelsOutsideHorizontalBars()
+    {
+        const string input =
+            """
+            %%{init: {"xyChart": {"showDataLabel": true, "showDataLabelOutsideBar": true}}}%%
+            xychart horizontal
+                x-axis [Fantasy, Romance, Thriller]
+                bar [32, 25, 17]
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // Mermaid's docs example: the palette colours the plots in the order they are declared.
+    [Test]
+    public Task PlotColorPalette()
+    {
+        const string input =
+            """
+            ---
+            config:
+              themeVariables:
+                xyChart:
+                  plotColorPalette: '#000000, #0000FF, #00FF00, #FF0000'
+            ---
+            xychart
+            title "Different Colors in xyChart"
+            x-axis "categoriesX" ["Category 1", "Category 2", "Category 3", "Category 4"]
+            y-axis "valuesY" 0 --> 50
+            line [10, 20, 30, 40]
+            line [15, 25, 35, 45]
+            line [5, 15, 25, 35]
+            line [20, 30, 40, 50]
+            """;
+
+        return VerifySvg(input);
+    }
 }

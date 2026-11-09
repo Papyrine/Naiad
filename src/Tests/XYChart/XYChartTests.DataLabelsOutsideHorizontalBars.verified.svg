@@ -1,0 +1,175 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 652.8 460"
+  style="max-width: 652.8px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <line
+    x1="112.8"
+    y1="80"
+    x2="112.8"
+    y2="380"
+    stroke="#e0e0e0" />
+  <text
+    x="112.8"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">17</text>
+  <line
+    x1="212.8"
+    y1="80"
+    x2="212.8"
+    y2="380"
+    stroke="#e0e0e0" />
+  <text
+    x="212.8"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">20</text>
+  <line
+    x1="312.8"
+    y1="80"
+    x2="312.8"
+    y2="380"
+    stroke="#e0e0e0" />
+  <text
+    x="312.8"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">23</text>
+  <line
+    x1="412.8"
+    y1="80"
+    x2="412.8"
+    y2="380"
+    stroke="#e0e0e0" />
+  <text
+    x="412.8"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">26</text>
+  <line
+    x1="512.8"
+    y1="80"
+    x2="512.8"
+    y2="380"
+    stroke="#e0e0e0" />
+  <text
+    x="512.8"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">29</text>
+  <line
+    x1="612.8"
+    y1="80"
+    x2="612.8"
+    y2="380"
+    stroke="#e0e0e0" />
+  <text
+    x="612.8"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">32</text>
+  <text
+    x="102.8"
+    y="130"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Fantasy</text>
+  <text
+    x="102.8"
+    y="230"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Romance</text>
+  <text
+    x="102.8"
+    y="330"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Thriller</text>
+  <rect
+    x="112.8"
+    y="90"
+    width="500"
+    height="78"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="112.8"
+    y="190"
+    width="266.67"
+    height="78"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="112.8"
+    y="290"
+    width="0"
+    height="78"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <text
+    x="622.8"
+    y="129"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="54px"
+    font-family="Arial, sans-serif"
+    fill="#333">32</text>
+  <text
+    x="389.47"
+    y="229"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="54px"
+    font-family="Arial, sans-serif"
+    fill="#333">25</text>
+  <line
+    x1="112.8"
+    y1="80"
+    x2="112.8"
+    y2="380"
+    stroke="#333"
+    stroke-width="2" />
+  <line
+    x1="112.8"
+    y1="380"
+    x2="612.8"
+    y2="380"
+    stroke="#333"
+    stroke-width="2" />
+</svg>

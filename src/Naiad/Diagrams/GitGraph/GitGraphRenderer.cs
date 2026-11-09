@@ -15,6 +15,14 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
     const double labelPadding = 5;
     const double labelSpacing = 12;
 
+    // With `rotateCommitLabel` (Mermaid's default) a caption runs off at 45 degrees, down and to the left,
+    // from just below its commit (or, in a vertical graph, from beside it). As in Mermaid, lanes are then
+    // 40px further apart to leave room for the captions between them.
+    const double rotatedLaneGap = 40;
+    const double rotatedDrop = 6;
+    const double rotatedSideGap = 4;
+    static readonly double diagonal = Math.Sqrt(0.5);
+
     static string[] branchColors =
     [
         "#4CAF50", // green - main
@@ -27,6 +35,60 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         "#607D8B"  // blue-grey
     ];
 
+    /// <summary>
+    /// The <c>gitGraph</c> options from the diagram's configuration, with Mermaid's defaults.
+    /// </summary>
+    sealed record Settings(
+        bool ShowBranches,
+        bool ShowCommitLabel,
+        bool RotateCommitLabel,
+        bool ParallelCommits,
+        string[] Colors,
+        Chip Caption,
+        Chip Tag)
+    {
+        /// <summary>
+        /// Reads the options, and the colours: Naiad's own, or with a configured theme (or theme variables)
+        /// the theme's <c>git0</c> to <c>git7</c> for the branches and its commit and tag label colours.
+        /// </summary>
+        public static Settings From(MermaidConfig config)
+        {
+            var colors = branchColors;
+            var caption = new Chip("#F4F4F4", "#CCC", "#333");
+            var tag = new Chip("#FFF9C4", "#FBC02D", "#333");
+            if (MermaidTheme.From(config, "gitGraph") is { } theme)
+            {
+                colors = Enumerable.Range(0, 8).Select(_ => theme[$"git{_}"] ?? branchColors[_]).ToArray();
+                var commitBackground = theme["commitLabelBackground"] ?? caption.Fill;
+                caption = new(commitBackground, commitBackground, theme["commitLabelColor"] ?? caption.Text);
+                tag = new(
+                    theme["tagLabelBackground"] ?? tag.Fill,
+                    theme["tagLabelBorder"] ?? tag.Stroke,
+                    theme["tagLabelColor"] ?? tag.Text);
+            }
+
+            return new(
+                config.GetBool("gitGraph", "showBranches") ?? true,
+                config.GetBool("gitGraph", "showCommitLabel") ?? true,
+                config.GetBool("gitGraph", "rotateCommitLabel") ?? true,
+                config.GetBool("gitGraph", "parallelCommits") ?? false,
+                colors,
+                caption,
+                tag);
+        }
+
+        public string Color(GitBranch branch) =>
+            branch.Color ?? Colors[branch.Column % Colors.Length];
+
+        // Whether the commit is captioned at all.
+        public bool HasCaption(GitCommit commit) =>
+            ShowCommitLabel &&
+            !string.IsNullOrEmpty(commit.DisplayLabel);
+    }
+
+    // A label's background, border and text colours.
+    sealed record Chip(string Fill, string Stroke, string Text);
+
     public SvgDocument Render(GitGraphModel model, RenderOptions options)
     {
         var document = RenderGraph(model, options);
@@ -36,12 +98,14 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
 
     static SvgDocument RenderGraph(GitGraphModel model, RenderOptions options)
     {
+        var settings = Settings.From(model.Config);
+
         // Compute the actual git graph from operations
-        var computed = ComputeGraph(model);
+        var computed = ComputeGraph(model, settings.ParallelCommits);
 
         if (model.Direction is Direction.TopToBottom or Direction.BottomToTop)
         {
-            return RenderVertical(computed, model.Direction == Direction.BottomToTop, options);
+            return RenderVertical(computed, model.Direction == Direction.BottomToTop, options, settings);
         }
 
         // Calculate dimensions
@@ -49,77 +113,137 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         var maxColumn = computed.Branches.Count > 0 ? computed.Branches.Max(_ => _.Column) : 0;
 
         var labelFontSize = options.FontSize - 4;
-        var maxLabelWidth = computed.Commits.Count > 0
-            ? computed.Commits.Max(_ => LabelWidth(_.DisplayLabel, labelFontSize))
-            : 0;
+        var captioned = computed.Commits.Where(settings.HasCaption).ToList();
 
-        // Captions sit under their commit, so the lane has to be at least as wide as the widest one for
-        // neighbouring captions not to run together.
+        // Upright captions sit under their commit, so a column has to be at least as wide as the widest one
+        // for neighbouring captions not to run together. Rotated ones run off at an angle, side by side.
+        var maxLabelWidth = 0.0;
+        if (!settings.RotateCommitLabel &&
+            captioned.Count > 0)
+        {
+            maxLabelWidth = captioned.Max(_ => LabelWidth(_.DisplayLabel, labelFontSize));
+        }
+
         var spacingX = Math.Max(commitSpacingX, maxLabelWidth + labelSpacing);
+        var laneSpacing = commitSpacingY;
+        if (settings.RotateCommitLabel)
+        {
+            laneSpacing += rotatedLaneGap;
+        }
 
-        var labelsWidth = Math.Max(80, computed.Branches.Count > 0
-            ? computed.Branches.Max(_ => MeasureText(_.Name, options.FontSize - 2)) + 10
-            : 0);
+        var nameWidth = 0.0;
+        var labelsWidth = 0.0;
+        if (settings.ShowBranches &&
+            computed.Branches.Count > 0)
+        {
+            nameWidth = computed.Branches.Max(_ => MeasureText(_.Name, options.FontSize - 2));
+            labelsWidth = Math.Max(80, nameWidth + 10);
+        }
+
+        // How far left of the first column, and how far below the last lane, the captions and tags reach.
+        var reachLeft = commitRadius;
+        var reachBelow = commitRadius;
+        foreach (var commit in computed.Commits)
+        {
+            var x = commit.Row * spacingX;
+            var y = (computed.FindBranch(commit.Branch)?.Column ?? 0) * laneSpacing - maxColumn * laneSpacing;
+            if (!string.IsNullOrEmpty(commit.Tag))
+            {
+                reachLeft = Math.Max(reachLeft, TagWidth(commit.Tag, options) / 2 - x);
+            }
+
+            if (!settings.HasCaption(commit))
+            {
+                continue;
+            }
+
+            var labelWidth = LabelWidth(commit.DisplayLabel, labelFontSize);
+            if (settings.RotateCommitLabel)
+            {
+                var reach = RotatedReach(labelWidth);
+                reachLeft = Math.Max(reachLeft, reach - x);
+                reachBelow = Math.Max(reachBelow, y + commitRadius + rotatedDrop + reach);
+            }
+            else
+            {
+                reachLeft = Math.Max(reachLeft, labelWidth / 2 - x);
+                reachBelow = Math.Max(reachBelow, commitRadius + labelGap + labelHeight);
+            }
+        }
 
         // Reserve whatever the tags above and the captions below actually need, so neither is clipped.
         var hasTag = computed.Commits.Any(_ => !string.IsNullOrEmpty(_.Tag));
         var topPad = Math.Max(
             commitSpacingY / 2,
             hasTag ? commitRadius + tagHeight + 5 : commitRadius);
-        var bottomPad = Math.Max(commitSpacingY / 2, commitRadius + labelGap + labelHeight);
+        var bottomPad = Math.Max(commitSpacingY / 2, reachBelow);
 
-        var offsetX = options.Padding + labelsWidth;
+        // Branch names leave the space to their right free, which captions and tags may reach into. The
+        // first column moves right only for what reaches further.
+        var offsetX = options.Padding + reachLeft;
+        if (settings.ShowBranches)
+        {
+            var free = labelsWidth - nameWidth - 10;
+            offsetX = options.Padding + labelsWidth + Math.Max(0, reachLeft - free);
+        }
+
         var offsetY = options.Padding + topPad;
 
-        var width = offsetX + maxRow * spacingX +
-                    Math.Max(commitRadius, maxLabelWidth / 2) + options.Padding;
-        var height = options.Padding * 2 + topPad + maxColumn * commitSpacingY + bottomPad;
+        var reachRight = commitRadius;
+        if (!settings.RotateCommitLabel)
+        {
+            reachRight = Math.Max(commitRadius, maxLabelWidth / 2);
+        }
+
+        var width = offsetX + maxRow * spacingX + reachRight + options.Padding;
+        var height = options.Padding * 2 + topPad + maxColumn * laneSpacing + bottomPad;
 
         var builder = new SvgBuilder();
         builder.Size(width, height);
 
-        var placement = new Placement(false, (row, column) => (offsetX + row * spacingX, offsetY + column * commitSpacingY));
+        var placement = new Placement(false, (row, column) => (offsetX + row * spacingX, offsetY + column * laneSpacing));
 
-        // Draw branch labels
-        foreach (var branch in computed.Branches)
+        if (settings.ShowBranches)
         {
-            var y = offsetY + branch.Column * commitSpacingY;
-            var color = branch.Color ?? branchColors[branch.Column % branchColors.Length];
-
-            builder.AddText(
-                options.Padding + 5, y, branch.Name,
-                anchor: "start",
-                baseline: "middle",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily,
-                fill: color,
-                fontWeight: "bold");
-        }
-
-        // Draw branch lines
-        foreach (var branch in computed.Branches)
-        {
-            if (branch.Commits.Count == 0)
+            // Draw branch labels
+            foreach (var branch in computed.Branches)
             {
-                continue;
+                var y = offsetY + branch.Column * laneSpacing;
+
+                builder.AddText(
+                    options.Padding + 5, y, branch.Name,
+                    anchor: "start",
+                    baseline: "middle",
+                    fontSize: options.FontSize - 2,
+                    fontFamily: options.FontFamily,
+                    fill: settings.Color(branch),
+                    fontWeight: "bold");
             }
 
-            var y = offsetY + branch.Column * commitSpacingY;
-            var color = branch.Color ?? branchColors[branch.Column % branchColors.Length];
+            // Draw branch lines
+            foreach (var branch in computed.Branches)
+            {
+                if (branch.Commits.Count == 0)
+                {
+                    continue;
+                }
 
-            var firstCommit = branch.Commits.MinBy(_ => _.Row)!;
-            var lastCommit = branch.Commits.MaxBy(_ => _.Row)!;
+                var y = offsetY + branch.Column * laneSpacing;
 
-            var startX = offsetX + firstCommit.Row * spacingX;
-            var endX = offsetX + lastCommit.Row * spacingX;
+                var firstCommit = branch.Commits.MinBy(_ => _.Row)!;
+                var lastCommit = branch.Commits.MaxBy(_ => _.Row)!;
 
-            builder.AddLine(
-                startX,
-                y,
-                endX,
-                y,
-                stroke: color,
-                strokeWidth: 2);
+                var startX = offsetX + firstCommit.Row * spacingX;
+                var endX = offsetX + lastCommit.Row * spacingX;
+
+                builder.AddLine(
+                    startX,
+                    y,
+                    endX,
+                    y,
+                    stroke: settings.Color(branch),
+                    strokeWidth: 2);
+            }
         }
 
         // Draw connections between commits (parent-child relationships)
@@ -129,7 +253,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             {
                 if (computed.CommitMap.TryGetValue(parentId, out var parent))
                 {
-                    DrawConnection(builder, parent, commit, computed, placement);
+                    DrawConnection(builder, parent, commit, computed, placement, settings);
                 }
             }
         }
@@ -137,7 +261,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         // Draw commits
         foreach (var commit in computed.Commits)
         {
-            DrawCommit(builder, commit, computed, placement, options);
+            DrawCommit(builder, commit, computed, placement, options, settings);
         }
 
         return builder.Build();
@@ -149,46 +273,78 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
 
     /// <summary>
     /// The <c>TB</c> and <c>BT</c> layouts: each branch is a vertical lane with its name at the end the
-    /// history starts from, and commits step down the page (or up it, for <c>BT</c>). Captions stay
+    /// history starts from, and commits step down the page (or up it, for <c>BT</c>). Upright captions stay
     /// under their commit and tags above it, so a row is tall enough for both and a lane wide enough for
-    /// the widest of them.
+    /// the widest of them. Rotated captions run down to the left from beside the commit, so a lane is wide
+    /// enough for the longest of those instead.
     /// </summary>
-    static SvgDocument RenderVertical(ComputedGitGraph computed, bool bottomToTop, RenderOptions options)
+    static SvgDocument RenderVertical(ComputedGitGraph computed, bool bottomToTop, RenderOptions options, Settings settings)
     {
-        const double branchBand = 28;
+        var branchBand = 0.0;
+        if (settings.ShowBranches)
+        {
+            branchBand = 28;
+        }
 
         var maxRow = computed.Commits.Count > 0 ? computed.Commits.Max(_ => _.Row) : 0;
         var maxColumn = computed.Branches.Count > 0 ? computed.Branches.Max(_ => _.Column) : 0;
 
         var labelFontSize = options.FontSize - 4;
         var widest = 0.0;
+        var rotatedReach = 0.0;
         foreach (var commit in computed.Commits)
         {
-            widest = Math.Max(widest, LabelWidth(commit.DisplayLabel, labelFontSize));
+            if (settings.HasCaption(commit))
+            {
+                var labelWidth = LabelWidth(commit.DisplayLabel, labelFontSize);
+                if (settings.RotateCommitLabel)
+                {
+                    rotatedReach = Math.Max(rotatedReach, RotatedReach(labelWidth));
+                }
+                else
+                {
+                    widest = Math.Max(widest, labelWidth);
+                }
+            }
+
             if (!string.IsNullOrEmpty(commit.Tag))
             {
-                widest = Math.Max(widest, MeasureText(commit.Tag, options.FontSize - 2) + tagPadding * 2);
+                widest = Math.Max(widest, TagWidth(commit.Tag, options));
             }
         }
 
-        foreach (var branch in computed.Branches)
+        if (settings.ShowBranches)
         {
-            widest = Math.Max(widest, MeasureText(branch.Name, options.FontSize - 2) + 4);
+            foreach (var branch in computed.Branches)
+            {
+                widest = Math.Max(widest, MeasureText(branch.Name, options.FontSize - 2) + 4);
+            }
+        }
+
+        // A rotated caption starts this far left of its commit's centre.
+        var rotatedStart = 0.0;
+        if (rotatedReach > 0)
+        {
+            rotatedStart = commitRadius + rotatedSideGap + rotatedReach;
         }
 
         var hasTag = computed.Commits.Any(_ => !string.IsNullOrEmpty(_.Tag));
         var above = hasTag ? commitRadius + tagHeight + 5 : commitRadius;
-        var below = commitRadius + labelGap + labelHeight;
+        var below = commitRadius;
+        if (settings.ShowCommitLabel &&
+            !settings.RotateCommitLabel)
+        {
+            below += labelGap + labelHeight;
+        }
 
-        var laneSpacing = Math.Max(commitSpacingX, widest + labelSpacing);
+        var laneSpacing = Math.Max(
+            commitSpacingX,
+            Math.Max(widest, rotatedStart + commitRadius) + labelSpacing);
         var rowSpacing = above + below + labelSpacing;
 
-        var offsetX = options.Padding + Math.Max(commitRadius, widest / 2);
+        var offsetX = options.Padding + Math.Max(Math.Max(commitRadius, widest / 2), rotatedStart);
         var firstRowY = options.Padding + above + (bottomToTop ? 0 : branchBand);
         var lastRowY = firstRowY + maxRow * rowSpacing;
-
-        var width = offsetX * 2 + maxColumn * laneSpacing;
-        var height = lastRowY + below + options.Padding + (bottomToTop ? branchBand : 0);
 
         var placement = new Placement(
             true,
@@ -198,45 +354,67 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
                 return (offsetX + column * laneSpacing, firstRowY + step * rowSpacing);
             });
 
+        // How far down the commits and their captions reach.
+        var bottom = lastRowY + below;
+        if (settings.RotateCommitLabel)
+        {
+            foreach (var commit in computed.Commits)
+            {
+                if (settings.HasCaption(commit))
+                {
+                    var (_, y) = placement.Point(commit.Row, computed.FindBranch(commit.Branch)?.Column ?? 0);
+                    bottom = Math.Max(
+                        bottom,
+                        y + rotatedSideGap + RotatedReach(LabelWidth(commit.DisplayLabel, labelFontSize)));
+                }
+            }
+        }
+
+        var width = offsetX + maxColumn * laneSpacing + Math.Max(commitRadius, widest / 2) + options.Padding;
+        var height = bottom + options.Padding + (bottomToTop ? branchBand : 0);
+
         var builder = new SvgBuilder();
         builder.Size(width, height);
 
-        // Branch names sit where the history starts: above the lanes, or below them when it runs upwards.
-        var bandY = bottomToTop
-            ? lastRowY + below + branchBand / 2
-            : options.Padding + branchBand / 2;
-        foreach (var branch in computed.Branches)
+        if (settings.ShowBranches)
         {
-            builder.AddText(
-                offsetX + branch.Column * laneSpacing,
-                bandY,
-                branch.Name,
-                anchor: "middle",
-                baseline: "middle",
-                fontSize: options.FontSize - 2,
-                fontFamily: options.FontFamily,
-                fill: branch.Color ?? branchColors[branch.Column % branchColors.Length],
-                fontWeight: "bold");
-        }
-
-        // Draw branch lines
-        foreach (var branch in computed.Branches)
-        {
-            if (branch.Commits.Count == 0)
+            // Branch names sit where the history starts: above the lanes, or below them when it runs upwards.
+            var bandY = bottomToTop
+                ? bottom + branchBand / 2
+                : options.Padding + branchBand / 2;
+            foreach (var branch in computed.Branches)
             {
-                continue;
+                builder.AddText(
+                    offsetX + branch.Column * laneSpacing,
+                    bandY,
+                    branch.Name,
+                    anchor: "middle",
+                    baseline: "middle",
+                    fontSize: options.FontSize - 2,
+                    fontFamily: options.FontFamily,
+                    fill: settings.Color(branch),
+                    fontWeight: "bold");
             }
 
-            var (x, startY) = placement.Point(branch.Commits.Min(_ => _.Row), branch.Column);
-            var (_, endY) = placement.Point(branch.Commits.Max(_ => _.Row), branch.Column);
+            // Draw branch lines
+            foreach (var branch in computed.Branches)
+            {
+                if (branch.Commits.Count == 0)
+                {
+                    continue;
+                }
 
-            builder.AddLine(
-                x,
-                startY,
-                x,
-                endY,
-                stroke: branch.Color ?? branchColors[branch.Column % branchColors.Length],
-                strokeWidth: 2);
+                var (x, startY) = placement.Point(branch.Commits.Min(_ => _.Row), branch.Column);
+                var (_, endY) = placement.Point(branch.Commits.Max(_ => _.Row), branch.Column);
+
+                builder.AddLine(
+                    x,
+                    startY,
+                    x,
+                    endY,
+                    stroke: settings.Color(branch),
+                    strokeWidth: 2);
+            }
         }
 
         foreach (var commit in computed.Commits)
@@ -245,14 +423,14 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             {
                 if (computed.CommitMap.TryGetValue(parentId, out var parent))
                 {
-                    DrawConnection(builder, parent, commit, computed, placement);
+                    DrawConnection(builder, parent, commit, computed, placement, settings);
                 }
             }
         }
 
         foreach (var commit in computed.Commits)
         {
-            DrawCommit(builder, commit, computed, placement, options);
+            DrawCommit(builder, commit, computed, placement, options, settings);
         }
 
         return builder.Build();
@@ -263,7 +441,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         GitCommit from,
         GitCommit to,
         ComputedGitGraph graph,
-        Placement placement)
+        Placement placement,
+        Settings settings)
     {
         var fromBranch = graph.FindBranch(from.Branch);
         var toBranch = graph.FindBranch(to.Branch);
@@ -276,7 +455,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         var (fromX, fromY) = placement.Point(from.Row, fromBranch.Column);
         var (toX, toY) = placement.Point(to.Row, toBranch.Column);
 
-        var toColor = toBranch.Color ?? branchColors[toBranch.Column % branchColors.Length];
+        var toColor = settings.Color(toBranch);
 
         if (from.Branch == to.Branch)
         {
@@ -313,8 +492,13 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         builder.AddPath(path, stroke: toColor, strokeWidth: 2, fill: "none");
     }
 
-    static void DrawCommit(SvgBuilder builder, GitCommit commit, ComputedGitGraph graph,
-        Placement placement, RenderOptions options)
+    static void DrawCommit(
+        SvgBuilder builder,
+        GitCommit commit,
+        ComputedGitGraph graph,
+        Placement placement,
+        RenderOptions options,
+        Settings settings)
     {
         var branch = graph.FindBranch(commit.Branch);
         if (branch == null)
@@ -323,15 +507,18 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         }
 
         var (x, y) = placement.Point(commit.Row, branch.Column);
-        var color = branch.Color ?? branchColors[branch.Column % branchColors.Length];
+        var color = settings.Color(branch);
 
         DrawCommitGlyph(builder, commit, x, y, color);
-        DrawCommitLabel(builder, commit.DisplayLabel, x, y, options);
+        if (settings.HasCaption(commit))
+        {
+            DrawCommitLabel(builder, commit.DisplayLabel, x, y, placement.Vertical, options, settings);
+        }
 
         // Tag
         if (!string.IsNullOrEmpty(commit.Tag))
         {
-            var tagWidth = MeasureText(commit.Tag, options.FontSize - 2) + tagPadding * 2;
+            var tagWidth = TagWidth(commit.Tag, options);
             var tagX = x - tagWidth / 2;
             var tagY = y - commitRadius - tagHeight - 5;
 
@@ -341,8 +528,8 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
                 tagWidth,
                 tagHeight,
                 rx: 3,
-                fill: "#FFF9C4",
-                stroke: "#FBC02D",
+                fill: settings.Tag.Fill,
+                stroke: settings.Tag.Stroke,
                 strokeWidth: 1);
 
             builder.AddText(
@@ -353,7 +540,7 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
                 baseline: "middle",
                 fontSize: options.FontSize - 2,
                 fontFamily: options.FontFamily,
-                fill: "#333");
+                fill: settings.Tag.Text);
         }
     }
 
@@ -416,42 +603,84 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         builder.AddCircle(x, y, commitRadius, fill: fill, stroke: color, strokeWidth: 2);
     }
 
-    static void DrawCommitLabel(SvgBuilder builder, string label, double x, double y, RenderOptions options)
+    static void DrawCommitLabel(
+        SvgBuilder builder,
+        string label,
+        double x,
+        double y,
+        bool vertical,
+        RenderOptions options,
+        Settings settings)
     {
-        if (string.IsNullOrEmpty(label))
+        var fontSize = options.FontSize - 4;
+        var width = LabelWidth(label, fontSize);
+
+        if (settings.RotateCommitLabel)
         {
+            // The chip is drawn level with its right end at the origin, then turned about that end: just
+            // below the commit, or just left of it in a vertical graph.
+            var anchorX = x;
+            var anchorY = y + commitRadius + rotatedDrop;
+            if (vertical)
+            {
+                anchorX = x - commitRadius - rotatedSideGap;
+                anchorY = y + rotatedSideGap;
+            }
+
+            builder.BeginGroup(
+                cssClass: "commit-label",
+                transform: string.Create(CultureInfo.InvariantCulture, $"translate({anchorX:0.##},{anchorY:0.##}) rotate(-45)"));
+            DrawLabelChip(builder, label, -width / 2, -labelHeight / 2, width, fontSize, options, settings.Caption);
+            builder.EndGroup();
             return;
         }
 
-        var fontSize = options.FontSize - 4;
-        var width = LabelWidth(label, fontSize);
-        var top = y + commitRadius + labelGap;
+        DrawLabelChip(builder, label, x, y + commitRadius + labelGap, width, fontSize, options, settings.Caption);
+    }
 
+    // A caption chip of the given width, centred on centreX, with its top at top.
+    static void DrawLabelChip(
+        SvgBuilder builder,
+        string label,
+        double centreX,
+        double top,
+        double width,
+        double fontSize,
+        RenderOptions options,
+        Chip chip)
+    {
         builder.AddRect(
-            x - width / 2,
+            centreX - width / 2,
             top,
             width,
             labelHeight,
             rx: 3,
-            fill: "#F4F4F4",
-            stroke: "#CCC",
+            fill: chip.Fill,
+            stroke: chip.Stroke,
             strokeWidth: 1);
 
         builder.AddText(
-            x,
+            centreX,
             top + labelHeight / 2,
             label,
             anchor: "middle",
             baseline: "middle",
             fontSize: fontSize,
             fontFamily: options.FontFamily,
-            fill: "#333");
+            fill: chip.Text);
     }
 
     static double LabelWidth(string label, double fontSize) =>
         MeasureText(label, fontSize) + labelPadding * 2;
 
-    static ComputedGitGraph ComputeGraph(GitGraphModel model)
+    static double TagWidth(string tag, RenderOptions options) =>
+        MeasureText(tag, options.FontSize - 2) + tagPadding * 2;
+
+    // How far a rotated caption of the given width reaches, across and down, from where it starts.
+    static double RotatedReach(double width) =>
+        (width + labelHeight / 2) * diagonal;
+
+    static ComputedGitGraph ComputeGraph(GitGraphModel model, bool parallelCommits)
     {
         var computed = new ComputedGitGraph();
         var branchMap = new Dictionary<string, GitBranch>();
@@ -462,11 +691,16 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         var mainBranch = new GitBranch
         {
             Name = model.MainBranchName,
-            Order = model.MainBranchOrder,
-            Column = 0
+            Order = model.MainBranchOrder
         };
         branchMap[model.MainBranchName] = mainBranch;
         computed.Branches.Add(mainBranch);
+
+        // The order each branch was given, if any. The main branch always has one.
+        var givenOrders = new List<int?>
+        {
+            model.MainBranchOrder
+        };
 
         string? lastCommitId = null;
         // branch -> latest commit id
@@ -517,11 +751,11 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
                         var newBranch = new GitBranch
                         {
                             Name = branch.Name,
-                            Order = branch.BranchOrder ?? computed.Branches.Count,
-                            Column = computed.Branches.Count
+                            Order = branch.BranchOrder ?? computed.Branches.Count
                         };
                         branchMap[branch.Name] = newBranch;
                         computed.Branches.Add(newBranch);
+                        givenOrders.Add(branch.BranchOrder);
 
                         // New branch starts from current branch's head
                         if (branchHeads.TryGetValue(currentBranch, out var parentCommit))
@@ -613,10 +847,56 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
             }
         }
 
+        AssignLanes(computed.Branches, givenOrders);
+
+        if (parallelCommits)
+        {
+            // `parallelCommits`: a commit sits one step after the latest of its parents, rather than after
+            // the commit made before it, so commits as far from their parents line up.
+            foreach (var commit in computed.Commits)
+            {
+                var row = 0;
+                foreach (var parentId in commit.Parents)
+                {
+                    if (computed.CommitMap.TryGetValue(parentId, out var parent) &&
+                        parent != commit)
+                    {
+                        row = Math.Max(row, parent.Row + 1);
+                    }
+                }
+
+                commit.Row = row;
+            }
+        }
+
         return computed;
+    }
+
+    /// <summary>
+    /// Puts the branches in Mermaid's order of lanes: by the order each was given (the main branch's being
+    /// <c>mainBranchOrder</c>, 0 unless configured). One given no order sorts as if it were <c>0.i</c>, i
+    /// being its place among the branches, so those keep the order they were made in, after the main branch
+    /// and ahead of any given an order of 1 or more. Mermaid reads that place as decimals, so the tenth
+    /// branch made (<c>0.10</c>) sorts with the first (<c>0.1</c>); that is kept, to lay out as it does.
+    /// </summary>
+    static void AssignLanes(List<GitBranch> branches, List<int?> givenOrders)
+    {
+        var keys = new double[branches.Count];
+        for (var index = 0; index < branches.Count; index++)
+        {
+            keys[index] = givenOrders[index] ??
+                          double.Parse(string.Create(CultureInfo.InvariantCulture, $"0.{index}"), CultureInfo.InvariantCulture);
+        }
+
+        var lanes = Enumerable.Range(0, branches.Count)
+            .OrderBy(_ => keys[_])
+            .ToList();
+        for (var column = 0; column < lanes.Count; column++)
+        {
+            branches[lanes[column]].Column = column;
+        }
     }
 
     static double MeasureText(string text, double fontSize) =>
         text.Length * fontSize * 0.55;
-
 }

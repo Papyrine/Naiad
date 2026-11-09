@@ -1,0 +1,47 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 296 120"
+  style="max-width: 296px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <rect
+    x="20"
+    y="20"
+    width="128"
+    height="40"
+    fill="#E3F2FD"
+    stroke="#333" />
+  <text
+    x="84"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Low</text>
+  <rect
+    x="148"
+    y="20"
+    width="128"
+    height="40"
+    fill="#E8F5E9"
+    stroke="#333" />
+  <text
+    x="212"
+    y="40"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Spans a row</text>
+  <rect
+    x="20"
+    y="60"
+    width="128"
+    height="40"
+    fill="#E8F5E9"
+    stroke="#333" />
+</svg>

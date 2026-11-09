@@ -1,0 +1,171 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 271.0066 228.06"
+  style="max-width: 271.0066px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="110.95"
+    y="34"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#4CAF50">main</text>
+  <text
+    x="225.91"
+    y="34"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#2196F3">develop</text>
+  <line
+    x1="110.95"
+    y1="60"
+    x2="110.95"
+    y2="168"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <line
+    x1="225.91"
+    y1="96"
+    x2="225.91"
+    y2="96"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <path
+    d="M 110.95 60 C 110.95 78, 225.91 78, 225.91 96"
+    fill="none"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <path
+    d="M 225.91 96 C 225.91 132, 110.95 132, 110.95 168"
+    fill="none"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <circle
+    cx="110.95"
+    cy="60"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(94.95,64) rotate(-45)">
+    <rect
+      x="-98"
+      y="-8"
+      width="98"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-49"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">a long commit id</text>
+  </g>
+  <circle
+    cx="225.91"
+    cy="96"
+    r="12"
+    fill="#2196F3"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(209.91,100) rotate(-45)">
+    <rect
+      x="-98"
+      y="-8"
+      width="98"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-49"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">another long one</text>
+  </g>
+  <circle
+    cx="110.95"
+    cy="132"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(94.95,136) rotate(-45)">
+    <rect
+      x="-37.5"
+      y="-8"
+      width="37.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-18.75"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">short</text>
+  </g>
+  <circle
+    cx="110.95"
+    cy="168"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <circle
+    cx="110.95"
+    cy="168"
+    r="7"
+    fill="#fff"
+    stroke="#4CAF50"
+    stroke-width="1.5" />
+  <g
+    class="commit-label"
+    transform="translate(94.95,172) rotate(-45)">
+    <rect
+      x="-43"
+      y="-8"
+      width="43"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-21.5"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">merge3</text>
+  </g>
+</svg>
