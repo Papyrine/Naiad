@@ -95,7 +95,7 @@ class ClassParser : IDiagramParser<ClassModel>
                     {
                         Name = rest.Name ?? firstWord,
                         Type = rest.Name is null ? rest.Type : firstWord,
-                        Visibility = visibility.OrSome(Visibility.Public),
+                        Visibility = visibility.OrSome(Visibility.None),
                         IsStatic = suffix is {HasValue: true, Value: '$'}
                     });
 
@@ -119,7 +119,7 @@ class ClassParser : IDiagramParser<ClassModel>
                         name,
                         parameters,
                         returnType.OrNull(),
-                        visibility.OrSome(Visibility.Public),
+                        visibility.OrSome(Visibility.None),
                         suffix));
 
         // Class annotation: <<interface>>, <<abstract>>, or any other text, such as <<Entity>>.
@@ -578,7 +578,7 @@ class ClassParser : IDiagramParser<ClassModel>
     /// </summary>
     static IClassBodyContent ParseLooseMember(CharSpan line)
     {
-        var visibility = Visibility.Public;
+        var visibility = Visibility.None;
         if (TryGetVisibility(line[0], out var marked))
         {
             visibility = marked;

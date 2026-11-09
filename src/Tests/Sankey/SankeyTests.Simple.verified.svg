@@ -8,20 +8,20 @@
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <path
-    d="M 40 20 C 130 20 130 20 220 20 L 220 150 C 130 150 130 153.33 40 153.33 Z"
+    d="M 40 25 C 130 25 130 20 220 20 L 220 150 C 130 150 130 155 40 155 Z"
     fill="#4CAF50"
     stroke="none"
     opacity="0.45" />
   <path
-    d="M 40 153.33 C 130 153.33 130 160 220 160 L 220 420 C 130 420 130 420 40 420 Z"
+    d="M 40 155 C 130 155 130 160 220 160 L 220 420 C 130 420 130 415 40 415 Z"
     fill="#4CAF50"
     stroke="none"
     opacity="0.45" />
   <rect
     x="20"
-    y="20"
+    y="25"
     width="20"
-    height="400"
+    height="390"
     fill="#4CAF50"
     stroke="#333" />
   <text

@@ -8,40 +8,40 @@
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <path
-    d="M 40 20 C 130 20 130 20 220 20 L 220 117.5 C 130 117.5 130 120 40 120 Z"
+    d="M 40 25 C 130 25 130 20 220 20 L 220 117.5 C 130 117.5 130 122.5 40 122.5 Z"
     fill="#4CAF50"
     stroke="none"
     opacity="0.45" />
   <path
-    d="M 40 120 C 130 120 130 127.5 220 127.5 L 220 420 C 130 420 130 420 40 420 Z"
+    d="M 40 122.5 C 130 122.5 130 127.5 220 127.5 L 220 420 C 130 420 130 415 40 415 Z"
     fill="#4CAF50"
     stroke="none"
     opacity="0.45" />
   <path
-    d="M 240 127.5 C 330 127.5 330 20 420 20 L 420 205 C 330 205 330 273.75 240 273.75 Z"
+    d="M 240 127.5 C 330 127.5 330 35.5 420 35.5 L 420 181.75 C 330 181.75 330 273.75 240 273.75 Z"
     fill="#FF9800"
     stroke="none"
     opacity="0.45" />
   <path
-    d="M 240 273.75 C 330 273.75 330 215 420 215 L 420 313.67 C 330 313.67 330 351.75 240 351.75 Z"
+    d="M 240 273.75 C 330 273.75 330 207.25 420 207.25 L 420 285.25 C 330 285.25 330 351.75 240 351.75 Z"
     fill="#FF9800"
     stroke="none"
     opacity="0.45" />
   <path
-    d="M 240 351.75 C 330 351.75 330 323.67 420 323.67 L 420 373 C 330 373 330 390.75 240 390.75 Z"
+    d="M 240 351.75 C 330 351.75 330 310.75 420 310.75 L 420 349.75 C 330 349.75 330 390.75 240 390.75 Z"
     fill="#FF9800"
     stroke="none"
     opacity="0.45" />
   <path
-    d="M 240 390.75 C 330 390.75 330 383 420 383 L 420 420 C 330 420 330 420 240 420 Z"
+    d="M 240 390.75 C 330 390.75 330 375.25 420 375.25 L 420 404.5 C 330 404.5 330 420 240 420 Z"
     fill="#FF9800"
     stroke="none"
     opacity="0.45" />
   <rect
     x="20"
-    y="20"
+    y="25"
     width="20"
-    height="400"
+    height="390"
     fill="#4CAF50"
     stroke="#333" />
   <text
@@ -108,14 +108,14 @@
     fill="#666">3000</text>
   <rect
     x="420"
-    y="20"
+    y="35.5"
     width="20"
-    height="185"
+    height="146.25"
     fill="#E91E63"
     stroke="#333" />
   <text
     x="414"
-    y="106.5"
+    y="102.63"
     text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
@@ -123,7 +123,7 @@
     fill="#333">Housing</text>
   <text
     x="414"
-    y="120.5"
+    y="116.63"
     text-anchor="end"
     dominant-baseline="middle"
     font-size="11px"
@@ -131,14 +131,14 @@
     fill="#666">1500</text>
   <rect
     x="420"
-    y="215"
+    y="207.25"
     width="20"
-    height="98.67"
+    height="78"
     fill="#9C27B0"
     stroke="#333" />
   <text
     x="414"
-    y="258.33"
+    y="240.25"
     text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
@@ -146,7 +146,7 @@
     fill="#333">Food</text>
   <text
     x="414"
-    y="272.33"
+    y="254.25"
     text-anchor="end"
     dominant-baseline="middle"
     font-size="11px"
@@ -154,14 +154,14 @@
     fill="#666">800</text>
   <rect
     x="420"
-    y="323.67"
+    y="310.75"
     width="20"
-    height="49.33"
+    height="39"
     fill="#00BCD4"
     stroke="#333" />
   <text
     x="414"
-    y="342.33"
+    y="324.25"
     text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
@@ -169,7 +169,7 @@
     fill="#333">Transport</text>
   <text
     x="414"
-    y="356.33"
+    y="338.25"
     text-anchor="end"
     dominant-baseline="middle"
     font-size="11px"
@@ -177,14 +177,14 @@
     fill="#666">400</text>
   <rect
     x="420"
-    y="383"
+    y="375.25"
     width="20"
-    height="37"
+    height="29.25"
     fill="#FF5722"
     stroke="#333" />
   <text
     x="414"
-    y="395.5"
+    y="383.88"
     text-anchor="end"
     dominant-baseline="middle"
     font-size="13px"
@@ -192,7 +192,7 @@
     fill="#333">Other</text>
   <text
     x="414"
-    y="409.5"
+    y="397.88"
     text-anchor="end"
     dominant-baseline="middle"
     font-size="11px"

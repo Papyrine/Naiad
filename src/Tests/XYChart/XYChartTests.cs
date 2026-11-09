@@ -126,4 +126,34 @@ public class XYChartTests: TestBase
         await Assert.That(result.Value.YAxisLabel).IsEqualTo("Revenue");
         await Assert.That(result.Value.Series.Select(_ => string.Join(",", _.Data))).IsEquivalentTo(["1,2", "3,4"], CollectionOrdering.Matching);
     }
+
+    // An axis titled without a range was pinned to 0 to 100, so data past 100 was drawn above the plot.
+    // Mermaid spans the data instead.
+    [Test]
+    public async Task TitledAxisWithoutRange_SpansTheData()
+    {
+        var result = new XYChartParser().Parse(
+            """
+            xychart-beta
+                y-axis "Revenue"
+                bar [500, 1000]
+            """);
+
+        await Assert.That(result.Value.YAxisMin).IsNull();
+        await Assert.That(result.Value.YAxisMax).IsNull();
+    }
+
+    [Test]
+    public Task TitledAxisWithoutRange()
+    {
+        const string input =
+            """
+            xychart-beta
+                x-axis [Q1, Q2, Q3]
+                y-axis "Revenue"
+                bar [500, 750, 1000]
+            """;
+
+        return VerifySvg(input);
+    }
 }

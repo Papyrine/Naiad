@@ -1146,25 +1146,6 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                 ], fill: "#333");
                 break;
 
-            case MessageType.SolidOpen:
-            case MessageType.DottedOpen:
-                // Open arrowhead (just lines)
-                builder.AddLine(
-                    toX - direction * arrowSize,
-                    y - arrowSize / 2,
-                    toX,
-                    y,
-                    stroke: "#333",
-                    strokeWidth: 1);
-                builder.AddLine(
-                    toX - direction * arrowSize,
-                    y + arrowSize / 2,
-                    toX,
-                    y,
-                    stroke: "#333",
-                    strokeWidth: 1);
-                break;
-
             case MessageType.SolidCross:
             case MessageType.DottedCross:
                 // X mark

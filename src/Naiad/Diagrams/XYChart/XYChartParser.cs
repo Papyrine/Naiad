@@ -59,7 +59,8 @@ class XYChartParser : IDiagramParser<XYChartModel>
                 .AndSkip(CommonParsers.LineEnd)
                 .Map((label, categories) => (label: label.OrSome(""), categories));
 
-        // Y-axis: y-axis "Label" min --> max or y-axis min --> max
+        // Y-axis: y-axis "Label" min --> max or y-axis min --> max. Without a range the axis spans the
+        // data, as Mermaid's does.
         var yAxisParser =
             CommonParsers.InlineWhitespace
                 .SkipAnd(TextIgnoreCase("y-axis"))
@@ -76,8 +77,8 @@ class XYChartParser : IDiagramParser<XYChartModel>
                 .AndSkip(CommonParsers.LineEnd)
                 .Map((label, range) =>
                     (label: label.OrSome(""),
-                        min: range.HasValue ? range.Value.Item1 : 0,
-                        max: range.HasValue ? range.Value.Item2 : 100));
+                        min: range.HasValue ? range.Value.Item1 : (double?)null,
+                        max: range.HasValue ? range.Value.Item2 : (double?)null));
 
         // Data list: [100, 200, 300]. As in a category list, blanks may surround a comma and the brackets.
         var dataListParser =
@@ -173,6 +174,6 @@ class XYChartParser : IDiagramParser<XYChartModel>
     interface IXYContent;
     readonly record struct TitleItem(string Value) : IXYContent;
     readonly record struct XAxisItem(string Label, List<string> Categories) : IXYContent;
-    readonly record struct YAxisItem(string Label, double Min, double Max) : IXYContent;
+    readonly record struct YAxisItem(string Label, double? Min, double? Max) : IXYContent;
     readonly record struct SeriesItem(ChartSeries Series) : IXYContent;
 }

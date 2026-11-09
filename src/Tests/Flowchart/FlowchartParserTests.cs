@@ -482,6 +482,32 @@ public class FlowchartParserTests
         await Assert.That(result.Value.Nodes.Count).IsEqualTo(3);
     }
 
+    // Mermaid hands a node to the first subgraph to close that mentions it. A nested subgraph closes before
+    // the one around it, so it takes a node the outer one mentioned first, and a later sibling takes
+    // nothing already claimed.
+    [Test]
+    public async Task NodeMentionedInNestedSubgraph_BelongsToTheNestedOne()
+    {
+        var result = new FlowchartParser().Parse(
+            """
+            flowchart TB
+                subgraph outer
+                    A --> B
+                    subgraph inner
+                        B --> C
+                    end
+                end
+                subgraph later
+                    C --> D
+                end
+            """);
+
+        var outer = result.Value.Subgraphs[0];
+        await Assert.That(string.Join(",", outer.NodeIds)).IsEqualTo("A");
+        await Assert.That(string.Join(",", outer.NestedSubgraphs.Single().NodeIds)).IsEqualTo("B,C");
+        await Assert.That(string.Join(",", result.Value.Subgraphs[1].NodeIds)).IsEqualTo("D");
+    }
+
     [Test]
     [Arguments("A[\"Text (with) [brackets]\"]", "Text (with) [brackets]", NodeShape.Rectangle)]
     [Arguments("A(\"Round (x)\")", "Round (x)", NodeShape.RoundedRectangle)]

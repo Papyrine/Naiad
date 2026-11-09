@@ -469,28 +469,28 @@
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ ACTIVE</text>
+      font-family="Arial, sans-serif">ACTIVE</text>
     <text
       x="836.25"
       y="101.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ INACTIVE</text>
+      font-family="Arial, sans-serif">INACTIVE</text>
     <text
       x="836.25"
       y="121.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ PENDING</text>
+      font-family="Arial, sans-serif">PENDING</text>
     <text
       x="836.25"
       y="141.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ DELETED</text>
+      font-family="Arial, sans-serif">DELETED</text>
     <rect
       x="36.15"
       y="252"

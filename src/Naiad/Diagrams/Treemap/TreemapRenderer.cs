@@ -51,7 +51,6 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
                 fontWeight: "bold");
         }
 
-        // Draw treemap using squarified layout
         var x = options.Padding;
         var y = options.Padding + titleOffset;
         var colorIndex = 0;
@@ -69,40 +68,8 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
             return;
         }
 
-        var totalValue = nodes.Sum(_ => _.TotalValue);
-        if (totalValue <= 0)
+        foreach (var (node, nodeX, nodeY, nodeWidth, nodeHeight) in Squarify(nodes, x, y, width, height))
         {
-            return;
-        }
-
-        // Use slice-and-dice algorithm based on depth
-        var horizontal = depth % 2 == 0;
-        var currentPos = horizontal ? x : y;
-        var totalSize = horizontal ? width : height;
-
-        foreach (var node in nodes)
-        {
-            var ratio = node.TotalValue / totalValue;
-            var nodeSize = totalSize * ratio;
-
-            double nodeX, nodeY, nodeWidth, nodeHeight;
-            if (horizontal)
-            {
-                nodeX = currentPos;
-                nodeY = y;
-                nodeWidth = nodeSize;
-                nodeHeight = height;
-                currentPos += nodeSize;
-            }
-            else
-            {
-                nodeX = x;
-                nodeY = currentPos;
-                nodeWidth = width;
-                nodeHeight = nodeSize;
-                currentPos += nodeSize;
-            }
-
             if (nodeWidth < 2 || nodeHeight < 2)
             {
                 continue;
@@ -122,6 +89,96 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
                 DrawParentNode(builder, node, nodeX, nodeY, nodeWidth, nodeHeight, color, depth, ref colorIndex, options);
             }
         }
+    }
+
+    // d3's default target aspect ratio for a squarified treemap.
+    static readonly double goldenRatio = (1 + Math.Sqrt(5)) / 2;
+
+    /// <summary>
+    /// Divides a rectangle among the nodes in proportion to their values with the squarified algorithm
+    /// (Bruls, Huizing and van Wijk), as d3's treemapSquarify does for Mermaid. Largest first, nodes are
+    /// laid in rows along the rectangle's shorter side, and a row takes another node only while that keeps
+    /// its cells closer to the golden ratio, so cells stay near square rather than becoming slivers.
+    /// </summary>
+    static List<(TreemapNode node, double x, double y, double width, double height)> Squarify(
+        List<TreemapNode> nodes, double x, double y, double width, double height)
+    {
+        var sorted = nodes
+            .Where(_ => _.TotalValue > 0)
+            .OrderByDescending(_ => _.TotalValue)
+            .ToList();
+        var cells = new List<(TreemapNode, double, double, double, double)>(sorted.Count);
+
+        var remaining = sorted.Sum(_ => _.TotalValue);
+        var x1 = x + width;
+        var y1 = y + height;
+        var start = 0;
+
+        while (start < sorted.Count)
+        {
+            var dx = x1 - x;
+            var dy = y1 - y;
+            var alpha = Math.Max(dy / dx, dx / dy) / (remaining * goldenRatio);
+
+            var end = start + 1;
+            var rowValue = sorted[start].TotalValue;
+            var minValue = rowValue;
+            var maxValue = rowValue;
+            var beta = rowValue * rowValue * alpha;
+            var worstRatio = Math.Max(maxValue / beta, beta / minValue);
+
+            for (; end < sorted.Count; end++)
+            {
+                var value = sorted[end].TotalValue;
+                var newRowValue = rowValue + value;
+                beta = newRowValue * newRowValue * alpha;
+                var newWorstRatio = Math.Max(Math.Max(maxValue, value) / beta, beta / Math.Min(minValue, value));
+                if (newWorstRatio > worstRatio)
+                {
+                    break;
+                }
+
+                rowValue = newRowValue;
+                minValue = Math.Min(minValue, value);
+                maxValue = Math.Max(maxValue, value);
+                worstRatio = newWorstRatio;
+            }
+
+            // A tall rectangle takes the row as a strip across its top, a wide one as a strip down its
+            // left; the cells then divide the strip along its length.
+            var lastRow = end == sorted.Count;
+            if (dx < dy)
+            {
+                var rowBottom = lastRow ? y1 : y + dy * rowValue / remaining;
+                var cellX = x;
+                for (var i = start; i < end; i++)
+                {
+                    var cellWidth = dx * sorted[i].TotalValue / rowValue;
+                    cells.Add((sorted[i], cellX, y, cellWidth, rowBottom - y));
+                    cellX += cellWidth;
+                }
+
+                y = rowBottom;
+            }
+            else
+            {
+                var rowRight = lastRow ? x1 : x + dx * rowValue / remaining;
+                var cellY = y;
+                for (var i = start; i < end; i++)
+                {
+                    var cellHeight = dy * sorted[i].TotalValue / rowValue;
+                    cells.Add((sorted[i], x, cellY, rowRight - x, cellHeight));
+                    cellY += cellHeight;
+                }
+
+                x = rowRight;
+            }
+
+            remaining -= rowValue;
+            start = end;
+        }
+
+        return cells;
     }
 
     static void DrawLeafNode(SvgBuilder builder, TreemapNode node, double x, double y,
