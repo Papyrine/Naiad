@@ -209,6 +209,23 @@ public class ZenUMLTests : TestBase
             .IsEqualTo("_STARTER_:True,Bob:False,A:False");
     }
 
+    // The title rule came before the calls and needed only a space after its keyword, which it matches in
+    // any case, so an assignment to a variable named title, or typed Title, became the diagram's title.
+    [Test]
+    public async Task Parse_AssignmentToTitleIsACall()
+    {
+        var model = Parse(
+            """
+            zenuml
+                title Orders
+                title = A.get()
+                Title t = B.create()
+            """);
+
+        await Assert.That(model.Title).IsEqualTo("Orders");
+        await Assert.That(Describe(model.Elements)).IsEqualTo("_STARTER_->A:get()|A-->_STARTER_:title|_STARTER_->B:create()|B-->_STARTER_:t");
+    }
+
     [Test]
     public async Task Parse_NamedStarter()
     {
