@@ -1,6 +1,3 @@
-namespace Naiad;
-
-// Lays out Mermaid source: see Mermaid.Format.
 static class MermaidFormatter
 {
     const string indent = "    ";
