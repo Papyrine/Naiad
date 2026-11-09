@@ -404,7 +404,7 @@ class DagreEngine : ILayoutEngine
             {
                 var list = new List<string>();
                 CollectLeaves(cluster, list);
-                found = (list, new(list, StringComparer.Ordinal));
+                found = (list, [with(StringComparer.Ordinal), .. list]);
                 leaves[cluster.Id] = found;
             }
 

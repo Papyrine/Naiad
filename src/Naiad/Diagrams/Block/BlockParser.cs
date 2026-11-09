@@ -222,7 +222,7 @@ class BlockParser : IDiagramParser<BlockModel>
             compositeHeader
                 .And(contentItem.Many())
                 .AndSkip(compositeEnd)
-                .Map(static (header, content) => (IBlockContent?) new CompositeItem(header.OrNull(), content));
+                .Map(static IBlockContent? (header, content) => new CompositeItem(header.OrNull(), content));
 
         // `classDef` before `class`, which is the start of it. The keyword statements before a line of blocks,
         // which would otherwise read `style` as the id of one.
@@ -298,7 +298,7 @@ class BlockParser : IDiagramParser<BlockModel>
             .Map((text, head) => new LinkBody(style, head, LinkLabel(text.Span), false));
 
     // A link label written in quotes is shown without them.
-    static string? LinkLabel(ReadOnlySpan<char> text)
+    static string? LinkLabel(CharSpan text)
     {
         text = text.Trim();
         if (text.Length >= 2 &&

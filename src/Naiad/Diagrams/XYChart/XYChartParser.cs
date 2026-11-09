@@ -70,7 +70,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
                 .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(CommonParsers.LineEnd)
                 .Map(static (label, axis) =>
-                    axis.OrSome(new XAxisItem("", [], null, null)) with {Label = label.OrSome("")});
+                    axis.OrSome(new("", [], null, null)) with {Label = label.OrSome("")});
 
         // Y-axis: y-axis "Label" min --> max or y-axis min --> max. Without a range the axis spans the
         // data, as Mermaid's does.

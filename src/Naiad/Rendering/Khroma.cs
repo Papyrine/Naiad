@@ -429,8 +429,11 @@ static class Khroma
 
     static string Stringify(Channels channels)
     {
-        if (!channels.Changed &&
-            channels.Color is { } color)
+        if (channels is
+            {
+                Changed: false,
+                Color: { } color
+            })
         {
             return color;
         }

@@ -91,7 +91,10 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     {
         var (text, iconCount) = AnalyzeLabel(DisplayText(node.Label ?? node.Id));
         var textSize = MeasureText(text, fontSize);
-        return new(textSize.Width + iconCount * 20, textSize.Height);
+        return textSize with
+        {
+            Width = textSize.Width + iconCount * 20
+        };
     }
 
     // Reserve space for edge labels so the layout keeps a rank gap clear for them.

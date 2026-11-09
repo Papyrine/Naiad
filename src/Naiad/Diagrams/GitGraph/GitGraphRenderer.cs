@@ -331,8 +331,11 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
         var hasTag = computed.Commits.Any(_ => !string.IsNullOrEmpty(_.Tag));
         var above = hasTag ? commitRadius + tagHeight + 5 : commitRadius;
         var below = commitRadius;
-        if (settings.ShowCommitLabel &&
-            !settings.RotateCommitLabel)
+        if (settings is
+            {
+                ShowCommitLabel: true,
+                RotateCommitLabel: false
+            })
         {
             below += labelGap + labelHeight;
         }
