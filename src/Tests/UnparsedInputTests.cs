@@ -58,7 +58,7 @@ public class UnparsedInputTests
         gantt
         dateFormat YYYY-MM-DD
         Task A :a1, 2024-01-01, 10d
-        todayMarker off
+        not a gantt statement
         Task B :a2, after a1, 5d
         """)]
     [Arguments(
