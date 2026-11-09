@@ -253,6 +253,25 @@ public class ZenUMLTests : TestBase
                 """))
             .Throws<MermaidParseException>();
 
+    // `} else {` after a call's block was dropped without a word, and the `}` meant to close the else then
+    // closed the block around it early.
+    [Test]
+    public async Task Parse_ElseAfterACallBlock_Fails()
+    {
+        var exception = await Assert.That(() => new ZenUMLParser().Parse(
+                """
+                zenuml
+                    A.m() {
+                      B.n()
+                    } else {
+                      C.o()
+                    }
+                """))
+            .Throws<MermaidParseException>();
+
+        await Assert.That(exception!.Message).Contains("'else' does not continue the block it follows");
+    }
+
     [Test]
     public async Task DetectsType()
     {
