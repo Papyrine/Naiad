@@ -220,6 +220,21 @@ public class FlowchartParserTests
         await Assert.That(result.Value.Edges.Count).IsEqualTo(1);
     }
 
+    // The class name took any hyphen, so the dashes of a link with no space before it went into the name
+    // and what was left of the link (`>B`) failed to parse.
+    [Test]
+    [Arguments("A:::foo-->B", "foo")]
+    [Arguments("A:::foo-.->B", "foo")]
+    [Arguments("A:::my-class---B", "my-class")]
+    public async Task ClassShorthand_LeavesTheLinksDashes(string link, string className)
+    {
+        var result = new FlowchartParser().Parse($"flowchart LR\n    {link}");
+
+        await Assert.That(result.Error).IsNull();
+        await Assert.That(result.Value.Edges.Count).IsEqualTo(1);
+        await Assert.That(result.Value.Nodes[0].Classes).IsEquivalentTo([className]);
+    }
+
     [Test]
     public async Task DirectionInsideSubgraph_SetsDirectionWithoutTruncating()
     {
