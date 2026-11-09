@@ -27,6 +27,16 @@ public class ClassParserTests
         await Assert.That(result.Value.Classes[0].Members.Any(_ => _.Name == "owner")).IsTrue();
     }
 
+    // Mermaid.Render took `classDiagram-v2` for a class diagram, but the parser then rejected the `-v2`.
+    [Test]
+    public async Task V2Keyword_IsAClassDiagram()
+    {
+        var result = new ClassParser().Parse("classDiagram-v2\n    Animal <|-- Dog");
+
+        await Assert.That(result.Error).IsNull();
+        await Assert.That(result.Value.Relationships.Count).IsEqualTo(1);
+    }
+
     [Test]
     public async Task LooseMembers_KeepTheirText()
     {

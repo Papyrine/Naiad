@@ -202,6 +202,18 @@ public class FlowchartParserTests
         await Assert.That(result.Value.Nodes[0].Label).IsEqualTo("Validate");
     }
 
+    // Mermaid.Render took `flowchart-elk` for a flowchart, but the parser then rejected the `-elk`.
+    [Test]
+    [Arguments("flowchart-elk TD")]
+    [Arguments("flowchart-elk")]
+    public async Task ElkKeyword_IsAFlowchart(string header)
+    {
+        var result = new FlowchartParser().Parse($"{header}\n    A --> B");
+
+        await Assert.That(result.Error).IsNull();
+        await Assert.That(result.Value.Edges.Count).IsEqualTo(1);
+    }
+
     [Test]
     public async Task ClassShorthand_IsIgnoredButNodeKept()
     {
