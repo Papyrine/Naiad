@@ -102,13 +102,13 @@ class BlockParser : IDiagramParser<BlockModel>
                         IsSpace = !shape.HasValue && id == "space"
                     });
 
-        // Elements, separated by whitespace. A line break is whitespace too, so the elements of the lines
-        // that follow join the same list, and the list has to run to the end of the input: whatever comes
-        // after an element and is not another element fails the parse.
+        // A line of elements, separated by blanks. Each line is read on its own, so a comment, a `columns`
+        // line or any other statement may come between lines of elements.
         var elementsLineParser =
             CommonParsers.InlineWhitespace
-                .SkipAnd(Separated(CommonParsers.RequiredWhitespace, elementParser))
-                .AndSkip(CommonParsers.End)
+                .SkipAnd(Separated(Literals.AnyOf(" \t"), elementParser))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
                 .Then(static _ => _.ToList());
 
         // Skip line (comments, empty lines)
