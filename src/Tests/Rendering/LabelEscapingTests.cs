@@ -85,4 +85,27 @@ public class LabelEscapingTests
             .ToList();
         await Assert.That(injected).IsEmpty().Because(name);
     }
+
+    // XML 1.0 allows no C0 control character but tab, line feed and carriage return, not even as a
+    // character reference. Cynefin unescapes \0, \b, \f and \v into them, and they went into the text as
+    // they were, so no XML parser would read the SVG.
+    [Test]
+    public async Task ControlCharacters_AreDroppedFromText()
+    {
+        var svg = Mermaid.Render(
+            """
+            cynefin-beta
+              complex
+                "a\0b" "c\vd" "e\bf\fg"
+            """);
+
+        var texts = XDocument.Parse(svg)
+            .Descendants()
+            .Where(_ => _.Name.LocalName == "text")
+            .Select(_ => _.Value)
+            .ToList();
+        await Assert.That(texts).Contains("ab");
+        await Assert.That(texts).Contains("cd");
+        await Assert.That(texts).Contains("efg");
+    }
 }

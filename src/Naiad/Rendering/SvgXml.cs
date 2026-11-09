@@ -2,6 +2,14 @@ namespace Naiad;
 
 static class SvgXml
 {
+    // The control characters XML 1.0 does not allow anywhere, even as character references: all of C0
+    // but tab, line feed and carriage return.
+    static bool IsDisallowed(char c) =>
+        c < ' ' && c is not ('\t' or '\n' or '\r');
+
+    static readonly SearchValues<char> attributeSpecials = SearchValues.Create(
+        "&<'" + new string(Enumerable.Range(0, ' ').Select(_ => (char) _).Where(IsDisallowed).ToArray()));
+
     /// <summary>
     /// Appends <c> name='value'</c>, escaping the value. Attribute values carry user text (colours and
     /// whole declarations from <c>style</c>/<c>classDef</c>/<c>linkStyle</c>, class names, ids), so an
@@ -21,7 +29,7 @@ static class SvgXml
     /// <summary>The value escaped for a single-quoted attribute (see <see cref="AppendAttribute"/>).</summary>
     public static string EscapeAttribute(string value)
     {
-        if (value.AsSpan().IndexOfAny("&<'") < 0)
+        if (value.AsSpan().IndexOfAny(attributeSpecials) < 0)
         {
             return value;
         }
@@ -49,6 +57,8 @@ static class SvgXml
                 '\'' => "&apos;",
                 '>' when !inAttribute => "&gt;",
                 '"' when !inAttribute => "&quot;",
+                // Dropped: a document holding one is not well-formed, and no XML parser reads it.
+                _ when IsDisallowed(c) => "",
                 _ => null
             };
 
