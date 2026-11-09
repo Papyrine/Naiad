@@ -1,0 +1,267 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 397.9 305"
+  style="max-width: 397.9px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M0,0 H357.9 V98 H0 Z"
+      fill="#E3F2FD"
+      stroke="#333" />
+    <foreignObject
+      x="0"
+      y="0"
+      width="357.9"
+      height="98"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 357.9px; height: 98px;">
+        <span>
+          <p>a</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M0,106 H235.93 V204 H0 Z"
+      fill="rgba(255,255,222,0.5)"
+      stroke="#aaaa33"
+      class="composite" />
+    <path
+      d="M8,114 H113.97 V151 H8 Z"
+      fill="#E8F5E9"
+      stroke="#333" />
+    <foreignObject
+      x="8"
+      y="114"
+      width="105.97"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 105.97px; height: 37px;">
+        <span>
+          <p>h</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M121.97,114 H227.93 V151 H121.97 Z"
+      fill="#FFF3E0"
+      stroke="#333" />
+    <foreignObject
+      x="121.97"
+      y="114"
+      width="105.97"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 105.97px; height: 37px;">
+        <span>
+          <p>i</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M8,159 H113.97 V196 H8 Z"
+      fill="#F3E5F5"
+      stroke="#333" />
+    <foreignObject
+      x="8"
+      y="159"
+      width="105.97"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 105.97px; height: 37px;">
+        <span>
+          <p>j</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M121.97,159 H227.93 V196 H121.97 Z"
+      fill="#FCE4EC"
+      stroke="#333" />
+    <foreignObject
+      x="121.97"
+      y="159"
+      width="105.97"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 105.97px; height: 37px;">
+        <span>
+          <p>k</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M243.93,106 H357.9 V204 H243.93 Z"
+      fill="#E0F7FA"
+      stroke="#333" />
+    <foreignObject
+      x="243.93"
+      y="106"
+      width="113.97"
+      height="98"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 113.97px; height: 98px;">
+        <span>
+          <p>g</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M0,212 H357.9 V265 H0 Z"
+      fill="rgba(255,255,222,0.5)"
+      stroke="#aaaa33"
+      class="composite" />
+    <path
+      d="M8,220 H49.99 V257 H8 Z"
+      fill="#FFF8E1"
+      stroke="#333" />
+    <foreignObject
+      x="8"
+      y="220"
+      width="41.99"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 41.99px; height: 37px;">
+        <span>
+          <p>l</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M57.99,220 H99.97 V257 H57.99 Z"
+      fill="#F1F8E9"
+      stroke="#333" />
+    <foreignObject
+      x="57.99"
+      y="220"
+      width="41.99"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 41.99px; height: 37px;">
+        <span>
+          <p>m</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M107.97,220 H149.96 V257 H107.97 Z"
+      fill="#E3F2FD"
+      stroke="#333" />
+    <foreignObject
+      x="107.97"
+      y="220"
+      width="41.99"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 41.99px; height: 37px;">
+        <span>
+          <p>n</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M157.96,220 H199.94 V257 H157.96 Z"
+      fill="#E8F5E9"
+      stroke="#333" />
+    <foreignObject
+      x="157.96"
+      y="220"
+      width="41.99"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 41.99px; height: 37px;">
+        <span>
+          <p>o</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M207.94,220 H249.93 V257 H207.94 Z"
+      fill="#FFF3E0"
+      stroke="#333" />
+    <foreignObject
+      x="207.94"
+      y="220"
+      width="41.99"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 41.99px; height: 37px;">
+        <span>
+          <p>p</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M257.93,220 H299.91 V257 H257.93 Z"
+      fill="#F3E5F5"
+      stroke="#333" />
+    <foreignObject
+      x="257.93"
+      y="220"
+      width="41.99"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 41.99px; height: 37px;">
+        <span>
+          <p>q</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M307.91,220 H349.9 V257 H307.91 Z"
+      fill="#FCE4EC"
+      stroke="#333" />
+    <foreignObject
+      x="307.91"
+      y="220"
+      width="41.99"
+      height="37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 41.99px; height: 37px;">
+        <span>
+          <p>r</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
+</svg>
