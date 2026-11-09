@@ -20,25 +20,22 @@ class TreemapParser : IDiagramParser<TreemapModel>
             Literals.Text(":::")
                 .SkipAnd(Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-').AsString());
 
-        // Where a value or a class is left out, what comes next is neither a blank nor a colon: either
-        // of those has to lead into the value or the class. So a name takes a class only after a value
-        // (`"Name":::class` is not read), and blanks may end a line only after a class.
-        var leftOut =
-            Not(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1));
-
-        // A node with no value is given 0.
+        // A node with no value is given 0. Either part may be left out, and blanks may end any line: a
+        // value is a colon and a number, which `:::` is not, so a class straight after the name is still a
+        // class.
         var value =
             CommonParsers.InlineWhitespace
                 .SkipAnd(Literals.Char(':'))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(number)
-                .Or(leftOut.Then(0d));
+                .Optional()
+                .Then(static _ => _.HasValue ? _.Value : 0d);
 
         var cssClassName =
             CommonParsers.InlineWhitespace
                 .SkipAnd(cssClass)
-                .Then<string?>(static _ => _)
-                .Or(leftOut.Then<string?>(static _ => null));
+                .Optional()
+                .Then(static _ => _.OrNull());
 
         var nodeLineParser =
             CommonParsers.Indentation

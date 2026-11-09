@@ -1,3 +1,5 @@
+using Naiad.Diagrams.Treemap;
+
 public class TreemapTests : TestBase
 {
     [Test]
@@ -104,5 +106,23 @@ public class TreemapTests : TestBase
             """;
 
         return VerifySvg(input);
+    }
+
+    // A blank before the line end was allowed only after a class, so a trailing space after a value or a
+    // section name failed the whole diagram, and a class straight after a name was not read.
+    [Test]
+    public async Task TrailingBlanksAndClassAfterAName_AreRead()
+    {
+        var result = new TreemapParser().Parse(
+            "treemap-beta\n\"Root\":::big \n    \"Leaf 1.1\": 12 \n    \"Section 2\"\t\n        \"Leaf 2.1\" : 5 :::small  \n");
+
+        await Assert.That(result.Error).IsNull();
+        var root = result.Value.RootNodes.Single();
+        await Assert.That(root.CssClass).IsEqualTo("big");
+        await Assert.That(root.Children.Select(_ => _.Name)).IsEquivalentTo(["Leaf 1.1", "Section 2"], CollectionOrdering.Matching);
+        await Assert.That(root.Children[0].Value).IsEqualTo(12);
+        var leaf = root.Children[1].Children.Single();
+        await Assert.That(leaf.Value).IsEqualTo(5);
+        await Assert.That(leaf.CssClass).IsEqualTo("small");
     }
 }
