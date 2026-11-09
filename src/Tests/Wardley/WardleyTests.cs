@@ -111,6 +111,29 @@ public class WardleyTests : TestBase
         return VerifySvg(input);
     }
 
+    // A pipeline's parent is drawn on the top of its box, not at its own visibility. Its evolve arrow took
+    // its end height from the visibility, so it ran at a slant from the box.
+    [Test]
+    public Task PipelineParentEvolves()
+    {
+        const string input =
+            """
+            wardley-beta
+            anchor User [0.85, 0.50]
+            component Database [0.40, 0.30]
+
+            pipeline Database {
+              component "SQL DB" [0.20]
+              component "NoSQL" [0.45]
+            }
+
+            User -> Database
+            evolve Database 0.80
+            """;
+
+        return VerifySvg(input);
+    }
+
     [Test]
     public Task CustomStageWidths()
     {
