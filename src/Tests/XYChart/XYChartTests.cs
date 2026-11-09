@@ -106,4 +106,24 @@ public class XYChartTests: TestBase
 
         return VerifySvg(input);
     }
+
+    // A blank before a list's closing bracket was rejected, and an axis title with nothing after it took
+    // the line end with it, so the next line failed to parse.
+    [Test]
+    public async Task BlanksBeforeBracketsAndATitleOnItsOwn_AreRead()
+    {
+        var result = new XYChartParser().Parse(
+            """
+            xychart-beta
+                x-axis ["Jan", "Feb" ]
+                y-axis "Revenue"
+                bar [1, 2 ]
+                line [ 3, 4 ]
+            """);
+
+        await Assert.That(result.Error).IsNull();
+        await Assert.That(result.Value.XAxisCategories).IsEquivalentTo(["Jan", "Feb"], CollectionOrdering.Matching);
+        await Assert.That(result.Value.YAxisLabel).IsEqualTo("Revenue");
+        await Assert.That(result.Value.Series.Select(_ => string.Join(",", _.Data))).IsEquivalentTo(["1,2", "3,4"], CollectionOrdering.Matching);
+    }
 }
