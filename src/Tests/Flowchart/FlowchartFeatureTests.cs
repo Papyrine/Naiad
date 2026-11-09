@@ -202,6 +202,11 @@ public class FlowchartFeatureTests
     [Arguments("`snake_case_name and 2*3*4`", "snake_case_name and 234", "snake_case_name and 2<em>3</em>4")]
     [Arguments("`a < b`", "a < b", "a &lt; b")]
     [Arguments("`first\n    second`", "first<br/>second", "first<br/>second")]
+    // Markers nest. `***both***` left stray asterisks, and italics kept the other italic marker as text.
+    [Arguments("`***both***`", "both", "<strong><em>both</em></strong>")]
+    [Arguments("`*_x_*`", "x", "<em>x</em>")]
+    [Arguments("`_a *b* c_`", "a b c", "<em>a </em><em>b</em><em> c</em>")]
+    [Arguments("`**a`", "**a", "**a")]
     public async Task MarkdownLabel_PlainAndHtml(string label, string plain, string html)
     {
         await Assert.That(MarkdownLabel.IsMarkdown(label)).IsTrue();

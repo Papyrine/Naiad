@@ -70,29 +70,34 @@ static partial class MarkdownLabel
     public static List<Run> Runs(string line)
     {
         var runs = new List<Run>();
-        AddRuns(runs, line, bold: false);
+        AddRuns(runs, line, bold: false, italic: false);
         return runs;
     }
 
-    static void AddRuns(List<Run> runs, string text, bool bold)
+    // Markers nest: bold may hold italics (`**bold and _both_**`), italics may hold the other italic marker
+    // (`*_x_*`), and `***x***` is both at once.
+    static void AddRuns(List<Run> runs, string text, bool bold, bool italic)
     {
         var last = 0;
         foreach (Match match in MarkerRegex().Matches(text))
         {
             if (match.Index > last)
             {
-                runs.Add(new(text[last..match.Index], bold, false));
+                runs.Add(new(text[last..match.Index], bold, italic));
             }
 
-            if (match.Groups["bold"].Success)
+            if (match.Groups["both"].Success)
             {
-                // Bold may hold italics: **bold and _both_**
-                AddRuns(runs, match.Groups["bold"].Value, bold: true);
+                AddRuns(runs, match.Groups["both"].Value, bold: true, italic: true);
+            }
+            else if (match.Groups["bold"].Success)
+            {
+                AddRuns(runs, match.Groups["bold"].Value, bold: true, italic);
             }
             else
             {
-                var italic = match.Groups["star"].Success ? match.Groups["star"].Value : match.Groups["under"].Value;
-                runs.Add(new(italic, bold, true));
+                var inner = match.Groups["star"].Success ? match.Groups["star"].Value : match.Groups["under"].Value;
+                AddRuns(runs, inner, bold, italic: true);
             }
 
             last = match.Index + match.Length;
@@ -100,11 +105,11 @@ static partial class MarkdownLabel
 
         if (last < text.Length)
         {
-            runs.Add(new(text[last..], bold, false));
+            runs.Add(new(text[last..], bold, italic));
         }
     }
 
     // An underscore only opens or closes italics at the edge of a word, so snake_case_names are left alone.
-    [GeneratedRegex(@"\*\*(?<bold>.+?)\*\*|\*(?<star>[^*]+?)\*|(?<![\p{L}\p{N}])_(?<under>[^_]+?)_(?![\p{L}\p{N}])")]
+    [GeneratedRegex(@"\*\*\*(?<both>[^*]+?)\*\*\*|\*\*(?<bold>.+?)\*\*|\*(?<star>[^*]+?)\*|(?<![\p{L}\p{N}])_(?<under>[^_]+?)_(?![\p{L}\p{N}])")]
     private static partial Regex MarkerRegex();
 }
