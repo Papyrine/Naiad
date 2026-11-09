@@ -256,6 +256,7 @@ class ClassParser : IDiagramParser<ClassModel>
                 .SkipAnd(Literals.Text("direction"))
                 .SkipAnd(CommonParsers.RequiredWhitespace)
                 .SkipAnd(CommonParsers.DirectionParser)
+                .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(CommonParsers.LineEnd);
 
         // The rest of the line as it is read, and as the string kept from it.

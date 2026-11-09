@@ -49,6 +49,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
                         .SkipAnd(CommonParsers.RequiredWhitespace)
                         .SkipAnd(Literals.NoneOf("\r\n").AsString())
                         .Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(CommonParsers.LineEnd)
                 .Map(static (created, type, id, alias) =>
                     new Participant
@@ -143,6 +144,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
                     ))
                 .AndSkip(CommonParsers.RequiredWhitespace)
                 .And(seqIdentifier)
+                .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(CommonParsers.LineEnd)
                 .Map(static (isActivate, participantId) =>
                     new Activation
