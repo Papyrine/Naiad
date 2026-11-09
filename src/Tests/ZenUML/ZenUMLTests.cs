@@ -226,6 +226,27 @@ public class ZenUMLTests : TestBase
         await Assert.That(Describe(model.Elements)).IsEqualTo("_STARTER_->A:get()|A-->_STARTER_:title|_STARTER_->B:create()|B-->_STARTER_:t");
     }
 
+    // A return inside a fragment answers the call, but its activation runs on, so the call's block was not
+    // marked as returned, and closing it answered the call a second time with the assigned variable.
+    [Test]
+    public async Task Parse_ReturnInAFragmentAnswersTheCallOnce()
+    {
+        var model = Parse(
+            """
+            zenuml
+                r = A.m() {
+                  if(x) {
+                    return r1
+                  }
+                }
+            """);
+
+        var alt = model.Elements.OfType<Alt>().Single();
+        await Assert.That(Describe(model.Elements)).IsEqualTo("_STARTER_->A:m()+");
+        await Assert.That(Describe(alt.Elements)).IsEqualTo("A-->_STARTER_:r1");
+        await Assert.That(model.Elements.OfType<Activation>().Single().IsActivate).IsFalse();
+    }
+
     [Test]
     public async Task Parse_NamedStarter()
     {

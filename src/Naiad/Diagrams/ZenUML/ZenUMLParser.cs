@@ -271,6 +271,12 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
         public SequenceElement? Fragment { get; init; }
 
         public bool Returned { get; set; }
+
+        /// <summary>
+        /// A return inside one of the block's fragments answered the call, though its activation runs on to
+        /// the end of the block.
+        /// </summary>
+        public bool Answered { get; set; }
     }
 
     sealed class ModelBuilder
@@ -468,6 +474,10 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
             {
                 Top.Returned = true;
             }
+            else
+            {
+                callFrame?.Answered = true;
+            }
         }
 
         void Open(OpenLine openLine)
@@ -541,8 +551,10 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
             if (frame.Call is { } call &&
                 !frame.Returned)
             {
-                // The block ends the call's activation, answering it if its result is kept.
-                if (call.Assignee is { } assignee)
+                // The block ends the call's activation, answering it if its result is kept and no return
+                // inside a fragment has answered it already.
+                if (call.Assignee is { } assignee &&
+                    !frame.Answered)
                 {
                     Message(frame.Current, frame.Caller!, assignee, MessageType.DottedArrow, deactivate: true);
                 }
