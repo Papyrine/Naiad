@@ -330,6 +330,27 @@ class ClassParser : IDiagramParser<ClassModel>
                 .SkipAnd(restOfLineText)
                 .SkipAnd(CommonParsers.LineEnd);
 
+        // The accessibility title and description, which change nothing that is drawn. Named before the
+        // member statement, which would otherwise read `accTitle: x` as a member of a class called accTitle.
+        var accessibilityLine =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(
+                    OneOf(Literals.Text("accTitle"), Literals.Text("accDescr"))
+                        .WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1)))
+                .SkipAnd(restOfLineText)
+                .SkipAnd(CommonParsers.LineEnd);
+
+        // `accDescr { ... }` may run over several lines.
+        var multiLineDescription =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(Literals.Text("accDescr"))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(Literals.Char('{'))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.Char('}'))
+                .SkipAnd(CommonParsers.InlineWhitespace)
+                .SkipAnd(CommonParsers.LineEnd);
+
         // Skip line (comments, empty lines)
         var skipLine =
             CommonParsers.InlineWhitespace
@@ -345,6 +366,8 @@ class ClassParser : IDiagramParser<ClassModel>
                 namespaceEndParser.Then<IClassContent?>(static _ => _),
                 annotationStatementParser.Then<IClassContent?>(static _ => _),
                 ignoredParser.Then<IClassContent?>(static _ => null),
+                multiLineDescription.Then<IClassContent?>(static _ => null),
+                accessibilityLine.Then<IClassContent?>(static _ => null),
                 memberStatementParser.Then<IClassContent?>(static _ => _),
                 skipLine.Then<IClassContent?>(static _ => null)
             );
