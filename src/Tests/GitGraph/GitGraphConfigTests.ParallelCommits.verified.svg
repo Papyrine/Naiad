@@ -1,0 +1,187 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 268.1515 212.95"
+  style="max-width: 268.1515px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="25"
+    y="45"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#4CAF50">main</text>
+  <text
+    x="25"
+    y="135"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#2196F3">develop</text>
+  <line
+    x1="116.15"
+    y1="45"
+    x2="236.15"
+    y2="45"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <line
+    x1="176.15"
+    y1="135"
+    x2="236.15"
+    y2="135"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <path
+    d="M 116.15 45 C 146.15 45, 146.15 135, 176.15 135"
+    fill="none"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <circle
+    cx="116.15"
+    cy="45"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(116.15,63) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">commit0</text>
+  </g>
+  <circle
+    cx="176.15"
+    cy="135"
+    r="12"
+    fill="#2196F3"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(176.15,153) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">commit1</text>
+  </g>
+  <circle
+    cx="236.15"
+    cy="135"
+    r="12"
+    fill="#2196F3"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(236.15,153) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">commit2</text>
+  </g>
+  <circle
+    cx="176.15"
+    cy="45"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(176.15,63) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">commit3</text>
+  </g>
+  <circle
+    cx="236.15"
+    cy="45"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(236.15,63) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">commit4</text>
+  </g>
+</svg>

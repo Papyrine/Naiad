@@ -9,10 +9,6 @@ namespace Naiad.Diagrams.TreeView;
 /// </summary>
 public class TreeViewRenderer : IDiagramRenderer<TreeViewModel>
 {
-    const double rowIndent = 10;
-    const double paddingX = 5;
-    const double paddingY = 5;
-    const double lineThickness = 1;
     const double iconSize = 14;
     const double iconGap = 4;
     const double descriptionGap = 16;
@@ -33,6 +29,18 @@ public class TreeViewRenderer : IDiagramRenderer<TreeViewModel>
 
     public SvgDocument Render(TreeViewModel model, RenderOptions options)
     {
+        // The `treeView` configuration, with Mermaid's defaults.
+        var config = model.Config;
+        var rowIndent = config.GetNumber("treeView", "rowIndent") ?? 10;
+        var paddingX = config.GetNumber("treeView", "paddingX") ?? 5;
+        var paddingY = config.GetNumber("treeView", "paddingY") ?? 5;
+        var lineThickness = config.GetNumber("treeView", "lineThickness") ?? 1;
+        var icons = new IconSettings(
+            config.GetBool("treeView", "showIcons") ?? false,
+            config.GetString("treeView", "defaultIconPack") ?? "",
+            config.GetMap("treeView", "filenameIcons"),
+            config.GetMap("treeView", "extensionIcons"));
+
         var fontSize = (double) options.FontSize;
         var rowHeight = fontSize * SvgBuilder.LineHeightFactor + paddingY * 2;
 
@@ -156,7 +164,7 @@ public class TreeViewRenderer : IDiagramRenderer<TreeViewModel>
             var x = depth * (rowIndent + paddingX);
             var y = rows.Count * rowHeight;
             var centerY = y + rowHeight / 2;
-            var icon = ResolveIcon(node);
+            var icon = ResolveIcon(node, icons);
             var iconOffset = icon is null ? 0 : iconSize + iconGap;
             var labelWidth = MeasureText(node.Name, fontSize, node.IsDirectory);
             var labelX = x + paddingX + iconOffset;
@@ -183,13 +191,79 @@ public class TreeViewRenderer : IDiagramRenderer<TreeViewModel>
         }
     }
 
+    // The `treeView` options that decide which icon a node shows.
+    sealed record IconSettings(
+        bool ShowIcons,
+        string DefaultIconPack,
+        Dictionary<string, object?>? FilenameIcons,
+        Dictionary<string, object?>? ExtensionIcons);
+
     /// <summary>
-    /// The icon a node shows. Only an explicit <c>icon()</c> draws one: Mermaid's <c>showIcons</c> option,
-    /// which gives every node a default file or folder icon, is configuration that is not read here. An
-    /// unprefixed name can only be one of the built-in icons, since there is no default icon pack either.
+    /// The icon a node shows, as Mermaid picks it. An explicit <c>icon()</c> always wins, and
+    /// <c>icon(none)</c> shows none. Otherwise only with <c>showIcons</c>: a file named in
+    /// <c>filenameIcons</c>, or whose extension is in <c>extensionIcons</c> (either may say <c>none</c>),
+    /// takes that icon, and anything else the built-in file or folder icon. An unprefixed name is a
+    /// built-in icon if there is one by that name, else one from <c>defaultIconPack</c>.
     /// </summary>
-    static string? ResolveIcon(TreeViewNode node) =>
-        node.Icon is null or "none" ? null : node.Icon;
+    static string? ResolveIcon(TreeViewNode node, IconSettings settings)
+    {
+        if (node.Icon == "none")
+        {
+            return null;
+        }
+
+        if (node.Icon is not null)
+        {
+            return QualifyIcon(node.Icon, settings);
+        }
+
+        if (!settings.ShowIcons)
+        {
+            return null;
+        }
+
+        if (!node.IsDirectory)
+        {
+            var detected = settings.FilenameIcons?.GetValueOrDefault(node.Name) as string;
+            var dot = node.Name.LastIndexOf('.');
+            if (string.IsNullOrEmpty(detected) &&
+                dot > 0)
+            {
+                var extension = node.Name[dot..].ToLowerInvariant();
+                detected = settings.ExtensionIcons?.GetValueOrDefault(extension) as string ??
+                           settings.ExtensionIcons?.GetValueOrDefault(extension[1..]) as string;
+            }
+
+            if (detected == "none")
+            {
+                return null;
+            }
+
+            if (!string.IsNullOrEmpty(detected))
+            {
+                return QualifyIcon(detected, settings);
+            }
+        }
+
+        if (node.IsDirectory)
+        {
+            return "folder";
+        }
+
+        return "file";
+    }
+
+    static string QualifyIcon(string icon, IconSettings settings)
+    {
+        if (icon.Contains(':') ||
+            icon is "file" or "folder" ||
+            settings.DefaultIconPack.Length == 0)
+        {
+            return icon;
+        }
+
+        return $"{settings.DefaultIconPack}:{icon}";
+    }
 
     static void DrawIcon(SvgBuilder builder, string icon, double x, double y, double fontSize, string fontFamily)
     {

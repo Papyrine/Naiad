@@ -359,6 +359,49 @@ public class TreeViewTests : TestBase
         return result.Value;
     }
 
+    // Mermaid's docs example: the built-in file and folder icons, which are off by default.
+    [Test]
+    public Task ShowIcons()
+    {
+        const string input =
+            """
+            ---
+            config:
+              treeView:
+                showIcons: true
+            ---
+            treeView-beta
+                src/
+                    index.js icon(none)
+                    app.ts
+                package.json
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // Deeper indentation and heavier lines.
+    [Test]
+    public Task RowIndentAndLineThickness()
+    {
+        const string input =
+            """
+            ---
+            config:
+              treeView:
+                rowIndent: 30
+                lineThickness: 3
+            ---
+            treeView-beta
+                my-project/
+                    src/
+                        index.js
+                    package.json
+            """;
+
+        return VerifySvg(input);
+    }
+
     static string Describe(TreeViewModel model) =>
         string.Join(",", model.Nodes.Select(Describe));
 

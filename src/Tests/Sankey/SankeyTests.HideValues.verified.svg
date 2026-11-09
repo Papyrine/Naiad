@@ -1,0 +1,85 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 260 440"
+  style="max-width: 260px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <path
+    d="M 40 20 C 130 20 130 20 220 20 L 220 106.67 C 130 106.67 130 106.67 40 106.67 Z"
+    fill="#4CAF50"
+    stroke="none"
+    opacity="0.45" />
+  <path
+    d="M 40 106.67 C 130 106.67 130 290 220 290 L 220 420 C 130 420 130 236.67 40 236.67 Z"
+    fill="#4CAF50"
+    stroke="none"
+    opacity="0.45" />
+  <path
+    d="M 40 246.67 C 130 246.67 130 106.67 220 106.67 L 220 280 C 130 280 130 420 40 420 Z"
+    fill="#E91E63"
+    stroke="none"
+    opacity="0.45" />
+  <rect
+    x="20"
+    y="20"
+    width="20"
+    height="216.67"
+    fill="#4CAF50"
+    stroke="#333" />
+  <text
+    x="46"
+    y="128.33"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">A</text>
+  <rect
+    x="220"
+    y="20"
+    width="20"
+    height="260"
+    fill="#2196F3"
+    stroke="#333" />
+  <text
+    x="214"
+    y="150"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">X</text>
+  <rect
+    x="220"
+    y="290"
+    width="20"
+    height="130"
+    fill="#FF9800"
+    stroke="#333" />
+  <text
+    x="214"
+    y="355"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">Y</text>
+  <rect
+    x="20"
+    y="246.67"
+    width="20"
+    height="173.33"
+    fill="#E91E63"
+    stroke="#333" />
+  <text
+    x="46"
+    y="333.33"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="13px"
+    font-family="Arial, sans-serif"
+    fill="#333">B</text>
+</svg>

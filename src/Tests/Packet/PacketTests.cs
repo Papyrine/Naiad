@@ -120,4 +120,42 @@ public class PacketTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // Mermaid's docs example: 16-bit rows, mirrored so each runs from its highest bit down to bit 0.
+    [Test]
+    public Task DescendingBitsPerRow()
+    {
+        const string input =
+            """
+            ---
+            config:
+              packet:
+                showBits: true
+                bitOrder: descending
+                bitsPerRow: 16
+            ---
+            packet
+            0-7: "DATA"
+            8-11: "TYPE"
+            12: "EN"
+            13-15: "RESERVED"
+            16-23: "NEXT"
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public Task HideBits()
+    {
+        const string input =
+            """
+            %%{init: {"packet": {"showBits": false, "bitsPerRow": 8}}}%%
+            packet
+            0-3: "Low"
+            4-11: "Spans a row"
+            """;
+
+        return VerifySvg(input);
+    }
 }

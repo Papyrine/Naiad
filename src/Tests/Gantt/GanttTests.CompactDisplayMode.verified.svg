@@ -1,0 +1,293 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1410 200"
+  style="max-width: 1410px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="705"
+    y="35"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="16px"
+    font-family="Arial, sans-serif">A Gantt Diagram</text>
+  <line
+    x1="170"
+    y1="85"
+    x2="1390"
+    y2="85"
+    stroke="#333" />
+  <line
+    x1="170"
+    y1="80"
+    x2="170"
+    y2="85"
+    stroke="#333" />
+  <text
+    x="170"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">01/01</text>
+  <line
+    x1="310"
+    y1="80"
+    x2="310"
+    y2="85"
+    stroke="#333" />
+  <text
+    x="310"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">01/08</text>
+  <line
+    x1="450"
+    y1="80"
+    x2="450"
+    y2="85"
+    stroke="#333" />
+  <text
+    x="450"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">01/15</text>
+  <line
+    x1="590"
+    y1="80"
+    x2="590"
+    y2="85"
+    stroke="#333" />
+  <text
+    x="590"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">01/22</text>
+  <line
+    x1="730"
+    y1="80"
+    x2="730"
+    y2="85"
+    stroke="#333" />
+  <text
+    x="730"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">01/29</text>
+  <line
+    x1="870"
+    y1="80"
+    x2="870"
+    y2="85"
+    stroke="#333" />
+  <text
+    x="870"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">02/05</text>
+  <line
+    x1="1010"
+    y1="80"
+    x2="1010"
+    y2="85"
+    stroke="#333" />
+  <text
+    x="1010"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">02/12</text>
+  <line
+    x1="1150"
+    y1="80"
+    x2="1150"
+    y2="85"
+    stroke="#333" />
+  <text
+    x="1150"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">02/19</text>
+  <line
+    x1="1290"
+    y1="80"
+    x2="1290"
+    y2="85"
+    stroke="#333" />
+  <text
+    x="1290"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">02/26</text>
+  <line
+    x1="170"
+    y1="90"
+    x2="170"
+    y2="180"
+    stroke="#ddd" />
+  <line
+    x1="270"
+    y1="90"
+    x2="270"
+    y2="180"
+    stroke="#ddd" />
+  <line
+    x1="410"
+    y1="90"
+    x2="410"
+    y2="180"
+    stroke="#ddd" />
+  <line
+    x1="550"
+    y1="90"
+    x2="550"
+    y2="180"
+    stroke="#ddd" />
+  <line
+    x1="690"
+    y1="90"
+    x2="690"
+    y2="180"
+    stroke="#ddd" />
+  <line
+    x1="830"
+    y1="90"
+    x2="830"
+    y2="180"
+    stroke="#ddd" />
+  <line
+    x1="970"
+    y1="90"
+    x2="970"
+    y2="180"
+    stroke="#ddd" />
+  <line
+    x1="1110"
+    y1="90"
+    x2="1110"
+    y2="180"
+    stroke="#ddd" />
+  <line
+    x1="1250"
+    y1="90"
+    x2="1250"
+    y2="180"
+    stroke="#ddd" />
+  <line
+    x1="170"
+    y1="90"
+    x2="1390"
+    y2="90"
+    stroke="#eee" />
+  <line
+    x1="170"
+    y1="120"
+    x2="1390"
+    y2="120"
+    stroke="#eee" />
+  <line
+    x1="170"
+    y1="150"
+    x2="1390"
+    y2="150"
+    stroke="#eee" />
+  <line
+    x1="170"
+    y1="180"
+    x2="1390"
+    y2="180"
+    stroke="#eee" />
+  <rect
+    x="20"
+    y="90"
+    width="1370"
+    height="25"
+    fill="#ECECFF"
+    stroke="none" />
+  <text
+    x="30"
+    y="102.5"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">Section</text>
+  <rect
+    x="170"
+    y="125"
+    width="600"
+    height="20"
+    rx="3"
+    ry="3"
+    fill="#4CAF50"
+    stroke="#333" />
+  <text
+    x="470"
+    y="135"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">A task</text>
+  <rect
+    x="550"
+    y="155"
+    width="500"
+    height="20"
+    rx="3"
+    ry="3"
+    fill="#4CAF50"
+    stroke="#333" />
+  <text
+    x="800"
+    y="165"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">Another task</text>
+  <rect
+    x="970"
+    y="125"
+    width="400"
+    height="20"
+    rx="3"
+    ry="3"
+    fill="#4CAF50"
+    stroke="#333" />
+  <text
+    x="1170"
+    y="135"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">Another one</text>
+</svg>

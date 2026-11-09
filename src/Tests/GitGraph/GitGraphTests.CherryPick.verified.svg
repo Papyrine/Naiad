@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 375.25 149"
-  style="max-width: 375.25px;"
+  viewBox="0 0 252.5952 197.4"
+  style="max-width: 252.5952px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -18,7 +18,7 @@
     fill="#4CAF50">main</text>
   <text
     x="25"
-    y="95"
+    y="135"
     text-anchor="start"
     dominant-baseline="middle"
     font-size="12px"
@@ -26,111 +26,123 @@
     font-weight="bold"
     fill="#2196F3">develop</text>
   <line
-    x1="100"
+    x1="100.6"
     y1="45"
-    x2="309"
+    x2="220.6"
     y2="45"
     stroke="#4CAF50"
     stroke-width="2" />
   <line
-    x1="204.5"
-    y1="95"
-    x2="204.5"
-    y2="95"
+    x1="160.6"
+    y1="135"
+    x2="160.6"
+    y2="135"
     stroke="#2196F3"
     stroke-width="2" />
   <path
-    d="M 100 45 C 152.25 45, 152.25 95, 204.5 95"
+    d="M 100.6 45 C 130.6 45, 130.6 135, 160.6 135"
     fill="none"
     stroke="#2196F3"
     stroke-width="2" />
   <path
-    d="M 204.5 95 C 256.75 95, 256.75 45, 309 45"
+    d="M 160.6 135 C 190.6 135, 190.6 45, 220.6 45"
     fill="none"
     stroke="#4CAF50"
     stroke-width="2" />
   <circle
-    cx="100"
+    cx="100.6"
     cy="45"
     r="12"
     fill="#4CAF50"
     stroke="#4CAF50"
     stroke-width="2" />
-  <rect
-    x="86.75"
-    y="63"
-    width="26.5"
-    height="16"
-    rx="3"
-    ry="3"
-    fill="#F4F4F4"
-    stroke="#CCC" />
-  <text
-    x="100"
-    y="71"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="10px"
-    font-family="Arial, sans-serif"
-    fill="#333">one</text>
+  <g
+    class="commit-label"
+    transform="translate(100.6,63) rotate(-45)">
+    <rect
+      x="-26.5"
+      y="-8"
+      width="26.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-13.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">one</text>
+  </g>
   <circle
-    cx="204.5"
-    cy="95"
+    cx="160.6"
+    cy="135"
     r="12"
     fill="#2196F3"
     stroke="#2196F3"
     stroke-width="2" />
-  <rect
-    x="191.25"
-    y="113"
-    width="26.5"
-    height="16"
-    rx="3"
-    ry="3"
-    fill="#F4F4F4"
-    stroke="#CCC" />
-  <text
-    x="204.5"
-    y="121"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="10px"
-    font-family="Arial, sans-serif"
-    fill="#333">two</text>
+  <g
+    class="commit-label"
+    transform="translate(160.6,153) rotate(-45)">
+    <rect
+      x="-26.5"
+      y="-8"
+      width="26.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-13.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">two</text>
+  </g>
   <circle
-    cx="309"
+    cx="220.6"
     cy="45"
     r="12"
     fill="#fff"
     stroke="#4CAF50"
     stroke-width="2" />
   <circle
-    cx="305"
+    cx="216.6"
     cy="47"
     r="3.5"
     fill="#4CAF50"
     stroke="#4CAF50" />
   <circle
-    cx="313"
+    cx="224.6"
     cy="47"
     r="3.5"
     fill="#4CAF50"
     stroke="#4CAF50" />
-  <rect
-    x="262.75"
-    y="63"
-    width="92.5"
-    height="16"
-    rx="3"
-    ry="3"
-    fill="#F4F4F4"
-    stroke="#CCC" />
-  <text
-    x="309"
-    y="71"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="10px"
-    font-family="Arial, sans-serif"
-    fill="#333">cherry-pick:two</text>
+  <g
+    class="commit-label"
+    transform="translate(220.6,63) rotate(-45)">
+    <rect
+      x="-92.5"
+      y="-8"
+      width="92.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-46.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">cherry-pick:two</text>
+  </g>
 </svg>

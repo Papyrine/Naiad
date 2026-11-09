@@ -1,0 +1,213 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 552 140"
+  style="max-width: 552px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="516"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">0</text>
+  <text
+    x="484"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">1</text>
+  <text
+    x="452"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">2</text>
+  <text
+    x="420"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">3</text>
+  <text
+    x="388"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">4</text>
+  <text
+    x="356"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">5</text>
+  <text
+    x="324"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">6</text>
+  <text
+    x="292"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">7</text>
+  <text
+    x="260"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">8</text>
+  <text
+    x="228"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">9</text>
+  <text
+    x="196"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">10</text>
+  <text
+    x="164"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">11</text>
+  <text
+    x="132"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">12</text>
+  <text
+    x="100"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">13</text>
+  <text
+    x="68"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">14</text>
+  <text
+    x="36"
+    y="30"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#666">15</text>
+  <rect
+    x="276"
+    y="40"
+    width="256"
+    height="40"
+    fill="#E3F2FD"
+    stroke="#333" />
+  <text
+    x="404"
+    y="60"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">DATA</text>
+  <rect
+    x="148"
+    y="40"
+    width="128"
+    height="40"
+    fill="#E8F5E9"
+    stroke="#333" />
+  <text
+    x="212"
+    y="60"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">TYPE</text>
+  <rect
+    x="116"
+    y="40"
+    width="32"
+    height="40"
+    fill="#FFF3E0"
+    stroke="#333" />
+  <text
+    x="132"
+    y="60"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">EN</text>
+  <rect
+    x="20"
+    y="40"
+    width="96"
+    height="40"
+    fill="#F3E5F5"
+    stroke="#333" />
+  <text
+    x="68"
+    y="60"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">RESERVED</text>
+  <rect
+    x="276"
+    y="80"
+    width="256"
+    height="40"
+    fill="#FCE4EC"
+    stroke="#333" />
+  <text
+    x="404"
+    y="100"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">NEXT</text>
+</svg>

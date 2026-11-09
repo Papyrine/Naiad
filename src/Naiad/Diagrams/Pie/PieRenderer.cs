@@ -33,6 +33,21 @@ public class PieRenderer : IDiagramRenderer<PieModel>
 
     public SvgDocument Render(PieModel model, RenderOptions options)
     {
+        // `pie.donutHole` cuts a hole of that share of the radius out of the middle; Mermaid takes it only
+        // between 0 and 0.9. `pie.textPosition` places the percentages from the centre (0) to the rim (1).
+        var donutHole = model.Config.GetNumber("pie", "donutHole") ?? 0;
+        var innerRadius = 0.0;
+        if (donutHole is > 0 and <= 0.9)
+        {
+            innerRadius = donutHole * radius;
+        }
+
+        var textPosition = model.Config.GetNumber("pie", "textPosition") ?? 0.75;
+
+        // A configured theme (or theme variables) gives the slices `pie1` to `pie12` and the text and
+        // strokes their pie variables; without one the default theme's colours below are used as they are.
+        var theme = MermaidTheme.From(model.Config, "pie");
+
         var total = model.Sections.Sum(_ => _.Value);
         if (total == 0)
         {
@@ -59,7 +74,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         var builder = new SvgBuilder();
         builder.Size(width, height);
         builder.DiagramType(null!, "pie");
-        builder.AddStyles(MermaidStyles.PieStyles);
+        builder.AddStyles(Styles(theme));
 
         // Empty group (Mermaid artifact)
         builder.BeginGroup();
@@ -77,12 +92,12 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         {
             var section = model.Sections[i];
             var sweepAngle = section.Value / total * 360;
-            var color = section.Color ?? defaultColors[i % defaultColors.Length];
+            var color = section.Color ?? SliceColor(theme, i);
 
             // A section with nothing in it has no slice to draw.
             if (sweepAngle > 0)
             {
-                var path = CreateMermaidArcPath(startAngle, sweepAngle);
+                var path = CreateMermaidArcPath(startAngle, sweepAngle, innerRadius);
                 builder.AddPath(path, fill: color, cssClass: "pieCircle");
             }
 
@@ -96,9 +111,8 @@ public class PieRenderer : IDiagramRenderer<PieModel>
             var sweepAngle = section.Value / total * 360;
             var percentage = (int)Math.Round(section.Value / total * 100);
 
-            // Mermaid uses a label radius factor of 0.75 (138.75 / 185)
             var midAngle = startAngle + sweepAngle / 2;
-            const double labelDist = radius * 0.75; // Exact mermaid factor
+            var labelDist = radius * textPosition;
             var labelX = labelDist * Math.Sin(ToRadians(midAngle));
             var labelY = -labelDist * Math.Cos(ToRadians(midAngle));
 
@@ -127,7 +141,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         for (var i = 0; i < model.Sections.Count; i++)
         {
             var section = model.Sections[i];
-            var colorRgb = GetRgbColor(section.Color, i);
+            var colorRgb = GetRgbColor(section.Color ?? ThemedColor(theme, i), i);
             var itemY = legendStartY + i * 22;
 
             builder.BeginGroup(cssClass: "legend", transform: $"translate(216,{itemY})");
@@ -141,14 +155,22 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         return builder.Build();
     }
 
-    static string CreateMermaidArcPath(double startAngle, double sweepAngle)
+    static string CreateMermaidArcPath(double startAngle, double sweepAngle, double innerRadius)
     {
-        // Mermaid uses: M startX,startY A r,r 0 largeArc,1 endX,endY L 0,0 Z
+        // Mermaid uses: M startX,startY A r,r 0 largeArc,1 endX,endY L 0,0 Z, or with a donut hole runs
+        // back along the inner arc instead of to the centre.
         // Angles start from top (12 o'clock) and go clockwise
         // A slice that is the whole pie starts and ends at the same point, and an arc between a point
         // and itself draws nothing. Two half circles do.
         if (sweepAngle >= 360 - 1e-9)
         {
+            if (innerRadius > 0)
+            {
+                return string.Create(
+                    CultureInfo.InvariantCulture,
+                    $"M0,-{radius}A{radius},{radius},0,1,1,0,{radius}A{radius},{radius},0,1,1,0,-{radius}M0,-{innerRadius:0.###}A{innerRadius:0.###},{innerRadius:0.###},0,1,0,0,{innerRadius:0.###}A{innerRadius:0.###},{innerRadius:0.###},0,1,0,0,-{innerRadius:0.###}Z");
+            }
+
             return string.Create(
                 CultureInfo.InvariantCulture,
                 $"M0,-{radius}A{radius},{radius},0,1,1,0,{radius}A{radius},{radius},0,1,1,0,-{radius}Z");
@@ -158,19 +180,71 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         var endRad = ToRadians(startAngle + sweepAngle);
         var largeArc = sweepAngle > 180 ? 1 : 0;
 
-        var x1 = radius * Math.Sin(startRad);
-        var y1 = -radius * Math.Cos(startRad);
-        var x2 = radius * Math.Sin(endRad);
-        var y2 = -radius * Math.Cos(endRad);
-
-        // Fix -0 to 0 (happens at 360 degree angles due to floating point)
-        if (Math.Abs(x2) < 1e-10) x2 = 0;
-        if (Math.Abs(y2) < 1e-10) y2 = 0;
+        var (x1, y1) = PointAt(radius, startRad);
+        var (x2, y2) = PointAt(radius, endRad);
 
         // Match mermaid's precision (2-3 decimal places)
-        return string.Create(
+        var outer = string.Create(
             CultureInfo.InvariantCulture,
-            $"M{Math.Round(x1, 3):0.###},{Math.Round(y1, 3):0.###}A{radius},{radius},0,{largeArc},1,{Math.Round(x2, 3):0.###},{Math.Round(y2, 3):0.###}L0,0Z");
+            $"M{x1:0.###},{y1:0.###}A{radius},{radius},0,{largeArc},1,{x2:0.###},{y2:0.###}");
+
+        if (innerRadius <= 0)
+        {
+            return outer + "L0,0Z";
+        }
+
+        var (innerX2, innerY2) = PointAt(innerRadius, endRad);
+        var (innerX1, innerY1) = PointAt(innerRadius, startRad);
+        return outer +
+               string.Create(
+                   CultureInfo.InvariantCulture,
+                   $"L{innerX2:0.###},{innerY2:0.###}A{innerRadius:0.###},{innerRadius:0.###},0,{largeArc},0,{innerX1:0.###},{innerY1:0.###}Z");
+    }
+
+    // The point at a distance from the centre and an angle clockwise from 12 o'clock, rounded as Mermaid
+    // rounds, without the -0 floating point leaves at whole turns.
+    static (double x, double y) PointAt(double distance, double radians)
+    {
+        var x = Math.Round(distance * Math.Sin(radians), 3);
+        var y = Math.Round(-distance * Math.Cos(radians), 3);
+        if (Math.Abs(x) < 1e-10)
+        {
+            x = 0;
+        }
+
+        if (Math.Abs(y) < 1e-10)
+        {
+            y = 0;
+        }
+
+        return (x, y);
+    }
+
+    // The theme's colour for the slice at an index, cycling through pie1 to pie12 as Mermaid's ordinal
+    // scale does, or null without a theme.
+    static string? ThemedColor(MermaidTheme? theme, int index) =>
+        theme?[$"pie{index % 12 + 1}"];
+
+    static string SliceColor(MermaidTheme? theme, int index) =>
+        ThemedColor(theme, index) ?? defaultColors[index % defaultColors.Length];
+
+    // Mermaid's pie styles, filled in from the theme.
+    static string Styles(MermaidTheme? theme)
+    {
+        if (theme is null)
+        {
+            return MermaidStyles.PieStyles;
+        }
+
+        const string font = "\"trebuchet ms\",verdana,arial,sans-serif";
+        return MermaidStyles.BaseStyles +
+               $$"""
+                 #naiad .pieCircle{stroke:{{theme["pieStrokeColor"]}};stroke-width:{{theme["pieStrokeWidth"]}};opacity:{{theme["pieOpacity"]}};}
+                 #naiad .pieOuterCircle{stroke:{{theme["pieOuterStrokeColor"]}};stroke-width:{{theme["pieOuterStrokeWidth"]}};fill:none;}
+                 #naiad .pieTitleText{text-anchor:middle;font-size:{{theme["pieTitleTextSize"]}};fill:{{theme["pieTitleTextColor"]}};font-family:{{font}};}
+                 #naiad .slice{font-family:{{font}};fill:{{theme["pieSectionTextColor"]}};font-size:{{theme["pieSectionTextSize"]}};}
+                 #naiad .legend text{fill:{{theme["pieLegendTextColor"]}};font-family:{{font}};font-size:{{theme["pieLegendTextSize"]}};}
+                 """;
     }
 
     static string GetRgbColor(string? color, int index)

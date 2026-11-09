@@ -6,9 +6,9 @@
 // each half (y-axis rotated), and a centred title.
 public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
 {
-    // Mermaid's quadrantChart config. The layout is a fixed 500x500 canvas, so these sizes are
-    // absolute rather than scaled by RenderOptions.
-    const double chartSize = 500;
+    // Mermaid's quadrantChart config. The layout is a 500x500 canvas unless `quadrantChart.chartWidth` or
+    // `chartHeight` says otherwise, so these sizes are absolute rather than scaled by RenderOptions.
+    const double defaultChartSize = 500;
     const double quadrantPadding = 5;
     const double titleFontSize = 20;
     const double titlePadding = 10;
@@ -32,6 +32,9 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
 
     public SvgDocument Render(QuadrantModel model, RenderOptions options)
     {
+        var chartWidth = model.Config.GetNumber("quadrantChart", "chartWidth") ?? defaultChartSize;
+        var chartHeight = model.Config.GetNumber("quadrantChart", "chartHeight") ?? defaultChartSize;
+
         var hasTitle = !string.IsNullOrEmpty(model.Title);
         var hasXAxis = !string.IsNullOrEmpty(model.XAxisLeft) || !string.IsNullOrEmpty(model.XAxisRight);
         var hasYAxis = !string.IsNullOrEmpty(model.YAxisBottom) || !string.IsNullOrEmpty(model.YAxisTop);
@@ -44,8 +47,8 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
         // y-axis labels (left) — matching Mermaid's default top-title / bottom-x / left-y placement.
         var plotLeft = quadrantPadding + yAxisSpace;
         var plotTop = quadrantPadding + titleSpace;
-        var plotRight = chartSize - quadrantPadding;
-        var plotBottom = chartSize - quadrantPadding - xAxisSpace;
+        var plotRight = chartWidth - quadrantPadding;
+        var plotBottom = chartHeight - quadrantPadding - xAxisSpace;
         var plotWidth = plotRight - plotLeft;
         var plotHeight = plotBottom - plotTop;
         var centerX = plotLeft + plotWidth / 2;
@@ -54,7 +57,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
         var halfHeight = plotHeight / 2;
 
         var builder = new SvgBuilder();
-        builder.Size(chartSize, chartSize);
+        builder.Size(chartWidth, chartHeight);
 
         // Quadrant fills (no stroke; the grid lines come from the border pass below).
         builder.AddRect(plotLeft, plotTop, halfWidth, halfHeight, fill: quadrant2Fill); // top-left
@@ -94,7 +97,7 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
         AddRotatedText(yLabelX, centerY + halfHeight / 2, model.YAxisBottom, axisLabelFontSize);
 
         // Title centred in the top gutter.
-        AddCenteredText(chartSize / 2, titlePadding + titleFontSize / 2, model.Title, titleFontSize);
+        AddCenteredText(chartWidth / 2, titlePadding + titleFontSize / 2, model.Title, titleFontSize);
 
         return builder.Build();
 
@@ -109,8 +112,8 @@ public class QuadrantRenderer : IDiagramRenderer<QuadrantModel>
 
             var half = MeasureText(text, pointLabelFontSize) / 2;
             var minX = quadrantPadding + half;
-            var maxX = chartSize - quadrantPadding - half;
-            var clampedX = maxX < minX ? chartSize / 2 : Math.Clamp(textX, minX, maxX);
+            var maxX = chartWidth - quadrantPadding - half;
+            var clampedX = maxX < minX ? chartWidth / 2 : Math.Clamp(textX, minX, maxX);
 
             AddCenteredText(clampedX, textY, text, pointLabelFontSize);
         }

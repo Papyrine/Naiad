@@ -1,0 +1,201 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 331.9515 311.06"
+  style="max-width: 331.9515px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <path
+    d="M 59.95 57 C 89.95 57, 89.95 147, 119.95 147"
+    fill="none"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <path
+    d="M 119.95 147 C 149.95 147, 149.95 237, 179.95 237"
+    fill="none"
+    stroke="#FF9800"
+    stroke-width="2" />
+  <path
+    d="M 119.95 147 C 179.95 147, 179.95 57, 239.95 57"
+    fill="none"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <path
+    d="M 119.95 147 C 209.95 147, 209.95 237, 299.95 237"
+    fill="none"
+    stroke="#FF9800"
+    stroke-width="2" />
+  <circle
+    cx="59.95"
+    cy="57"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(59.95,75) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">commit0</text>
+  </g>
+  <circle
+    cx="119.95"
+    cy="147"
+    r="12"
+    fill="#2196F3"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(119.95,165) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">commit1</text>
+  </g>
+  <circle
+    cx="179.95"
+    cy="237"
+    r="12"
+    fill="#FF9800"
+    stroke="#FF9800"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(179.95,255) rotate(-45)">
+    <rect
+      x="-26.5"
+      y="-8"
+      width="26.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-13.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">ash</text>
+  </g>
+  <rect
+    x="165.05"
+    y="200"
+    width="29.8"
+    height="20"
+    rx="3"
+    ry="3"
+    fill="#FFF9C4"
+    stroke="#FBC02D" />
+  <text
+    x="179.95"
+    y="210"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">abc</text>
+  <circle
+    cx="239.95"
+    cy="57"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <circle
+    cx="239.95"
+    cy="57"
+    r="7"
+    fill="#fff"
+    stroke="#4CAF50"
+    stroke-width="1.5" />
+  <g
+    class="commit-label"
+    transform="translate(239.95,75) rotate(-45)">
+    <rect
+      x="-43"
+      y="-8"
+      width="43"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-21.5"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">merge3</text>
+  </g>
+  <circle
+    cx="299.95"
+    cy="237"
+    r="12"
+    fill="#FF9800"
+    stroke="#FF9800"
+    stroke-width="2" />
+  <circle
+    cx="299.95"
+    cy="237"
+    r="7"
+    fill="#fff"
+    stroke="#FF9800"
+    stroke-width="1.5" />
+  <g
+    class="commit-label"
+    transform="translate(299.95,255) rotate(-45)">
+    <rect
+      x="-43"
+      y="-8"
+      width="43"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#F4F4F4"
+      stroke="#CCC" />
+    <text
+      x="-21.5"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#333">merge4</text>
+  </g>
+</svg>

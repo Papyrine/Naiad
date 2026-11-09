@@ -1,0 +1,155 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 524.2 149"
+  style="max-width: 524.2px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="25"
+    y="45"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#4CAF50">main</text>
+  <text
+    x="25"
+    y="95"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#2196F3">develop</text>
+  <line
+    x1="125.2"
+    y1="45"
+    x2="455.2"
+    y2="45"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <line
+    x1="235.2"
+    y1="95"
+    x2="235.2"
+    y2="95"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <path
+    d="M 125.2 45 C 180.2 45, 180.2 95, 235.2 95"
+    fill="none"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <path
+    d="M 235.2 95 C 345.2 95, 345.2 45, 455.2 45"
+    fill="none"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <circle
+    cx="125.2"
+    cy="45"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <rect
+    x="76.2"
+    y="63"
+    width="98"
+    height="16"
+    rx="3"
+    ry="3"
+    fill="#F4F4F4"
+    stroke="#CCC" />
+  <text
+    x="125.2"
+    y="71"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#333">a long commit id</text>
+  <circle
+    cx="235.2"
+    cy="95"
+    r="12"
+    fill="#2196F3"
+    stroke="#2196F3"
+    stroke-width="2" />
+  <rect
+    x="186.2"
+    y="113"
+    width="98"
+    height="16"
+    rx="3"
+    ry="3"
+    fill="#F4F4F4"
+    stroke="#CCC" />
+  <text
+    x="235.2"
+    y="121"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#333">another long one</text>
+  <circle
+    cx="345.2"
+    cy="45"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <rect
+    x="326.45"
+    y="63"
+    width="37.5"
+    height="16"
+    rx="3"
+    ry="3"
+    fill="#F4F4F4"
+    stroke="#CCC" />
+  <text
+    x="345.2"
+    y="71"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#333">short</text>
+  <circle
+    cx="455.2"
+    cy="45"
+    r="12"
+    fill="#4CAF50"
+    stroke="#4CAF50"
+    stroke-width="2" />
+  <circle
+    cx="455.2"
+    cy="45"
+    r="7"
+    fill="#fff"
+    stroke="#4CAF50"
+    stroke-width="1.5" />
+  <rect
+    x="433.7"
+    y="63"
+    width="43"
+    height="16"
+    rx="3"
+    ry="3"
+    fill="#F4F4F4"
+    stroke="#CCC" />
+  <text
+    x="455.2"
+    y="71"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    fill="#333">merge3</text>
+</svg>

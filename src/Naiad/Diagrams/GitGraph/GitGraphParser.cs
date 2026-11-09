@@ -1,13 +1,24 @@
-class GitGraphParser : IDiagramParser<GitGraphModel>
+// The main branch's name and place among the branches come from the `gitGraph` configuration, since
+// whether a checkout names a branch that exists depends on the name.
+class GitGraphParser(MermaidConfig config) : IDiagramParser<GitGraphModel>
 {
     static Parser<GitGraphModel> parser;
 
+    readonly string mainBranchName = config.GetString("gitGraph", "mainBranchName") ?? "main";
+    readonly int mainBranchOrder = (int) (config.GetNumber("gitGraph", "mainBranchOrder") ?? 0);
+
+    public GitGraphParser() :
+        this(MermaidConfig.Empty)
+    {
+    }
+
     static GitGraphParser()
     {
-        // Identifiers
-        var branchName =
-            Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-' || _ == '/')
-                .AsString();
+        // Identifiers. A checkout keeps where the name was, to report it if no such branch exists.
+        var branchNameSpan =
+            Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-' || _ == '/');
+
+        var branchName = branchNameSpan.AsString();
 
         var commitId =
             Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-')
@@ -94,10 +105,15 @@ class GitGraphParser : IDiagramParser<GitGraphModel>
             CommonParsers.InlineWhitespace
                 .SkipAnd(TextIgnoreCase("checkout"))
                 .SkipAnd(CommonParsers.RequiredWhitespace)
-                .SkipAnd(branchName)
+                .SkipAnd(branchNameSpan)
                 .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(CommonParsers.LineEnd)
-                .Then(static _ => new CheckoutOperation { BranchName = _ });
+                .Then(static _ =>
+                    new CheckoutOperation
+                    {
+                        BranchName = _.ToString(),
+                        Offset = _.Offset
+                    });
 
         var parseMergeAttributes =
             OneOf(
@@ -243,7 +259,42 @@ class GitGraphParser : IDiagramParser<GitGraphModel>
         return model;
     }
 
-    public DiagramParseResult<GitGraphModel> Parse(string input) => parser.ParseDiagram(input);
+    public DiagramParseResult<GitGraphModel> Parse(string input)
+    {
+        var result = parser.ParseDiagram(input);
+        if (!result.Success)
+        {
+            return result;
+        }
+
+        var model = result.Value;
+        model.MainBranchName = mainBranchName;
+        model.MainBranchOrder = mainBranchOrder;
+
+        // As in Mermaid, a checkout names a branch that exists by then: the main branch, or one an earlier
+        // `branch` made. Going on regardless put every later commit on a branch with no lane, so none of
+        // them was drawn.
+        var branches = new HashSet<string>(StringComparer.Ordinal)
+        {
+            mainBranchName
+        };
+        foreach (var operation in model.Operations)
+        {
+            switch (operation)
+            {
+                case BranchOperation branch:
+                    branches.Add(branch.Name);
+                    break;
+                case CheckoutOperation checkout when !branches.Contains(checkout.BranchName):
+                    return new(
+                        new DiagramParseContext(input).DescribeAt(
+                            checkout.Offset,
+                            $"Trying to checkout branch which is not yet created. (Help try using \"branch {checkout.BranchName}\")"));
+            }
+        }
+
+        return result;
+    }
 
     internal interface ICommitAttr;
     readonly record struct IdAttr(string Value) : ICommitAttr;

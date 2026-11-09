@@ -33,15 +33,42 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
             return emptyBuilder.Build();
         }
 
+        // `packet.bitsPerRow` sets the width of a row; `packet.bitOrder: descending` mirrors every row, so
+        // it reads from its highest bit down to its lowest as registers are drawn; `packet.showBits: false`
+        // leaves out the bit numbers.
         var bitsPerRow = model.BitsPerRow;
+        if (model.Config.GetNumber("packet", "bitsPerRow") is double configured and >= 1)
+        {
+            bitsPerRow = (int) configured;
+        }
+
+        var descending = model.Config.GetString("packet", "bitOrder") == "descending";
+        var showBits = model.Config.GetBool("packet", "showBits") ?? true;
+
+        // The column a run of bits starting at a column of the row is drawn from.
+        int Column(int firstColumn, int bits)
+        {
+            if (descending)
+            {
+                return bitsPerRow - firstColumn - bits;
+            }
+
+            return firstColumn;
+        }
+
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
+        var numbersHeight = 0.0;
+        if (showBits)
+        {
+            numbersHeight = bitNumberHeight;
+        }
 
         // Calculate total rows needed
         var maxBit = model.Fields.Max(f => f.EndBit);
         var totalRows = maxBit / bitsPerRow + 1;
 
         var width = bitsPerRow * bitWidth + options.Padding * 2;
-        var height = totalRows * rowHeight + bitNumberHeight + options.Padding * 2 + titleOffset;
+        var height = totalRows * rowHeight + numbersHeight + options.Padding * 2 + titleOffset;
 
         var builder = new SvgBuilder();
         builder.Size(width, height);
@@ -63,13 +90,13 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
         var baseY = options.Padding + titleOffset;
 
         // Draw bit numbers
-        for (var i = 0; i < bitsPerRow; i++)
+        for (var i = 0; showBits && i < bitsPerRow; i++)
         {
-            var x = options.Padding + i * bitWidth + bitWidth / 2;
+            var x = options.Padding + Column(i, 1) * bitWidth + bitWidth / 2;
             builder.AddText(
                 x,
-                baseY + bitNumberHeight / 2,
-                i.ToString(),
+                baseY + numbersHeight / 2,
+                i.ToString(CultureInfo.InvariantCulture),
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: options.FontSize - 4,
@@ -91,8 +118,8 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
                 var startCol = field.StartBit % bitsPerRow;
                 var fieldWidth = field.Width;
 
-                var x = options.Padding + startCol * bitWidth;
-                var y = baseY + bitNumberHeight + startRow * rowHeight;
+                var x = options.Padding + Column(startCol, fieldWidth) * bitWidth;
+                var y = baseY + numbersHeight + startRow * rowHeight;
 
                 builder.AddRect(
                     x,
@@ -129,8 +156,8 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
                     }
 
                     var fieldWidth = colEnd - colStart + 1;
-                    var x = options.Padding + colStart * bitWidth;
-                    var y = baseY + bitNumberHeight + row * rowHeight;
+                    var x = options.Padding + Column(colStart, fieldWidth) * bitWidth;
+                    var y = baseY + numbersHeight + row * rowHeight;
 
                     builder.AddRect(
                         x,

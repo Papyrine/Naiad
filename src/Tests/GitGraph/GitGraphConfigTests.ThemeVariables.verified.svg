@@ -1,0 +1,209 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 328.1515 314.95"
+  style="max-width: 328.1515px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="25"
+    y="57"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#ff0000">main</text>
+  <text
+    x="25"
+    y="147"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#00ff00">develop</text>
+  <text
+    x="25"
+    y="237"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#0000ff">feature</text>
+  <line
+    x1="116.15"
+    y1="57"
+    x2="296.15"
+    y2="57"
+    stroke="#ff0000"
+    stroke-width="2" />
+  <line
+    x1="176.15"
+    y1="147"
+    x2="176.15"
+    y2="147"
+    stroke="#00ff00"
+    stroke-width="2" />
+  <line
+    x1="236.15"
+    y1="237"
+    x2="236.15"
+    y2="237"
+    stroke="#0000ff"
+    stroke-width="2" />
+  <path
+    d="M 116.15 57 C 146.15 57, 146.15 147, 176.15 147"
+    fill="none"
+    stroke="#00ff00"
+    stroke-width="2" />
+  <path
+    d="M 176.15 147 C 206.15 147, 206.15 237, 236.15 237"
+    fill="none"
+    stroke="#0000ff"
+    stroke-width="2" />
+  <path
+    d="M 176.15 147 C 236.15 147, 236.15 57, 296.15 57"
+    fill="none"
+    stroke="#ff0000"
+    stroke-width="2" />
+  <circle
+    cx="116.15"
+    cy="57"
+    r="12"
+    fill="#ff0000"
+    stroke="#ff0000"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(116.15,75) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#00ff00"
+      stroke="#00ff00" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#ff0000">commit0</text>
+  </g>
+  <circle
+    cx="176.15"
+    cy="147"
+    r="12"
+    fill="#00ff00"
+    stroke="#00ff00"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(176.15,165) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#00ff00"
+      stroke="#00ff00" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#ff0000">commit1</text>
+  </g>
+  <rect
+    x="157.95"
+    y="110"
+    width="36.4"
+    height="20"
+    rx="3"
+    ry="3"
+    fill="#00ff00"
+    stroke="hsl(240, 60%, 86.2745%)" />
+  <text
+    x="176.15"
+    y="120"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#131300">v1.0</text>
+  <circle
+    cx="236.15"
+    cy="237"
+    r="12"
+    fill="#0000ff"
+    stroke="#0000ff"
+    stroke-width="2" />
+  <g
+    class="commit-label"
+    transform="translate(236.15,255) rotate(-45)">
+    <rect
+      x="-48.5"
+      y="-8"
+      width="48.5"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#00ff00"
+      stroke="#00ff00" />
+    <text
+      x="-24.25"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#ff0000">commit2</text>
+  </g>
+  <circle
+    cx="296.15"
+    cy="57"
+    r="12"
+    fill="#ff0000"
+    stroke="#ff0000"
+    stroke-width="2" />
+  <circle
+    cx="296.15"
+    cy="57"
+    r="7"
+    fill="#fff"
+    stroke="#ff0000"
+    stroke-width="1.5" />
+  <g
+    class="commit-label"
+    transform="translate(296.15,75) rotate(-45)">
+    <rect
+      x="-43"
+      y="-8"
+      width="43"
+      height="16"
+      rx="3"
+      ry="3"
+      fill="#00ff00"
+      stroke="#00ff00" />
+    <text
+      x="-21.5"
+      y="0"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="10px"
+      font-family="Arial, sans-serif"
+      fill="#ff0000">merge3</text>
+  </g>
+</svg>
