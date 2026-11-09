@@ -10,7 +10,7 @@
   <rect
     x="20"
     y="20"
-    width="157.5"
+    width="402.5"
     height="20"
     fill="#70A89F"
     stroke="#333" />
@@ -22,174 +22,9 @@
     font-size="10px"
     font-family="Arial, sans-serif"
     font-weight="bold"
-    fill="#333">Group 1</text>
-  <text
-    x="172.5"
-    y="30"
-    text-anchor="end"
-    dominant-baseline="middle"
-    font-size="10px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#333">45</text>
-  <rect
-    x="20"
-    y="40"
-    width="157.5"
-    height="75.56"
-    fill="#ffffb3"
-    stroke="#333" />
-  <text
-    x="98.75"
-    y="74.18"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="12px"
-    font-family="Arial, sans-serif"
-    fill="#333">A</text>
-  <text
-    x="98.75"
-    y="84.98"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="7.2px"
-    font-family="Arial, sans-serif"
-    fill="#666">10</text>
-  <rect
-    x="20"
-    y="115.56"
-    width="157.5"
-    height="113.33"
-    fill="#bebada"
-    stroke="#333" />
-  <text
-    x="98.75"
-    y="167.12"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="17px"
-    font-family="Arial, sans-serif"
-    fill="#333">B</text>
-  <text
-    x="98.75"
-    y="182.42"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="10.2px"
-    font-family="Arial, sans-serif"
-    fill="#666">15</text>
-  <rect
-    x="20"
-    y="228.89"
-    width="157.5"
-    height="151.11"
-    fill="#fb8072"
-    stroke="#333" />
-  <text
-    x="98.75"
-    y="297.64"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="22.67px"
-    font-family="Arial, sans-serif"
-    fill="#333">C</text>
-  <text
-    x="98.75"
-    y="318.04"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13.6px"
-    font-family="Arial, sans-serif"
-    fill="#666">20</text>
-  <rect
-    x="177.5"
-    y="20"
-    width="192.5"
-    height="20"
-    fill="#668DA8"
-    stroke="#333" />
-  <text
-    x="182.5"
-    y="30"
-    text-anchor="start"
-    dominant-baseline="middle"
-    font-size="10px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#333">Group 2</text>
-  <text
-    x="365"
-    y="30"
-    text-anchor="end"
-    dominant-baseline="middle"
-    font-size="10px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-    fill="#333">55</text>
-  <rect
-    x="177.5"
-    y="40"
-    width="192.5"
-    height="154.55"
-    fill="#fdb462"
-    stroke="#333" />
-  <text
-    x="273.75"
-    y="110.32"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="23.18px"
-    font-family="Arial, sans-serif"
-    fill="#333">D</text>
-  <text
-    x="273.75"
-    y="131.18"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="13.91px"
-    font-family="Arial, sans-serif"
-    fill="#666">25</text>
-  <rect
-    x="177.5"
-    y="194.55"
-    width="192.5"
-    height="185.45"
-    fill="#b3de69"
-    stroke="#333" />
-  <text
-    x="273.75"
-    y="278.93"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="27.82px"
-    font-family="Arial, sans-serif"
-    fill="#333">E</text>
-  <text
-    x="273.75"
-    y="303.96"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="16.69px"
-    font-family="Arial, sans-serif"
-    fill="#666">30</text>
-  <rect
-    x="370"
-    y="20"
-    width="210"
-    height="20"
-    fill="#C9A4B7"
-    stroke="#333" />
-  <text
-    x="375"
-    y="30"
-    text-anchor="start"
-    dominant-baseline="middle"
-    font-size="10px"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
     fill="#333">Group 3</text>
   <text
-    x="575"
+    x="417.5"
     y="30"
     text-anchor="end"
     dominant-baseline="middle"
@@ -198,95 +33,260 @@
     font-weight="bold"
     fill="#333">60</text>
   <rect
-    x="370"
+    x="20"
     y="40"
-    width="210"
-    height="68"
-    fill="#d9d9d9"
+    width="147.58"
+    height="167.83"
+    fill="#ffffb3"
     stroke="#333" />
   <text
-    x="475"
-    y="70.4"
+    x="93.79"
+    y="117.27"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="22.14px"
+    font-family="Arial, sans-serif"
+    fill="#333">H</text>
+  <text
+    x="93.79"
+    y="137.2"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13.28px"
+    font-family="Arial, sans-serif"
+    fill="#666">22</text>
+  <rect
+    x="167.58"
+    y="40"
+    width="201.25"
+    height="100.7"
+    fill="#bebada"
+    stroke="#333" />
+  <text
+    x="268.21"
+    y="85.82"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="15.1px"
+    font-family="Arial, sans-serif"
+    fill="#333">G</text>
+  <text
+    x="268.21"
+    y="99.41"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="9.06px"
+    font-family="Arial, sans-serif"
+    fill="#666">18</text>
+  <rect
+    x="167.58"
+    y="140.7"
+    width="201.25"
+    height="67.13"
+    fill="#fb8072"
+    stroke="#333" />
+  <text
+    x="268.21"
+    y="170.66"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
     fill="#333">F</text>
   <text
-    x="475"
-    y="81.2"
+    x="268.21"
+    y="181.46"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="7.2px"
     font-family="Arial, sans-serif"
     fill="#666">12</text>
   <rect
-    x="370"
-    y="108"
-    width="210"
-    height="102"
-    fill="#bc80bd"
+    x="368.83"
+    y="40"
+    width="53.67"
+    height="167.83"
+    fill="#80b1d3"
     stroke="#333" />
   <text
-    x="475"
-    y="154.41"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="15.3px"
-    font-family="Arial, sans-serif"
-    fill="#333">G</text>
-  <text
-    x="475"
-    y="168.18"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="9.18px"
-    font-family="Arial, sans-serif"
-    fill="#666">18</text>
-  <rect
-    x="370"
-    y="210"
-    width="210"
-    height="124.67"
-    fill="#ccebc5"
-    stroke="#333" />
-  <text
-    x="475"
-    y="266.72"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="18.7px"
-    font-family="Arial, sans-serif"
-    fill="#333">H</text>
-  <text
-    x="475"
-    y="283.55"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    font-size="11.22px"
-    font-family="Arial, sans-serif"
-    fill="#666">22</text>
-  <rect
-    x="370"
-    y="334.67"
-    width="210"
-    height="45.33"
-    fill="#ffed6f"
-    stroke="#333" />
-  <text
-    x="475"
-    y="353.73"
+    x="395.67"
+    y="120.31"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="12px"
     font-family="Arial, sans-serif"
     fill="#333">I</text>
   <text
-    x="475"
-    y="364.53"
+    x="395.67"
+    y="131.11"
     text-anchor="middle"
     dominant-baseline="middle"
     font-size="7.2px"
     font-family="Arial, sans-serif"
     fill="#666">8</text>
+  <rect
+    x="20"
+    y="207.83"
+    width="402.5"
+    height="20"
+    fill="#CA904E"
+    stroke="#333" />
+  <text
+    x="25"
+    y="217.83"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Group 2</text>
+  <text
+    x="417.5"
+    y="217.83"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">55</text>
+  <rect
+    x="20"
+    y="227.83"
+    width="219.55"
+    height="152.17"
+    fill="#b3de69"
+    stroke="#333" />
+  <text
+    x="129.77"
+    y="297.07"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="22.83px"
+    font-family="Arial, sans-serif"
+    fill="#333">E</text>
+  <text
+    x="129.77"
+    y="317.61"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13.7px"
+    font-family="Arial, sans-serif"
+    fill="#666">30</text>
+  <rect
+    x="239.55"
+    y="227.83"
+    width="182.95"
+    height="152.17"
+    fill="#fccde5"
+    stroke="#333" />
+  <text
+    x="331.02"
+    y="297.07"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="22.83px"
+    font-family="Arial, sans-serif"
+    fill="#333">D</text>
+  <text
+    x="331.02"
+    y="317.61"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13.7px"
+    font-family="Arial, sans-serif"
+    fill="#666">25</text>
+  <rect
+    x="422.5"
+    y="20"
+    width="157.5"
+    height="20"
+    fill="#ADADAD"
+    stroke="#333" />
+  <text
+    x="427.5"
+    y="30"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">Group 1</text>
+  <text
+    x="575"
+    y="30"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="10px"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    fill="#333">45</text>
+  <rect
+    x="422.5"
+    y="40"
+    width="157.5"
+    height="151.11"
+    fill="#bc80bd"
+    stroke="#333" />
+  <text
+    x="501.25"
+    y="108.76"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="22.67px"
+    font-family="Arial, sans-serif"
+    fill="#333">C</text>
+  <text
+    x="501.25"
+    y="129.16"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="13.6px"
+    font-family="Arial, sans-serif"
+    fill="#666">20</text>
+  <rect
+    x="422.5"
+    y="191.11"
+    width="94.5"
+    height="188.89"
+    fill="#ccebc5"
+    stroke="#333" />
+  <text
+    x="469.75"
+    y="281.3"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14.18px"
+    font-family="Arial, sans-serif"
+    fill="#333">B</text>
+  <text
+    x="469.75"
+    y="294.06"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="8.51px"
+    font-family="Arial, sans-serif"
+    fill="#666">15</text>
+  <rect
+    x="517"
+    y="191.11"
+    width="63"
+    height="188.89"
+    fill="#ffed6f"
+    stroke="#333" />
+  <text
+    x="548.5"
+    y="281.96"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">A</text>
+  <text
+    x="548.5"
+    y="292.76"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="7.2px"
+    font-family="Arial, sans-serif"
+    fill="#666">10</text>
 </svg>

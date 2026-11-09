@@ -338,10 +338,16 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
     {
         var allTasks = model.Sections.SelectMany(_ => _.Tasks).ToList();
         // Task ids are not guaranteed unique (a user may reuse an id, or the parser may derive the
-        // same id from repeated tokens); group so duplicates resolve to the first task instead of throwing.
-        var taskMap = allTasks.Where(_ => _.Id != null)
-            .DistinctBy(_ => _.Id!)
-            .ToDictionary(_ => _.Id!);
+        // same id from repeated tokens). As in Mermaid, whose index of tasks each later task overwrites,
+        // a reused id names the last task given it.
+        var taskMap = new Dictionary<string, GanttTask>();
+        foreach (var task in allTasks)
+        {
+            if (task.Id != null)
+            {
+                taskMap[task.Id] = task;
+            }
+        }
 
         var today = DateTime.Today;
         var placed = new HashSet<GanttTask>();

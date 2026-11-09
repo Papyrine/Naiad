@@ -79,9 +79,12 @@ public class SequenceSyntaxTests
     {
         var svg = Mermaid.Render("sequenceDiagram\n    autonumber 10 5\n    A->>B: one\n    B->>A: two\n    A->>B: three");
 
-        await Assert.That(svg).Contains(">10. one<");
-        await Assert.That(svg).Contains(">15. two<");
-        await Assert.That(svg).Contains(">20. three<");
+        // As in Mermaid, each number sits in a circle of its own and the message text is left as written.
+        await Assert.That(svg).Contains(">10<");
+        await Assert.That(svg).Contains(">15<");
+        await Assert.That(svg).Contains(">20<");
+        await Assert.That(svg).Contains(">one<");
+        await Assert.That(svg).DoesNotContain("10. one");
     }
 
     [Test]

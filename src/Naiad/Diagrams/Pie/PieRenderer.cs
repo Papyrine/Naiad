@@ -44,7 +44,7 @@ public class PieRenderer : IDiagramRenderer<PieModel>
         {
             if (model.ShowData)
             {
-                return $"{_.Label} [{(int) _.Value}]";
+                return $"{_.Label} [{_.Value.ToString(CultureInfo.InvariantCulture)}]";
             }
 
             return _.Label;

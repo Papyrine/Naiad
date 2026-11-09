@@ -50,8 +50,12 @@ public static class SvgRenderer
             var width = Double(foreignObject.Attribute("width"));
             var height = Double(foreignObject.Attribute("height"));
 
+            // A label sized on the foreignObject itself (style="font-size:12px") keeps that size; the rest
+            // take the theme's 16px.
+            var fontSize = FontSize(foreignObject) ?? 16;
+
             // One <text> per <br/>-separated line, the block centred in the box.
-            const double lineHeight = 16 * 1.2;
+            var lineHeight = fontSize * 1.2;
             var firstY = y + height / 2 - (lines.Count - 1) * lineHeight / 2;
             foreignObject.ReplaceWith(
                 lines.Select((line, index) =>
@@ -61,13 +65,24 @@ public static class SvgRenderer
                         new XAttribute("y", Format(firstY + index * lineHeight)),
                         new XAttribute("text-anchor", "middle"),
                         new XAttribute("dominant-baseline", "middle"),
-                        new XAttribute("font-size", "16px"),
+                        new XAttribute("font-size", $"{Format(fontSize)}px"),
                         new XAttribute("font-family", "trebuchet ms, verdana, arial, sans-serif"),
                         new XAttribute("fill", "#333"),
                         line)));
         }
 
         return document.ToString(SaveOptions.DisableFormatting);
+    }
+
+    static double? FontSize(XElement foreignObject)
+    {
+        var match = Regex.Match((string?) foreignObject.Attribute("style") ?? "", @"font-size:\s*([\d.]+)px");
+        if (!match.Success)
+        {
+            return null;
+        }
+
+        return double.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture);
     }
 
     // The label's text, split where its <p> holds a <br/>. A label that is all whitespace has no lines.

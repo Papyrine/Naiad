@@ -61,7 +61,7 @@
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
-    fill="#333">Id: REQ-001</text>
+    fill="#333">ID: REQ-001</text>
   <text
     x="41.08"
     y="109"
@@ -126,7 +126,7 @@
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
-    fill="#333">Id: REQ-002</text>
+    fill="#333">ID: REQ-002</text>
   <text
     x="32"
     y="305"
@@ -240,10 +240,27 @@
     y2="180"
     stroke="#666"
     stroke-width="1.5" />
-  <path
-    d="M 407.6 180 L 403.6 173.07 L 411.6 173.07 Z"
-    fill="#666"
-    stroke="none" />
+  <circle
+    cx="407.6"
+    cy="139"
+    r="9"
+    fill="#fff"
+    stroke="#666"
+    stroke-width="1.5" />
+  <line
+    x1="407.6"
+    y1="130"
+    x2="407.6"
+    y2="148"
+    stroke="#666"
+    stroke-width="1.5" />
+  <line
+    x1="416.6"
+    y1="139"
+    x2="398.6"
+    y2="139"
+    stroke="#666"
+    stroke-width="1.5" />
   <text
     x="449.9"
     y="155"
@@ -261,9 +278,10 @@
     stroke-width="1.5"
     stroke-dasharray="10,7" />
   <path
-    d="M 237.6 258.93 L 243.64 253.68 L 245.16 261.54 Z"
-    fill="#666"
-    stroke="none" />
+    d="M 247.12 251.62 L 237.6 258.93 L 249.16 262.15"
+    fill="none"
+    stroke="#666"
+    stroke-width="1.5" />
   <text
     x="278.91"
     y="231.15"
@@ -281,9 +299,10 @@
     stroke-width="1.5"
     stroke-dasharray="10,7" />
   <path
-    d="M 128.8 166 L 132.8 172.93 L 124.8 172.93 Z"
-    fill="#666"
-    stroke="none" />
+    d="M 134.17 176.73 L 128.8 166 L 123.43 176.73"
+    fill="none"
+    stroke="#666"
+    stroke-width="1.5" />
   <text
     x="89.53"
     y="191"

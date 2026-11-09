@@ -985,11 +985,46 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         }
     }
 
-    /// <summary>Number of text lines an element shows (label, optional technology, optional description).</summary>
+    /// <summary>Number of text lines an element shows (label, type and technology, optional description).</summary>
     static int ContentLineCount(C4Element element) =>
         1
-        + (string.IsNullOrEmpty(element.Technology) ? 0 : 1)
+        + (TypeLine(element) is null ? 0 : 1)
         + DescriptionLines(element).Count;
+
+    /// <summary>
+    /// The line under an element's name saying what kind of element it is, with its technology where it has
+    /// one, as Mermaid writes it: <c>[Person]</c>, <c>[Software System]</c>, <c>[Container: React]</c>. A
+    /// deployment node shows only its technology.
+    /// </summary>
+    static string? TypeLine(C4Element element)
+    {
+        var technology = string.IsNullOrEmpty(element.Technology) ? null : element.Technology;
+        var kind = element.Type switch
+        {
+            C4ElementType.Person => "Person",
+            C4ElementType.System or C4ElementType.SystemDb or C4ElementType.SystemQueue => "Software System",
+            C4ElementType.Container or C4ElementType.ContainerDb or C4ElementType.ContainerQueue => "Container",
+            C4ElementType.Component or C4ElementType.ComponentDb or C4ElementType.ComponentQueue => "Component",
+            _ => null
+        };
+
+        if (kind is null)
+        {
+            if (technology is null)
+            {
+                return null;
+            }
+
+            return $"[{technology}]";
+        }
+
+        if (technology is null)
+        {
+            return $"[{kind}]";
+        }
+
+        return $"[{kind}: {technology}]";
+    }
 
     /// <summary>
     /// The description, wrapped to the box rather than cut off at an ellipsis. Elements are a fixed
@@ -1151,7 +1186,7 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             // Center the text in the body region below the head.
             var textCenterY = (y + headRadius * 2 + (y + height)) / 2;
             var descriptionLines = DescriptionLines(element);
-            var textY = textCenterY - descriptionLines.Count * (lineHeight / 2);
+            var textY = textCenterY - (ContentLineCount(element) - 1) * (lineHeight / 2);
 
             // Label
             builder.AddText(
@@ -1164,6 +1199,21 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
                 fontFamily: options.FontFamily,
                 fill: textColor,
                 fontWeight: "bold");
+
+            // Type
+            if (TypeLine(element) is { } typeLine)
+            {
+                textY += lineHeight;
+                builder.AddText(
+                    centerX,
+                    textY,
+                    typeLine,
+                    anchor: "middle",
+                    baseline: "middle",
+                    fontSize: options.FontSize - 3,
+                    fontFamily: options.FontFamily,
+                    fill: textColor);
+            }
 
             // Description
             foreach (var line in descriptionLines)
@@ -1258,14 +1308,14 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
             fill: textColor,
             fontWeight: "bold");
 
-        // Technology
-        if (!string.IsNullOrEmpty(element.Technology))
+        // Type and technology
+        if (TypeLine(element) is { } typeLine)
         {
             textY += lineHeight;
             builder.AddText(
                 centerX,
                 textY,
-                $"[{element.Technology}]",
+                typeLine,
                 anchor: "middle",
                 baseline: "middle",
                 fontSize: options.FontSize - 3,

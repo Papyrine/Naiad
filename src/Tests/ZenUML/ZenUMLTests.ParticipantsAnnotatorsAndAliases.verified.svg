@@ -79,7 +79,7 @@
     x="70"
     y="64"
     text-anchor="middle"
-    dominant-baseline="top"
+    dominant-baseline="hanging"
     font-size="14px"
     font-family="Arial, sans-serif">Alice</text>
   <rect
@@ -142,7 +142,7 @@
     y2="134"
     stroke="#333" />
   <polygon
-    points="70,134 78,130 78,138"
+    points="70,134 79,128 74,134 79,140"
     fill="#333" />
   <text
     x="220"
@@ -158,7 +158,7 @@
     y2="184"
     stroke="#333" />
   <polygon
-    points="220,184 212,180 212,188"
+    points="220,184 211,178 216,184 211,190"
     fill="#333" />
   <text
     x="145"
@@ -201,7 +201,7 @@
     x="70"
     y="278"
     text-anchor="middle"
-    dominant-baseline="top"
+    dominant-baseline="hanging"
     font-size="14px"
     font-family="Arial, sans-serif">Alice</text>
   <rect

@@ -2,7 +2,10 @@ namespace Naiad.Diagrams.Packet;
 
 public class PacketRenderer : IDiagramRenderer<PacketModel>
 {
-    const double bitWidth = 20;
+    // Mermaid's bit width: wide enough for a three-letter flag name in a one-bit field.
+    const double bitWidth = 32;
+    const double labelPadding = 2;
+    const double minLabelFontSize = 7;
     const double rowHeight = 40;
     const double bitNumberHeight = 20;
     const double titleHeight = 40;
@@ -100,15 +103,7 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
                     stroke: "#333",
                     strokeWidth: 1);
 
-                builder.AddText(
-                    x + fieldWidth * bitWidth / 2,
-                    y + rowHeight / 2,
-                    field.Label,
-                    anchor: "middle",
-                    baseline: "middle",
-                    fontSize: options.FontSize - 2,
-                    fontFamily: options.FontFamily,
-                    fill: "#333");
+                AddLabel(builder, field.Label, x, y, fieldWidth, options);
             }
             else
             {
@@ -149,15 +144,7 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
                     // Only show label in first row
                     if (row == startRow)
                     {
-                        builder.AddText(
-                            x + fieldWidth * bitWidth / 2,
-                            y + rowHeight / 2,
-                            field.Label,
-                            anchor: "middle",
-                            baseline: "middle",
-                            fontSize: options.FontSize - 2,
-                            fontFamily: options.FontFamily,
-                            fill: "#333");
+                        AddLabel(builder, field.Label, x, y, fieldWidth, options);
                     }
                 }
             }
@@ -167,4 +154,29 @@ public class PacketRenderer : IDiagramRenderer<PacketModel>
 
         return builder.Build();
     }
+
+    // A label is shrunk to fit its field, so the names of adjacent one-bit flags do not run into each other.
+    static void AddLabel(SvgBuilder builder, string label, double x, double y, int bits, RenderOptions options)
+    {
+        var available = bits * bitWidth - labelPadding * 2;
+        var fontSize = (double) (options.FontSize - 2);
+        var width = MeasureText(label, fontSize);
+        if (width > available)
+        {
+            fontSize = Math.Max(minLabelFontSize, fontSize * available / width);
+        }
+
+        builder.AddText(
+            x + bits * bitWidth / 2,
+            y + rowHeight / 2,
+            label,
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: fontSize,
+            fontFamily: options.FontFamily,
+            fill: "#333");
+    }
+
+    static double MeasureText(string text, double fontSize) =>
+        text.Length * fontSize * 0.55;
 }

@@ -1,0 +1,53 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 277.9 124"
+  style="max-width: 277.9px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <g
+    transform="translate(0,36)">
+    <g
+      transform="translate(20,20)">
+      <path
+        d="M0,0 H237.9 V48 H0 Z"
+        fill="#ECECFF"
+        stroke="#9370DB" />
+      <foreignObject
+        x="0"
+        y="0"
+        width="237.9"
+        height="48"
+        class="nodeLabel">
+        <div
+          xmlns="http://www.w3.org/1999/xhtml"
+          style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 237.9px; height: 48px;">
+          <span>
+            <p>This is the text in the box</p>
+          </span>
+        </div>
+      </foreignObject>
+    </g>
+  </g>
+  <text
+    x="138.95"
+    y="18"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="18px"
+    font-family="Arial, sans-serif"
+    fill="#333"
+    class="diagramTitleText">Node with text</text>
+</svg>

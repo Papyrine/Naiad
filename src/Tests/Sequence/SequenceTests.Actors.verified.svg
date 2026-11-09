@@ -79,7 +79,7 @@
     x="70"
     y="64"
     text-anchor="middle"
-    dominant-baseline="top"
+    dominant-baseline="hanging"
     font-size="14px"
     font-family="Arial, sans-serif">User</text>
   <rect
@@ -179,7 +179,7 @@
     x="70"
     y="278"
     text-anchor="middle"
-    dominant-baseline="top"
+    dominant-baseline="hanging"
     font-size="14px"
     font-family="Arial, sans-serif">User</text>
   <rect

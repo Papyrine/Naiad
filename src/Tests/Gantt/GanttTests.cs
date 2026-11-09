@@ -131,7 +131,8 @@ public class GanttTests : TestBase
     public Task DuplicateIds()
     {
         // Two tasks share the id "a1"; a third depends on it via "after a1".
-        // The duplicate must not crash, and the dependency resolves to the first task with that id.
+        // The duplicate must not crash, and as in Mermaid the dependency resolves to the last task with
+        // that id, so Task C starts after Task B.
         const string input =
             """
             gantt

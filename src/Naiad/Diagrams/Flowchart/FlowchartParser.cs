@@ -626,6 +626,11 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         var subgraphStack = new Stack<Subgraph>();
         var assignedToSubgraph = new HashSet<string>();
 
+        // The node ids written directly inside each open subgraph, in order. They are handed out when the
+        // subgraph closes, as Mermaid does it: a node belongs to the first subgraph to close that mentions
+        // it, so a nested subgraph takes a node from the one around it, which closes later.
+        var mentioned = new Dictionary<Subgraph, List<string>>();
+
         // Styling is declarative (forward references allowed), so directives are collected here and
         // resolved onto nodes/subgraphs in one pass after all statements are seen.
         var classDefs = new Dictionary<string, NodeStyle>(StringComparer.Ordinal);
@@ -660,7 +665,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                     var subgraph = new Subgraph
                     {
                         Id = start.Id ?? $"subGraph{subgraphCount}",
-                        Title = start.Label ?? start.Id,
+                        Title = (start.Label ?? start.Id) is { } title ? EntityCodes.Decode(title) : null,
                         Direction = direction
                     };
                     subgraphCount++;
@@ -675,12 +680,13 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
 
                     subgraphById[subgraph.Id] = subgraph;
                     subgraphStack.Push(subgraph);
+                    mentioned[subgraph] = [];
                     break;
 
                 case SubgraphEndStatement:
                     if (subgraphStack.Count > 0)
                     {
-                        subgraphStack.Pop();
+                        CloseSubgraph(subgraphStack.Pop());
                     }
 
                     break;
@@ -748,6 +754,12 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             }
         }
 
+        // A subgraph still open at the end of the input closes there, innermost first.
+        while (subgraphStack.Count > 0)
+        {
+            CloseSubgraph(subgraphStack.Pop());
+        }
+
         InheritDirections(model.Subgraphs, model.Direction, directed);
         ApplyLinkStyles(model.Edges, linkStyles);
 
@@ -765,6 +777,16 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                      !subgraph.Classes.Contains(className))
             {
                 subgraph.Classes.Add(className);
+            }
+        }
+
+        // Entity codes (`#quot;`, `#9829;`) are decoded once a node's label is settled, whichever reference
+        // supplied it.
+        foreach (var node in model.Nodes)
+        {
+            if (node.Label is not null)
+            {
+                node.Label = EntityCodes.Decode(node.Label);
             }
         }
 
@@ -815,17 +837,29 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                 }
             }
 
-            // A node belongs to the subgraph it first appears inside,
-            // even if it was first referenced outside one.
+            // A node mentioned inside a subgraph may belong to it, even if it was first referenced outside
+            // one. Which subgraph gets it is settled when they close.
             if (subgraphStack.Count > 0)
             {
-                if (assignedToSubgraph.Add(node.Id))
+                var ids = mentioned[subgraphStack.Peek()];
+                if (!ids.Contains(node.Id))
                 {
-                    subgraphStack.Peek().NodeIds.Add(node.Id);
+                    ids.Add(node.Id);
                 }
-                else if (!subgraphStack.Peek().NodeIds.Contains(node.Id))
+            }
+        }
+
+        void CloseSubgraph(Subgraph subgraph)
+        {
+            foreach (var id in mentioned[subgraph])
+            {
+                if (assignedToSubgraph.Add(id))
                 {
-                    subgraphStack.Peek().LostMember = true;
+                    subgraph.NodeIds.Add(id);
+                }
+                else
+                {
+                    subgraph.LostMember = true;
                 }
             }
         }
@@ -843,7 +877,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                             TargetId = target.Id,
                             Type = link.Type,
                             LineStyle = link.Style,
-                            Label = link.Label,
+                            Label = link.Label is null ? null : EntityCodes.Decode(link.Label),
                             MinLength = link.Length
                         });
                 }

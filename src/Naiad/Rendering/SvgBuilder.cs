@@ -270,7 +270,8 @@ public class SvgBuilder
         double width,
         double height,
         string htmlContent,
-        string? className = null)
+        string? className = null,
+        string? style = null)
     {
         var foreignObject = new SvgForeignObject
         {
@@ -279,7 +280,8 @@ public class SvgBuilder
             Width = width,
             Height = height,
             HtmlContent = htmlContent,
-            Class = className
+            Class = className,
+            Style = style
         };
         AddElement(foreignObject);
     }

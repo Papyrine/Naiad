@@ -1,0 +1,170 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 620 460"
+  style="max-width: 620px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <line
+    x1="80"
+    y1="380"
+    x2="580"
+    y2="380"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="380"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">500</text>
+  <line
+    x1="80"
+    y1="320"
+    x2="580"
+    y2="320"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="320"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">600</text>
+  <line
+    x1="80"
+    y1="260"
+    x2="580"
+    y2="260"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="260"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">700</text>
+  <line
+    x1="80"
+    y1="200"
+    x2="580"
+    y2="200"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="200"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">800</text>
+  <line
+    x1="80"
+    y1="140"
+    x2="580"
+    y2="140"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="140"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">900</text>
+  <line
+    x1="80"
+    y1="80"
+    x2="580"
+    y2="80"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="80"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">1000</text>
+  <text
+    x="163.33"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Q1</text>
+  <text
+    x="330"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Q2</text>
+  <text
+    x="496.67"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Q3</text>
+  <g
+    transform="rotate(-90, 35, 230)">
+    <text
+      x="35"
+      y="230"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333">Revenue</text>
+  </g>
+  <rect
+    x="96.67"
+    y="380"
+    width="131.33"
+    height="0"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="263.33"
+    y="230"
+    width="131.33"
+    height="150"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="430"
+    y="80"
+    width="131.33"
+    height="300"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <line
+    x1="80"
+    y1="80"
+    x2="80"
+    y2="380"
+    stroke="#333"
+    stroke-width="2" />
+  <line
+    x1="80"
+    y1="380"
+    x2="580"
+    y2="380"
+    stroke="#333"
+    stroke-width="2" />
+</svg>

@@ -241,7 +241,7 @@
     stroke="#333"
     stroke-dasharray="5,5" />
   <polygon
-    points="80,388 88,384 88,392"
+    points="80,388 89,382 84,388 89,394"
     fill="#333" />
   <text
     x="155"

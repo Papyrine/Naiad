@@ -55,7 +55,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
                     new Participant
                     {
                         Id = id,
-                        Alias = alias.HasValue ? Unquote(alias.Value.Trim()) : null,
+                        Alias = alias.HasValue ? EntityCodes.Decode(Unquote(alias.Value.Trim())) : null,
                         Type = type,
                         IsCreated = created.HasValue
                     });
@@ -97,7 +97,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
                     {
                         FromId = fromId,
                         ToId = toId,
-                        Text = text.OrNull(),
+                        Text = text.HasValue ? EntityCodes.Decode(text.Value) : null,
                         Type = arrow,
                         Activate = activate.HasValue,
                         Deactivate = deactivate.HasValue
@@ -129,7 +129,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
                 .Map(static (position, participantId, participant2, text) =>
                     new Note
                     {
-                        Text = text,
+                        Text = EntityCodes.Decode(text),
                         Position = position,
                         ParticipantId = participantId,
                         OverParticipantId2 = participant2.OrNull()
@@ -402,7 +402,7 @@ class SequenceParser : IDiagramParser<SequenceModel>
                 return null;
             }
 
-            return text;
+            return EntityCodes.Decode(text);
         }
 
         foreach (var item in content)

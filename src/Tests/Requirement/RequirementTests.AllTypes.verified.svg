@@ -61,7 +61,7 @@
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
-    fill="#333">Id: 1</text>
+    fill="#333">ID: 1</text>
   <text
     x="39.63"
     y="109"
@@ -110,7 +110,7 @@
     dominant-baseline="middle"
     font-size="11px"
     font-family="Arial, sans-serif"
-    fill="#333">Id: 2</text>
+    fill="#333">ID: 2</text>
   <text
     x="32"
     y="269"
@@ -169,9 +169,10 @@
     stroke-width="1.5"
     stroke-dasharray="10,7" />
   <path
-    d="M 107.63 130 L 111.63 136.93 L 103.63 136.93 Z"
-    fill="#666"
-    stroke="none" />
+    d="M 112.99 140.73 L 107.63 130 L 102.26 140.73"
+    fill="none"
+    stroke="#666"
+    stroke-width="1.5" />
   <text
     x="68.35"
     y="155"
@@ -189,9 +190,10 @@
     stroke-width="1.5"
     stroke-dasharray="10,7" />
   <path
-    d="M 187.63 72.21 L 194.41 67.97 L 194.69 75.96 Z"
-    fill="#666"
-    stroke="none" />
+    d="M 198.16 66.47 L 187.63 72.21 L 198.54 77.19"
+    fill="none"
+    stroke="#666"
+    stroke-width="1.5" />
   <text
     x="236"
     y="57.93"
@@ -209,9 +211,10 @@
     stroke-width="1.5"
     stroke-dasharray="10,7" />
   <path
-    d="M 191.47 180 L 195.07 172.86 L 199.45 179.54 Z"
-    fill="#666"
-    stroke="none" />
+    d="M 197.5 169.63 L 191.47 180 L 203.39 178.6"
+    fill="none"
+    stroke="#666"
+    stroke-width="1.5" />
   <text
     x="225.53"
     y="118.91"

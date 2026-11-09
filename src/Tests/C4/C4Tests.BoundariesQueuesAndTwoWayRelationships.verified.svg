@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 480 755.6"
+  viewBox="0 0 480 809.6"
   style="max-width: 480px;"
   role="graphics-document document">
   <style
@@ -21,9 +21,9 @@
       transform="translate(0,50)">
       <rect
         x="0"
-        y="184"
+        y="202"
         width="440"
-        height="329.6"
+        height="347.6"
         rx="5"
         ry="5"
         fill="#FFFFFF"
@@ -31,52 +31,52 @@
         stroke-width="2"
         style="stroke-dasharray: 8 4" />
       <path
-        d="M 201.74 94 L 110.54 328.8"
+        d="M 199.67 112 L 112.79 351.3"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 110.54 328.8 L 109.32 320.89 L 116.77 323.79 Z"
+        d="M 112.79 351.3 L 111.39 343.42 L 118.91 346.15 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 201.74 94 L 202.96 101.91 L 195.51 99.01 Z"
+        d="M 199.67 112 L 201.06 119.88 L 193.54 117.15 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 175 342.94 L 265 313.86"
+        d="M 175 373 L 265 342.3"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 265 313.86 L 259.64 319.79 L 257.18 312.18 Z"
+        d="M 265 342.3 L 259.73 348.32 L 257.15 340.75 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 175 394.66 L 265 423.74"
+        d="M 175 427.6 L 265 458.3"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 265 423.74 L 257.18 425.42 L 259.64 417.81 Z"
+        d="M 265 458.3 L 257.15 459.85 L 259.73 452.28 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 113.81 408.8 L 205.42 603.6"
+        d="M 116.93 449.3 L 202.1 639.6"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 205.42 603.6 L 198.85 599.03 L 206.09 595.63 Z"
+        d="M 202.1 639.6 L 195.62 634.91 L 202.92 631.64 Z"
         fill="#666"
         stroke="none" />
       <text
         x="15"
-        y="199"
+        y="217"
         text-anchor="start"
         dominant-baseline="middle"
         font-size="14px"
@@ -85,7 +85,7 @@
         fill="#333333">Web shop</text>
       <text
         x="15"
-        y="214"
+        y="232"
         text-anchor="start"
         dominant-baseline="middle"
         font-size="11px"
@@ -95,7 +95,7 @@
         x="140"
         y="28"
         width="160"
-        height="66"
+        height="84"
         rx="8"
         ry="8"
         fill="#08427B"
@@ -122,19 +122,27 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Person]</text>
+      <text
+        x="220"
+        y="94"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
         fill="#FFFFFF">Places orders</text>
       <rect
         x="15"
-        y="328.8"
+        y="351.3"
         width="160"
-        height="80"
+        height="98"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="95"
-        y="359.8"
+        y="382.3"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -143,7 +151,15 @@
         fill="#FFFFFF">Storefront</text>
       <text
         x="95"
-        y="377.8"
+        y="400.3"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="95"
+        y="418.3"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -151,16 +167,16 @@
         fill="#FFFFFF">Takes the orders</text>
       <rect
         x="265"
-        y="239"
+        y="257"
         width="160"
-        height="98"
+        height="116"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="345"
-        y="270"
+        y="288"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -169,7 +185,15 @@
         fill="#FFFFFF">Order queue</text>
       <text
         x="345"
-        y="288"
+        y="306"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="345"
+        y="324"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -177,7 +201,7 @@
         fill="#FFFFFF">Holds orders until</text>
       <text
         x="345"
-        y="306"
+        y="342"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -185,28 +209,28 @@
         fill="#FFFFFF">they are picked up</text>
       <ellipse
         cx="345"
-        cy="415.6"
+        cy="451.6"
         rx="75"
         ry="15"
         fill="#85BBF0"
         stroke="none" />
       <rect
         x="270"
-        y="415.6"
+        y="451.6"
         width="150"
         height="68"
         fill="#85BBF0"
         stroke="none" />
       <ellipse
         cx="345"
-        cy="483.6"
+        cy="519.6"
         rx="75"
         ry="15"
         fill="#85BBF0"
         stroke="none" />
       <text
         x="345"
-        y="431.6"
+        y="467.6"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -215,15 +239,15 @@
         fill="#FFFFFF">Basket cache</text>
       <text
         x="345"
-        y="449.6"
+        y="485.6"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">[Redis]</text>
+        fill="#FFFFFF">[Component: Redis]</text>
       <text
         x="345"
-        y="467.6"
+        y="503.6"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -231,25 +255,33 @@
         fill="#FFFFFF">Keeps open baskets</text>
       <rect
         x="140"
-        y="603.6"
+        y="639.6"
         width="160"
-        height="62"
+        height="80"
         rx="5"
         ry="5"
         fill="#999999"
         stroke="none" />
       <text
         x="220"
-        y="634.6"
+        y="670.6"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
         font-family="Arial, sans-serif"
         font-weight="bold"
         fill="#FFFFFF">Courier feed</text>
+      <text
+        x="220"
+        y="688.6"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
       <rect
-        x="99.34"
-        y="194.9"
+        x="99.43"
+        y="215.15"
         width="113.6"
         height="17"
         rx="3"
@@ -257,8 +289,8 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="156.14"
-        y="203.4"
+        x="156.23"
+        y="223.65"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -266,7 +298,7 @@
         fill="#666">Browses and buys</text>
       <rect
         x="196.2"
-        y="311.9"
+        y="341.15"
         width="47.6"
         height="17"
         rx="3"
@@ -275,7 +307,7 @@
         stroke="none" />
       <text
         x="220"
-        y="320.4"
+        y="349.65"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -283,7 +315,7 @@
         fill="#666">Queues</text>
       <rect
         x="198"
-        y="385.2"
+        y="418.95"
         width="44"
         height="32"
         rx="3"
@@ -292,7 +324,7 @@
         stroke="none" />
       <text
         x="220"
-        y="394.7"
+        y="428.45"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -300,15 +332,15 @@
         fill="#666">Reads</text>
       <text
         x="220"
-        y="408.7"
+        y="442.45"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
         font-family="Arial, sans-serif"
         fill="#888">[RESP]</text>
       <rect
-        x="122.62"
-        y="482.2"
+        x="122.51"
+        y="520.45"
         width="74"
         height="32"
         rx="3"
@@ -316,16 +348,16 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="159.62"
-        y="491.7"
+        x="159.51"
+        y="529.95"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
         fill="#666">Hands over</text>
       <text
-        x="159.62"
-        y="505.7"
+        x="159.51"
+        y="543.95"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"

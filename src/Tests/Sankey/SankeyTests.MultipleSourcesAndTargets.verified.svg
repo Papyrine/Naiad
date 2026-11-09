@@ -8,40 +8,40 @@
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <path
-    d="M 40 20 C 130 20 130 20 220 20 L 220 70.67 C 130 70.67 130 72 40 72 Z"
+    d="M 40 23.33 C 130 23.33 130 20 220 20 L 220 70.67 C 130 70.67 130 74 40 74 Z"
     fill="#4CAF50"
     stroke="none"
     opacity="0.45" />
   <path
-    d="M 40 72 C 130 72 130 182 220 182 L 220 258 C 130 258 130 150 40 150 Z"
+    d="M 40 74 C 130 74 130 182 220 182 L 220 258 C 130 258 130 150 40 150 Z"
     fill="#4CAF50"
     stroke="none"
     opacity="0.45" />
   <path
-    d="M 40 160 C 130 160 130 70.67 220 70.67 L 220 172 C 130 172 130 264 40 264 Z"
+    d="M 40 163.33 C 130 163.33 130 70.67 220 70.67 L 220 172 C 130 172 130 264.67 40 264.67 Z"
     fill="#E91E63"
     stroke="none"
     opacity="0.45" />
   <path
-    d="M 40 264 C 130 264 130 258 220 258 L 220 384.67 C 130 384.67 130 394 40 394 Z"
+    d="M 40 264.67 C 130 264.67 130 258 220 258 L 220 384.67 C 130 384.67 130 391.33 40 391.33 Z"
     fill="#E91E63"
     stroke="none"
     opacity="0.45" />
   <path
-    d="M 40 394 C 130 394 130 394.67 220 394.67 L 220 420 C 130 420 130 420 40 420 Z"
+    d="M 40 391.33 C 130 391.33 130 394.67 220 394.67 L 220 420 C 130 420 130 416.67 40 416.67 Z"
     fill="#E91E63"
     stroke="none"
     opacity="0.45" />
   <rect
     x="20"
-    y="20"
+    y="23.33"
     width="20"
-    height="130"
+    height="126.67"
     fill="#4CAF50"
     stroke="#333" />
   <text
     x="46"
-    y="79"
+    y="80.67"
     text-anchor="start"
     dominant-baseline="middle"
     font-size="13px"
@@ -49,7 +49,7 @@
     fill="#333">A</text>
   <text
     x="46"
-    y="93"
+    y="94.67"
     text-anchor="start"
     dominant-baseline="middle"
     font-size="11px"
@@ -103,9 +103,9 @@
     fill="#666">40</text>
   <rect
     x="20"
-    y="160"
+    y="163.33"
     width="20"
-    height="260"
+    height="253.33"
     fill="#E91E63"
     stroke="#333" />
   <text

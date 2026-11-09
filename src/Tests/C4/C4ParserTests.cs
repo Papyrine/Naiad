@@ -158,7 +158,8 @@ public class C4ParserTests
 
         await Assert.That(svg).Contains(">[Product team]<");
         await Assert.That(svg).Contains(">[System]<");
-        await Assert.That(Regex.Matches(svg, @">\[[^<]*\]<").Count).IsEqualTo(2);
+        // Each system also carries its own type line; only the two typed boundaries add a caption.
+        await Assert.That(Regex.Matches(svg, @">\[[^<]*\]<").Count(_ => _.Value != ">[Software System]<")).IsEqualTo(2);
     }
 
     [Test]

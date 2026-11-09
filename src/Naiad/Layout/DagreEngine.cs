@@ -235,6 +235,8 @@ class DagreEngine : ILayoutEngine
             clusters[subgraph.Id] = subgraph;
         }
 
+        var anchors = new ClusterAnchors(clusters, diagram.Edges, collapsed);
+
         var edgeLabels = new List<(Edge Edge, EdgeLabel Label)>(diagram.Edges.Count);
         for (var i = 0; i < diagram.Edges.Count; i++)
         {
@@ -254,8 +256,8 @@ class DagreEngine : ILayoutEngine
 
             // Dagre cannot rank an edge that ends on a cluster, so an edge to or from a subgraph is laid out
             // against one of the nodes inside it and cut back to the subgraph's border afterwards.
-            var source = ClusterAnchor(clusters, edge.SourceId, edge.TargetId, collapsed);
-            var target = ClusterAnchor(clusters, edge.TargetId, edge.SourceId, collapsed);
+            var source = anchors.For(edge.SourceId, edge.TargetId, leaving: true);
+            var target = anchors.For(edge.TargetId, edge.SourceId, leaving: false);
 
             // A unique per-edge name keeps parallel edges (same source/target) distinct in the multigraph.
             graph.SetEdge(source, target, label, "e" + i.ToString(CultureInfo.InvariantCulture));
@@ -322,58 +324,112 @@ class DagreEngine : ILayoutEngine
 
     /// <summary>
     /// The node an edge end is laid out against. For a plain node that is the node itself; for a subgraph
-    /// it is a node inside it, preferring one that is not the edge's other end so an edge between a
-    /// subgraph and one of its own members does not collapse into a self-loop. An empty subgraph has no
-    /// node to stand in for it, and being a leaf as far as dagre is concerned it needs none.
+    /// it is a node inside it. An edge leaving a subgraph starts from where the flow inside it ends, a
+    /// member nothing else inside leads on from, and an edge entering one ends where the flow inside it
+    /// starts, a member nothing inside leads into, so that a subgraph linked to another is ranked wholly
+    /// before it rather than overlapping it. A member that is the edge's other end is passed over, so an
+    /// edge between a subgraph and one of its own members does not collapse into a self-loop. An empty
+    /// subgraph has no node to stand in for it, and being a leaf as far as dagre is concerned it needs none.
     /// </summary>
-    static string ClusterAnchor(
+    sealed class ClusterAnchors(
         Dictionary<string, Subgraph> clusters,
-        string id,
-        string otherEnd,
+        List<Edge> edges,
         HashSet<Subgraph> collapsed)
     {
-        if (!clusters.TryGetValue(id, out var cluster))
-        {
-            return id;
-        }
+        Dictionary<string, (List<string> Ordered, HashSet<string> Set)> leaves = new(StringComparer.Ordinal);
+        Dictionary<string, List<string>>? outgoing;
+        Dictionary<string, List<string>>? incoming;
 
-        return FirstLeaf(cluster, otherEnd, collapsed) ?? FirstLeaf(cluster, null, collapsed) ?? id;
-    }
-
-    // A collapsed subgraph is a leaf itself: the nodes inside it are not in this layout.
-    static string? FirstLeaf(Subgraph subgraph, string? except, HashSet<Subgraph> collapsed)
-    {
-        // So is an empty one, nested or not. Falling through would leave a subgraph holding only empty
-        // subgraphs with no leaf, and the edge would be ranked against that compound node, which dagre
-        // cannot do.
-        if (collapsed.Contains(subgraph) ||
-            subgraph is { NodeIds.Count: 0, NestedSubgraphs.Count: 0 })
+        public string For(string id, string otherEnd, bool leaving)
         {
-            if (subgraph.Id == except)
+            if (!clusters.TryGetValue(id, out var cluster))
             {
-                return null;
+                return id;
             }
 
-            return subgraph.Id;
+            var (ordered, members) = Leaves(cluster);
+            var candidates = ordered.Where(_ => _ != otherEnd).ToList();
+            if (candidates.Count == 0)
+            {
+                candidates = ordered;
+            }
+
+            if (candidates.Count == 0)
+            {
+                return id;
+            }
+
+            if (candidates.Count == 1)
+            {
+                return candidates[0];
+            }
+
+            if (outgoing is null)
+            {
+                outgoing = new(StringComparer.Ordinal);
+                incoming = new(StringComparer.Ordinal);
+                foreach (var edge in edges)
+                {
+                    Add(outgoing, edge.SourceId, edge.TargetId);
+                    Add(incoming!, edge.TargetId, edge.SourceId);
+                }
+            }
+
+            if (leaving)
+            {
+                return candidates.LastOrDefault(_ => !LinksWithin(outgoing, _, members)) ?? candidates[^1];
+            }
+
+            return candidates.FirstOrDefault(_ => !LinksWithin(incoming!, _, members)) ?? candidates[0];
         }
 
-        foreach (var nodeId in subgraph.NodeIds)
+        static void Add(Dictionary<string, List<string>> map, string key, string value)
         {
-            if (nodeId != except)
+            if (!map.TryGetValue(key, out var list))
             {
-                return nodeId;
+                list = [];
+                map[key] = list;
+            }
+
+            list.Add(value);
+        }
+
+        static bool LinksWithin(Dictionary<string, List<string>> map, string id, HashSet<string> members) =>
+            map.TryGetValue(id, out var others) &&
+            others.Exists(_ => _ != id && members.Contains(_));
+
+        (List<string> Ordered, HashSet<string> Set) Leaves(Subgraph cluster)
+        {
+            if (!leaves.TryGetValue(cluster.Id, out var found))
+            {
+                var list = new List<string>();
+                CollectLeaves(cluster, list);
+                found = (list, new(list, StringComparer.Ordinal));
+                leaves[cluster.Id] = found;
+            }
+
+            return found;
+        }
+
+        // A collapsed subgraph is a leaf itself: the nodes inside it are not in this layout.
+        void CollectLeaves(Subgraph subgraph, List<string> list)
+        {
+            // So is an empty one, nested or not. Falling through would leave a subgraph holding only empty
+            // subgraphs with no leaf, and the edge would be ranked against that compound node, which dagre
+            // cannot do.
+            if (collapsed.Contains(subgraph) ||
+                subgraph is { NodeIds.Count: 0, NestedSubgraphs.Count: 0 })
+            {
+                list.Add(subgraph.Id);
+                return;
+            }
+
+            list.AddRange(subgraph.NodeIds);
+            foreach (var nested in subgraph.NestedSubgraphs)
+            {
+                CollectLeaves(nested, list);
             }
         }
-
-        foreach (var nested in subgraph.NestedSubgraphs)
-        {
-            if (FirstLeaf(nested, except, collapsed) is { } leaf)
-            {
-                return leaf;
-            }
-        }
-
-        return null;
     }
 
     /// <summary>

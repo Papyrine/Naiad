@@ -855,13 +855,14 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             stroke: "#9370DB",
             strokeWidth: 1);
 
-        // Label below
+        // Label below. `hanging` hangs the text from y; `top` is not an SVG baseline, so it fell back to
+        // the alphabetic one and the name rose into the legs.
         builder.AddTextLines(
             cx,
             legBottom + 4,
             text,
             anchor: "middle",
-            baseline: "top",
+            baseline: "hanging",
             fontSize: options.FontSize,
             fontFamily: options.FontFamily);
     }
@@ -1071,11 +1072,10 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             // Text above
             if (!string.IsNullOrEmpty(msg.Text))
             {
-                var labelText = number.HasValue ? $"{number}. {msg.Text}" : msg.Text;
                 builder.AddTextLines(
                     fromX + selfMessageLoopWidth + 5,
                     y + loopHeight / 2,
-                    labelText,
+                    msg.Text,
                     anchor: "start",
                     baseline: "middle",
                     fontSize: options.FontSize,
@@ -1101,25 +1101,41 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
             }
 
             // Text above the line
-            if (!string.IsNullOrEmpty(msg.Text) || number.HasValue)
+            if (!string.IsNullOrEmpty(msg.Text))
             {
-                var labelText = number.HasValue && !string.IsNullOrEmpty(msg.Text)
-                    ? $"{number}. {msg.Text}"
-                    : number.HasValue
-                        ? $"{number}."
-                        : msg.Text!;
-
                 var midX = (fromX + toX) / 2;
                 builder.AddTextLines(
                     midX,
                     y - 8,
-                    labelText,
+                    msg.Text,
                     anchor: "middle",
                     baseline: "bottom",
                     fontSize: options.FontSize,
                     fontFamily: options.FontFamily);
             }
         }
+
+        if (number.HasValue)
+        {
+            DrawSequenceNumber(builder, fromX, y, number.Value, options);
+        }
+    }
+
+    // Mermaid's autonumber: the number in a filled circle where the message leaves its sender, leaving the
+    // message's own text as written.
+    static void DrawSequenceNumber(SvgBuilder builder, double x, double y, int number, RenderOptions options)
+    {
+        const double radius = 9;
+        builder.AddCircle(x, y, radius, fill: "#333", stroke: "none");
+        builder.AddText(
+            x,
+            y,
+            number.ToString(CultureInfo.InvariantCulture),
+            anchor: "middle",
+            baseline: "middle",
+            fontSize: 12,
+            fontFamily: options.FontFamily,
+            fill: "#fff");
     }
 
     static void DrawArrowhead(SvgBuilder builder, double fromX, double toX, double y, MessageType type)
@@ -1129,12 +1145,21 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
         switch (type)
         {
+            case MessageType.SolidAsync:
+            case MessageType.DottedAsync:
+                // Mermaid's async head: barbed, its back notched in, telling `-)` apart from `->>`.
+                builder.AddPolygon([
+                    new(toX, y),
+                    new(toX - direction * 9, y - 6),
+                    new(toX - direction * 4, y),
+                    new(toX - direction * 9, y + 6)
+                ], fill: "#333");
+                break;
+
             case MessageType.SolidArrow:
             case MessageType.DottedArrow:
             case MessageType.Solid:
             case MessageType.Dotted:
-            case MessageType.SolidAsync:
-            case MessageType.DottedAsync:
             case MessageType.BiDirectional:
             case MessageType.DottedBiDirectional:
                 // Filled arrowhead
@@ -1144,25 +1169,6 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
                     new(backX, y - arrowSize / 2),
                     new(backX, y + arrowSize / 2)
                 ], fill: "#333");
-                break;
-
-            case MessageType.SolidOpen:
-            case MessageType.DottedOpen:
-                // Open arrowhead (just lines)
-                builder.AddLine(
-                    toX - direction * arrowSize,
-                    y - arrowSize / 2,
-                    toX,
-                    y,
-                    stroke: "#333",
-                    strokeWidth: 1);
-                builder.AddLine(
-                    toX - direction * arrowSize,
-                    y + arrowSize / 2,
-                    toX,
-                    y,
-                    stroke: "#333",
-                    strokeWidth: 1);
                 break;
 
             case MessageType.SolidCross:

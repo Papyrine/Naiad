@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 740 443"
+  viewBox="0 0 740 519"
   style="max-width: 740px;"
   role="graphics-document document">
   <style
@@ -90,7 +90,7 @@
     x1="225"
     y1="161"
     x2="225"
-    y2="165"
+    y2="241"
     stroke="#999"
     stroke-dasharray="3,3" />
   <rect
@@ -121,7 +121,7 @@
     x1="425"
     y1="161"
     x2="425"
-    y2="279"
+    y2="355"
     stroke="#999"
     stroke-dasharray="3,3" />
   <rect
@@ -152,7 +152,7 @@
     x1="625"
     y1="161"
     x2="625"
-    y2="393"
+    y2="469"
     stroke="#999"
     stroke-dasharray="3,3" />
   <path
@@ -163,64 +163,64 @@
     marker-end="url(#journey-arrow)" />
   <circle
     cx="225"
-    cy="180"
+    cy="256"
     r="15"
     fill="#F0EAD0"
     stroke="#8C8455" />
   <circle
     cx="220"
-    cy="177"
+    cy="253"
     r="1.6"
     fill="#3F3F3F" />
   <circle
     cx="230"
-    cy="177"
+    cy="253"
     r="1.6"
     fill="#3F3F3F" />
   <path
-    d="M 219 182 Q 225 188 231 182"
+    d="M 219 258 Q 225 264 231 258"
     fill="none"
     stroke="#3F3F3F"
     stroke-width="1.5" />
   <circle
     cx="425"
-    cy="294"
+    cy="370"
     r="15"
     fill="#F0EAD0"
     stroke="#8C8455" />
   <circle
     cx="420"
-    cy="291"
+    cy="367"
     r="1.6"
     fill="#3F3F3F" />
   <circle
     cx="430"
-    cy="291"
+    cy="367"
     r="1.6"
     fill="#3F3F3F" />
   <path
-    d="M 419 296 Q 425 302 431 296"
+    d="M 419 372 Q 425 378 431 372"
     fill="none"
     stroke="#3F3F3F"
     stroke-width="1.5" />
   <circle
     cx="625"
-    cy="408"
+    cy="484"
     r="15"
     fill="#F0EAD0"
     stroke="#8C8455" />
   <circle
     cx="620"
-    cy="405"
+    cy="481"
     r="1.6"
     fill="#3F3F3F" />
   <circle
     cx="630"
-    cy="405"
+    cy="481"
     r="1.6"
     fill="#3F3F3F" />
   <path
-    d="M 619 414 Q 625 408 631 414"
+    d="M 619 490 Q 625 484 631 490"
     fill="none"
     stroke="#3F3F3F"
     stroke-width="1.5" />

@@ -86,7 +86,7 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         }
 
         // Position nodes
-        PositionNodes(nodes, chartHeight, titleOffset + options.Padding);
+        var scale = PositionNodes(nodes, chartHeight, titleOffset + options.Padding);
 
         // Draw links first (behind nodes)
         var sourceOffsets = new Dictionary<string, double>();
@@ -104,23 +104,22 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             var sourceNode = nodes[link.Source];
             var targetNode = nodes[link.Target];
 
-            var sourceBand = link.Value / Math.Max(1, sourceNode.OutputValue) * sourceNode.Height;
-            var targetBand = link.Value / Math.Max(1, targetNode.InputValue) * targetNode.Height;
+            // The whole chart shares one scale, so a link is as thick where it arrives as where it leaves.
+            var band = link.Value * scale;
 
             sourceOffsets.TryGetValue(link.Source, out var sOff);
             targetOffsets.TryGetValue(link.Target, out var tOff);
 
-            var sourceY = sourceNode.Y + sOff + sourceBand / 2;
-            var targetY = targetNode.Y + tOff + targetBand / 2;
+            var sourceY = sourceNode.Y + sOff + band / 2;
+            var targetY = targetNode.Y + tOff + band / 2;
 
-            sourceOffsets[link.Source] = sOff + sourceBand;
-            targetOffsets[link.Target] = tOff + targetBand;
+            sourceOffsets[link.Source] = sOff + band;
+            targetOffsets[link.Target] = tOff + band;
 
             var sourceX = options.Padding + sourceNode.Column * columnSpacing + nodeWidth;
             var targetX = options.Padding + targetNode.Column * columnSpacing;
 
-            // Draw bezier curve for link (tapers from source band to target band so each end meets its node edge exactly)
-            var pathData = CreateLinkPath(sourceX, sourceY, targetX, targetY, sourceBand, targetBand);
+            var pathData = CreateLinkPath(sourceX, sourceY, targetX, targetY, band);
             var colorIndex = nodeColorIndices[link.Source] % nodeColors.Length;
 
             // Translucent, as Mermaid draws them: node labels lie over the ribbons, and overlapping
@@ -287,35 +286,86 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         }
     }
 
-    static void PositionNodes(Dictionary<string, SankeyNode> nodes, double chartHeight, double topOffset)
+    /// <summary>
+    /// Lays the nodes out the way d3-sankey does initially: one value-to-pixels scale for the whole chart,
+    /// taken from the column that needs the most room, so a link is equally thick at both ends. Columns
+    /// carrying less than that one spread their spare height evenly around their nodes.
+    /// </summary>
+    /// <returns>The scale, in pixels per unit of value.</returns>
+    static double PositionNodes(Dictionary<string, SankeyNode> nodes, double chartHeight, double topOffset)
     {
-        var maxColumn = nodes.Values.Max(_ => _.Column);
+        var columns = nodes.Values
+            .GroupBy(_ => _.Column)
+            .Select(_ => _.ToList())
+            .ToList();
 
-        for (var col = 0; col <= maxColumn; col++)
+        var scale = columns.Min(_ => ColumnScale(_, chartHeight));
+        if (double.IsPositiveInfinity(scale))
         {
-            var columnNodes = nodes.Values.Where(_ => _.Column == col).ToList();
-            var totalValue = columnNodes.Sum(_ => Math.Max(_.InputValue, _.OutputValue));
-            var scale = (chartHeight - (columnNodes.Count - 1) * nodePadding) / Math.Max(1, totalValue);
+            scale = 1;
+        }
 
-            var y = topOffset;
+        foreach (var columnNodes in columns)
+        {
             foreach (var node in columnNodes)
             {
-                var value = Math.Max(node.InputValue, node.OutputValue);
-                node.Height = Math.Max(minNodeHeight, value * scale);
-                node.Y = y;
-                y += node.Height + nodePadding;
+                node.Height = Math.Max(minNodeHeight, NodeValue(node) * scale);
             }
+
+            var used = columnNodes.Sum(_ => _.Height) + (columnNodes.Count - 1) * nodePadding;
+            var spare = Math.Max(0, chartHeight - used) / (columnNodes.Count + 1);
+
+            var y = topOffset + spare;
+            foreach (var node in columnNodes)
+            {
+                node.Y = y;
+                y += node.Height + nodePadding + spare;
+            }
+        }
+
+        return scale;
+    }
+
+    /// <summary>
+    /// The largest scale at which a column still fits the plot. A node too small to reach the minimum
+    /// height is held at it, which takes room from the others, so the scale is found again without the
+    /// held nodes until none more fall short. Scaling first and holding afterwards let the busiest column
+    /// run off the bottom of the canvas.
+    /// </summary>
+    static double ColumnScale(List<SankeyNode> column, double chartHeight)
+    {
+        var available = chartHeight - (column.Count - 1) * nodePadding;
+        var held = new HashSet<SankeyNode>();
+        while (true)
+        {
+            var free = column.Where(_ => !held.Contains(_)).ToList();
+            var freeValue = free.Sum(NodeValue);
+            if (freeValue <= 0)
+            {
+                return double.PositiveInfinity;
+            }
+
+            var scale = (available - held.Count * minNodeHeight) / freeValue;
+            var tooSmall = free.Where(_ => NodeValue(_) * scale < minNodeHeight).ToList();
+            if (tooSmall.Count == 0)
+            {
+                return scale;
+            }
+
+            held.UnionWith(tooSmall);
         }
     }
 
-    static string CreateLinkPath(double x1, double y1, double x2, double y2, double sourceHeight, double targetHeight)
+    static double NodeValue(SankeyNode node) =>
+        Math.Max(node.InputValue, node.OutputValue);
+
+    static string CreateLinkPath(double x1, double y1, double x2, double y2, double band)
     {
-        var sourceHalf = sourceHeight / 2;
-        var targetHalf = targetHeight / 2;
+        var half = band / 2;
         var cx = (x1 + x2) / 2;
 
         return string.Create(
             CultureInfo.InvariantCulture,
-            $"M {x1:0.##} {y1 - sourceHalf:0.##} C {cx:0.##} {y1 - sourceHalf:0.##} {cx:0.##} {y2 - targetHalf:0.##} {x2:0.##} {y2 - targetHalf:0.##} L {x2:0.##} {y2 + targetHalf:0.##} C {cx:0.##} {y2 + targetHalf:0.##} {cx:0.##} {y1 + sourceHalf:0.##} {x1:0.##} {y1 + sourceHalf:0.##} Z");
+            $"M {x1:0.##} {y1 - half:0.##} C {cx:0.##} {y1 - half:0.##} {cx:0.##} {y2 - half:0.##} {x2:0.##} {y2 - half:0.##} L {x2:0.##} {y2 + half:0.##} C {cx:0.##} {y2 + half:0.##} {cx:0.##} {y1 + half:0.##} {x1:0.##} {y1 + half:0.##} Z");
     }
 }

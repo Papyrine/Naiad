@@ -2,13 +2,13 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 680 100"
-  style="max-width: 680px;"
+  viewBox="0 0 1064 100"
+  style="max-width: 1064px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <text
-    x="30"
+    x="36"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -16,7 +16,7 @@
     font-family="Arial, sans-serif"
     fill="#666">0</text>
   <text
-    x="50"
+    x="68"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -24,7 +24,7 @@
     font-family="Arial, sans-serif"
     fill="#666">1</text>
   <text
-    x="70"
+    x="100"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -32,7 +32,7 @@
     font-family="Arial, sans-serif"
     fill="#666">2</text>
   <text
-    x="90"
+    x="132"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -40,7 +40,7 @@
     font-family="Arial, sans-serif"
     fill="#666">3</text>
   <text
-    x="110"
+    x="164"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -48,7 +48,7 @@
     font-family="Arial, sans-serif"
     fill="#666">4</text>
   <text
-    x="130"
+    x="196"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -56,7 +56,7 @@
     font-family="Arial, sans-serif"
     fill="#666">5</text>
   <text
-    x="150"
+    x="228"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -64,7 +64,7 @@
     font-family="Arial, sans-serif"
     fill="#666">6</text>
   <text
-    x="170"
+    x="260"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -72,7 +72,7 @@
     font-family="Arial, sans-serif"
     fill="#666">7</text>
   <text
-    x="190"
+    x="292"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -80,7 +80,7 @@
     font-family="Arial, sans-serif"
     fill="#666">8</text>
   <text
-    x="210"
+    x="324"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -88,7 +88,7 @@
     font-family="Arial, sans-serif"
     fill="#666">9</text>
   <text
-    x="230"
+    x="356"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -96,7 +96,7 @@
     font-family="Arial, sans-serif"
     fill="#666">10</text>
   <text
-    x="250"
+    x="388"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -104,7 +104,7 @@
     font-family="Arial, sans-serif"
     fill="#666">11</text>
   <text
-    x="270"
+    x="420"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -112,7 +112,7 @@
     font-family="Arial, sans-serif"
     fill="#666">12</text>
   <text
-    x="290"
+    x="452"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -120,7 +120,7 @@
     font-family="Arial, sans-serif"
     fill="#666">13</text>
   <text
-    x="310"
+    x="484"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -128,7 +128,7 @@
     font-family="Arial, sans-serif"
     fill="#666">14</text>
   <text
-    x="330"
+    x="516"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -136,7 +136,7 @@
     font-family="Arial, sans-serif"
     fill="#666">15</text>
   <text
-    x="350"
+    x="548"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -144,7 +144,7 @@
     font-family="Arial, sans-serif"
     fill="#666">16</text>
   <text
-    x="370"
+    x="580"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -152,7 +152,7 @@
     font-family="Arial, sans-serif"
     fill="#666">17</text>
   <text
-    x="390"
+    x="612"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -160,7 +160,7 @@
     font-family="Arial, sans-serif"
     fill="#666">18</text>
   <text
-    x="410"
+    x="644"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -168,7 +168,7 @@
     font-family="Arial, sans-serif"
     fill="#666">19</text>
   <text
-    x="430"
+    x="676"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -176,7 +176,7 @@
     font-family="Arial, sans-serif"
     fill="#666">20</text>
   <text
-    x="450"
+    x="708"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -184,7 +184,7 @@
     font-family="Arial, sans-serif"
     fill="#666">21</text>
   <text
-    x="470"
+    x="740"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -192,7 +192,7 @@
     font-family="Arial, sans-serif"
     fill="#666">22</text>
   <text
-    x="490"
+    x="772"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -200,7 +200,7 @@
     font-family="Arial, sans-serif"
     fill="#666">23</text>
   <text
-    x="510"
+    x="804"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -208,7 +208,7 @@
     font-family="Arial, sans-serif"
     fill="#666">24</text>
   <text
-    x="530"
+    x="836"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -216,7 +216,7 @@
     font-family="Arial, sans-serif"
     fill="#666">25</text>
   <text
-    x="550"
+    x="868"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -224,7 +224,7 @@
     font-family="Arial, sans-serif"
     fill="#666">26</text>
   <text
-    x="570"
+    x="900"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -232,7 +232,7 @@
     font-family="Arial, sans-serif"
     fill="#666">27</text>
   <text
-    x="590"
+    x="932"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -240,7 +240,7 @@
     font-family="Arial, sans-serif"
     fill="#666">28</text>
   <text
-    x="610"
+    x="964"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -248,7 +248,7 @@
     font-family="Arial, sans-serif"
     fill="#666">29</text>
   <text
-    x="630"
+    x="996"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -256,7 +256,7 @@
     font-family="Arial, sans-serif"
     fill="#666">30</text>
   <text
-    x="650"
+    x="1028"
     y="30"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -266,12 +266,12 @@
   <rect
     x="20"
     y="40"
-    width="160"
+    width="256"
     height="40"
     fill="#E3F2FD"
     stroke="#333" />
   <text
-    x="100"
+    x="148"
     y="60"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -279,14 +279,14 @@
     font-family="Arial, sans-serif"
     fill="#333">Header</text>
   <rect
-    x="180"
+    x="276"
     y="40"
-    width="20"
+    width="32"
     height="40"
     fill="#E8F5E9"
     stroke="#333" />
   <text
-    x="190"
+    x="292"
     y="60"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -294,14 +294,14 @@
     font-family="Arial, sans-serif"
     fill="#333">Flag</text>
   <rect
-    x="200"
+    x="308"
     y="40"
-    width="140"
+    width="224"
     height="40"
     fill="#FFF3E0"
     stroke="#333" />
   <text
-    x="270"
+    x="420"
     y="60"
     text-anchor="middle"
     dominant-baseline="middle"

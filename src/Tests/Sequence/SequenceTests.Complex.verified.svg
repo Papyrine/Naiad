@@ -86,7 +86,7 @@
     x="70"
     y="94"
     text-anchor="middle"
-    dominant-baseline="top"
+    dominant-baseline="hanging"
     font-size="14px"
     font-family="Arial, sans-serif">User</text>
   <rect
@@ -231,7 +231,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">1. Enter credentials</text>
+    font-family="Arial, sans-serif">Enter credentials</text>
+  <circle
+    cx="70"
+    cy="164"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="70"
+    y="164"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">1</text>
   <line
     x1="220"
     y1="214"
@@ -247,7 +261,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">2. POST /login</text>
+    font-family="Arial, sans-serif">POST /login</text>
+  <circle
+    cx="220"
+    cy="214"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="220"
+    y="214"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">2</text>
   <line
     x1="370"
     y1="264"
@@ -263,7 +291,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">3. Query user</text>
+    font-family="Arial, sans-serif">Query user</text>
+  <circle
+    cx="370"
+    cy="264"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="370"
+    y="264"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">3</text>
   <line
     x1="520"
     y1="314"
@@ -280,7 +322,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">4. User data</text>
+    font-family="Arial, sans-serif">User data</text>
+  <circle
+    cx="520"
+    cy="314"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="520"
+    y="314"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">4</text>
   <path
     d="M430,364 L596,364 L604,372 L604,404 L430,404 Z"
     fill="#FFFFCC"
@@ -315,7 +371,21 @@
     text-anchor="start"
     dominant-baseline="middle"
     font-size="14px"
-    font-family="Arial, sans-serif">5. Generate JWT</text>
+    font-family="Arial, sans-serif">Generate JWT</text>
+  <circle
+    cx="370"
+    cy="414"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="370"
+    y="414"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">5</text>
   <path
     d="M430,464 L596,464 L604,472 L604,504 L430,504 Z"
     fill="#FFFFCC"
@@ -355,7 +425,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">6. 200 OK + Token</text>
+    font-family="Arial, sans-serif">200 OK + Token</text>
+  <circle
+    cx="370"
+    cy="532"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="370"
+    y="532"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">6</text>
   <line
     x1="220"
     y1="582"
@@ -371,7 +455,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">7. Send welcome email</text>
+    font-family="Arial, sans-serif">Send welcome email</text>
+  <circle
+    cx="220"
+    cy="582"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="220"
+    y="582"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">7</text>
   <line
     x1="670"
     y1="632"
@@ -388,7 +486,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">8. Email sent</text>
+    font-family="Arial, sans-serif">Email sent</text>
+  <circle
+    cx="670"
+    cy="632"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="670"
+    y="632"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">8</text>
   <line
     x1="220"
     y1="682"
@@ -405,7 +517,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">9. Show dashboard</text>
+    font-family="Arial, sans-serif">Show dashboard</text>
+  <circle
+    cx="220"
+    cy="682"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="220"
+    y="682"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">9</text>
   <path
     d="M20,732 L562,732 L570,740 L570,772 L20,772 Z"
     fill="#FFFFCC"
@@ -463,7 +589,7 @@
     x="70"
     y="826"
     text-anchor="middle"
-    dominant-baseline="top"
+    dominant-baseline="hanging"
     font-size="14px"
     font-family="Arial, sans-serif">User</text>
   <rect

@@ -102,7 +102,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">[tech]</text>
+        fill="#FFFFFF">[Container: tech]</text>
       <text
         x="95"
         y="166.5"
@@ -136,7 +136,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">[tech]</text>
+        fill="#FFFFFF">[Container: tech]</text>
       <text
         x="345"
         y="122"
@@ -170,7 +170,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">[tech]</text>
+        fill="#FFFFFF">[Container: tech]</text>
       <text
         x="595"
         y="166.5"

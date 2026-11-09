@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 312 460"
+  viewBox="0 0 312 478"
   style="max-width: 312px;"
   role="graphics-document document">
   <style
@@ -21,7 +21,7 @@
       transform="translate(41,50)">
       <rect
         x="0"
-        y="184"
+        y="202"
         width="190"
         height="186"
         rx="5"
@@ -31,18 +31,18 @@
         stroke-width="2"
         style="stroke-dasharray: 8 4" />
       <path
-        d="M 95 94 L 95 239"
+        d="M 95 112 L 95 257"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 95 239 L 91 232.07 L 99 232.07 Z"
+        d="M 95 257 L 91 250.07 L 99 250.07 Z"
         fill="#666"
         stroke="none" />
       <text
         x="15"
-        y="199"
+        y="217"
         text-anchor="start"
         dominant-baseline="middle"
         font-size="14px"
@@ -51,7 +51,7 @@
         fill="#333333">Internet Banking</text>
       <text
         x="15"
-        y="214"
+        y="232"
         text-anchor="start"
         dominant-baseline="middle"
         font-size="11px"
@@ -61,7 +61,7 @@
         x="15"
         y="28"
         width="160"
-        height="66"
+        height="84"
         rx="8"
         ry="8"
         fill="#08427B"
@@ -88,10 +88,18 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Person]</text>
+      <text
+        x="95"
+        y="94"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
         fill="#FFFFFF">A bank customer</text>
       <rect
         x="15"
-        y="239"
+        y="257"
         width="160"
         height="116"
         rx="5"
@@ -100,7 +108,7 @@
         stroke="none" />
       <text
         x="95"
-        y="270"
+        y="288"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -109,20 +117,12 @@
         fill="#FFFFFF">Web App</text>
       <text
         x="95"
-        y="288"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="11px"
-        font-family="Arial, sans-serif"
-        fill="#FFFFFF">[React]</text>
-      <text
-        x="95"
         y="306"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">Delivers content to</text>
+        fill="#FFFFFF">[Container: React]</text>
       <text
         x="95"
         y="324"
@@ -130,10 +130,18 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
+        fill="#FFFFFF">Delivers content to</text>
+      <text
+        x="95"
+        y="342"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
         fill="#FFFFFF">the customer</text>
       <rect
         x="15"
-        y="248"
+        y="266"
         width="160"
         height="98"
         rx="5"
@@ -142,7 +150,7 @@
         stroke="none" />
       <text
         x="95"
-        y="279"
+        y="297"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -151,15 +159,15 @@
         fill="#FFFFFF">Duplicate</text>
       <text
         x="95"
-        y="297"
+        y="315"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">[React]</text>
+        fill="#FFFFFF">[Container: React]</text>
       <text
         x="95"
-        y="315"
+        y="333"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -167,7 +175,7 @@
         fill="#FFFFFF">Reuses the web id</text>
       <rect
         x="70"
-        y="142.5"
+        y="160.5"
         width="50"
         height="32"
         rx="3"
@@ -176,7 +184,7 @@
         stroke="none" />
       <text
         x="95"
-        y="152"
+        y="170"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -184,7 +192,7 @@
         fill="#666">Uses</text>
       <text
         x="95"
-        y="166"
+        y="184"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"

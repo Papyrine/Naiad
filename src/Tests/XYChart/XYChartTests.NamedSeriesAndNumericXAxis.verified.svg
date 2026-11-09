@@ -1,0 +1,282 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 711.7 460"
+  style="max-width: 711.7px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <line
+    x1="80"
+    y1="380"
+    x2="580"
+    y2="380"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="380"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">0</text>
+  <line
+    x1="80"
+    y1="320"
+    x2="580"
+    y2="320"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="320"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">10</text>
+  <line
+    x1="80"
+    y1="260"
+    x2="580"
+    y2="260"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="260"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">20</text>
+  <line
+    x1="80"
+    y1="200"
+    x2="580"
+    y2="200"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="200"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">30</text>
+  <line
+    x1="80"
+    y1="140"
+    x2="580"
+    y2="140"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="140"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">40</text>
+  <line
+    x1="80"
+    y1="80"
+    x2="580"
+    y2="80"
+    stroke="#e0e0e0" />
+  <text
+    x="70"
+    y="80"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">50</text>
+  <text
+    x="130"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">1</text>
+  <text
+    x="230"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">2</text>
+  <text
+    x="330"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">3</text>
+  <text
+    x="430"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">4</text>
+  <text
+    x="530"
+    y="400"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">5</text>
+  <g
+    transform="rotate(-90, 35, 230)">
+    <text
+      x="35"
+      y="230"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333">Units</text>
+  </g>
+  <text
+    x="330"
+    y="425"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Month</text>
+  <rect
+    x="90"
+    y="320"
+    width="78"
+    height="60"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="190"
+    y="260"
+    width="78"
+    height="120"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="290"
+    y="200"
+    width="78"
+    height="180"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="390"
+    y="140"
+    width="78"
+    height="240"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="490"
+    y="80"
+    width="78"
+    height="300"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <path
+    d="M 130 290 L 230 230 L 330 200 L 430 170 L 530 110"
+    fill="none"
+    stroke="#9C27B0"
+    stroke-width="2" />
+  <circle
+    cx="130"
+    cy="290"
+    r="4"
+    fill="#9C27B0"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="230"
+    cy="230"
+    r="4"
+    fill="#9C27B0"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="330"
+    cy="200"
+    r="4"
+    fill="#9C27B0"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="430"
+    cy="170"
+    r="4"
+    fill="#9C27B0"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="530"
+    cy="110"
+    r="4"
+    fill="#9C27B0"
+    stroke="#fff"
+    stroke-width="2" />
+  <rect
+    x="610"
+    y="214.25"
+    width="10.5"
+    height="10.5"
+    fill="#4CAF50"
+    stroke="none" />
+  <text
+    x="625.5"
+    y="219.5"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Sold</text>
+  <line
+    x1="610"
+    y1="240.5"
+    x2="620.5"
+    y2="240.5"
+    stroke="#9C27B0"
+    stroke-width="2" />
+  <text
+    x="625.5"
+    y="240.5"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Target</text>
+  <line
+    x1="80"
+    y1="80"
+    x2="80"
+    y2="380"
+    stroke="#333"
+    stroke-width="2" />
+  <line
+    x1="80"
+    y1="380"
+    x2="580"
+    y2="380"
+    stroke="#333"
+    stroke-width="2" />
+</svg>

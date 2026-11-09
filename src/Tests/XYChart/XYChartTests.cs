@@ -126,4 +126,87 @@ public class XYChartTests: TestBase
         await Assert.That(result.Value.YAxisLabel).IsEqualTo("Revenue");
         await Assert.That(result.Value.Series.Select(_ => string.Join(",", _.Data))).IsEquivalentTo(["1,2", "3,4"], CollectionOrdering.Matching);
     }
+
+    // An axis titled without a range was pinned to 0 to 100, so data past 100 was drawn above the plot.
+    // Mermaid spans the data instead.
+    [Test]
+    public async Task TitledAxisWithoutRange_SpansTheData()
+    {
+        var result = new XYChartParser().Parse(
+            """
+            xychart-beta
+                y-axis "Revenue"
+                bar [500, 1000]
+            """);
+
+        await Assert.That(result.Value.YAxisMin).IsNull();
+        await Assert.That(result.Value.YAxisMax).IsNull();
+    }
+
+    // Mermaid lays a chart on its side with `horizontal` after the keyword: categories run down the left
+    // and the bars grow to the right.
+    [Test]
+    public Task Horizontal()
+    {
+        const string input =
+            """
+            xychart-beta horizontal
+                title "Regional Sales"
+                x-axis "Region" ["North America", "Europe", "Asia Pacific"]
+                y-axis "Revenue" 0 --> 100
+                bar [85, 72, 90]
+                line [80, 70, 88]
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // A series may be named, and the x-axis may be a numeric range rather than categories, which the data
+    // points are spread across.
+    [Test]
+    public Task NamedSeriesAndNumericXAxis()
+    {
+        const string input =
+            """
+            xychart-beta vertical
+                x-axis "Month" 1 --> 5
+                y-axis "Units" 0 --> 50
+                bar "Sold" [10, 20, 30, 40, 50]
+                line "Target" [15, 25, 30, 35, 45]
+            """;
+
+        return VerifySvg(input);
+    }
+
+    [Test]
+    public async Task NamedSeriesAndNumericXAxis_AreRead()
+    {
+        var result = new XYChartParser().Parse(
+            """
+            xychart-beta horizontal
+                x-axis "Month" 1 --> 12
+                bar "Sold" [10, 20]
+            """);
+
+        await Assert.That(result.Error).IsNull();
+        await Assert.That(result.Value.Horizontal).IsTrue();
+        await Assert.That(result.Value.XAxisLabel).IsEqualTo("Month");
+        await Assert.That(result.Value.XAxisMin).IsEqualTo(1);
+        await Assert.That(result.Value.XAxisMax).IsEqualTo(12);
+        await Assert.That(result.Value.Series.Single().Name).IsEqualTo("Sold");
+    }
+
+    [Test]
+    public Task TitledAxisWithoutRange()
+    {
+        const string input =
+            """
+            xychart-beta
+                x-axis [Q1, Q2, Q3]
+                y-axis "Revenue"
+                bar [500, 750, 1000]
+            """;
+
+        return VerifySvg(input);
+    }
 }

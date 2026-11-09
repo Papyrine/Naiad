@@ -196,7 +196,9 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             CheckForElementsOutsideBounds();
         }
 
-        return builder.Build();
+        var document = builder.Build();
+        DiagramTitle.Add(document, model.Title, options);
+        return document;
     }
 
     // Nested states are already at their final places, so they move with the composite that holds them.

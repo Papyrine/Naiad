@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 480 498"
+  viewBox="0 0 480 516"
   style="max-width: 480px;"
   role="graphics-document document">
   <style
@@ -34,7 +34,7 @@
         x="0"
         y="258"
         width="440"
-        height="150"
+        height="168"
         rx="5"
         ry="5"
         fill="#FFFFFF"
@@ -42,23 +42,23 @@
         stroke-width="2"
         style="stroke-dasharray: 8 4" />
       <path
-        d="M 195.4 153 L 115.08 313"
+        d="M 196.26 153 L 118.74 313"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 115.08 313 L 114.61 305.01 L 121.76 308.6 Z"
+        d="M 118.74 313 L 118.16 305.02 L 125.36 308.51 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 175 353 L 220 353 L 265 353"
+        d="M 175 362 L 220 362 L 265 362"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 265 353 L 258.07 357 L 258.07 349 Z"
+        d="M 265 362 L 258.07 366 L 258.07 358 Z"
         fill="#666"
         stroke="none" />
       <text
@@ -120,7 +120,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">[JavaScript]</text>
+        fill="#FFFFFF">[Container: JavaScript]</text>
       <text
         x="220"
         y="122"
@@ -133,7 +133,7 @@
         x="15"
         y="313"
         width="160"
-        height="80"
+        height="98"
         rx="5"
         ry="5"
         fill="#438DD5"
@@ -154,31 +154,39 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Container]</text>
+      <text
+        x="95"
+        y="380"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
         fill="#FFFFFF">Serves the front end</text>
       <ellipse
         cx="345"
-        cy="328"
+        cy="337"
         rx="75"
         ry="15"
         fill="#438DD5"
         stroke="none" />
       <rect
         x="270"
-        y="328"
+        y="337"
         width="150"
         height="50"
         fill="#438DD5"
         stroke="none" />
       <ellipse
         cx="345"
-        cy="378"
+        cy="387"
         rx="75"
         ry="15"
         fill="#438DD5"
         stroke="none" />
       <text
         x="345"
-        y="344"
+        y="353"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -187,14 +195,14 @@
         fill="#FFFFFF">Database</text>
       <text
         x="345"
-        y="362"
+        y="371"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">[PostgreSQL]</text>
+        fill="#FFFFFF">[Container: PostgreSQL]</text>
       <rect
-        x="88.54"
+        x="90.8"
         y="209"
         width="133.4"
         height="32"
@@ -203,7 +211,7 @@
         fill="#FFFFFF"
         stroke="none" />
       <text
-        x="155.24"
+        x="157.5"
         y="218.5"
         text-anchor="middle"
         dominant-baseline="middle"
@@ -211,7 +219,7 @@
         font-family="Arial, sans-serif"
         fill="#666">Submits credentials</text>
       <text
-        x="155.24"
+        x="157.5"
         y="232.5"
         text-anchor="middle"
         dominant-baseline="middle"
@@ -220,7 +228,7 @@
         fill="#888">[JSON/HTTPS]</text>
       <rect
         x="189.6"
-        y="336.5"
+        y="345.5"
         width="60.8"
         height="17"
         rx="3"
@@ -229,7 +237,7 @@
         stroke="none" />
       <text
         x="220"
-        y="345"
+        y="354"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"

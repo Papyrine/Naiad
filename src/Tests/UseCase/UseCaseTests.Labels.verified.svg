@@ -29,15 +29,22 @@
         fill="rgba(232,232,232,0.8)"
         stroke="none"
         class="edgeLabel" />
-      <text
-        x="163.4"
-        y="144.2"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="12px"
-        font-family="Arial, sans-serif"
-        fill="#333"
-        class="relationship-label">opens form</text>
+      <foreignObject
+        x="117.8"
+        y="135.2"
+        width="91.2"
+        height="18"
+        class="relationship-label"
+        style="font-size:12px;font-family:Arial, sans-serif">
+        <div
+          xmlns="http://www.w3.org/1999/xhtml"
+          style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 91.2px; height: 18px;">
+          <span>
+            <p
+              style="margin:0;color:#333">opens <strong>form</strong></p>
+          </span>
+        </div>
+      </foreignObject>
       <path
         d="M81.6,144.29 L95.23,125.08 C108.87,105.86 136.13,67.43 165.92,48.22 C195.7,29 228,29 244.15,29 L260.3,29"
         fill="none"
@@ -111,15 +118,24 @@
           stroke="#9370DB"
           stroke-width="2" />
       </g>
-      <text
-        x="40.8"
-        y="241.8"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="14px"
-        font-family="Arial, sans-serif"
-        fill="#333"
-        class="actor-label">Reviewer</text>
+      <foreignObject
+        x="-3.16"
+        y="231.3"
+        width="87.92"
+        height="21"
+        class="actor-label"
+        style="font-size:14px;font-family:Arial, sans-serif">
+        <div
+          xmlns="http://www.w3.org/1999/xhtml"
+          style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 87.92px; height: 21px;">
+          <span>
+            <p
+              style="margin:0;color:#333">
+              <em>Reviewer</em>
+            </p>
+          </span>
+        </div>
+      </foreignObject>
       <path
         d="M 268.3 29 A 82.7 29 0 1 0 433.7 29 A 82.7 29 0 1 0 268.3 29 Z"
         fill="#ECECFF"
@@ -141,24 +157,24 @@
         stroke="#9370DB"
         stroke-width="2"
         class="usecase-element" />
-      <text
-        x="351"
-        y="137"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="12px"
-        font-family="Arial, sans-serif"
-        fill="#333"
-        class="usecase-label">Formatted label</text>
-      <text
-        x="351"
-        y="151.4"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="12px"
-        font-family="Arial, sans-serif"
-        fill="#333"
-        class="usecase-label">with a physical line break</text>
+      <foreignObject
+        x="242.04"
+        y="128"
+        width="217.92"
+        height="32.4"
+        class="usecase-label"
+        style="font-size:12px;font-family:Arial, sans-serif">
+        <div
+          xmlns="http://www.w3.org/1999/xhtml"
+          style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 217.92px; height: 32.4px;">
+          <span>
+            <p
+              style="margin:0;color:#333">
+              <strong>Formatted label</strong>
+              <br />with a physical line break</p>
+          </span>
+        </div>
+      </foreignObject>
       <path
         d="M 271.6 259.4 A 79.4 29 0 1 0 430.4 259.4 A 79.4 29 0 1 0 271.6 259.4 Z"
         fill="#ECECFF"

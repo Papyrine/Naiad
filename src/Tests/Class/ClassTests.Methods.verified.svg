@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 175.5 131"
-  style="max-width: 175.5px;"
+  viewBox="0 0 167.8 131"
+  style="max-width: 167.8px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -74,12 +74,12 @@
     <rect
       x="0"
       y="0"
-      width="135.5"
+      width="127.8"
       height="91"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="67.75"
+      x="63.9"
       y="20"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -89,7 +89,7 @@
     <line
       x1="0"
       y1="40"
-      x2="135.5"
+      x2="127.8"
       y2="40"
       stroke="#333" />
     <text
@@ -98,13 +98,13 @@
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ makeSound()</text>
+      font-family="Arial, sans-serif">+makeSound()</text>
     <text
       x="10"
       y="71"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ move() : void</text>
+      font-family="Arial, sans-serif">+move() : void</text>
   </g>
 </svg>

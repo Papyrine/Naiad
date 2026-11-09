@@ -220,7 +220,8 @@ public class ClassParserTests
             .IsEqualTo("Aggregate Root");
 
         var svg = Mermaid.Render("classDiagram\n    class Order {\n        <<Entity>>\n    }");
-        await Assert.That(svg).Contains("&lt;&lt;Entity&gt;&gt;");
+        // Shown between guillemets, as Mermaid writes it.
+        await Assert.That(svg).Contains("«Entity»");
     }
 
     [Test]

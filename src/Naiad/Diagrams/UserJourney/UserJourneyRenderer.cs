@@ -91,8 +91,10 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         var axisY = taskBottom + axisGap;
 
         var lastTaskRight = TaskX(taskCount - 1) + taskWidth;
-        var minScore = tasks.Min(_ => _.Score);
-        var lowestFaceY = FaceCenterY(axisY, minScore);
+        // The top of the face scale is a 5, or a higher score where one was given, so that every face
+        // hangs below the axis while still ranking above the lower ones.
+        var topScore = Math.Max(5, tasks.Max(_ => _.Score));
+        var lowestFaceY = FaceCenterY(axisY, tasks.Min(_ => _.Score), topScore);
 
         var width = lastTaskRight + rightMargin;
         var height = lowestFaceY + faceRadius + options.Padding;
@@ -207,7 +209,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
                 }
 
                 // Dashed drop-line from the task down past the axis to its score face.
-                var faceCenterY = FaceCenterY(axisY, task.Score);
+                var faceCenterY = FaceCenterY(axisY, task.Score, topScore);
                 builder.AddLine(
                     centerX,
                     taskBottom,
@@ -235,7 +237,7 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
         for (var index = 0; index < tasks.Count; index++)
         {
             var centerX = TaskX(index) + taskWidth / 2;
-            DrawFace(builder, centerX, FaceCenterY(axisY, tasks[index].Score), tasks[index].Score);
+            DrawFace(builder, centerX, FaceCenterY(axisY, tasks[index].Score, topScore), tasks[index].Score);
         }
 
         return builder.Build();
@@ -243,7 +245,8 @@ public class UserJourneyRenderer : IDiagramRenderer<UserJourneyModel>
 
     static double TaskX(int index) => leftMargin + index * (taskWidth + taskGap);
 
-    static double FaceCenterY(double axisY, int score) => axisY + faceGap + (5 - score) * faceStep;
+    static double FaceCenterY(double axisY, int score, int topScore) =>
+        axisY + faceGap + (topScore - score) * faceStep;
 
     static void DrawFace(SvgBuilder builder, double cx, double cy, int score)
     {

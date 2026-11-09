@@ -6,9 +6,15 @@ class SankeyParser : IDiagramParser<SankeyModel>
     {
         var numberParser = CommonParsers.SignedDecimal;
 
+        // A quoted field, CSV style: a quote inside it is written twice ("Heating and cooling, ""homes""").
         var quotedString =
-            Between(Literals.Char('"'), Literals.NoneOf("\"", minSize: 0), Literals.Char('"'))
-                .AsString();
+            Literals.Char('"')
+                .SkipAnd(
+                    Literals.NoneOf("\"").AsString()
+                        .Or(Literals.Text("\"\"").Then("\""))
+                        .Many())
+                .AndSkip(Literals.Char('"'))
+                .Then(static _ => string.Concat(_));
 
         // Unquoted name (no commas or newlines)
         var unquotedName =

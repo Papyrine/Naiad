@@ -12,8 +12,11 @@ class StateParser : IDiagramParser<StateModel>
 
         var restOfLine = restOfLineText.AsString();
 
-        // Trailing spaces are allowed before every line end.
-        var endOfLine = CommonParsers.InlineWhitespace.SkipAnd(CommonParsers.LineEnd);
+        // Trailing spaces are allowed before every line end, and so is a `%%` comment
+        // (`Moving --> Still %% another comment`).
+        var endOfLine =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(CommonParsers.LineEnd.Or(CommonParsers.Comment));
 
         // State identifier (alphanumeric, underscore, or [*] for start/end)
         var bareIdentifier =
@@ -96,6 +99,17 @@ class StateParser : IDiagramParser<StateModel>
                 .SkipAnd(Literals.Text("state"))
                 .SkipAnd(CommonParsers.RequiredWhitespace)
                 .SkipAnd(stateIdentifier)
+                .AndSkip(endOfLine)
+                .Then(static _ => new State { Id = _ });
+
+        // A state declared by naming it on a line of its own: StateName. Nothing but a comment may follow
+        // the name; that is checked before the line end is tried, so a line that is not one of these
+        // does not move where a parse error is reported.
+        var bareStateDeclaration =
+            CommonParsers.InlineWhitespace
+                .SkipAnd(bareIdentifier)
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Not(Literals.NoneOf("\r\n%", maxSize: 1)))
                 .AndSkip(endOfLine)
                 .Then(static _ => new State { Id = _ });
 
@@ -278,6 +292,7 @@ class StateParser : IDiagramParser<StateModel>
                 styledStateDeclaration.Then<IStateContent?>(static _ => new StateItem(_)),
                 stateWithDescription.Then<IStateContent?>(static _ => new StateItem(_)),
                 simpleStateDeclaration.Then<IStateContent?>(static _ => new StateItem(_)),
+                bareStateDeclaration.Then<IStateContent?>(static _ => new StateItem(_)),
                 skipLine.Then<IStateContent?>(static _ => null)
             ).Many();
 

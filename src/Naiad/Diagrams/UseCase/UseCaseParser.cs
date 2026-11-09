@@ -19,7 +19,7 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
         var plainString =
             Between(Literals.Char('"'), Literals.NoneOf("\"\r\n", minSize: 0), Literals.Char('"'))
                 .Or(Between(Literals.Char('\''), Literals.NoneOf("'\r\n", minSize: 0), Literals.Char('\'')))
-                .Then(static _ => DecodeEntities(_.ToString()));
+                .Then(static _ => EntityCodes.Decode(_.ToString()));
 
         // A markdown string may run over several lines. It keeps its backticks, which is how the renderer
         // tells it from plain text.
@@ -27,7 +27,7 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
             Literals.Text("\"`")
                 .SkipAnd(AnyCharBefore(Literals.Text("`\""), canBeEmpty: true))
                 .AndSkip(Literals.Text("`\""))
-                .Then(static _ => $"`{DecodeEntities(_.ToString())}`");
+                .Then(static _ => $"`{EntityCodes.Decode(_.ToString())}`");
 
         var quotedLabel = markdownString.Or(plainString);
         var label = quotedLabel.Or(new UnquotedLabel());
@@ -43,7 +43,7 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
             Literals.Text("<<")
                 .SkipAnd(Literals.NoneOf(">\r\n"))
                 .AndSkip(Literals.Text(">>"))
-                .Then(static _ => DecodeEntities(_.Span.Trim().ToString()));
+                .Then(static _ => EntityCodes.Decode(_.Span.Trim().ToString()));
 
         var className =
             Literals.Pattern(static _ => char.IsAsciiLetterOrDigit(_) || _ is '_' or '-').AsString();
@@ -410,41 +410,6 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
         return builder.ToString();
     }
 
-    /// <summary>
-    /// Mermaid's entity codes, <c>#quot;</c> and <c>#40;</c>, which are how a label holds a character the
-    /// syntax reserves.
-    /// </summary>
-    static string DecodeEntities(string text)
-    {
-        if (!text.Contains('#'))
-        {
-            return text;
-        }
-
-        return EntityPattern().Replace(
-            text,
-            static _ =>
-            {
-                var name = _.Groups[1].Value;
-                if (int.TryParse(name, NumberStyles.None, CultureInfo.InvariantCulture, out var code))
-                {
-                    // Not 0, and not a surrogate, which is half of a pair and no character by itself.
-                    if (code > 0 && Rune.IsValid(code))
-                    {
-                        return char.ConvertFromUtf32(code);
-                    }
-
-                    return _.Value;
-                }
-
-                var decoded = WebUtility.HtmlDecode($"&{name};");
-                return decoded == $"&{name};" ? _.Value : decoded;
-            });
-    }
-
-    [GeneratedRegex(@"#(\w+);")]
-    private static partial Regex EntityPattern();
-
     // The properties of a metadata block: `key: value` pairs, split on commas and line breaks.
     static Dictionary<string, string> ParseMetadata(string text)
     {
@@ -583,10 +548,23 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
 
                 break;
             case JsonValueKind.Array:
+                // As Mermaid lists them, an object or array in an array is keyed by its index (`items[0].name`),
+                // while plain values are a list under the array's own key: the first row carries the key and
+                // the rest leave it blank.
                 var count = 0;
+                var keyShown = false;
                 foreach (var item in element.EnumerateArray())
                 {
-                    AddRows(rows, item, $"{path}[{count.ToString(CultureInfo.InvariantCulture)}]");
+                    if (item.ValueKind is JsonValueKind.Object or JsonValueKind.Array)
+                    {
+                        AddRows(rows, item, $"{path}[{count.ToString(CultureInfo.InvariantCulture)}]");
+                    }
+                    else
+                    {
+                        AddRows(rows, item, keyShown ? "" : path);
+                        keyShown = true;
+                    }
+
                     count++;
                 }
 
@@ -643,7 +621,7 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
             }
 
             cursor.Advance(length);
-            result.Set(start, start + length, DecodeEntities(text.ToString()));
+            result.Set(start, start + length, EntityCodes.Decode(text.ToString()));
             return true;
         }
 

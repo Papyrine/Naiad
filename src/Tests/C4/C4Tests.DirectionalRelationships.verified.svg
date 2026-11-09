@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 700 510"
+  viewBox="0 0 700 564"
   style="max-width: 700px;"
   role="graphics-document document">
   <style
@@ -20,57 +20,57 @@
     <g
       transform="translate(0,50)">
       <path
-        d="M 330 170 L 330 80"
+        d="M 330 188 L 330 98"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 330 80 L 334 86.93 L 326 86.93 Z"
+        d="M 330 98 L 334 104.93 L 326 104.93 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 330 250 L 330 340"
+        d="M 330 286 L 330 376"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 330 340 L 326 333.07 L 334 333.07 Z"
+        d="M 330 376 L 326 369.07 L 334 369.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 250 210 L 160 210"
+        d="M 250 237 L 160 237"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 160 210 L 166.93 206 L 166.93 214 Z"
+        d="M 160 237 L 166.93 233 L 166.93 241 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 410 210 L 500 210"
+        d="M 410 237 L 500 237"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 500 210 L 493.07 214 L 493.07 206 Z"
+        d="M 500 237 L 493.07 241 L 493.07 233 Z"
         fill="#666"
         stroke="none" />
       <rect
         x="250"
-        y="170"
+        y="188"
         width="160"
-        height="80"
+        height="98"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="330"
-        y="201"
+        y="219"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -79,7 +79,15 @@
         fill="#FFFFFF">Core</text>
       <text
         x="330"
-        y="219"
+        y="237"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="330"
+        y="255"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -89,7 +97,7 @@
         x="250"
         y="0"
         width="160"
-        height="80"
+        height="98"
         rx="5"
         ry="5"
         fill="#1168BD"
@@ -110,19 +118,27 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="330"
+        y="67"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
         fill="#FFFFFF">Above the core</text>
       <rect
         x="250"
-        y="340"
+        y="376"
         width="160"
-        height="80"
+        height="98"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="330"
-        y="371"
+        y="407"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -131,7 +147,15 @@
         fill="#FFFFFF">Downstream</text>
       <text
         x="330"
-        y="389"
+        y="425"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="330"
+        y="443"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -139,16 +163,16 @@
         fill="#FFFFFF">Below the core</text>
       <rect
         x="0"
-        y="170"
+        y="188"
         width="160"
-        height="80"
+        height="98"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="80"
-        y="201"
+        y="219"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -157,7 +181,15 @@
         fill="#FFFFFF">Left Service</text>
       <text
         x="80"
-        y="219"
+        y="237"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="80"
+        y="255"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -165,16 +197,16 @@
         fill="#FFFFFF">Left of the core</text>
       <rect
         x="500"
-        y="170"
+        y="188"
         width="160"
-        height="80"
+        height="98"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="580"
-        y="201"
+        y="219"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -183,7 +215,15 @@
         fill="#FFFFFF">Right Service</text>
       <text
         x="580"
-        y="219"
+        y="237"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="580"
+        y="255"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -191,7 +231,7 @@
         fill="#FFFFFF">Right of the core</text>
       <rect
         x="286.4"
-        y="108.5"
+        y="126.5"
         width="87.2"
         height="17"
         rx="3"
@@ -200,7 +240,7 @@
         stroke="none" />
       <text
         x="330"
-        y="117"
+        y="135"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -208,7 +248,7 @@
         fill="#666">Publishes to</text>
       <rect
         x="309.5"
-        y="278.5"
+        y="314.5"
         width="41"
         height="17"
         rx="3"
@@ -217,7 +257,7 @@
         stroke="none" />
       <text
         x="330"
-        y="287"
+        y="323"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -225,7 +265,7 @@
         fill="#666">Calls</text>
       <rect
         x="168"
-        y="193.5"
+        y="220.5"
         width="74"
         height="17"
         rx="3"
@@ -234,7 +274,7 @@
         stroke="none" />
       <text
         x="205"
-        y="202"
+        y="229"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -242,7 +282,7 @@
         fill="#666">Reads from</text>
       <rect
         x="421.3"
-        y="193.5"
+        y="220.5"
         width="67.4"
         height="17"
         rx="3"
@@ -251,7 +291,7 @@
         stroke="none" />
       <text
         x="455"
-        y="202"
+        y="229"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"

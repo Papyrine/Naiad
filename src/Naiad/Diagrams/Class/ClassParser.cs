@@ -95,8 +95,9 @@ class ClassParser : IDiagramParser<ClassModel>
                     {
                         Name = rest.Name ?? firstWord,
                         Type = rest.Name is null ? rest.Type : firstWord,
-                        Visibility = visibility.OrSome(Visibility.Public),
-                        IsStatic = suffix is {HasValue: true, Value: '$'}
+                        Visibility = visibility.OrSome(Visibility.None),
+                        IsStatic = suffix is {HasValue: true, Value: '$'},
+                        TypeFirst = rest.Name is not null
                     });
 
         // Method: +makeSound(), +move(int distance) : void, +getId() int or +validate()$ bool
@@ -119,7 +120,7 @@ class ClassParser : IDiagramParser<ClassModel>
                         name,
                         parameters,
                         returnType.OrNull(),
-                        visibility.OrSome(Visibility.Public),
+                        visibility.OrSome(Visibility.None),
                         suffix));
 
         // Class annotation: <<interface>>, <<abstract>>, or any other text, such as <<Entity>>.
@@ -158,9 +159,9 @@ class ClassParser : IDiagramParser<ClassModel>
                     .Or(Not(Literals.Char('"')).SkipAnd(Literals.NoneOf("]\r\n", minSize: 0).AsString())),
                 Literals.Char(']'));
 
-        // Class definition: class ClassName, class ClassName { ... }, class ClassName["Label"] or
-        // class ClassName:::cssClass. Styling is not applied to class diagrams, so the css class is read
-        // and dropped.
+        // Class definition: class ClassName, class ClassName { ... }, class ClassName["Label"],
+        // class ClassName <<interface>> or class ClassName:::cssClass. Styling is not applied to class
+        // diagrams, so the css class is read and dropped.
         var classDefinitionParser =
             CommonParsers.InlineWhitespace
                 .SkipAnd(Literals.Text("class"))
@@ -168,6 +169,7 @@ class ClassParser : IDiagramParser<ClassModel>
                 .SkipAnd(className)
                 .And(CommonParsers.InlineWhitespace.SkipAnd(classLabel).Optional())
                 .AndSkip(Literals.Text(":::").SkipAnd(CommonParsers.Identifier).Optional())
+                .And(CommonParsers.InlineWhitespace.SkipAnd(annotationText).Optional())
                 .AndSkip(CommonParsers.InlineWhitespace)
                 .And(classBody.Optional())
                 .AndSkip(CommonParsers.InlineWhitespace)
@@ -390,32 +392,10 @@ class ClassParser : IDiagramParser<ClassModel>
 
     /// <summary>
     /// Rewrites Mermaid's tilde-delimited generics as angle brackets, so <c>List~Item~</c> displays as
-    /// <c>List&lt;Item&gt;</c>. Tildes alternate open/close, matching how Mermaid pairs them.
+    /// <c>List&lt;Item&gt;</c> and the nested <c>List~List~int~~</c> as <c>List&lt;List&lt;int&gt;&gt;</c>.
     /// </summary>
-    static string NormalizeGenerics(string text)
-    {
-        if (!text.Contains('~'))
-        {
-            return text;
-        }
-
-        var builder = new StringBuilder(text.Length);
-        var open = true;
-        foreach (var ch in text)
-        {
-            if (ch == '~')
-            {
-                builder.Append(open ? '<' : '>');
-                open = !open;
-            }
-            else
-            {
-                builder.Append(ch);
-            }
-        }
-
-        return builder.ToString();
-    }
+    static string NormalizeGenerics(string text) =>
+        NormalizeNestedGenerics(text);
 
     static RelationshipType Classify(RelationshipArrow arrow)
     {
@@ -527,7 +507,8 @@ class ClassParser : IDiagramParser<ClassModel>
                 new()
                 {
                     Name = NormalizeGenerics(text[(space + 1)..]),
-                    Type = NormalizeGenerics(text[..space].TrimEnd())
+                    Type = NormalizeGenerics(text[..space].TrimEnd()),
+                    TypeFirst = true
                 });
         }
 
@@ -578,7 +559,7 @@ class ClassParser : IDiagramParser<ClassModel>
     /// </summary>
     static IClassBodyContent ParseLooseMember(CharSpan line)
     {
-        var visibility = Visibility.Public;
+        var visibility = Visibility.None;
         if (TryGetVisibility(line[0], out var marked))
         {
             visibility = marked;
@@ -710,6 +691,7 @@ class ClassParser : IDiagramParser<ClassModel>
     static ClassDefinition CreateClassDefinition(
         ClassName name,
         Option<string> label,
+        Option<string> annotation,
         Option<(string? annotation, List<ClassMember> members, List<ClassMethod> methods)> body)
     {
         var classDef = new ClassDefinition
@@ -718,11 +700,17 @@ class ClassParser : IDiagramParser<ClassModel>
             DisplayName = label.HasValue ? label.Value : name.DisplayName
         };
 
+        // `class Shape <<interface>>`: the annotation on the declaration line itself.
+        if (annotation.HasValue)
+        {
+            SetAnnotation(classDef, annotation.Value);
+        }
+
         if (body.HasValue)
         {
-            if (body.Value.annotation is { } annotation)
+            if (body.Value.annotation is { } bodyAnnotation)
             {
-                SetAnnotation(classDef, annotation);
+                SetAnnotation(classDef, bodyAnnotation);
             }
 
             classDef.Members.AddRange(body.Value.members);

@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 615.45 684"
-  style="max-width: 615.45px;"
+  viewBox="0 0 592.35 684"
+  style="max-width: 592.35px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -72,54 +72,55 @@
   <g
     transform="translate(20,20)">
     <rect
-      x="366.25"
+      x="343.15"
       y="384"
       width="209.2"
       height="260"
       fill="none"
       stroke="#999" />
     <path
-      d="M385.4,109.96 L367.65,120.3 C349.91,130.64 314.42,151.32 279.18,169.5 C243.95,187.67 208.98,203.34 191.49,211.18 L174,219.02"
+      d="M373.85,104.45 L355.14,115.71 C336.43,126.97 299.02,149.48 261.86,169.27 C224.7,189.05 187.8,206.1 169.35,214.62 L150.9,223.14"
       fill="none"
       stroke="#333" />
     <polygon
-      points="385.4,109.96 380.43,118.64 375.4,110"
+      points="373.85,104.45 369.01,113.2 363.85,104.63"
       fill="#fff"
       stroke="#333" />
     <path
-      d="M467.08,132 L467.71,138.67 C468.33,145.33 469.59,158.67 470.22,172.08 C470.85,185.5 470.85,199 470.85,205.75 L470.85,212.5"
+      d="M443.98,132 L444.61,138.67 C445.23,145.33 446.49,158.67 447.12,172.08 C447.75,185.5 447.75,199 447.75,205.75 L447.75,212.5"
       fill="none"
       stroke="#333" />
     <polygon
-      points="467.08,132 472.87,140.15 462.91,141.09"
+      points="443.98,132 449.77,140.15 439.81,141.09"
       fill="#fff"
       stroke="#333" />
     <path
-      d="M470.85,303.5 L470.85,310.25 C470.85,317 470.85,330.5 470.85,343.92 C470.85,357.33 470.85,370.67 470.85,384 C470.85,397.33 470.85,410.67 470.85,417.33 L470.85,424"
+      d="M447.75,303.5 L447.75,310.25 C447.75,317 447.75,330.5 447.75,343.92 C447.75,357.33 447.75,370.67 447.75,384 C447.75,397.33 447.75,410.67 447.75,417.33 L447.75,424"
       fill="none"
       stroke="#333" />
-    <polygon
-      points="470.85,424 465.85,415.34 475.85,415.34"
-      fill="#333" />
     <path
-      d="M470.85,474 L470.85,480.67 C470.85,487.33 470.85,500.67 470.85,514 C470.85,527.33 470.85,540.67 470.85,547.33 L470.85,554"
+      d="M 442.75 415.34 L 447.75 424 L 452.75 415.34"
+      fill="none"
+      stroke="#333" />
+    <path
+      d="M447.75,474 L447.75,480.67 C447.75,487.33 447.75,500.67 447.75,514 C447.75,527.33 447.75,540.67 447.75,547.33 L447.75,554"
       fill="none"
       stroke="#333" />
     <circle
-      cx="470.85"
+      cx="447.75"
       cy="548"
       r="6"
       fill="#fff"
       stroke="#333" />
     <rect
-      x="437.55"
+      x="414.45"
       y="387"
       width="66.6"
       height="18"
       fill="#fff"
       stroke="none" />
     <text
-      x="470.85"
+      x="447.75"
       y="396"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -128,69 +129,69 @@
       font-weight="bold"
       fill="#666">Storage</text>
     <rect
-      x="173.4"
+      x="161.85"
       y="48.8"
       width="152"
       height="34.4"
       fill="#FFF5AD"
       stroke="#AAAA33" />
     <text
-      x="249.4"
+      x="237.85"
       y="66"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">From Duck till Zebra</text>
     <path
-      d="M77,97.6 L77,110 C77,122.4 77,147.2 77.78,166.27 C78.55,185.33 80.1,198.67 80.88,205.33 L81.65,212"
+      d="M65.45,97.6 L65.45,110 C65.45,122.4 65.45,147.2 66.23,166.27 C67,185.33 68.55,198.67 69.33,205.33 L70.1,212"
       fill="none"
       stroke="#AAAA33"
       stroke-dasharray="3,3" />
     <rect
-      x="40.6"
+      x="29.05"
       y="34.4"
       width="72.8"
       height="63.2"
       fill="#FFF5AD"
       stroke="#AAAA33" />
     <text
-      x="77"
+      x="65.45"
       y="51.6"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">can fly</text>
     <text
-      x="77"
+      x="65.45"
       y="66"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">can swim</text>
     <text
-      x="77"
+      x="65.45"
       y="80.4"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">can dive</text>
     <rect
-      x="385.4"
+      x="373.85"
       y="0"
-      width="150.9"
+      width="127.8"
       height="132"
       fill="#FFF3E0"
       stroke="#333" />
     <text
-      x="460.85"
+      x="437.75"
       y="20"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif"
-      fill="#666">&lt;&lt;abstract&gt;&gt;</text>
+      fill="#666">«abstract»</text>
     <text
-      x="460.85"
+      x="437.75"
       y="40"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -198,47 +199,47 @@
       font-family="Arial, sans-serif"
       font-weight="bold">Animal</text>
     <line
-      x1="385.4"
+      x1="373.85"
       y1="60"
-      x2="536.3"
+      x2="501.65"
       y2="60"
       stroke="#333" />
     <text
-      x="395.4"
+      x="383.85"
       y="71"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ age : int</text>
+      font-family="Arial, sans-serif">+int age</text>
     <text
-      x="395.4"
+      x="383.85"
       y="91"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ gender : String</text>
+      font-family="Arial, sans-serif">+String gender</text>
     <line
-      x1="385.4"
+      x1="373.85"
       y1="101"
-      x2="536.3"
+      x2="501.65"
       y2="101"
       stroke="#333" />
     <text
-      x="395.4"
+      x="383.85"
       y="112"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ isMammal()</text>
+      font-family="Arial, sans-serif">+isMammal()</text>
     <rect
       x="0"
       y="212"
-      width="174"
+      width="150.9"
       height="92"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="87"
+      x="75.45"
       y="232"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -248,7 +249,7 @@
     <line
       x1="0"
       y1="252"
-      x2="174"
+      x2="150.9"
       y2="252"
       stroke="#333" />
     <text
@@ -257,11 +258,11 @@
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ beakColor : String</text>
+      font-family="Arial, sans-serif">+String beakColor</text>
     <line
       x1="0"
       y1="273"
-      x2="174"
+      x2="150.9"
       y2="273"
       stroke="#333" />
     <text
@@ -270,24 +271,24 @@
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ swim()</text>
+      font-family="Arial, sans-serif">+swim()</text>
     <rect
-      x="391.55"
+      x="380"
       y="212.5"
-      width="158.6"
+      width="135.5"
       height="91"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="470.85"
+      x="447.75"
       y="232.5"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif"
-      fill="#666">&lt;&lt;Entity&gt;&gt;</text>
+      fill="#666">«Entity»</text>
     <text
-      x="470.85"
+      x="447.75"
       y="252.5"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -295,27 +296,27 @@
       font-family="Arial, sans-serif"
       font-weight="bold">Fish</text>
     <line
-      x1="391.55"
+      x1="380"
       y1="272.5"
-      x2="550.15"
+      x2="515.5"
       y2="272.5"
       stroke="#333" />
     <text
-      x="401.55"
+      x="390"
       y="283.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">- sizeInFeet : int</text>
+      font-family="Arial, sans-serif">-int sizeInFeet</text>
     <rect
-      x="419.9"
+      x="396.8"
       y="424"
       width="101.9"
       height="50"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="470.85"
+      x="447.75"
       y="444"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -323,14 +324,14 @@
       font-family="Arial, sans-serif"
       font-weight="bold">Fish Tank</text>
     <rect
-      x="406.25"
+      x="383.15"
       y="554"
       width="129.2"
       height="50"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="470.85"
+      x="447.75"
       y="574"
       text-anchor="middle"
       dominant-baseline="middle"

@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 459.2 588"
+  viewBox="0 0 459.2 642"
   style="max-width: 459.2px;"
   role="graphics-document document">
   <style
@@ -20,40 +20,40 @@
     <g
       transform="translate(0,50)">
       <path
-        d="M 144.84 94 L 80 155 L 80 216"
+        d="M 139.85 112 L 80 173 L 80 234"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 216 L 76 209.07 L 84 209.07 Z"
+        d="M 80 234 L 76 227.07 L 84 227.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 80 296 L 80 357 L 149.33 418"
+        d="M 80 332 L 80 393 L 143.66 454"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 149.33 418 L 141.49 416.43 L 146.78 410.42 Z"
+        d="M 143.66 454 L 135.89 452.09 L 141.43 446.32 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 244.76 94 L 309.6 155 L 309.6 256 L 309.6 357 L 240.27 418"
+        d="M 249.75 112 L 309.6 173 L 309.6 283 L 309.6 393 L 245.94 454"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 240.27 418 L 242.82 410.42 L 248.11 416.43 Z"
+        d="M 245.94 454 L 248.17 446.32 L 253.71 452.09 Z"
         fill="#666"
         stroke="none" />
       <rect
         x="114.8"
         y="28"
         width="160"
-        height="66"
+        height="84"
         rx="8"
         ry="8"
         fill="#08427B"
@@ -80,19 +80,27 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Person]</text>
+      <text
+        x="194.8"
+        y="94"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
         fill="#FFFFFF">A user</text>
       <rect
         x="0"
-        y="216"
+        y="234"
         width="160"
-        height="80"
+        height="98"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="80"
-        y="247"
+        y="265"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -101,7 +109,15 @@
         fill="#FFFFFF">Web App</text>
       <text
         x="80"
-        y="265"
+        y="283"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="80"
+        y="301"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -109,16 +125,16 @@
         fill="#FFFFFF">Frontend</text>
       <rect
         x="114.8"
-        y="418"
+        y="454"
         width="160"
-        height="80"
+        height="98"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="194.8"
-        y="449"
+        y="485"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -127,7 +143,15 @@
         fill="#FFFFFF">API</text>
       <text
         x="194.8"
-        y="467"
+        y="503"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="194.8"
+        y="521"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -135,7 +159,7 @@
         fill="#FFFFFF">Backend</text>
       <rect
         x="55"
-        y="139"
+        y="157"
         width="50"
         height="32"
         rx="3"
@@ -144,7 +168,7 @@
         stroke="none" />
       <text
         x="80"
-        y="148.5"
+        y="166.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -152,7 +176,7 @@
         fill="#666">Uses</text>
       <text
         x="80"
-        y="162.5"
+        y="180.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -160,7 +184,7 @@
         fill="#888">[HTTPS]</text>
       <rect
         x="58"
-        y="341"
+        y="377"
         width="44"
         height="32"
         rx="3"
@@ -169,7 +193,7 @@
         stroke="none" />
       <text
         x="80"
-        y="350.5"
+        y="386.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -177,7 +201,7 @@
         fill="#666">Calls</text>
       <text
         x="80"
-        y="364.5"
+        y="400.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -185,7 +209,7 @@
         fill="#888">[REST]</text>
       <rect
         x="200"
-        y="240"
+        y="267"
         width="219.2"
         height="32"
         rx="3"
@@ -194,7 +218,7 @@
         stroke="none" />
       <text
         x="309.6"
-        y="249.5"
+        y="276.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -202,7 +226,7 @@
         fill="#666">Receives push notifications from</text>
       <text
         x="309.6"
-        y="263.5"
+        y="290.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"

@@ -31,51 +31,51 @@
     font-size="10px"
     font-family="Arial, sans-serif"
     font-weight="bold"
-    fill="#333">1500</text>
+    fill="#333">1,500</text>
   <rect
     x="20"
     y="40"
-    width="336"
-    height="226.67"
+    width="224"
+    height="340"
     fill="#ffffb3"
     stroke="#333" />
   <text
-    x="188"
-    y="143.13"
+    x="132"
+    y="199.92"
     text-anchor="middle"
     dominant-baseline="middle"
-    font-size="34px"
+    font-size="33.6px"
     font-family="Arial, sans-serif"
     fill="#333">Sub A1</text>
   <text
-    x="188"
-    y="173.73"
+    x="132"
+    y="230.16"
     text-anchor="middle"
     dominant-baseline="middle"
-    font-size="20.4px"
+    font-size="20.16px"
     font-family="Arial, sans-serif"
-    fill="#666">1000</text>
+    fill="#666">1,000</text>
   <rect
-    x="20"
-    y="266.67"
-    width="336"
-    height="113.33"
+    x="244"
+    y="40"
+    width="112"
+    height="340"
     fill="#bebada"
     stroke="#333" />
   <text
-    x="188"
-    y="318.23"
+    x="300"
+    y="204.96"
     text-anchor="middle"
     dominant-baseline="middle"
-    font-size="17px"
+    font-size="16.8px"
     font-family="Arial, sans-serif"
     fill="#333">Sub A2</text>
   <text
-    x="188"
-    y="333.53"
+    x="300"
+    y="220.08"
     text-anchor="middle"
     dominant-baseline="middle"
-    font-size="10.2px"
+    font-size="10.08px"
     font-family="Arial, sans-serif"
     fill="#666">500</text>
   <rect
@@ -102,7 +102,7 @@
     font-size="10px"
     font-family="Arial, sans-serif"
     font-weight="bold"
-    fill="#333">1000</text>
+    fill="#333">1,000</text>
   <rect
     x="356"
     y="40"
