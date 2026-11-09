@@ -1,5 +1,3 @@
-using Naiad.Diagrams.Sankey;
-
 /// <summary>
 /// Examples from Mermaid 12.3.0's own syntax pages (mermaid.js.org/syntax) that Naiad rendered
 /// differently from Mermaid, or failed to read.
