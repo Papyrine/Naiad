@@ -139,6 +139,16 @@ class ERParser : IDiagramParser<ERModel>
             Capture(attributeWord.And(Literals.Char('?').Optional()))
                 .AsString();
 
+        // An attribute ends at the line end, or where the body's `}` or the next attribute follows on the same
+        // line: Mermaid's lexer skips any white space between them, so `CUSTOMER { string name }` is one
+        // entity with one attribute.
+        var attributeEnd =
+            endOfLine.Then(static _ => true)
+                .Or(
+                    CommonParsers.InlineWhitespace
+                        .WhenFollowedBy(Literals.Char('}').Then(static _ => true).Or(attributeWord.Then(static _ => true)))
+                        .Then(static _ => true));
+
         // Entity attribute: type name PK "comment"
         var attributeParser =
             CommonParsers.InlineWhitespace
@@ -149,7 +159,7 @@ class ERParser : IDiagramParser<ERModel>
                 .And(keyTypesParser.Optional())
                 .AndSkip(CommonParsers.InlineWhitespace)
                 .And(attributeComment.Optional())
-                .AndSkip(endOfLine)
+                .AndSkip(attributeEnd)
                 .Map(static (type, name, keyTypes, comment) =>
                     CreateAttribute(type, name, keyTypes.OrSome([]), comment.OrNull()));
 
