@@ -1,5 +1,3 @@
-namespace Naiad.Web.Services;
-
 public class FileDownloadService(IJSRuntime jsRuntime)
 {
     /// <summary>Triggers a browser download of arbitrary bytes — works for both text and binary formats.</summary>

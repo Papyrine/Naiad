@@ -1,5 +1,3 @@
-namespace Naiad;
-
 // What the diagram grammars share that Parlot does not come with.
 static class GrammarExtensions
 {

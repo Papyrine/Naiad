@@ -1,5 +1,3 @@
-namespace Naiad;
-
 /// <summary>
 /// The drawing sink the shared SVG walker (<see cref="SvgRasterizer"/>) paints into. Geometry arrives
 /// already flattened to polyline <see cref="SubPath"/>s and styling already resolved, so a backend only

@@ -1,7 +1,3 @@
-using System.Net;
-
-namespace Naiad.Web.Services;
-
 /// <summary>
 /// Builds a pre-filled GitHub "new issue" URL when an unexpected exception escapes a render, so a user
 /// can report it in a single click. Instead of opening the URL itself (there is no browser shell to call
@@ -9,7 +5,7 @@ namespace Naiad.Web.Services;
 /// </summary>
 public static class IssueLauncher
 {
-    const string NewIssue = "https://github.com/Papyrine/Naiad/issues/new";
+    const string newIssue = "https://github.com/Papyrine/Naiad/issues/new";
 
     /// <summary>
     /// Produces a `…/issues/new?title=…&amp;body=…` URL describing <paramref name="exception"/>.
@@ -49,6 +45,6 @@ public static class IssueLauncher
 
         var body = WebUtility.UrlEncode(string.Join("\n", lines));
 
-        return $"{NewIssue}?title={title}&body={body}";
+        return $"{newIssue}?title={title}&body={body}";
     }
 }

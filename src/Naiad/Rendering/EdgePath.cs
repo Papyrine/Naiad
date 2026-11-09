@@ -1,5 +1,3 @@
-namespace Naiad;
-
 static class EdgePath
 {
     // Builds a smooth edge path through a set of routed waypoints using a cubic B-spline (d3 curveBasis):

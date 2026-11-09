@@ -1,5 +1,3 @@
-namespace Naiad.Web.Services;
-
 /// <summary>The outcome of rendering Mermaid source: SVG markup, or a parse/render error message.</summary>
 public record DiagramRenderResult(string? Svg, string? Error, Exception? Unexpected)
 {

@@ -1,18 +1,10 @@
-namespace Naiad.Web.Services;
-
-public enum ThemeType
-{
-    Light,
-    Dark
-}
-
 public class ThemePreferenceService(IJSRuntime jsRuntime)
 {
-    const string ThemeKey = "selectedTheme";
+    const string themeKey = "selectedTheme";
 
     public async Task<ThemeType> GetSavedThemeAsync()
     {
-        var value = await jsRuntime.InvokeAsync<string?>("statePreference.get", ThemeKey);
+        var value = await jsRuntime.InvokeAsync<string?>("statePreference.get", themeKey);
         if (value is not null && Enum.TryParse<ThemeType>(value, out var theme))
         {
             return theme;
@@ -22,5 +14,5 @@ public class ThemePreferenceService(IJSRuntime jsRuntime)
     }
 
     public async Task SaveThemeAsync(ThemeType theme) =>
-        await jsRuntime.InvokeVoidAsync("statePreference.set", ThemeKey, theme.ToString());
+        await jsRuntime.InvokeVoidAsync("statePreference.set", themeKey, theme.ToString());
 }

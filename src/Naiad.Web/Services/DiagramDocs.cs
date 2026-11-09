@@ -1,5 +1,3 @@
-namespace Naiad.Web.Services;
-
 /// <summary>A friendly diagram-type name paired with its page on the Mermaid syntax reference.</summary>
 public record DiagramDocsLink(string Name, string Url);
 

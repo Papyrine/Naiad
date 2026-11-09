@@ -3,7 +3,6 @@ global using System.Net.Sockets;
 global using Naiad;
 global using Naiad.Web.Components;
 global using Naiad.Web.Layout;
-global using Naiad.Web.Services;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Hosting;

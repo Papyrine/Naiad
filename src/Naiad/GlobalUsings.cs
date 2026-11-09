@@ -46,4 +46,4 @@ global using Naiad.Diagrams.XYChart;
 global using Parlot;
 global using Parlot.Fluent;
 global using static Parlot.Fluent.Parsers;
-global using static Naiad.GrammarExtensions;
+global using static GrammarExtensions;

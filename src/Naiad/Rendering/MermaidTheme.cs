@@ -1,5 +1,3 @@
-namespace Naiad;
-
 using static Khroma;
 
 /// <summary>

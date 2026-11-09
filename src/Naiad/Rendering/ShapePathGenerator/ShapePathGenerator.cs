@@ -1,27 +1,5 @@
 ﻿namespace Naiad;
 
-/// <summary>How one part of a node's shape is painted, given the node's fill and stroke.</summary>
-enum ShapePaint
-{
-    /// <summary>Filled with the node's fill and outlined with its stroke.</summary>
-    Body,
-
-    /// <summary>Filled, with no outline: the backing behind a brace.</summary>
-    Fill,
-
-    /// <summary>Outlined, with no fill: a brace, a rim, a rule.</summary>
-    Stroke,
-
-    /// <summary>Filled and outlined in the node's stroke colour: a junction, a window's buttons.</summary>
-    Solid,
-
-    /// <summary>Neither filled nor outlined unless the node's own style asks for it: a text block.</summary>
-    Hidden
-}
-
-/// <summary>One path of a node's shape, and how it is painted.</summary>
-readonly record struct ShapePart(string Path, ShapePaint Paint = ShapePaint.Body, double? Opacity = null);
-
 /// <summary>
 /// Draws the node shapes of Mermaid's flowcharts. The geometry follows Mermaid 12's shapes; the sizes keep
 /// Naiad's usual padding around a label and grow by whatever a shape adds beside it, the way Mermaid's do.

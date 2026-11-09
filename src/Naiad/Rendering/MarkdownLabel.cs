@@ -1,5 +1,3 @@
-namespace Naiad;
-
 /// <summary>
 /// Mermaid's markdown strings: a label wrapped in backticks, as in <c>A["`This **is** _markdown_`"]</c>.
 /// Inside one, <c>**text**</c> is bold, <c>*text*</c> and <c>_text_</c> are italic, and a line break in

@@ -1,5 +1,3 @@
-namespace Naiad;
-
 static class CommonParsers
 {
     // Whitespace

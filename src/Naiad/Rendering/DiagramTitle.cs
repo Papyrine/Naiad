@@ -1,5 +1,3 @@
-namespace Naiad;
-
 /// <summary>
 /// The title Mermaid draws centred above a flowchart, class, state, ER or git graph diagram, taken from the
 /// front matter's <c>title:</c>. The diagram is laid out without it, then moved down to make room and
