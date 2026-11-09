@@ -522,6 +522,25 @@ public class UseCaseTests : TestBase
         await Assert.That(model.UseCases.Single().Label).IsEqualTo("a#55296;b A");
     }
 
+    // A quoted name's id is made from its label. Every character outside ASCII used to become `_`, so two
+    // labels of the same length in another script got the same id and merged into one element.
+    [Test]
+    public async Task Parse_LabelsInAnotherScriptStayApart()
+    {
+        var model = Parse(
+            """
+            usecase-beta
+            actor "日本"
+            actor "中国"
+            "日本" --> "登录"
+            "中国" --> "注册"
+            """);
+
+        await Assert.That(model.Actors.Select(_ => _.Label)).IsEquivalentTo(["日本", "中国"], CollectionOrdering.Matching);
+        await Assert.That(model.UseCases.Select(_ => _.Label)).IsEquivalentTo(["登录", "注册"], CollectionOrdering.Matching);
+        await Assert.That(model.Relationships.Count).IsEqualTo(2);
+    }
+
     // Each layer wins over the one before: the default class, the named classes in order, then `style`.
     [Test]
     public async Task Parse_StylePrecedence()
