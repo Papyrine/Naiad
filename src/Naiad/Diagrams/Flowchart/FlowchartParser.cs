@@ -8,8 +8,13 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
     static readonly Parser<char> linkHeadStart =
         OneOf(Literals.Char('<'), Literals.Char('o'), Literals.Char('x'));
 
+    // `flowchart-elk` asks Mermaid for its ELK layout. The layout here is the same either way.
     static readonly Parser<FlowchartModel> parser =
-        CreateGrammar<FlowchartModel>(Literals.Text("flowchart").Or(Literals.Text("graph")));
+        CreateGrammar<FlowchartModel>(
+            OneOf(
+                Literals.Text("flowchart-elk"),
+                Literals.Text("flowchart"),
+                Literals.Text("graph")));
 
     /// <summary>
     /// Builds the flowchart grammar behind a given opening keyword. Swimlane diagrams are written in exactly

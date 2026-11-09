@@ -380,7 +380,7 @@ class ClassParser : IDiagramParser<ClassModel>
 
         parser =
             CommonParsers.InlineWhitespace
-                .SkipAnd(Literals.Text("classDiagram"))
+                .SkipAnd(Literals.Text("classDiagram-v2").Or(Literals.Text("classDiagram")))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(CommonParsers.LineEnd)
                 .SkipAnd(parseContent.Many())
