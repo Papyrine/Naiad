@@ -128,9 +128,10 @@
     stroke-width="1.5"
     stroke-dasharray="10,7" />
   <path
-    d="M 189.2 78.02 L 195.83 73.54 L 196.39 81.52 Z"
-    fill="#666"
-    stroke="none" />
+    d="M 199.53 71.91 L 189.2 78.02 L 200.28 82.62"
+    fill="none"
+    stroke="#666"
+    stroke-width="1.5" />
   <text
     x="233.2"
     y="60.7"

@@ -195,7 +195,7 @@
         font-size="12px"
         font-family="Arial, sans-serif"
         fill="#333"
-        class="usecase-json-key">colors[0]</text>
+        class="usecase-json-key">colors</text>
       <text
         x="298.8"
         y="147"
@@ -220,7 +220,7 @@
         font-size="12px"
         font-family="Arial, sans-serif"
         fill="#333"
-        class="usecase-json-key">colors[1]</text>
+        class="usecase-json-key" />
       <text
         x="298.8"
         y="169"

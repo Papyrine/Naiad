@@ -27,9 +27,6 @@ class XYChartParser : IDiagramParser<XYChartModel>
                 .AndSkip(CommonParsers.LineEnd)
                 .Then(static _ => _.Trim());
 
-        // Number parser
-        var numberParser = CommonParsers.SignedDecimal;
-
         // Category item (unquoted or quoted)
         var categoryItem =
             quotedString.Or(
@@ -48,16 +45,32 @@ class XYChartParser : IDiagramParser<XYChartModel>
                 .AndSkip(Literals.Char(']'))
                 .Then(static _ => _.ToList());
 
-        // X-axis: x-axis [cat1, cat2] or x-axis "Label" [cat1, cat2]
+        // Number parser
+        var numberParser = CommonParsers.SignedDecimal;
+
+        // A numeric axis range: 0 --> 100
+        var rangeParser =
+            numberParser
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(Literals.Text("-->"))
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .And(numberParser);
+
+        // X-axis: categories (x-axis [cat1, cat2]), a numeric range (x-axis 1 --> 12) or neither, each
+        // optionally after a title (x-axis "Label" [cat1, cat2]).
         var xAxisParser =
             CommonParsers.InlineWhitespace
                 .SkipAnd(TextIgnoreCase("x-axis"))
                 .SkipAnd(CommonParsers.RequiredWhitespace)
                 .SkipAnd(quotedString.AndSkip(CommonParsers.InlineWhitespace).Optional())
-                .And(categoryListParser)
+                .And(
+                    categoryListParser.Then(static _ => new XAxisItem("", _, null, null))
+                        .Or(rangeParser.Then(static _ => new XAxisItem("", [], _.Item1, _.Item2)))
+                        .Optional())
                 .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(CommonParsers.LineEnd)
-                .Map((label, categories) => (label: label.OrSome(""), categories));
+                .Map(static (label, axis) =>
+                    axis.OrSome(new XAxisItem("", [], null, null)) with {Label = label.OrSome("")});
 
         // Y-axis: y-axis "Label" min --> max or y-axis min --> max. Without a range the axis spans the
         // data, as Mermaid's does.
@@ -66,13 +79,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
                 .SkipAnd(TextIgnoreCase("y-axis"))
                 .SkipAnd(CommonParsers.RequiredWhitespace)
                 .SkipAnd(quotedString.AndSkip(CommonParsers.InlineWhitespace).Optional())
-                .And(
-                    numberParser
-                        .AndSkip(CommonParsers.InlineWhitespace)
-                        .AndSkip(Literals.Text("-->"))
-                        .AndSkip(CommonParsers.InlineWhitespace)
-                        .And(numberParser)
-                        .Optional())
+                .And(rangeParser.Optional())
                 .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(CommonParsers.LineEnd)
                 .Map((label, range) =>
@@ -92,25 +99,32 @@ class XYChartParser : IDiagramParser<XYChartModel>
                 .AndSkip(Literals.Char(']'))
                 .Then(static _ => _.ToList());
 
-        // Bar series: bar [100, 200, 300]
+        // Bar series: bar [100, 200, 300] or bar "Sales" [100, 200, 300]
         var barParser =
             CommonParsers.InlineWhitespace
                 .SkipAnd(TextIgnoreCase("bar"))
                 .SkipAnd(CommonParsers.RequiredWhitespace)
-                .SkipAnd(dataListParser)
+                .SkipAnd(quotedString.AndSkip(CommonParsers.InlineWhitespace).Optional())
+                .And(dataListParser)
                 .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(CommonParsers.LineEnd)
-                .Then(static _ => new ChartSeries { Type = ChartSeriesType.Bar, Data = _ });
+                .Map(static (name, data) => new ChartSeries { Type = ChartSeriesType.Bar, Data = data, Name = name.OrNull() });
 
-        // Line series: line [100, 200, 300]
+        // Line series: line [100, 200, 300] or line "Target" [100, 200, 300]
         var lineParser =
             CommonParsers.InlineWhitespace
                 .SkipAnd(TextIgnoreCase("line"))
                 .SkipAnd(CommonParsers.RequiredWhitespace)
-                .SkipAnd(dataListParser)
+                .SkipAnd(quotedString.AndSkip(CommonParsers.InlineWhitespace).Optional())
+                .And(dataListParser)
                 .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(CommonParsers.LineEnd)
-                .Then(static _ => new ChartSeries { Type = ChartSeriesType.Line, Data = _ });
+                .Map(static (name, data) => new ChartSeries { Type = ChartSeriesType.Line, Data = data, Name = name.OrNull() });
+
+        // The chart's orientation, after its keyword: bars stand up by default and lie down when horizontal.
+        var orientationParser =
+            TextIgnoreCase("horizontal").Then(true)
+                .Or(TextIgnoreCase("vertical").Then(false));
 
         // Skip line (comments, empty lines)
         var skipLine =
@@ -120,7 +134,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
         var contentItem =
             OneOf(
                 titleParser.Then<IXYContent?>(static _ => new TitleItem(_)),
-                xAxisParser.Then<IXYContent?>(static _ => new XAxisItem(_.label, _.categories)),
+                xAxisParser.Then<IXYContent?>(static _ => _),
                 yAxisParser.Then<IXYContent?>(static _ => new YAxisItem(_.label, _.min, _.max)),
                 barParser.Then<IXYContent?>(static _ => new SeriesItem(_)),
                 lineParser.Then<IXYContent?>(static _ => new SeriesItem(_)),
@@ -131,15 +145,20 @@ class XYChartParser : IDiagramParser<XYChartModel>
             CommonParsers.InlineWhitespace
                 .SkipAnd(CommonParsers.BetaKeyword("xychart"))
                 .SkipAnd(CommonParsers.InlineWhitespace)
-                .SkipAnd(CommonParsers.LineEnd)
-                .SkipAnd(contentItem.Many())
+                .SkipAnd(orientationParser.Optional())
+                .AndSkip(CommonParsers.InlineWhitespace)
+                .AndSkip(CommonParsers.LineEnd)
+                .And(contentItem.Many())
                 .AndSkip(CommonParsers.End)
-                .Then(BuildModel);
+                .Map(static (horizontal, content) => BuildModel(horizontal.OrSome(false), content));
     }
 
-    static XYChartModel BuildModel(IEnumerable<IXYContent?> content)
+    static XYChartModel BuildModel(bool horizontal, IEnumerable<IXYContent?> content)
     {
-        var model = new XYChartModel();
+        var model = new XYChartModel
+        {
+            Horizontal = horizontal
+        };
 
         foreach (var item in content)
         {
@@ -152,6 +171,8 @@ class XYChartParser : IDiagramParser<XYChartModel>
                 case XAxisItem xAxis:
                     model.XAxisLabel = string.IsNullOrEmpty(xAxis.Label) ? null : xAxis.Label;
                     model.XAxisCategories.AddRange(xAxis.Categories);
+                    model.XAxisMin = xAxis.Min;
+                    model.XAxisMax = xAxis.Max;
                     break;
 
                 case YAxisItem yAxis:
@@ -173,7 +194,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
 
     interface IXYContent;
     readonly record struct TitleItem(string Value) : IXYContent;
-    readonly record struct XAxisItem(string Label, List<string> Categories) : IXYContent;
+    readonly record struct XAxisItem(string Label, List<string> Categories, double? Min, double? Max) : IXYContent;
     readonly record struct YAxisItem(string Label, double? Min, double? Max) : IXYContent;
     readonly record struct SeriesItem(ChartSeries Series) : IXYContent;
 }

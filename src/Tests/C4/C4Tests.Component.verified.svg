@@ -64,7 +64,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">[Express]</text>
+        fill="#FFFFFF">[Component: Express]</text>
       <text
         x="80"
         y="67"
@@ -98,7 +98,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">[Express]</text>
+        fill="#FFFFFF">[Component: Express]</text>
       <text
         x="300"
         y="67"
@@ -132,7 +132,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">[TypeScript]</text>
+        fill="#FFFFFF">[Component: TypeScript]</text>
       <text
         x="190"
         y="272"

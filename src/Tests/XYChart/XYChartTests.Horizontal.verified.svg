@@ -1,0 +1,212 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 685.8 490"
+  style="max-width: 685.8px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <text
+    x="342.9"
+    y="35"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="18px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">Regional Sales</text>
+  <line
+    x1="145.8"
+    y1="110"
+    x2="145.8"
+    y2="410"
+    stroke="#e0e0e0" />
+  <text
+    x="145.8"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">0</text>
+  <line
+    x1="245.8"
+    y1="110"
+    x2="245.8"
+    y2="410"
+    stroke="#e0e0e0" />
+  <text
+    x="245.8"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">20</text>
+  <line
+    x1="345.8"
+    y1="110"
+    x2="345.8"
+    y2="410"
+    stroke="#e0e0e0" />
+  <text
+    x="345.8"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">40</text>
+  <line
+    x1="445.8"
+    y1="110"
+    x2="445.8"
+    y2="410"
+    stroke="#e0e0e0" />
+  <text
+    x="445.8"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">60</text>
+  <line
+    x1="545.8"
+    y1="110"
+    x2="545.8"
+    y2="410"
+    stroke="#e0e0e0" />
+  <text
+    x="545.8"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">80</text>
+  <line
+    x1="645.8"
+    y1="110"
+    x2="645.8"
+    y2="410"
+    stroke="#e0e0e0" />
+  <text
+    x="645.8"
+    y="430"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">100</text>
+  <text
+    x="135.8"
+    y="160"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">North America</text>
+  <text
+    x="135.8"
+    y="260"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Europe</text>
+  <text
+    x="135.8"
+    y="360"
+    text-anchor="end"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#333">Asia Pacific</text>
+  <g
+    transform="rotate(-90, 35, 260)">
+    <text
+      x="35"
+      y="260"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="14px"
+      font-family="Arial, sans-serif"
+      fill="#333">Region</text>
+  </g>
+  <text
+    x="395.8"
+    y="455"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Revenue</text>
+  <rect
+    x="145.8"
+    y="120"
+    width="425"
+    height="78"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="145.8"
+    y="220"
+    width="360"
+    height="78"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <rect
+    x="145.8"
+    y="320"
+    width="450"
+    height="78"
+    rx="2"
+    ry="2"
+    fill="#4CAF50"
+    stroke="none" />
+  <path
+    d="M 545.8 160 L 495.8 260 L 585.8 360"
+    fill="none"
+    stroke="#9C27B0"
+    stroke-width="2" />
+  <circle
+    cx="545.8"
+    cy="160"
+    r="4"
+    fill="#9C27B0"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="495.8"
+    cy="260"
+    r="4"
+    fill="#9C27B0"
+    stroke="#fff"
+    stroke-width="2" />
+  <circle
+    cx="585.8"
+    cy="360"
+    r="4"
+    fill="#9C27B0"
+    stroke="#fff"
+    stroke-width="2" />
+  <line
+    x1="145.8"
+    y1="110"
+    x2="145.8"
+    y2="410"
+    stroke="#333"
+    stroke-width="2" />
+  <line
+    x1="145.8"
+    y1="410"
+    x2="645.8"
+    y2="410"
+    stroke="#333"
+    stroke-width="2" />
+</svg>

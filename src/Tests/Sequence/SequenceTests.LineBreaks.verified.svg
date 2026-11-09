@@ -102,14 +102,14 @@
     x="220"
     y="64"
     text-anchor="middle"
-    dominant-baseline="top"
+    dominant-baseline="hanging"
     font-size="14px"
     font-family="Arial, sans-serif">Bob</text>
   <text
     x="220"
     y="80.8"
     text-anchor="middle"
-    dominant-baseline="top"
+    dominant-baseline="hanging"
     font-size="14px"
     font-family="Arial, sans-serif">the Builder</text>
   <rect
@@ -355,14 +355,14 @@
     x="220"
     y="607.6"
     text-anchor="middle"
-    dominant-baseline="top"
+    dominant-baseline="hanging"
     font-size="14px"
     font-family="Arial, sans-serif">Bob</text>
   <text
     x="220"
     y="624.4"
     text-anchor="middle"
-    dominant-baseline="top"
+    dominant-baseline="hanging"
     font-size="14px"
     font-family="Arial, sans-serif">the Builder</text>
   <rect

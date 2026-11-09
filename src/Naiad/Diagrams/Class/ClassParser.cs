@@ -96,7 +96,8 @@ class ClassParser : IDiagramParser<ClassModel>
                         Name = rest.Name ?? firstWord,
                         Type = rest.Name is null ? rest.Type : firstWord,
                         Visibility = visibility.OrSome(Visibility.None),
-                        IsStatic = suffix is {HasValue: true, Value: '$'}
+                        IsStatic = suffix is {HasValue: true, Value: '$'},
+                        TypeFirst = rest.Name is not null
                     });
 
         // Method: +makeSound(), +move(int distance) : void, +getId() int or +validate()$ bool
@@ -527,7 +528,8 @@ class ClassParser : IDiagramParser<ClassModel>
                 new()
                 {
                     Name = NormalizeGenerics(text[(space + 1)..]),
-                    Type = NormalizeGenerics(text[..space].TrimEnd())
+                    Type = NormalizeGenerics(text[..space].TrimEnd()),
+                    TypeFirst = true
                 });
         }
 

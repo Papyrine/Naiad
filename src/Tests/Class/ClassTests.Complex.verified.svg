@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 985.25 847"
-  style="max-width: 985.25px;"
+  viewBox="0 0 946.75 847"
+  style="max-width: 946.75px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -72,16 +72,16 @@
   <g
     transform="translate(20,20)">
     <path
-      d="M629.2,403.5 L629.2,413.58 C629.2,423.67 629.2,443.83 629.2,465.75 C629.2,487.67 629.2,511.33 629.2,523.17 L629.2,535"
+      d="M594.55,403.5 L594.55,413.58 C594.55,423.67 594.55,443.83 594.55,465.75 C594.55,487.67 594.55,511.33 594.55,523.17 L594.55,535"
       fill="none"
       stroke="#333"
       stroke-dasharray="5,5" />
     <polygon
-      points="629.2,403.5 634.2,412.16 624.2,412.16"
+      points="594.55,403.5 599.55,412.16 589.55,412.16"
       fill="#fff"
       stroke="#333" />
     <rect
-      x="592.2"
+      x="557.55"
       y="456"
       width="74"
       height="16"
@@ -89,22 +89,22 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="629.2"
+      x="594.55"
       y="464"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">implements</text>
     <path
-      d="M207.85,162 L207.85,170.33 C207.85,178.67 207.85,195.33 207.85,210.33 C207.85,225.33 207.85,238.67 207.85,245.33 L207.85,252"
+      d="M188.6,162 L188.6,170.33 C188.6,178.67 188.6,195.33 188.6,210.33 C188.6,225.33 188.6,238.67 188.6,245.33 L188.6,252"
       fill="none"
       stroke="#333" />
     <polygon
-      points="207.85,162 212.85,170.66 202.85,170.66"
+      points="188.6,162 193.6,170.66 183.6,170.66"
       fill="#fff"
       stroke="#333" />
     <rect
-      x="180.75"
+      x="161.5"
       y="204"
       width="54.2"
       height="16"
@@ -112,22 +112,22 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="207.85"
+      x="188.6"
       y="212"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">extends</text>
     <path
-      d="M629.2,172 L629.2,178.67 C629.2,185.33 629.2,198.67 629.2,215.42 C629.2,232.17 629.2,252.33 629.2,262.42 L629.2,272.5"
+      d="M594.55,172 L594.55,178.67 C594.55,185.33 594.55,198.67 594.55,215.42 C594.55,232.17 594.55,252.33 594.55,262.42 L594.55,272.5"
       fill="none"
       stroke="#333"
       stroke-dasharray="5,5" />
     <polygon
-      points="629.2,272.5 624.2,263.84 634.2,263.84"
+      points="594.55,272.5 589.55,263.84 599.55,263.84"
       fill="#333" />
     <rect
-      x="612"
+      x="577.35"
       y="204"
       width="34.4"
       height="16"
@@ -135,21 +135,21 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="629.2"
+      x="594.55"
       y="212"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">uses</text>
     <path
-      d="M120.11,424 L113.31,430.67 C106.51,437.33 92.9,450.67 86.1,464.08 C79.3,477.5 79.3,491 79.3,497.75 L79.3,504.5"
+      d="M106.12,424 L99.72,430.67 C93.33,437.33 80.54,450.67 74.14,464.08 C67.75,477.5 67.75,491 67.75,497.75 L67.75,504.5"
       fill="none"
       stroke="#333" />
     <polygon
-      points="79.3,504.5 74.3,495.84 84.3,495.84"
+      points="67.75,504.5 62.75,495.84 72.75,495.84"
       fill="#333" />
     <rect
-      x="65.4"
+      x="53.85"
       y="456"
       width="27.8"
       height="16"
@@ -157,36 +157,36 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="79.3"
+      x="67.75"
       y="464"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">has</text>
     <text
-      x="97.4"
-      y="432.26"
+      x="83.67"
+      y="432.96"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">1</text>
     <text
-      x="89.3"
+      x="77.75"
       y="482.5"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">1..*</text>
     <path
-      d="M295.59,424 L302.39,430.67 C309.19,437.33 322.8,450.67 329.6,464 C336.4,477.33 336.4,490.67 336.4,497.33 L336.4,504"
+      d="M271.08,424 L277.48,430.67 C283.87,437.33 296.66,450.67 303.06,464 C309.45,477.33 309.45,490.67 309.45,497.33 L309.45,504"
       fill="none"
       stroke="#333" />
     <polygon
-      points="295.59,424 295.66,431.07 302.73,431 302.66,423.93"
+      points="271.08,424 270.94,431.07 278.01,431.22 278.15,424.15"
       fill="#fff"
       stroke="#333" />
     <rect
-      x="312.6"
+      x="285.65"
       y="456"
       width="47.6"
       height="16"
@@ -194,36 +194,36 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="336.4"
+      x="309.45"
       y="464"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">places</text>
     <text
-      x="304.3"
-      y="446.54"
+      x="279.1"
+      y="446.8"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">1</text>
     <text
-      x="346.4"
+      x="319.45"
       y="482"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">*</text>
     <path
-      d="M336.4,616 L336.4,622.67 C336.4,629.33 336.4,642.67 336.4,656 C336.4,669.33 336.4,682.67 336.4,689.33 L336.4,696"
+      d="M309.45,616 L309.45,622.67 C309.45,629.33 309.45,642.67 309.45,656 C309.45,669.33 309.45,682.67 309.45,689.33 L309.45,696"
       fill="none"
       stroke="#333" />
     <polygon
-      points="336.4,616 331.4,621 336.4,626 341.4,621"
+      points="309.45,616 304.45,621 309.45,626 314.45,621"
       fill="#333"
       stroke="#333" />
     <rect
-      x="306"
+      x="279.05"
       y="648"
       width="60.8"
       height="16"
@@ -231,35 +231,35 @@
       stroke="none"
       class="edgeLabel" />
     <text
-      x="336.4"
+      x="309.45"
       y="656"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">contains</text>
     <text
-      x="326.4"
+      x="299.45"
       y="638"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">1</text>
     <text
-      x="346.4"
+      x="319.45"
       y="674"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif">1..*</text>
     <rect
-      x="526.8"
+      x="496"
       y="272.5"
-      width="204.8"
+      width="197.1"
       height="131"
       fill="#E8F4FD"
       stroke="#333" />
     <text
-      x="629.2"
+      x="594.55"
       y="292.5"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -267,7 +267,7 @@
       font-family="Arial, sans-serif"
       fill="#666">&lt;&lt;interface&gt;&gt;</text>
     <text
-      x="629.2"
+      x="594.55"
       y="312.5"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -275,41 +275,41 @@
       font-family="Arial, sans-serif"
       font-weight="bold">IRepository&lt;T&gt;</text>
     <line
-      x1="526.8"
+      x1="496"
       y1="332.5"
-      x2="731.6"
+      x2="693.1"
       y2="332.5"
       stroke="#333" />
     <text
-      x="536.8"
+      x="506"
       y="343.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ get(id: int) : T</text>
+      font-family="Arial, sans-serif">+get(id: int) : T</text>
     <text
-      x="536.8"
+      x="506"
       y="363.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ save(entity: T) : void</text>
+      font-family="Arial, sans-serif">+save(entity: T) : void</text>
     <text
-      x="536.8"
+      x="506"
       y="383.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ delete(id: int) : void</text>
+      font-family="Arial, sans-serif">+delete(id: int) : void</text>
     <rect
-      x="113.15"
+      x="105.45"
       y="10"
-      width="189.4"
+      width="166.3"
       height="152"
       fill="#FFF3E0"
       stroke="#333" />
     <text
-      x="207.85"
+      x="188.6"
       y="30"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -317,7 +317,7 @@
       font-family="Arial, sans-serif"
       fill="#666">&lt;&lt;abstract&gt;&gt;</text>
     <text
-      x="207.85"
+      x="188.6"
       y="50"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -325,54 +325,54 @@
       font-family="Arial, sans-serif"
       font-weight="bold">AbstractEntity</text>
     <line
-      x1="113.15"
+      x1="105.45"
       y1="70"
-      x2="302.55"
+      x2="271.75"
       y2="70"
       stroke="#333" />
     <text
-      x="123.15"
+      x="115.45"
       y="81"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif"># id : int</text>
+      font-family="Arial, sans-serif">#int id</text>
     <text
-      x="123.15"
+      x="115.45"
       y="101"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif"># createdAt : DateTime</text>
+      font-family="Arial, sans-serif">#DateTime createdAt</text>
     <text
-      x="123.15"
+      x="115.45"
       y="121"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif"># updatedAt : DateTime</text>
+      font-family="Arial, sans-serif">#DateTime updatedAt</text>
     <line
-      x1="113.15"
+      x1="105.45"
       y1="131"
-      x2="302.55"
+      x2="271.75"
       y2="131"
       stroke="#333" />
     <text
-      x="123.15"
+      x="115.45"
       y="142"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ getId() : int</text>
+      font-family="Arial, sans-serif">+getId() : int</text>
     <rect
-      x="492.15"
+      x="461.35"
       y="0"
-      width="274.1"
+      width="266.4"
       height="172"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="629.2"
+      x="594.55"
       y="20"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -380,7 +380,7 @@
       font-family="Arial, sans-serif"
       fill="#666">&lt;&lt;service&gt;&gt;</text>
     <text
-      x="629.2"
+      x="594.55"
       y="40"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -388,61 +388,61 @@
       font-family="Arial, sans-serif"
       font-weight="bold">UserService</text>
     <line
-      x1="492.15"
+      x1="461.35"
       y1="60"
-      x2="766.25"
+      x2="727.75"
       y2="60"
       stroke="#333" />
     <text
-      x="502.15"
+      x="471.35"
       y="71"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">- repository : IUserRepository</text>
+      font-family="Arial, sans-serif">-IUserRepository repository</text>
     <text
-      x="502.15"
+      x="471.35"
       y="91"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">- logger : ILogger</text>
+      font-family="Arial, sans-serif">-ILogger logger</text>
     <line
-      x1="492.15"
+      x1="461.35"
       y1="101"
-      x2="766.25"
+      x2="727.75"
       y2="101"
       stroke="#333" />
     <text
-      x="502.15"
+      x="471.35"
       y="112"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ createUser(name: String) : User</text>
+      font-family="Arial, sans-serif">+createUser(name: String) : User</text>
     <text
-      x="502.15"
+      x="471.35"
       y="132"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ findUser(id: int) : User</text>
+      font-family="Arial, sans-serif">+findUser(id: int) : User</text>
     <text
-      x="502.15"
+      x="471.35"
       y="152"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ deleteUser(id: int) : void</text>
+      font-family="Arial, sans-serif">+deleteUser(id: int) : void</text>
     <rect
-      x="826.25"
+      x="787.75"
       y="10.5"
       width="119"
       height="151"
       fill="#E8F5E9"
       stroke="#333" />
     <text
-      x="885.75"
+      x="847.25"
       y="30.5"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -450,7 +450,7 @@
       font-family="Arial, sans-serif"
       fill="#666">&lt;&lt;enumeration&gt;&gt;</text>
     <text
-      x="885.75"
+      x="847.25"
       y="50.5"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -458,48 +458,48 @@
       font-family="Arial, sans-serif"
       font-weight="bold">Status</text>
     <line
-      x1="826.25"
+      x1="787.75"
       y1="70.5"
-      x2="945.25"
+      x2="906.75"
       y2="70.5"
       stroke="#333" />
     <text
-      x="836.25"
+      x="797.75"
       y="81.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">ACTIVE</text>
     <text
-      x="836.25"
+      x="797.75"
       y="101.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">INACTIVE</text>
     <text
-      x="836.25"
+      x="797.75"
       y="121.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">PENDING</text>
     <text
-      x="836.25"
+      x="797.75"
       y="141.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
       font-family="Arial, sans-serif">DELETED</text>
     <rect
-      x="36.15"
+      x="24.6"
       y="252"
-      width="343.4"
+      width="328"
       height="172"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="207.85"
+      x="188.6"
       y="272"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -507,68 +507,70 @@
       font-family="Arial, sans-serif"
       font-weight="bold">User</text>
     <line
-      x1="36.15"
+      x1="24.6"
       y1="292"
-      x2="379.55"
+      x2="352.6"
       y2="292"
       stroke="#333" />
     <text
-      x="46.15"
+      x="34.6"
       y="303"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ name : String</text>
+      font-family="Arial, sans-serif">+String name</text>
     <text
-      x="46.15"
+      x="34.6"
       y="323"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ email : String</text>
+      font-family="Arial, sans-serif">+String email</text>
     <text
-      x="46.15"
+      x="34.6"
       y="343"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">- passwordHash : String</text>
+      font-family="Arial, sans-serif">-String passwordHash</text>
     <text
-      x="46.15"
+      x="34.6"
       y="363"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">~ status : Status</text>
+      font-family="Arial, sans-serif">~Status status</text>
     <line
-      x1="36.15"
+      x1="24.6"
       y1="373"
-      x2="379.55"
+      x2="352.6"
       y2="373"
       stroke="#333" />
     <text
-      x="46.15"
+      x="34.6"
       y="384"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ validate()$ : bool</text>
+      font-family="Arial, sans-serif"
+      style="text-decoration:underline">+validate() : bool</text>
     <text
-      x="46.15"
+      x="34.6"
       y="404"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ hashPassword(password: String)$ : String</text>
+      font-family="Arial, sans-serif"
+      style="text-decoration:underline">+hashPassword(password: String) : String</text>
     <rect
-      x="-0"
+      x="0"
       y="504.5"
-      width="158.6"
+      width="135.5"
       height="111"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="79.3"
+      x="67.75"
       y="524.5"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -576,9 +578,9 @@
       font-family="Arial, sans-serif"
       font-weight="bold">Address</text>
     <line
-      x1="-0"
+      x1="0"
       y1="544.5"
-      x2="158.6"
+      x2="135.5"
       y2="544.5"
       stroke="#333" />
     <text
@@ -587,30 +589,30 @@
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ street : String</text>
+      font-family="Arial, sans-serif">+String street</text>
     <text
       x="10"
       y="575.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ city : String</text>
+      font-family="Arial, sans-serif">+String city</text>
     <text
       x="10"
       y="595.5"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ zipCode : String</text>
+      font-family="Arial, sans-serif">+String zipCode</text>
     <rect
-      x="218.6"
+      x="195.5"
       y="504"
-      width="235.6"
+      width="227.9"
       height="112"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="336.4"
+      x="309.45"
       y="524"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -618,47 +620,47 @@
       font-family="Arial, sans-serif"
       font-weight="bold">Order</text>
     <line
-      x1="218.6"
+      x1="195.5"
       y1="544"
-      x2="454.2"
+      x2="423.4"
       y2="544"
       stroke="#333" />
     <text
-      x="228.6"
+      x="205.5"
       y="555"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ orderId : int</text>
+      font-family="Arial, sans-serif">+int orderId</text>
     <text
-      x="228.6"
+      x="205.5"
       y="575"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ items : List&lt;Item&gt;</text>
+      font-family="Arial, sans-serif">+List&lt;Item&gt; items</text>
     <line
-      x1="218.6"
+      x1="195.5"
       y1="585"
-      x2="454.2"
+      x2="423.4"
       y2="585"
       stroke="#333" />
     <text
-      x="228.6"
+      x="205.5"
       y="596"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ calculateTotal() : Decimal</text>
+      font-family="Arial, sans-serif">+calculateTotal() : Decimal</text>
     <rect
-      x="260.95"
+      x="245.55"
       y="696"
-      width="150.9"
+      width="127.8"
       height="111"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="336.4"
+      x="309.45"
       y="716"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -666,41 +668,41 @@
       font-family="Arial, sans-serif"
       font-weight="bold">Item</text>
     <line
-      x1="260.95"
+      x1="245.55"
       y1="736"
-      x2="411.85"
+      x2="373.35"
       y2="736"
       stroke="#333" />
     <text
-      x="270.95"
+      x="255.55"
       y="747"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ name : String</text>
+      font-family="Arial, sans-serif">+String name</text>
     <text
-      x="270.95"
+      x="255.55"
       y="767"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ price : Decimal</text>
+      font-family="Arial, sans-serif">+Decimal price</text>
     <text
-      x="270.95"
+      x="255.55"
       y="787"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ quantity : int</text>
+      font-family="Arial, sans-serif">+int quantity</text>
     <rect
-      x="555.5"
+      x="520.85"
       y="535"
       width="147.4"
       height="50"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="629.2"
+      x="594.55"
       y="555"
       text-anchor="middle"
       dominant-baseline="middle"

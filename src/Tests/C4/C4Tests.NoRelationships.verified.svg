@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 640 170"
+  viewBox="0 0 640 188"
   style="max-width: 640px;"
   role="graphics-document document">
   <style
@@ -23,7 +23,7 @@
         x="0"
         y="0"
         width="160"
-        height="80"
+        height="98"
         rx="5"
         ry="5"
         fill="#1168BD"
@@ -44,12 +44,20 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="80"
+        y="67"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
         fill="#FFFFFF">First system</text>
       <rect
         x="220"
         y="0"
         width="160"
-        height="80"
+        height="98"
         rx="5"
         ry="5"
         fill="#1168BD"
@@ -70,12 +78,20 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="300"
+        y="67"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
         fill="#FFFFFF">Second system</text>
       <rect
         x="440"
         y="0"
         width="160"
-        height="80"
+        height="98"
         rx="5"
         ry="5"
         fill="#1168BD"
@@ -92,6 +108,14 @@
       <text
         x="520"
         y="49"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="520"
+        y="67"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"

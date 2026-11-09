@@ -107,7 +107,7 @@
     x="80"
     y="90"
     text-anchor="middle"
-    dominant-baseline="top"
+    dominant-baseline="hanging"
     font-size="14px"
     font-family="Arial, sans-serif">User</text>
   <rect
@@ -185,7 +185,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">10. Open page</text>
+    font-family="Arial, sans-serif">Open page</text>
+  <circle
+    cx="80"
+    cy="160"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="80"
+    y="160"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">10</text>
   <line
     x1="230"
     y1="210"
@@ -204,7 +218,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">15. Handshake</text>
+    font-family="Arial, sans-serif">Handshake</text>
+  <circle
+    cx="230"
+    cy="210"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="230"
+    y="210"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">15</text>
   <line
     x1="380"
     y1="260"
@@ -220,7 +248,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">20. Start job</text>
+    font-family="Arial, sans-serif">Start job</text>
+  <circle
+    cx="380"
+    cy="260"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="380"
+    y="260"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">20</text>
   <line
     x1="530"
     y1="310"
@@ -240,7 +282,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">25. Progress</text>
+    font-family="Arial, sans-serif">Progress</text>
+  <circle
+    cx="530"
+    cy="310"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="530"
+    y="310"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">25</text>
   <line
     x1="530"
     y1="360"
@@ -257,7 +313,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">30. Done</text>
+    font-family="Arial, sans-serif">Done</text>
+  <circle
+    cx="530"
+    cy="360"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="530"
+    y="360"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">30</text>
   <line
     x1="380"
     y1="410"
@@ -274,7 +344,21 @@
     text-anchor="middle"
     dominant-baseline="bottom"
     font-size="14px"
-    font-family="Arial, sans-serif">35. Result</text>
+    font-family="Arial, sans-serif">Result</text>
+  <circle
+    cx="380"
+    cy="410"
+    r="9"
+    fill="#333"
+    stroke="none" />
+  <text
+    x="380"
+    y="410"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#fff">35</text>
   <rect
     x="480"
     y="240"
@@ -339,7 +423,7 @@
     x="80"
     y="504"
     text-anchor="middle"
-    dominant-baseline="top"
+    dominant-baseline="hanging"
     font-size="14px"
     font-family="Arial, sans-serif">User</text>
   <rect

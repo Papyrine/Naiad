@@ -566,8 +566,9 @@ public class UseCaseTests : TestBase
         await Assert.That(note.TargetId).IsEqualTo("Login");
         await Assert.That(note.Text).IsEqualTo("Requires a session");
         await Assert.That(model.UseCases.Select(_ => _.Id)).IsEquivalentTo(["Login"]);
+        // As Mermaid lists them, the plain values of an array share its key, shown on the first row only.
         await Assert.That(model.JsonTables.Single().Rows.Select(_ => $"{_.Key}={_.Value}"))
-            .IsEquivalentTo(["b=2", "a.c[0]=true", "a.c[1]=null", "e={}"], CollectionOrdering.Matching);
+            .IsEquivalentTo(["b=2", "a.c=true", "=null", "e={}"], CollectionOrdering.Matching);
     }
 
     // A numeric entity naming a surrogate is no character, and turning it into one threw.

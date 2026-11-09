@@ -209,9 +209,10 @@
     stroke-width="1.5"
     stroke-dasharray="10,7" />
   <path
-    d="M 193.9 87.7 L 200.55 83.25 L 201.08 91.23 Z"
-    fill="#666"
-    stroke="none" />
+    d="M 204.25 81.63 L 193.9 87.7 L 204.96 92.34"
+    fill="none"
+    stroke="#666"
+    stroke-width="1.5" />
   <text
     x="244.93"
     y="70.31"
@@ -229,9 +230,10 @@
     stroke-width="1.5"
     stroke-dasharray="10,7" />
   <path
-    d="M 113.9 216 L 109.9 209.07 L 117.9 209.07 Z"
-    fill="#666"
-    stroke="none" />
+    d="M 108.53 205.27 L 113.9 216 L 119.27 205.27"
+    fill="none"
+    stroke="#666"
+    stroke-width="1.5" />
   <text
     x="150.15"
     y="191"
@@ -249,9 +251,10 @@
     stroke-width="1.5"
     stroke-dasharray="10,7" />
   <path
-    d="M 206.52 216 L 209.49 208.57 L 214.44 214.85 Z"
-    fill="#666"
-    stroke="none" />
+    d="M 211.63 205.14 L 206.52 216 L 218.27 213.57"
+    fill="none"
+    stroke="#666"
+    stroke-width="1.5" />
   <text
     x="239.53"
     y="145.65"

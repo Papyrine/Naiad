@@ -2,13 +2,13 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 690 200"
-  style="max-width: 690px;"
+  viewBox="0 0 790 200"
+  style="max-width: 790px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <text
-    x="345"
+    x="395"
     y="35"
     text-anchor="middle"
     dominant-baseline="middle"
@@ -17,7 +17,7 @@
   <line
     x1="170"
     y1="85"
-    x2="670"
+    x2="770"
     y2="85"
     stroke="#333" />
   <line
@@ -147,6 +147,20 @@
     font-family="Arial, sans-serif"
     fill="#666">01/25</text>
   <line
+    x1="710"
+    y1="80"
+    x2="710"
+    y2="85"
+    stroke="#333" />
+  <text
+    x="710"
+    y="70"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="12px"
+    font-family="Arial, sans-serif"
+    fill="#666">01/28</text>
+  <line
     x1="170"
     y1="90"
     x2="170"
@@ -171,27 +185,33 @@
     y2="180"
     stroke="#ddd" />
   <line
+    x1="730"
+    y1="90"
+    x2="730"
+    y2="180"
+    stroke="#ddd" />
+  <line
     x1="170"
     y1="90"
-    x2="670"
+    x2="770"
     y2="90"
     stroke="#eee" />
   <line
     x1="170"
     y1="120"
-    x2="670"
+    x2="770"
     y2="120"
     stroke="#eee" />
   <line
     x1="170"
     y1="150"
-    x2="670"
+    x2="770"
     y2="150"
     stroke="#eee" />
   <line
     x1="170"
     y1="180"
-    x2="670"
+    x2="770"
     y2="180"
     stroke="#eee" />
   <text
@@ -250,7 +270,7 @@
     font-size="14px"
     font-family="Arial, sans-serif">Task C</text>
   <rect
-    x="370"
+    x="650"
     y="155"
     width="100"
     height="20"
@@ -259,7 +279,7 @@
     fill="#4CAF50"
     stroke="#333" />
   <text
-    x="420"
+    x="700"
     y="165"
     text-anchor="middle"
     dominant-baseline="middle"

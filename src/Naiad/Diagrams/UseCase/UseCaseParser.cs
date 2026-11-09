@@ -583,10 +583,23 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
 
                 break;
             case JsonValueKind.Array:
+                // As Mermaid lists them, an object or array in an array is keyed by its index (`items[0].name`),
+                // while plain values are a list under the array's own key: the first row carries the key and
+                // the rest leave it blank.
                 var count = 0;
+                var keyShown = false;
                 foreach (var item in element.EnumerateArray())
                 {
-                    AddRows(rows, item, $"{path}[{count.ToString(CultureInfo.InvariantCulture)}]");
+                    if (item.ValueKind is JsonValueKind.Object or JsonValueKind.Array)
+                    {
+                        AddRows(rows, item, $"{path}[{count.ToString(CultureInfo.InvariantCulture)}]");
+                    }
+                    else
+                    {
+                        AddRows(rows, item, keyShown ? "" : path);
+                        keyShown = true;
+                    }
+
                     count++;
                 }
 

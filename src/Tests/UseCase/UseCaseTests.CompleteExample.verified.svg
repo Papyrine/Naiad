@@ -258,14 +258,21 @@
         fill="#fff5ad"
         stroke="#aaaa33"
         class="usecase-note" />
-      <text
-        x="250.5"
-        y="211.7"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        font-size="12px"
-        font-family="Arial, sans-serif"
-        fill="#333">Validates the cart before payment</text>
+      <foreignObject
+        x="113.82"
+        y="202.7"
+        width="273.36"
+        height="18"
+        style="font-size:12px;font-family:Arial, sans-serif">
+        <div
+          xmlns="http://www.w3.org/1999/xhtml"
+          style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 273.36px; height: 18px;">
+          <span>
+            <p
+              style="margin:0;color:#333">Validates the <strong>cart</strong> before payment</p>
+          </span>
+        </div>
+      </foreignObject>
       <rect
         x="700.8"
         y="441.7"

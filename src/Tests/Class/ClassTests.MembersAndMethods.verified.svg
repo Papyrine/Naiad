@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 275.6 172"
-  style="max-width: 275.6px;"
+  viewBox="0 0 260.2 172"
+  style="max-width: 260.2px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -74,12 +74,12 @@
     <rect
       x="0"
       y="0"
-      width="235.6"
+      width="220.2"
       height="132"
       fill="#FFFFDE"
       stroke="#333" />
     <text
-      x="117.8"
+      x="110.1"
       y="20"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -89,7 +89,7 @@
     <line
       x1="0"
       y1="40"
-      x2="235.6"
+      x2="220.2"
       y2="40"
       stroke="#333" />
     <text
@@ -98,18 +98,18 @@
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ name : String</text>
+      font-family="Arial, sans-serif">+String name</text>
     <text
       x="10"
       y="71"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ age : int</text>
+      font-family="Arial, sans-serif">+int age</text>
     <line
       x1="0"
       y1="81"
-      x2="235.6"
+      x2="220.2"
       y2="81"
       stroke="#333" />
     <text
@@ -118,13 +118,13 @@
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ makeSound() : void</text>
+      font-family="Arial, sans-serif">+makeSound() : void</text>
     <text
       x="10"
       y="112"
       text-anchor="start"
       dominant-baseline="middle"
       font-size="14px"
-      font-family="Arial, sans-serif">+ move(distance: int) : void</text>
+      font-family="Arial, sans-serif">+move(int distance) : void</text>
   </g>
 </svg>

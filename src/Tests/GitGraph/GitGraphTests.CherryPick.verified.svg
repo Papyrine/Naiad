@@ -44,6 +44,11 @@
     fill="none"
     stroke="#2196F3"
     stroke-width="2" />
+  <path
+    d="M 204.5 95 C 256.75 95, 256.75 45, 309 45"
+    fill="none"
+    stroke="#4CAF50"
+    stroke-width="2" />
   <circle
     cx="100"
     cy="45"

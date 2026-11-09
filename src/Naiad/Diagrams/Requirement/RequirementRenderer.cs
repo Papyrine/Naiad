@@ -279,18 +279,14 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
             strokeWidth: 1.5,
             strokeDasharray: dashArray);
 
-        // Draw arrowhead
-        const int arrowSize = 8;
-        const double arrowAngle = Math.PI / 6;
-        var ax1 = toX - arrowSize * Math.Cos(angle - arrowAngle);
-        var ay1 = toY - arrowSize * Math.Sin(angle - arrowAngle);
-        var ax2 = toX - arrowSize * Math.Cos(angle + arrowAngle);
-        var ay2 = toY - arrowSize * Math.Sin(angle + arrowAngle);
-
-        builder.AddPath(
-            string.Create(CultureInfo.InvariantCulture, $"M {toX:0.##} {toY:0.##} L {ax1:0.##} {ay1:0.##} L {ax2:0.##} {ay2:0.##} Z"),
-            fill: "#666",
-            stroke: "none");
+        if (type == RelationType.Contains)
+        {
+            DrawContainsMarker(builder, fromX, fromY, angle);
+        }
+        else
+        {
+            DrawOpenArrowhead(builder, toX, toY, angle);
+        }
 
         // Label, pushed off the line along its perpendicular. How far depends on which way the edge runs:
         // clearing a vertical line means moving half the label's width, a horizontal one half its height.
@@ -317,6 +313,38 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
             fontSize: labelFontSize,
             fontFamily: options.FontFamily,
             fill: "#666");
+    }
+
+    // Mermaid's open arrowhead for every relation but containment: two strokes meeting at the target.
+    static void DrawOpenArrowhead(SvgBuilder builder, double toX, double toY, double angle)
+    {
+        const double arrowLength = 12;
+        var arrowAngle = Math.Atan(0.5);
+        var ax1 = toX - arrowLength * Math.Cos(angle - arrowAngle);
+        var ay1 = toY - arrowLength * Math.Sin(angle - arrowAngle);
+        var ax2 = toX - arrowLength * Math.Cos(angle + arrowAngle);
+        var ay2 = toY - arrowLength * Math.Sin(angle + arrowAngle);
+
+        builder.AddPath(
+            string.Create(CultureInfo.InvariantCulture, $"M {ax1:0.##} {ay1:0.##} L {toX:0.##} {toY:0.##} L {ax2:0.##} {ay2:0.##}"),
+            fill: "none",
+            stroke: "#666",
+            strokeWidth: 1.5);
+    }
+
+    // Mermaid's mark for containment: a circled plus where the line leaves the container, with no
+    // arrowhead at the contained end.
+    static void DrawContainsMarker(SvgBuilder builder, double fromX, double fromY, double angle)
+    {
+        const double radius = 9;
+        var dx = Math.Cos(angle);
+        var dy = Math.Sin(angle);
+        var cx = fromX + dx * radius;
+        var cy = fromY + dy * radius;
+
+        builder.AddCircle(cx, cy, radius, fill: "#fff", stroke: "#666", strokeWidth: 1.5);
+        builder.AddLine(cx - dx * radius, cy - dy * radius, cx + dx * radius, cy + dy * radius, stroke: "#666", strokeWidth: 1.5);
+        builder.AddLine(cx + dy * radius, cy - dx * radius, cx - dy * radius, cy + dx * radius, stroke: "#666", strokeWidth: 1.5);
     }
 
     /// <summary>

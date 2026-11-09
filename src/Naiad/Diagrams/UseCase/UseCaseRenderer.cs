@@ -337,6 +337,64 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
     static string DisplayText(string label) =>
         MarkdownLabel.IsMarkdown(label) ? MarkdownLabel.Plain(label) : label;
 
+    /// <summary>
+    /// Draws a label centred on (<paramref name="x"/>, <paramref name="y"/>), under an optional first line
+    /// such as a stereotype. SVG text cannot change weight or slant part-way through a line, so a markdown
+    /// string, whose bold and italics Mermaid shows, is HTML in a foreignObject where HTML is allowed.
+    /// </summary>
+    static void AddLabel(
+        SvgBuilder builder,
+        double x,
+        double y,
+        string label,
+        double fontSize,
+        string fill,
+        string? cssClass,
+        RenderOptions options,
+        string? firstLine = null)
+    {
+        var plain = DisplayText(label);
+        if (firstLine is not null)
+        {
+            plain = $"{firstLine}<br/>{plain}";
+        }
+
+        if (!options.AllowHtmlElements ||
+            !MarkdownLabel.IsMarkdown(label))
+        {
+            builder.AddTextLines(
+                x,
+                y,
+                plain,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: fontSize,
+                fontFamily: options.FontFamily,
+                fill: fill,
+                cssClass: cssClass);
+            return;
+        }
+
+        var html = MarkdownLabel.Html(label);
+        if (firstLine is not null)
+        {
+            html = $"{WebUtility.HtmlEncode(firstLine)}<br/>{html}";
+        }
+
+        // The width is an estimate, and bold runs wider, so the box is given room to spare; its text is
+        // centred and does not wrap.
+        var size = Measure(plain, fontSize);
+        var width = size.Width * 1.2 + fontSize;
+        builder.AddForeignObject(
+            x - width / 2,
+            y - size.Height / 2,
+            width,
+            size.Height,
+            $"<p style=\"margin:0;color:{fill}\">{html}</p>",
+            cssClass,
+            string.Create(CultureInfo.InvariantCulture, $"font-size:{fontSize:0.##}px;font-family:{options.FontFamily}"));
+    }
+
     static double TextWidth(string text, double fontSize) =>
         text.Length * fontSize * charWidthFactor;
 
@@ -552,19 +610,17 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
             return;
         }
 
-        var label = DisplayText(edge.Label);
         var position = edge.LabelPosition;
         builder.AddEdgeLabelBackground(position.X, position.Y, edge.LabelWidth, edge.LabelHeight);
-        builder.AddTextLines(
+        AddLabel(
+            builder,
             position.X,
             position.Y,
-            label,
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: fontSize,
-            fontFamily: options.FontFamily,
-            fill: style?.Color ?? textColor,
-            cssClass: "relationship-label");
+            edge.Label,
+            fontSize,
+            style?.Color ?? textColor,
+            "relationship-label",
+            options);
     }
 
     static double HeadLength(UseCaseMarker marker) =>
@@ -718,16 +774,15 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
             textY += shape.StereotypeHeight + stereotypeGap;
         }
 
-        builder.AddTextLines(
+        AddLabel(
+            builder,
             center.X,
             textY + shape.LabelHeight / 2,
-            DisplayText(actor.Label),
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: shape.FontSize,
-            fontFamily: options.FontFamily,
-            fill: color,
-            cssClass: "actor-label");
+            actor.Label,
+            shape.FontSize,
+            color,
+            "actor-label",
+            options);
     }
 
     // An icon from a registered pack, fitted to the figure's width. False when the icon is not registered.
@@ -827,16 +882,16 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
                 cssClass: "usecase-element");
         }
 
-        builder.AddTextLines(
+        AddLabel(
+            builder,
             center.X,
             center.Y,
-            shape.Text,
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: shape.FontSize,
-            fontFamily: options.FontFamily,
-            fill: style?.Color ?? textColor,
-            cssClass: "usecase-label");
+            useCase.Label,
+            shape.FontSize,
+            style?.Color ?? textColor,
+            "usecase-label",
+            options,
+            useCase.Stereotype is null ? null : $"«{useCase.Stereotype}»");
     }
 
     /// <summary>
@@ -867,15 +922,15 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
             stroke: noteStroke,
             strokeWidth: 1,
             cssClass: "usecase-note");
-        builder.AddTextLines(
+        AddLabel(
+            builder,
             center.X,
             center.Y,
-            DisplayText(shape.Note.Text),
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: shape.FontSize,
-            fontFamily: options.FontFamily,
-            fill: textColor);
+            shape.Note.Text,
+            shape.FontSize,
+            textColor,
+            null,
+            options);
     }
 
     // A JSON table: its identifier in a title row, then a row for each leaf, key on the left, value on the right.

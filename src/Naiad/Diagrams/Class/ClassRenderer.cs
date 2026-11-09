@@ -389,7 +389,8 @@ public class ClassRenderer :
                     anchor: "start",
                     baseline: "middle",
                     fontSize: options.FontSize,
-                    fontFamily: options.FontFamily);
+                    fontFamily: options.FontFamily,
+                    style: ClassifierStyle(member.IsStatic, false));
                 currentY += lineHeight;
             }
         }
@@ -416,7 +417,8 @@ public class ClassRenderer :
                     anchor: "start",
                     baseline: "middle",
                     fontSize: options.FontSize,
-                    fontFamily: options.FontFamily);
+                    fontFamily: options.FontFamily,
+                    style: ClassifierStyle(method.IsStatic, method.IsAbstract));
                 currentY += lineHeight;
             }
         }
@@ -591,11 +593,22 @@ public class ClassRenderer :
         builder.AddMarker("aggregation", "M0,5 L5,0 L10,5 L5,10 Z", 12, 12, 10, 5, "#fff");
     }
 
+    // Members read as they were written, as Mermaid shows them: `+String name` keeps its type first and
+    // `+name : String` its type last. The classifier is not part of the text; it styles it.
     static string FormatMember(ClassMember member)
     {
         var visibility = GetVisibilitySymbol(member.Visibility);
-        var typeStr = !string.IsNullOrEmpty(member.Type) ? $" : {member.Type}" : "";
-        return $"{visibility}{member.Name}{typeStr}{Classifier(member.IsStatic, false)}";
+        if (string.IsNullOrEmpty(member.Type))
+        {
+            return $"{visibility}{member.Name}";
+        }
+
+        if (member.TypeFirst)
+        {
+            return $"{visibility}{member.Type} {member.Name}";
+        }
+
+        return $"{visibility}{member.Name} : {member.Type}";
     }
 
     static string FormatMethod(ClassMethod method)
@@ -603,7 +616,7 @@ public class ClassRenderer :
         var visibility = GetVisibilitySymbol(method.Visibility);
         var parameters = string.Join(", ", method.Parameters.Select(FormatParameter));
         var returnTypeStr = !string.IsNullOrEmpty(method.ReturnType) ? $" : {method.ReturnType}" : "";
-        return $"{visibility}{method.Name}({parameters}){Classifier(method.IsStatic, method.IsAbstract)}{returnTypeStr}";
+        return $"{visibility}{method.Name}({parameters}){returnTypeStr}";
     }
 
     static string FormatParameter(MethodParameter parameter)
@@ -613,25 +626,38 @@ public class ClassRenderer :
             return parameter.Name;
         }
 
+        if (parameter.TypeFirst)
+        {
+            return $"{parameter.Type} {parameter.Name}";
+        }
+
         return $"{parameter.Name}: {parameter.Type}";
     }
 
-    // Mermaid's trailing classifier: $ for static, * for abstract.
-    static string Classifier(bool isStatic, bool isAbstract) =>
-        (isStatic, isAbstract) switch
+    // Mermaid's classifier: a static member ($) is underlined and an abstract one (*) italic.
+    static string? ClassifierStyle(bool isStatic, bool isAbstract)
+    {
+        if (isStatic)
         {
-            (true, _) => "$",
-            (_, true) => "*",
-            _ => ""
-        };
+            return "text-decoration:underline";
+        }
 
+        if (isAbstract)
+        {
+            return "font-style:italic";
+        }
+
+        return null;
+    }
+
+    // Mermaid writes the marker straight before the member, with no space.
     static string GetVisibilitySymbol(Visibility visibility) =>
         visibility switch
         {
-            Visibility.Public => "+ ",
-            Visibility.Private => "- ",
-            Visibility.Protected => "# ",
-            Visibility.PackagePrivate => "~ ",
+            Visibility.Public => "+",
+            Visibility.Private => "-",
+            Visibility.Protected => "#",
+            Visibility.PackagePrivate => "~",
             _ => ""
         };
 

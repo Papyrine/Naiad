@@ -587,6 +587,9 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
                             cherryCommit.Parents.Add(cherryHead);
                         }
 
+                        // As in Mermaid, the copy is also linked to the commit it was taken from.
+                        cherryCommit.Parents.Add(sourceCommit.Id);
+
                         computed.Commits.Add(cherryCommit);
                         computed.CommitMap[cherryId] = cherryCommit;
                         branchHeads[currentBranch] = cherryId;

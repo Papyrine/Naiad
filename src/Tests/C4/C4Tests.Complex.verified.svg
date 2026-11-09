@@ -2,7 +2,7 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 1080 642"
+  viewBox="0 0 1080 696"
   style="max-width: 1080px;"
   role="graphics-document document">
   <style
@@ -20,80 +20,80 @@
     <g
       transform="translate(0,50)">
       <path
-        d="M 410 112 L 410 173 L 471 234"
+        d="M 410 130 L 410 191 L 466.39 252"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 471 234 L 463.27 231.93 L 468.93 226.27 Z"
+        d="M 466.39 252 L 458.75 249.63 L 464.62 244.2 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 630 112 L 630 173 L 569 234"
+        d="M 630 130 L 630 191 L 573.61 252"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 569 234 L 571.07 226.27 L 576.73 231.93 Z"
+        d="M 573.61 252 L 575.38 244.2 L 581.25 249.63 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 440 303 L 80 393 L 80 454"
+        d="M 440 331.64 L 80 429 L 80 490"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 80 454 L 76 447.07 L 84 447.07 Z"
+        d="M 80 490 L 76 483.07 L 84 483.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 440 323 L 300 393 L 300 454"
+        d="M 440 353.27 L 300 429 L 300 490"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 300 454 L 296 447.07 L 304 447.07 Z"
+        d="M 300 490 L 296 483.07 L 304 483.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 520 332 L 520 393 L 520 454"
+        d="M 520 368 L 520 429 L 520 490"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 520 454 L 516 447.07 L 524 447.07 Z"
+        d="M 520 490 L 516 483.07 L 524 483.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 600 323 L 740 393 L 740 454"
+        d="M 600 353.27 L 740 429 L 740 490"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 740 454 L 736 447.07 L 744 447.07 Z"
+        d="M 740 490 L 736 483.07 L 744 483.07 Z"
         fill="#666"
         stroke="none" />
       <path
-        d="M 600 303 L 960 393 L 960 454"
+        d="M 600 331.64 L 960 429 L 960 490"
         fill="none"
         stroke="#666"
         stroke-width="1.5"
         stroke-dasharray="5,5" />
       <path
-        d="M 960 454 L 956 447.07 L 964 447.07 Z"
+        d="M 960 490 L 956 483.07 L 964 483.07 Z"
         fill="#666"
         stroke="none" />
       <rect
         x="330"
         y="28"
         width="160"
-        height="84"
+        height="102"
         rx="8"
         ry="8"
         fill="#08427B"
@@ -120,10 +120,18 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">System administrator</text>
+        fill="#FFFFFF">[Person]</text>
       <text
         x="410"
         y="94"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">System administrator</text>
+      <text
+        x="410"
+        y="112"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -133,7 +141,7 @@
         x="550"
         y="28"
         width="160"
-        height="84"
+        height="102"
         rx="8"
         ry="8"
         fill="#08427B"
@@ -160,7 +168,7 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
-        fill="#FFFFFF">End user of the</text>
+        fill="#FFFFFF">[Person]</text>
       <text
         x="630"
         y="94"
@@ -168,19 +176,27 @@
         dominant-baseline="middle"
         font-size="11px"
         font-family="Arial, sans-serif"
+        fill="#FFFFFF">End user of the</text>
+      <text
+        x="630"
+        y="112"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
         fill="#FFFFFF">application</text>
       <rect
         x="440"
-        y="234"
+        y="252"
         width="160"
-        height="98"
+        height="116"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="520"
-        y="265"
+        y="283"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -189,7 +205,15 @@
         fill="#FFFFFF">Core System</text>
       <text
         x="520"
-        y="283"
+        y="301"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="520"
+        y="319"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -197,7 +221,7 @@
         fill="#FFFFFF">Main application</text>
       <text
         x="520"
-        y="301"
+        y="337"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -205,16 +229,16 @@
         fill="#FFFFFF">server</text>
       <rect
         x="0"
-        y="454"
+        y="490"
         width="160"
-        height="98"
+        height="116"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="80"
-        y="485"
+        y="521"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -223,7 +247,15 @@
         fill="#FFFFFF">Auth Service</text>
       <text
         x="80"
-        y="503"
+        y="539"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="80"
+        y="557"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -231,7 +263,7 @@
         fill="#FFFFFF">Authentication and</text>
       <text
         x="80"
-        y="521"
+        y="575"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -239,16 +271,16 @@
         fill="#FFFFFF">authorization</text>
       <rect
         x="220"
-        y="454"
+        y="490"
         width="160"
-        height="98"
+        height="116"
         rx="5"
         ry="5"
         fill="#1168BD"
         stroke="none" />
       <text
         x="300"
-        y="485"
+        y="521"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -257,7 +289,15 @@
         fill="#FFFFFF">Database</text>
       <text
         x="300"
-        y="503"
+        y="539"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="300"
+        y="557"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -265,7 +305,7 @@
         fill="#FFFFFF">PostgreSQL database</text>
       <text
         x="300"
-        y="521"
+        y="575"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -273,16 +313,16 @@
         fill="#FFFFFF">cluster</text>
       <rect
         x="440"
-        y="454"
+        y="490"
         width="160"
-        height="98"
+        height="116"
         rx="5"
         ry="5"
         fill="#999999"
         stroke="none" />
       <text
         x="520"
-        y="485"
+        y="521"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -291,7 +331,15 @@
         fill="#FFFFFF">Payment Gateway</text>
       <text
         x="520"
-        y="503"
+        y="539"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="520"
+        y="557"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -299,7 +347,7 @@
         fill="#FFFFFF">Third-party payment</text>
       <text
         x="520"
-        y="521"
+        y="575"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -307,16 +355,16 @@
         fill="#FFFFFF">processor</text>
       <rect
         x="660"
-        y="454"
+        y="490"
         width="160"
-        height="98"
+        height="116"
         rx="5"
         ry="5"
         fill="#999999"
         stroke="none" />
       <text
         x="740"
-        y="485"
+        y="521"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -325,7 +373,15 @@
         fill="#FFFFFF">Email Service</text>
       <text
         x="740"
-        y="503"
+        y="539"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="740"
+        y="557"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -333,7 +389,7 @@
         fill="#FFFFFF">SendGrid email</text>
       <text
         x="740"
-        y="521"
+        y="575"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -341,16 +397,16 @@
         fill="#FFFFFF">delivery</text>
       <rect
         x="880"
-        y="454"
+        y="490"
         width="160"
-        height="98"
+        height="116"
         rx="5"
         ry="5"
         fill="#999999"
         stroke="none" />
       <text
         x="960"
-        y="485"
+        y="521"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="13px"
@@ -359,7 +415,15 @@
         fill="#FFFFFF">CDN</text>
       <text
         x="960"
-        y="503"
+        y="539"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-size="11px"
+        font-family="Arial, sans-serif"
+        fill="#FFFFFF">[Software System]</text>
+      <text
+        x="960"
+        y="557"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -367,7 +431,7 @@
         fill="#FFFFFF">Content delivery</text>
       <text
         x="960"
-        y="521"
+        y="575"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -375,7 +439,7 @@
         fill="#FFFFFF">network</text>
       <rect
         x="382.9"
-        y="157"
+        y="175"
         width="54.2"
         height="32"
         rx="3"
@@ -384,7 +448,7 @@
         stroke="none" />
       <text
         x="410"
-        y="166.5"
+        y="184.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -392,7 +456,7 @@
         fill="#666">Manages</text>
       <text
         x="410"
-        y="180.5"
+        y="198.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -400,7 +464,7 @@
         fill="#888">[HTTPS]</text>
       <rect
         x="605"
-        y="157"
+        y="175"
         width="50"
         height="32"
         rx="3"
@@ -409,7 +473,7 @@
         stroke="none" />
       <text
         x="630"
-        y="166.5"
+        y="184.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -417,7 +481,7 @@
         fill="#666">Uses</text>
       <text
         x="630"
-        y="180.5"
+        y="198.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -425,7 +489,7 @@
         fill="#888">[HTTPS]</text>
       <rect
         x="19.9"
-        y="384.5"
+        y="420.5"
         width="120.2"
         height="17"
         rx="3"
@@ -434,7 +498,7 @@
         stroke="none" />
       <text
         x="80"
-        y="393"
+        y="429"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -442,7 +506,7 @@
         fill="#666">Authenticates via</text>
       <rect
         x="256.4"
-        y="377"
+        y="413"
         width="87.2"
         height="32"
         rx="3"
@@ -451,7 +515,7 @@
         stroke="none" />
       <text
         x="300"
-        y="386.5"
+        y="422.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -459,7 +523,7 @@
         fill="#666">Reads/Writes</text>
       <text
         x="300"
-        y="400.5"
+        y="436.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -467,7 +531,7 @@
         fill="#888">[TCP/5432]</text>
       <rect
         x="456.6"
-        y="377"
+        y="413"
         width="126.8"
         height="32"
         rx="3"
@@ -476,7 +540,7 @@
         stroke="none" />
       <text
         x="520"
-        y="386.5"
+        y="422.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -484,7 +548,7 @@
         fill="#666">Processes payments</text>
       <text
         x="520"
-        y="400.5"
+        y="436.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -492,7 +556,7 @@
         fill="#888">[HTTPS]</text>
       <rect
         x="673.3"
-        y="377"
+        y="413"
         width="133.4"
         height="32"
         rx="3"
@@ -501,7 +565,7 @@
         stroke="none" />
       <text
         x="740"
-        y="386.5"
+        y="422.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -509,7 +573,7 @@
         fill="#666">Sends notifications</text>
       <text
         x="740"
-        y="400.5"
+        y="436.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
@@ -517,7 +581,7 @@
         fill="#888">[SMTP]</text>
       <rect
         x="913.1"
-        y="377"
+        y="413"
         width="93.8"
         height="32"
         rx="3"
@@ -526,7 +590,7 @@
         stroke="none" />
       <text
         x="960"
-        y="386.5"
+        y="422.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="11px"
@@ -534,7 +598,7 @@
         fill="#666">Serves assets</text>
       <text
         x="960"
-        y="400.5"
+        y="436.5"
         text-anchor="middle"
         dominant-baseline="middle"
         font-size="10px"
