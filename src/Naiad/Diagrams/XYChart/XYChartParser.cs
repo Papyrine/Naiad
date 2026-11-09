@@ -35,9 +35,8 @@ class XYChartParser : IDiagramParser<XYChartModel>
             quotedString.Or(
                 unquoted.SkipAnd(Literals.NoneOf(",]\r\n").AsTrimmedString()));
 
-        // Category list: [jan, feb, mar] or ["Jan", "Feb", "Mar"]. Blanks may surround a comma, but the
-        // closing bracket comes straight after the last item. An unquoted item takes the blanks after it
-        // as its own, a quoted one does not: `["Jan", "Feb" ]` is not read.
+        // Category list: [jan, feb, mar] or ["Jan", "Feb", "Mar"]. Blanks may surround a comma and the
+        // brackets.
         var categoryListParser =
             Literals.Char('[')
                 .SkipAnd(CommonParsers.InlineWhitespace)
@@ -45,6 +44,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
                     Separated(
                         CommonParsers.InlineWhitespace.SkipAnd(Literals.Char(',')).SkipAnd(CommonParsers.InlineWhitespace),
                         categoryItem))
+                .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(Literals.Char(']'))
                 .Then(static _ => _.ToList());
 
@@ -53,7 +53,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
             CommonParsers.InlineWhitespace
                 .SkipAnd(TextIgnoreCase("x-axis"))
                 .SkipAnd(CommonParsers.RequiredWhitespace)
-                .SkipAnd(quotedString.AndSkip(CommonParsers.RequiredWhitespace).Optional())
+                .SkipAnd(quotedString.AndSkip(CommonParsers.InlineWhitespace).Optional())
                 .And(categoryListParser)
                 .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(CommonParsers.LineEnd)
@@ -64,7 +64,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
             CommonParsers.InlineWhitespace
                 .SkipAnd(TextIgnoreCase("y-axis"))
                 .SkipAnd(CommonParsers.RequiredWhitespace)
-                .SkipAnd(quotedString.AndSkip(CommonParsers.RequiredWhitespace).Optional())
+                .SkipAnd(quotedString.AndSkip(CommonParsers.InlineWhitespace).Optional())
                 .And(
                     numberParser
                         .AndSkip(CommonParsers.InlineWhitespace)
@@ -79,8 +79,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
                         min: range.HasValue ? range.Value.Item1 : 0,
                         max: range.HasValue ? range.Value.Item2 : 100));
 
-        // Data list: [100, 200, 300]. As in a category list, the closing bracket comes straight after
-        // the last number: `[100, 200 ]` is not read.
+        // Data list: [100, 200, 300]. As in a category list, blanks may surround a comma and the brackets.
         var dataListParser =
             Literals.Char('[')
                 .SkipAnd(CommonParsers.InlineWhitespace)
@@ -88,6 +87,7 @@ class XYChartParser : IDiagramParser<XYChartModel>
                     Separated(
                         CommonParsers.InlineWhitespace.SkipAnd(Literals.Char(',')).SkipAnd(CommonParsers.InlineWhitespace),
                         numberParser))
+                .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(Literals.Char(']'))
                 .Then(static _ => _.ToList());
 
