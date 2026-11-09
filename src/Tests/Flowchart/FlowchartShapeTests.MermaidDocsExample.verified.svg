@@ -1,0 +1,121 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 228.6 672.91"
+  style="max-width: 228.6px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M26.25,0 H162.35 L94.3,136.1 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="26.25"
+      y="7.5"
+      width="136.1"
+      height="21"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 136.1px; height: 21px;">
+        <span>
+          <p>File Handling</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M40.8,210.1 L147.8,186.1 V258.1 H40.8 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="40.8"
+      y="210.1"
+      width="107"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 107px; height: 48px;">
+        <span>
+          <p>User Input</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M0,328.1 V395.04 C8.03,396.92 16.06,398.8 24.09,400.22 C32.11,401.64 40.14,402.59 48.17,402.84 C56.2,403.09 64.23,402.65 72.26,401.61 C80.29,400.57 88.31,398.95 96.34,397.13 C104.37,395.32 112.4,393.32 120.43,391.62 C128.46,389.92 136.49,388.54 144.51,387.8 C152.54,387.06 160.57,386.97 168.6,387.55 V377.55 H178.6 V367.55 H188.6 V308.1 H20 V318.1 H10 V328.1 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <path
+      d="M10,328.1 H168.6 V377.55 H178.6 V318.1 H10 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="0"
+      y="328.1"
+      width="168.6"
+      height="59.06"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 168.6px; height: 59.06px;">
+        <span>
+          <p>Multiple Documents</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M5,462.91 V510.91 H173.6 V505.91 H178.6 V500.91 H183.6 V452.91 H15 V457.91 H10 V462.91 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <path
+      d="M10,462.91 H173.6 V505.91 H178.6 V457.91 H10 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="5"
+      y="462.91"
+      width="168.6"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 168.6px; height: 48px;">
+        <span>
+          <p>Process Automation</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M29.25,626.91 C34.67,628.48 40.09,630.04 45.51,631.16 C50.93,632.27 56.35,632.91 61.78,632.91 C67.2,632.91 72.62,632.27 78.04,631.16 C83.46,630.04 88.88,628.48 94.3,626.91 C99.72,625.34 105.14,623.78 110.56,622.67 C115.98,621.56 121.4,620.91 126.83,620.91 C132.25,620.91 137.67,621.56 143.09,622.67 C148.51,623.78 153.93,625.34 159.35,626.91 V566.91 C153.93,565.34 148.51,563.78 143.09,562.67 C137.67,561.56 132.25,560.91 126.83,560.91 C121.4,560.91 115.98,561.56 110.56,562.67 C105.14,563.78 99.72,565.34 94.3,566.91 C88.88,568.48 83.46,570.04 78.04,571.16 C72.62,572.27 67.2,572.91 61.78,572.91 C56.35,572.91 50.93,572.27 45.51,571.16 C40.09,570.04 34.67,568.48 29.25,566.91 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="29.25"
+      y="560.91"
+      width="130.1"
+      height="72"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 130.1px; height: 72px;">
+        <span>
+          <p>Paper Records</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
+</svg>

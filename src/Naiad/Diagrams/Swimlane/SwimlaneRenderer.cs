@@ -67,7 +67,7 @@ public class SwimlaneRenderer : IDiagramRenderer<SwimlaneModel>
             return emptyBuilder.Build();
         }
 
-        FlowchartRenderer.MeasureNodes(model.Nodes, options);
+        FlowchartRenderer.MeasureNodes(model.Nodes, options, model.Direction);
         FlowchartRenderer.MeasureEdgeLabels(model.Edges, options);
 
         var horizontal = model.Direction is Direction.LeftToRight or Direction.RightToLeft;
@@ -214,7 +214,7 @@ public class SwimlaneRenderer : IDiagramRenderer<SwimlaneModel>
 
         foreach (var node in model.Nodes)
         {
-            FlowchartRenderer.RenderNode(builder, node);
+            FlowchartRenderer.RenderNode(builder, node, options.FontSize);
         }
 
         foreach (var subgraph in AllSubgraphs(nested))

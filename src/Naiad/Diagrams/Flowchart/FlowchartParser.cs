@@ -547,24 +547,79 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
     }
 
     static NodeShape ShapeFromName(string name) =>
-        name.ToLowerInvariant() switch
+        shapeNames.GetValueOrDefault(name.Trim(), NodeShape.Rectangle);
+
+    // Every name Mermaid 12.3 accepts for a documented flowchart shape: its short name, its aliases, and the
+    // names its renderer used internally before the expanded shapes arrived.
+    static readonly Dictionary<string, NodeShape> shapeNames = BuildShapeNames(
+        (NodeShape.Rectangle, ["rect", "proc", "process", "rectangle", "squareRect"]),
+        (NodeShape.RoundedRectangle, ["rounded", "event", "roundedRect"]),
+        (NodeShape.Stadium, ["stadium", "terminal", "pill"]),
+        (NodeShape.Subroutine, ["fr-rect", "subprocess", "subproc", "framed-rectangle", "subroutine"]),
+        (NodeShape.Cylinder, ["cyl", "db", "database", "cylinder"]),
+        (NodeShape.Datastore, ["datastore", "data-store"]),
+        (NodeShape.Folder, ["folder", "directory"]),
+        (NodeShape.Bucket, ["bucket"]),
+        (NodeShape.Console, ["console"]),
+        (NodeShape.Browser, ["browser"]),
+        (NodeShape.Person, ["person"]),
+        (NodeShape.Circle, ["circle", "circ"]),
+        (NodeShape.Bang, ["bang"]),
+        (NodeShape.Cloud, ["cloud"]),
+        (NodeShape.Diamond, ["diam", "decision", "diamond", "question"]),
+        (NodeShape.Hexagon, ["hex", "hexagon", "prepare"]),
+        (NodeShape.Parallelogram, ["lean-r", "lean-right", "in-out", "lean_right"]),
+        (NodeShape.ParallelogramAlt, ["lean-l", "lean-left", "out-in", "lean_left"]),
+        (NodeShape.Trapezoid, ["trap-b", "priority", "trapezoid-bottom", "trapezoid"]),
+        (NodeShape.TrapezoidAlt, ["trap-t", "manual", "trapezoid-top", "inv-trapezoid", "inv_trapezoid"]),
+        (NodeShape.DoubleCircle, ["dbl-circ", "double-circle", "doublecircle"]),
+        (NodeShape.Text, ["text"]),
+        (NodeShape.NotchedRectangle, ["notch-rect", "card", "notched-rectangle"]),
+        (NodeShape.LinedRectangle, ["lin-rect", "lined-rectangle", "lined-process", "lin-proc", "shaded-process"]),
+        (NodeShape.SmallCircle, ["sm-circ", "start", "small-circle", "stateStart"]),
+        (NodeShape.FramedCircle, ["fr-circ", "stop", "framed-circle", "stateEnd"]),
+        (NodeShape.ForkJoin, ["fork", "join", "forkJoin"]),
+        (NodeShape.Hourglass, ["hourglass", "collate"]),
+        (NodeShape.CurlyBracket, ["brace", "comment", "brace-l"]),
+        (NodeShape.CurlyBracketRight, ["brace-r"]),
+        (NodeShape.CurlyBraces, ["braces"]),
+        (NodeShape.Lightning, ["bolt", "com-link", "lightning-bolt"]),
+        (NodeShape.Document, ["doc", "document"]),
+        (NodeShape.HalfRoundedRectangle, ["delay", "half-rounded-rectangle"]),
+        (NodeShape.TiltedCylinder, ["h-cyl", "das", "horizontal-cylinder"]),
+        (NodeShape.LinedCylinder, ["lin-cyl", "disk", "lined-cylinder"]),
+        (NodeShape.CurvedTrapezoid, ["curv-trap", "curved-trapezoid", "display"]),
+        (NodeShape.DividedRectangle, ["div-rect", "div-proc", "divided-rectangle", "divided-process"]),
+        (NodeShape.TriangleUp, ["tri", "extract", "triangle"]),
+        (NodeShape.WindowPane, ["win-pane", "internal-storage", "window-pane"]),
+        (NodeShape.FilledCircle, ["f-circ", "junction", "filled-circle"]),
+        (NodeShape.NotchedPentagon, ["notch-pent", "loop-limit", "notched-pentagon"]),
+        (NodeShape.TriangleDown, ["flip-tri", "manual-file", "flipped-triangle"]),
+        (NodeShape.SlopedRectangle, ["sl-rect", "manual-input", "sloped-rectangle"]),
+        (NodeShape.MultiDocument, ["docs", "documents", "st-doc", "stacked-document"]),
+        (NodeShape.MultiProcess, ["st-rect", "procs", "processes", "stacked-rectangle"]),
+        (NodeShape.BowTie, ["bow-rect", "stored-data", "bow-tie-rectangle"]),
+        (NodeShape.CrossedCircle, ["cross-circ", "summary", "crossed-circle"]),
+        (NodeShape.TaggedDocument, ["tag-doc", "tagged-document"]),
+        (NodeShape.TaggedRect, ["tag-rect", "tagged-rectangle", "tag-proc", "tagged-process"]),
+        (NodeShape.Flag, ["flag", "paper-tape"]),
+        (NodeShape.Asymmetric, ["odd", "rect_left_inv_arrow"]),
+        (NodeShape.LinedDocument, ["lin-doc", "lined-document"]));
+
+    // Mermaid is strict about case; reading the names case-blind costs nothing and accepts more.
+    static Dictionary<string, NodeShape> BuildShapeNames(params (NodeShape Shape, string[] Names)[] shapes)
+    {
+        var names = new Dictionary<string, NodeShape>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (shape, aliases) in shapes)
         {
-            "rounded" or "event" => NodeShape.RoundedRectangle,
-            "stadium" or "pill" or "terminal" => NodeShape.Stadium,
-            "subproc" or "subprocess" or "subroutine" or "fr-rect" or "framed-rectangle" => NodeShape.Subroutine,
-            "cyl" or "cylinder" or "database" or "db" => NodeShape.Cylinder,
-            "circle" or "circ" => NodeShape.Circle,
-            "dbl-circ" or "double-circle" => NodeShape.DoubleCircle,
-            "odd" => NodeShape.Asymmetric,
-            "diam" or "diamond" or "decision" or "question" => NodeShape.Diamond,
-            "hex" or "hexagon" or "prepare" => NodeShape.Hexagon,
-            "lean-r" or "lean-right" or "in-out" => NodeShape.Parallelogram,
-            "lean-l" or "lean-left" or "out-in" => NodeShape.ParallelogramAlt,
-            "trap-b" or "trapezoid" or "trapezoid-bottom" or "priority" => NodeShape.Trapezoid,
-            "trap-t" or "trapezoid-top" or "inv-trapezoid" or "manual" => NodeShape.TrapezoidAlt,
-            "doc" or "document" => NodeShape.Document,
-            _ => NodeShape.Rectangle
-        };
+            foreach (var alias in aliases)
+            {
+                names.Add(alias, shape);
+            }
+        }
+
+        return names;
+    }
 
     // Sorts the text after `subgraph` into an id and a title:
     //   `one`                   id `one`, titled by its id

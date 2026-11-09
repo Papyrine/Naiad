@@ -1,0 +1,204 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 626 134.81"
+  style="max-width: 626px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <defs>
+    <marker
+      id="naiad_flowchart-pointEnd"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="10"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M 0 0 L 10 5 L 0 10 z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-pointStart"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="0"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M 0 5 L 10 10 L 10 0 z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-circleEnd"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="11"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <circle
+        cx="5"
+        cy="5"
+        r="5"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-circleStart"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="-1"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <circle
+        cx="5"
+        cy="5"
+        r="5"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-crossEnd"
+      class="marker cross"
+      viewBox="0 0 11 11"
+      refX="12"
+      refY="5.2"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <path
+        d="M 1,1 l 9,9 M 10,1 l -9,9"
+        class="arrowMarkerPath"
+        style="stroke-width: 2;" />
+    </marker>
+    <marker
+      id="naiad_flowchart-crossStart"
+      class="marker cross"
+      viewBox="0 0 11 11"
+      refX="-1"
+      refY="5.2"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <path
+        d="M 1,1 l 9,9 M 10,1 l -9,9"
+        class="arrowMarkerPath"
+        style="stroke-width: 2;" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M127.6,47.41 L133.43,47.41 C139.27,47.41 150.93,47.41 162.6,47.41 C174.27,47.41 185.93,47.41 191.77,47.41 L197.6,47.41"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M211.6,47.41 L217.43,47.41 C223.27,47.41 234.93,47.41 246.6,47.41 C258.27,47.41 269.93,47.41 275.77,47.41 L281.6,47.41"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M373.6,47.41 L379.43,47.41 C385.27,47.41 396.93,47.41 408.6,47.41 C420.27,47.41 431.93,47.41 437.77,47.41 L443.6,47.41"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M10,76.41 A5,5 0 0 1 5,71.41 V52.41 A5,5 0 0 0 0,47.41 A5,5 0 0 0 5,42.41 V23.41 A5,5 0 0 1 10,18.41 L117.6,18.41 A5,5 0 0 1 122.6,23.41 V42.41 A5,5 0 0 0 127.6,47.41 A5,5 0 0 0 122.6,52.41 V71.41 A5,5 0 0 1 117.6,76.41 Z"
+      fill="#fde68a"
+      stroke="none" />
+    <path
+      d="M10,76.41 A5,5 0 0 1 5,71.41 V52.41 A5,5 0 0 0 0,47.41 A5,5 0 0 0 5,42.41 V23.41 A5,5 0 0 1 10,18.41 M117.6,18.41 A5,5 0 0 1 122.6,23.41 V42.41 A5,5 0 0 0 127.6,47.41 A5,5 0 0 0 122.6,52.41 V71.41 A5,5 0 0 1 117.6,76.41"
+      fill="none"
+      stroke="#b45309" />
+    <foreignObject
+      x="0"
+      y="18.41"
+      width="127.6"
+      height="58"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 127.6px; height: 58px;">
+        <span>
+          <p>Styled braces</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M197.6,47.41 A7,7 0 1 0 211.6,47.41 A7,7 0 1 0 197.6,47.41 Z"
+      fill="#16a34a"
+      stroke="#14532d" />
+    <path
+      d="M281.6,29.41 H373.6 V65.41 H281.6 Z"
+      fill="#e0f2fe"
+      stroke="#0369a1" />
+    <foreignObject
+      x="281.6"
+      y="29.41"
+      width="92"
+      height="36"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 92px; height: 36px;">
+        <span>
+          <p>Boxed text</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M443.6,20 V86.94 C449.43,88.82 455.26,90.7 461.09,92.12 C466.91,93.54 472.74,94.49 478.57,94.74 C484.4,94.99 490.23,94.55 496.06,93.51 C501.89,92.47 507.71,90.85 513.54,89.03 C519.37,87.22 525.2,85.22 531.03,83.52 C536.86,81.82 542.69,80.44 548.51,79.7 C554.34,78.96 560.17,78.87 566,79.45 V69.45 H576 V59.45 H586 V0 H463.6 V10 H453.6 V20 Z"
+      fill="#fee2e2"
+      stroke="#dc2626"
+      stroke-width="2" />
+    <path
+      d="M453.6,20 H566 V69.45 H576 V10 H453.6 Z"
+      fill="#fee2e2"
+      stroke="#dc2626"
+      stroke-width="2" />
+    <foreignObject
+      x="443.6"
+      y="20"
+      width="122.4"
+      height="59.06"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 122.4px; height: 59.06px;">
+        <span>
+          <p>Styled stack</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
+</svg>

@@ -1,0 +1,209 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 421.1 186"
+  style="max-width: 421.1px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <defs>
+    <marker
+      id="naiad_flowchart-pointEnd"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="10"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M 0 0 L 10 5 L 0 10 z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-pointStart"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="0"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M 0 5 L 10 10 L 10 0 z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-circleEnd"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="11"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <circle
+        cx="5"
+        cy="5"
+        r="5"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-circleStart"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="-1"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <circle
+        cx="5"
+        cy="5"
+        r="5"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-crossEnd"
+      class="marker cross"
+      viewBox="0 0 11 11"
+      refX="12"
+      refY="5.2"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <path
+        d="M 1,1 l 9,9 M 10,1 l -9,9"
+        class="arrowMarkerPath"
+        style="stroke-width: 2;" />
+    </marker>
+    <marker
+      id="naiad_flowchart-crossStart"
+      class="marker cross"
+      viewBox="0 0 11 11"
+      refX="-1"
+      refY="5.2"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <path
+        d="M 1,1 l 9,9 M 10,1 l -9,9"
+        class="arrowMarkerPath"
+        style="stroke-width: 2;" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M14,73 L19.83,73 C25.67,73 37.33,73 49,73 C60.67,73 72.33,73 78.17,73 L84,73"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M94,66.88 L99.83,59.73 C105.67,52.58 117.33,38.29 129,31.15 C140.67,24 152.33,24 158.17,24 L164,24"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M94,79.13 L99.83,86.27 C105.67,93.42 117.33,107.71 129,114.85 C140.67,122 152.33,122 158.17,122 L164,122"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M217.1,24 L222.93,24 C228.77,24 240.43,24 252.1,31.15 C263.77,38.29 275.43,52.58 281.27,59.73 L287.1,66.88"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M217.1,122 L222.93,122 C228.77,122 240.43,122 252.1,114.85 C263.77,107.71 275.43,93.42 281.27,86.27 L287.1,79.13"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M297.1,73 L302.93,73 C308.77,73 320.43,73 332.1,73 C343.77,73 355.43,73 361.27,73 L367.1,73"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M0,73 A7,7 0 1 0 14,73 A7,7 0 1 0 0,73 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <path
+      d="M84,38 H94 V108 H84 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <path
+      d="M164,0 H217.1 V48 H164 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="164"
+      y="0"
+      width="53.1"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 53.1px; height: 48px;">
+        <span>
+          <p>One</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M164,98 H217.1 V146 H164 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="164"
+      y="98"
+      width="53.1"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 53.1px; height: 48px;">
+        <span>
+          <p>Two</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M287.1,38 H297.1 V108 H287.1 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <path
+      d="M367.1,73 A7,7 0 1 0 381.1,73 A7,7 0 1 0 367.1,73 Z M371.6,73 A2.5,2.5 0 1 0 376.6,73 A2.5,2.5 0 1 0 371.6,73 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+  </g>
+</svg>
