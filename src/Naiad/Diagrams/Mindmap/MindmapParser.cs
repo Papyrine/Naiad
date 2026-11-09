@@ -12,11 +12,11 @@ class MindmapParser : IDiagramParser<MindmapModel>
             Between(Literals.Text("::icon("), Literals.NoneOf(")"), Literals.Char(')'))
                 .AsString();
 
-        // CSS class: :::className
+        // CSS classes: :::urgent large, the rest of the line.
         var cssClassParser =
             Literals.Text(":::")
-                .SkipAnd(Literals.Pattern(static _ => char.IsLetterOrDigit(_) || _ == '_' || _ == '-'))
-                .AsString();
+                .SkipAnd(Literals.NoneOf("\r\n"))
+                .AsTrimmedString();
 
         // Node with shape: ((circle)), (rounded), [square], {{hexagon}}, ))bang((, )cloud(
         var shapedNodeParser =
@@ -52,9 +52,11 @@ class MindmapParser : IDiagramParser<MindmapModel>
             nodeIdParser.Optional()
                 .SkipAnd(shapedNodeParser);
 
-        // A line with no shape is its text, up to any icon or class.
+        // A line with no shape is its text, up to any icon or class. A colon on its own is part of the text
+        // (`Ratio 1:2`).
         var plainNodeParser =
-            Literals.NoneOf(":\r\n", minSize: 0)
+            LineBefore(Literals.Text("::icon(").Or(Literals.Text(":::")))
+                .Or(Literals.NoneOf("\r\n", minSize: 0))
                 .Then(static _ => (text: _.Span.Trim().ToString(), shape: MindmapShape.Default));
 
         // Node line: indentation + optional shape + text + optional icon/class
@@ -93,6 +95,29 @@ class MindmapParser : IDiagramParser<MindmapModel>
     static MindmapModel BuildModel(List<(int indent, string text, MindmapShape shape, string? icon, string? cssClass)> lines)
     {
         var model = new MindmapModel();
+
+        // A line holding only an icon or a class, as Mermaid's documentation writes `::icon(fa fa-book)`
+        // under a node, decorates the node above it rather than being a node of its own.
+        var merged = new List<(int indent, string text, MindmapShape shape, string? icon, string? cssClass)>(lines.Count);
+        foreach (var line in lines)
+        {
+            if (line is { text.Length: 0, shape: MindmapShape.Default } &&
+                (line.icon is not null || line.cssClass is not null) &&
+                merged.Count > 0)
+            {
+                var previous = merged[^1];
+                merged[^1] = previous with
+                {
+                    icon = line.icon ?? previous.icon,
+                    cssClass = line.cssClass ?? previous.cssClass
+                };
+                continue;
+            }
+
+            merged.Add(line);
+        }
+
+        lines = merged;
 
         if (lines.Count == 0)
             return model;
