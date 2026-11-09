@@ -29,6 +29,13 @@ public class GitGraphRenderer : IDiagramRenderer<GitGraphModel>
 
     public SvgDocument Render(GitGraphModel model, RenderOptions options)
     {
+        var document = RenderGraph(model, options);
+        DiagramTitle.Add(document, model.Title, options);
+        return document;
+    }
+
+    static SvgDocument RenderGraph(GitGraphModel model, RenderOptions options)
+    {
         // Compute the actual git graph from operations
         var computed = ComputeGraph(model);
 

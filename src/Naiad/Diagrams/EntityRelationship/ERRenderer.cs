@@ -70,7 +70,9 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
             RenderEntity(builder, entity, options);
         }
 
-        return builder.Build();
+        var document = builder.Build();
+        DiagramTitle.Add(document, model.Title, options);
+        return document;
     }
 
     static GraphDiagramBase ConvertToGraphModel(ERModel model, RenderOptions options)

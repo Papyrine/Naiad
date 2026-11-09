@@ -84,7 +84,9 @@ public class ClassRenderer :
             }
         }
 
-        return builder.Build();
+        var document = builder.Build();
+        DiagramTitle.Add(document, model.Title, options);
+        return document;
     }
 
     static GraphDiagramBase ConvertToGraphModel(ClassModel model, RenderOptions options)
@@ -168,16 +170,17 @@ public class ClassRenderer :
         string.Create(CultureInfo.InvariantCulture, $"note:{index}");
 
     // `<<interface>>`, `<<Entity>>` ... or null for a class with no annotation.
+    // Mermaid writes an annotation between guillemets: «interface».
     static string? AnnotationLabel(ClassDefinition classDef)
     {
         if (classDef.AnnotationText is not null)
         {
-            return $"<<{classDef.AnnotationText}>>";
+            return $"«{classDef.AnnotationText}»";
         }
 
         if (classDef.Annotation is { } annotation)
         {
-            return $"<<{annotation.ToString().ToLower()}>>";
+            return $"«{annotation.ToString().ToLowerInvariant()}»";
         }
 
         return null;
@@ -525,8 +528,16 @@ public class ClassRenderer :
                 break;
 
             case RelationshipMarker.Arrow:
+                // An open arrowhead, two strokes meeting at the end of the line, as Mermaid draws an
+                // association or dependency.
                 var arrowPoints = GetArrowPoints(x, y, angle, markerSize);
-                builder.AddPolygon(arrowPoints, fill: "#333");
+                builder.AddPath(
+                    string.Create(
+                        CultureInfo.InvariantCulture,
+                        $"M {arrowPoints[1].X:0.##} {arrowPoints[1].Y:0.##} L {arrowPoints[0].X:0.##} {arrowPoints[0].Y:0.##} L {arrowPoints[2].X:0.##} {arrowPoints[2].Y:0.##}"),
+                    fill: "none",
+                    stroke: "#333",
+                    strokeWidth: 1);
                 break;
 
             case RelationshipMarker.Lollipop:

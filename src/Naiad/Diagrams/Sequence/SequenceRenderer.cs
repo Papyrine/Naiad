@@ -1145,12 +1145,21 @@ public class SequenceRenderer : IDiagramRenderer<SequenceModel>
 
         switch (type)
         {
+            case MessageType.SolidAsync:
+            case MessageType.DottedAsync:
+                // Mermaid's async head: barbed, its back notched in, telling `-)` apart from `->>`.
+                builder.AddPolygon([
+                    new(toX, y),
+                    new(toX - direction * 9, y - 6),
+                    new(toX - direction * 4, y),
+                    new(toX - direction * 9, y + 6)
+                ], fill: "#333");
+                break;
+
             case MessageType.SolidArrow:
             case MessageType.DottedArrow:
             case MessageType.Solid:
             case MessageType.Dotted:
-            case MessageType.SolidAsync:
-            case MessageType.DottedAsync:
             case MessageType.BiDirectional:
             case MessageType.DottedBiDirectional:
                 // Filled arrowhead

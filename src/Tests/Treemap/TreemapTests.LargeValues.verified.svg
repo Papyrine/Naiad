@@ -31,7 +31,7 @@
     font-size="10px"
     font-family="Arial, sans-serif"
     font-weight="bold"
-    fill="#333">1500</text>
+    fill="#333">1,500</text>
   <rect
     x="20"
     y="40"
@@ -54,7 +54,7 @@
     dominant-baseline="middle"
     font-size="20.16px"
     font-family="Arial, sans-serif"
-    fill="#666">1000</text>
+    fill="#666">1,000</text>
   <rect
     x="244"
     y="40"
@@ -102,7 +102,7 @@
     font-size="10px"
     font-family="Arial, sans-serif"
     font-weight="bold"
-    fill="#333">1000</text>
+    fill="#333">1,000</text>
   <rect
     x="356"
     y="40"

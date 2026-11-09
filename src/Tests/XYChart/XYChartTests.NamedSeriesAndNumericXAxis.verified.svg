@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 620 460"
-  style="max-width: 620px;"
+  viewBox="0 0 711.7 460"
+  style="max-width: 711.7px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -235,6 +235,36 @@
     fill="#9C27B0"
     stroke="#fff"
     stroke-width="2" />
+  <rect
+    x="610"
+    y="214.25"
+    width="10.5"
+    height="10.5"
+    fill="#4CAF50"
+    stroke="none" />
+  <text
+    x="625.5"
+    y="219.5"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Sold</text>
+  <line
+    x1="610"
+    y1="240.5"
+    x2="620.5"
+    y2="240.5"
+    stroke="#9C27B0"
+    stroke-width="2" />
+  <text
+    x="625.5"
+    y="240.5"
+    text-anchor="start"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    fill="#333">Target</text>
   <line
     x1="80"
     y1="80"

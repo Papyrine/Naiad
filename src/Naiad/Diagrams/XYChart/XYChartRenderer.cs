@@ -50,8 +50,16 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
             left = Math.Max(leftMargin, categories.Max(_ => MeasureText(_, tickFontSize)) + 40);
         }
 
+        // Named series get a legend at the right, as Mermaid draws one, and the canvas widens for it.
+        var legend = LegendEntries(model);
+        var legendWidth = 0d;
+        if (legend.Count > 0)
+        {
+            legendWidth = legendGap + legendMarkerSize + legendLabelGap + legend.Max(_ => MeasureText(_.Name, legendFontSize));
+        }
+
         var titleOffset = string.IsNullOrEmpty(model.Title) ? 0 : titleHeight;
-        var width = chartWidth + left + rightMargin + options.Padding * 2;
+        var width = chartWidth + left + rightMargin + legendWidth + options.Padding * 2;
         var height = chartHeight + topMargin + bottomMargin + titleOffset + options.Padding * 2;
 
         var builder = new SvgBuilder();
@@ -288,6 +296,8 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
             }
         }
 
+        DrawLegend(builder, legend, chartRight + legendGap, chartTop + chartHeight / 2, options);
+
         // Draw axes last so the baseline sits on top of the series
         builder.AddLine(
             chartLeft,
@@ -331,6 +341,76 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
         }
 
         return (index + 1).ToString(CultureInfo.InvariantCulture);
+    }
+
+    const double legendGap = 30;
+    const double legendMarkerSize = 10.5;
+    const double legendLabelGap = 5;
+    const double legendRowHeight = 21;
+    const double legendFontSize = 14;
+
+    readonly record struct LegendEntry(string Name, ChartSeriesType Type, string Color);
+
+    // The named series in order, each with the colour it is drawn in.
+    static List<LegendEntry> LegendEntries(XYChartModel model)
+    {
+        var entries = new List<LegendEntry>();
+        var barIndex = 0;
+        var lineIndex = 0;
+        foreach (var series in model.Series)
+        {
+            string color;
+            if (series.Type == ChartSeriesType.Bar)
+            {
+                color = barColors[barIndex++ % barColors.Length];
+            }
+            else
+            {
+                color = lineColors[lineIndex++ % lineColors.Length];
+            }
+
+            if (!string.IsNullOrEmpty(series.Name))
+            {
+                entries.Add(new(series.Name, series.Type, color));
+            }
+        }
+
+        return entries;
+    }
+
+    // Mermaid's legend: a block of rows centred on the plot's height, each a swatch for a bar series or a
+    // short stroke for a line series, then the series' name.
+    static void DrawLegend(SvgBuilder builder, List<LegendEntry> legend, double x, double centerY, RenderOptions options)
+    {
+        var y = centerY - (legend.Count - 1) * legendRowHeight / 2;
+        foreach (var entry in legend)
+        {
+            if (entry.Type == ChartSeriesType.Bar)
+            {
+                builder.AddRect(
+                    x,
+                    y - legendMarkerSize / 2,
+                    legendMarkerSize,
+                    legendMarkerSize,
+                    fill: entry.Color,
+                    stroke: "none");
+            }
+            else
+            {
+                builder.AddLine(x, y, x + legendMarkerSize, y, stroke: entry.Color, strokeWidth: 2);
+            }
+
+            builder.AddText(
+                x + legendMarkerSize + legendLabelGap,
+                y,
+                entry.Name,
+                anchor: "start",
+                baseline: "middle",
+                fontSize: legendFontSize,
+                fontFamily: options.FontFamily,
+                fill: "#333");
+            y += legendRowHeight;
+        }
     }
 
     static double MeasureText(string text, double fontSize) =>

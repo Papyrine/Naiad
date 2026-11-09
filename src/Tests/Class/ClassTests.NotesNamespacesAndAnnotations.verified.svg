@@ -98,9 +98,10 @@
       d="M447.75,303.5 L447.75,310.25 C447.75,317 447.75,330.5 447.75,343.92 C447.75,357.33 447.75,370.67 447.75,384 C447.75,397.33 447.75,410.67 447.75,417.33 L447.75,424"
       fill="none"
       stroke="#333" />
-    <polygon
-      points="447.75,424 442.75,415.34 452.75,415.34"
-      fill="#333" />
+    <path
+      d="M 442.75 415.34 L 447.75 424 L 452.75 415.34"
+      fill="none"
+      stroke="#333" />
     <path
       d="M447.75,474 L447.75,480.67 C447.75,487.33 447.75,500.67 447.75,514 C447.75,527.33 447.75,540.67 447.75,547.33 L447.75,554"
       fill="none"
@@ -188,7 +189,7 @@
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif"
-      fill="#666">&lt;&lt;abstract&gt;&gt;</text>
+      fill="#666">«abstract»</text>
     <text
       x="437.75"
       y="40"
@@ -285,7 +286,7 @@
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif"
-      fill="#666">&lt;&lt;Entity&gt;&gt;</text>
+      fill="#666">«Entity»</text>
     <text
       x="447.75"
       y="252.5"

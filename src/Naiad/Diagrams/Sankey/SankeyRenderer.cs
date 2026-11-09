@@ -299,8 +299,11 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
             .Select(_ => _.ToList())
             .ToList();
 
-        var scale = columns.Min(_ =>
-            (chartHeight - (_.Count - 1) * nodePadding) / Math.Max(1, _.Sum(NodeValue)));
+        var scale = columns.Min(_ => ColumnScale(_, chartHeight));
+        if (double.IsPositiveInfinity(scale))
+        {
+            scale = 1;
+        }
 
         foreach (var columnNodes in columns)
         {
@@ -321,6 +324,36 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         }
 
         return scale;
+    }
+
+    /// <summary>
+    /// The largest scale at which a column still fits the plot. A node too small to reach the minimum
+    /// height is held at it, which takes room from the others, so the scale is found again without the
+    /// held nodes until none more fall short. Scaling first and holding afterwards let the busiest column
+    /// run off the bottom of the canvas.
+    /// </summary>
+    static double ColumnScale(List<SankeyNode> column, double chartHeight)
+    {
+        var available = chartHeight - (column.Count - 1) * nodePadding;
+        var held = new HashSet<SankeyNode>();
+        while (true)
+        {
+            var free = column.Where(_ => !held.Contains(_)).ToList();
+            var freeValue = free.Sum(NodeValue);
+            if (freeValue <= 0)
+            {
+                return double.PositiveInfinity;
+            }
+
+            var scale = (available - held.Count * minNodeHeight) / freeValue;
+            var tooSmall = free.Where(_ => NodeValue(_) * scale < minNodeHeight).ToList();
+            if (tooSmall.Count == 0)
+            {
+                return scale;
+            }
+
+            held.UnionWith(tooSmall);
+        }
     }
 
     static double NodeValue(SankeyNode node) =>

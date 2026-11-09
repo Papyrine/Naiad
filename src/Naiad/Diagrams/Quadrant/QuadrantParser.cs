@@ -26,8 +26,8 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
                         .AndSkip(Literals.Text("-->"))
                         .AndSkip(CommonParsers.InlineWhitespace)
                         .And(restOfLine)
-                        .Then(static _ => (first: _.Item1.Span.Trim().ToString(), second: _.Item2))
-                        .Or(restOfLine.Then(static _ => (first: _, second: ""))))
+                        .Then(static _ => (first: Unquote(_.Item1.Span.Trim().ToString()), second: Unquote(_.Item2)))
+                        .Or(restOfLine.Then(static _ => (first: Unquote(_), second: ""))))
                 .AndSkip(CommonParsers.LineEnd);
 
         // X-axis: x-axis Low --> High
@@ -46,7 +46,7 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
                 .AndSkip(CommonParsers.RequiredWhitespace)
                 .And(restOfLine)
                 .AndSkip(CommonParsers.LineEnd)
-                .Map((digit, label) => (quadrant: digit.Span[0] - '0', label));
+                .Map((digit, label) => (quadrant: digit.Span[0] - '0', label: Unquote(label)));
 
         // Coordinate value. Mirrors Mermaid's lexer rule (1)|(0(\.\d+)?): either a bare 1, or a 0 with
         // an optional fraction. Anything else (1.0, 1.5, 2, -3, ...) fails to parse, exactly as mermaid.js
@@ -157,4 +157,18 @@ class QuadrantParser : IDiagramParser<QuadrantModel>
     readonly record struct YAxisItem(string Bottom, string Top) : IQuadrantContent;
     readonly record struct QuadrantLabelItem(int Quadrant, string Label) : IQuadrantContent;
     readonly record struct PointItem(QuadrantPoint Point) : IQuadrantContent;
+
+    // A label may be quoted (`x-axis "Low" --> "High"`) to hold characters such as an arrow; as in
+    // Mermaid, the quotes are not part of it.
+    static string Unquote(string text)
+    {
+        if (text.Length >= 2 &&
+            text[0] == '"' &&
+            text[^1] == '"')
+        {
+            return text[1..^1];
+        }
+
+        return text;
+    }
 }

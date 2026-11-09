@@ -218,7 +218,7 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
                 builder.AddText(
                     x + width / 2,
                     y + height / 2 + spacing,
-                    node.Value.Value.ToString("0.#"),
+                    node.Value.Value.ToString("#,0.##########", CultureInfo.InvariantCulture),
                     anchor: "middle",
                     baseline: "middle",
                     fontSize: valueFontSize,
@@ -262,7 +262,7 @@ public class TreemapRenderer : IDiagramRenderer<TreemapModel>
             builder.AddText(
                 x + width - 5,
                 y + headerHeight / 2,
-                node.TotalValue.ToString("0.#"),
+                node.TotalValue.ToString("#,0.##########", CultureInfo.InvariantCulture),
                 anchor: "end",
                 baseline: "middle",
                 fontSize: Math.Min(options.FontSize - 2, 10),

@@ -72,6 +72,13 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         node.Width = Math.Max(nodeMinWidth, textWidth + nodePadding * 2 + iconAllowance);
         node.Height = nodeHeight;
 
+        // A circle is as tall as it is wide, and the layout has to leave it that much room or its top and
+        // bottom are cut off.
+        if (node.Shape == MindmapShape.Circle)
+        {
+            node.Height = node.Width;
+        }
+
         foreach (var child in node.Children)
         {
             CalculateNodeSizes(child, options);

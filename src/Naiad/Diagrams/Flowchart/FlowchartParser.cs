@@ -665,7 +665,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                     var subgraph = new Subgraph
                     {
                         Id = start.Id ?? $"subGraph{subgraphCount}",
-                        Title = start.Label ?? start.Id,
+                        Title = (start.Label ?? start.Id) is { } title ? EntityCodes.Decode(title) : null,
                         Direction = direction
                     };
                     subgraphCount++;
@@ -780,6 +780,16 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
             }
         }
 
+        // Entity codes (`#quot;`, `#9829;`) are decoded once a node's label is settled, whichever reference
+        // supplied it.
+        foreach (var node in model.Nodes)
+        {
+            if (node.Label is not null)
+            {
+                node.Label = EntityCodes.Decode(node.Label);
+            }
+        }
+
         // `classDef default` styles every node; subgraphs only take explicitly assigned classes/styles.
         classDefs.TryGetValue("default", out var defaultStyle);
 
@@ -867,7 +877,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                             TargetId = target.Id,
                             Type = link.Type,
                             LineStyle = link.Style,
-                            Label = link.Label,
+                            Label = link.Label is null ? null : EntityCodes.Decode(link.Label),
                             MinLength = link.Length
                         });
                 }

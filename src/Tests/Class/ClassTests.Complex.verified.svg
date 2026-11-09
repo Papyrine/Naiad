@@ -2,8 +2,8 @@
   id="naiad"
   width="100%"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 946.75 847"
-  style="max-width: 946.75px;"
+  viewBox="0 0 933.55 847"
+  style="max-width: 933.55px;"
   role="graphics-document document">
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
@@ -123,9 +123,10 @@
       fill="none"
       stroke="#333"
       stroke-dasharray="5,5" />
-    <polygon
-      points="594.55,272.5 589.55,263.84 599.55,263.84"
-      fill="#333" />
+    <path
+      d="M 589.55 263.84 L 594.55 272.5 L 599.55 263.84"
+      fill="none"
+      stroke="#333" />
     <rect
       x="577.35"
       y="204"
@@ -145,9 +146,10 @@
       d="M106.12,424 L99.72,430.67 C93.33,437.33 80.54,450.67 74.14,464.08 C67.75,477.5 67.75,491 67.75,497.75 L67.75,504.5"
       fill="none"
       stroke="#333" />
-    <polygon
-      points="67.75,504.5 62.75,495.84 72.75,495.84"
-      fill="#333" />
+    <path
+      d="M 62.75 495.84 L 67.75 504.5 L 72.75 495.84"
+      fill="none"
+      stroke="#333" />
     <rect
       x="53.85"
       y="456"
@@ -265,7 +267,7 @@
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif"
-      fill="#666">&lt;&lt;interface&gt;&gt;</text>
+      fill="#666">«interface»</text>
     <text
       x="594.55"
       y="312.5"
@@ -315,7 +317,7 @@
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif"
-      fill="#666">&lt;&lt;abstract&gt;&gt;</text>
+      fill="#666">«abstract»</text>
     <text
       x="188.6"
       y="50"
@@ -378,7 +380,7 @@
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif"
-      fill="#666">&lt;&lt;service&gt;&gt;</text>
+      fill="#666">«service»</text>
     <text
       x="594.55"
       y="40"
@@ -437,20 +439,20 @@
     <rect
       x="787.75"
       y="10.5"
-      width="119"
+      width="105.8"
       height="151"
       fill="#E8F5E9"
       stroke="#333" />
     <text
-      x="847.25"
+      x="840.65"
       y="30.5"
       text-anchor="middle"
       dominant-baseline="middle"
       font-size="12px"
       font-family="Arial, sans-serif"
-      fill="#666">&lt;&lt;enumeration&gt;&gt;</text>
+      fill="#666">«enumeration»</text>
     <text
-      x="847.25"
+      x="840.65"
       y="50.5"
       text-anchor="middle"
       dominant-baseline="middle"
@@ -460,7 +462,7 @@
     <line
       x1="787.75"
       y1="70.5"
-      x2="906.75"
+      x2="893.55"
       y2="70.5"
       stroke="#333" />
     <text

@@ -69,7 +69,9 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         // edge over the text left the title unreadable.
         RenderSubgraphTitles(builder, model.Subgraphs, options);
 
-        return builder.Build();
+        var document = builder.Build();
+        DiagramTitle.Add(document, model.Title, options);
+        return document;
     }
 
     // Sizes each node around its label, then to suit its shape. Shared with the swimlane renderer, which

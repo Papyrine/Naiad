@@ -130,7 +130,7 @@ public class RequirementRenderer : IDiagramRenderer<RequirementModel>
         var rows = new List<string>();
         if (!string.IsNullOrEmpty(requirement.Id))
         {
-            rows.Add($"Id: {requirement.Id}");
+            rows.Add($"ID: {requirement.Id}");
         }
 
         if (!string.IsNullOrEmpty(requirement.Text))
