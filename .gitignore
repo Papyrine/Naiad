@@ -11,5 +11,5 @@ nugets/
 nul
 /BenchmarkDotNet.Artifacts
 .dagre-ref/
-/TestResults
+TestResults/
 *.lnk
