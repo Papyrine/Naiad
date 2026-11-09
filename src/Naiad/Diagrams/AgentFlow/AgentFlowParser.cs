@@ -580,6 +580,14 @@ class AgentFlowParser : IDiagramParser<AgentFlowModel>
                     break;
 
                 case ConnectorStatement connector:
+                    // A flow's id names the flow, as it does when used as a node. A connector under that id
+                    // would be a node and a subgraph at once, which the layout cannot place.
+                    if (containerIds.Contains(connector.Id))
+                    {
+                        frames.Peek().Members.Add(connector.Id);
+                        break;
+                    }
+
                     var connectorNode = GetOrAddNode(connector.Id);
                     connectorNode.Kind = AgentFlowNodeKind.Connector;
                     if (!string.IsNullOrWhiteSpace(connector.Label))
