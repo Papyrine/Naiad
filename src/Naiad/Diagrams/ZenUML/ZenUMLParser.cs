@@ -556,12 +556,13 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
                 }
             }
 
-            if (closeLine.Continuation is null ||
-                frame.Fragment is null)
+            if (closeLine.Continuation is null)
             {
                 return;
             }
 
+            // A call's block has no branches: `} else {` after one is as wrong as after an `opt`. Dropping
+            // it would leave its `{` to be closed by the `}` meant for the block around it.
             var condition = closeLine.Condition is { Length: > 0 } text ? text : null;
             var body = (frame.Fragment, closeLine.Continuation) switch
             {
