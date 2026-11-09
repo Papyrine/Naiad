@@ -206,4 +206,26 @@ public class MindmapTests : TestBase
 
         return VerifySvg(input);
     }
+
+    // An icon or class on a line of its own, as Mermaid's documentation writes it, became an extra node with
+    // no text. A class list took only its first class, and a colon in a node's text failed the parse.
+    [Test]
+    public async Task IconAndClassLines_DecorateTheNodeAbove()
+    {
+        var result = new MindmapParser().Parse(
+            """
+            mindmap
+              root((History))
+                Long history
+                ::icon(fa fa-book)
+                Ratio 1:2
+                :::urgent large
+            """);
+
+        await Assert.That(result.Error).IsNull();
+        var children = result.Value.Root!.Children;
+        await Assert.That(children.Select(_ => _.Text)).IsEquivalentTo(["Long history", "Ratio 1:2"], CollectionOrdering.Matching);
+        await Assert.That(children[0].Icon).IsEqualTo("fa fa-book");
+        await Assert.That(children[1].CssClass).IsEqualTo("urgent large");
+    }
 }
