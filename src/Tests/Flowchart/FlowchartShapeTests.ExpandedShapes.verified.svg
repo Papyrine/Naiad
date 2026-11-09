@@ -1,0 +1,1279 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1056.5592 1363.56"
+  style="max-width: 1056.5592px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <style>
+#naiad{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#naiad p{margin:0;}
+#naiad .marker{fill:#333333;stroke:#333333;}
+#naiad .marker.cross{stroke:#333333;}
+#naiad span{fill:#333;color:#333;}
+#naiad .flowchart-link{stroke:#333333;fill:none;}
+#naiad .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}
+#naiad .edgeLabel p{background-color:rgba(232,232,232, 0.8);}
+#naiad .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}
+</style>
+  <defs>
+    <marker
+      id="naiad_flowchart-pointEnd"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="10"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M 0 0 L 10 5 L 0 10 z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-pointStart"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="0"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="8"
+      markerHeight="8"
+      orient="auto">
+      <path
+        d="M 0 5 L 10 10 L 10 0 z"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-circleEnd"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="11"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <circle
+        cx="5"
+        cy="5"
+        r="5"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-circleStart"
+      class="marker"
+      viewBox="0 0 10 10"
+      refX="-1"
+      refY="5"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <circle
+        cx="5"
+        cy="5"
+        r="5"
+        class="arrowMarkerPath" />
+    </marker>
+    <marker
+      id="naiad_flowchart-crossEnd"
+      class="marker cross"
+      viewBox="0 0 11 11"
+      refX="12"
+      refY="5.2"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <path
+        d="M 1,1 l 9,9 M 10,1 l -9,9"
+        class="arrowMarkerPath"
+        style="stroke-width: 2;" />
+    </marker>
+    <marker
+      id="naiad_flowchart-crossStart"
+      class="marker cross"
+      viewBox="0 0 11 11"
+      refX="-1"
+      refY="5.2"
+      markerUnits="userSpaceOnUse"
+      markerWidth="11"
+      markerHeight="11"
+      orient="auto">
+      <path
+        d="M 1,1 l 9,9 M 10,1 l -9,9"
+        class="arrowMarkerPath"
+        style="stroke-width: 2;" />
+    </marker>
+  </defs>
+  <g
+    transform="translate(20,20)">
+    <path
+      d="M73.7,58 L73.7,65.5 C73.7,73 73.7,88 73.7,104.43 C73.7,120.85 73.7,138.7 73.7,147.63 L73.7,156.55"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M73.7,204.55 L73.7,213.48 C73.7,222.4 73.7,240.25 73.7,258.33 C73.7,276.4 73.7,294.7 73.7,303.85 L73.7,313"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M73.7,361 L73.7,370.15 C73.7,379.3 73.7,397.6 73.7,416.48 C73.7,435.36 73.7,454.83 73.7,464.57 L73.7,474.3"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M73.7,522.3 L73.7,532.04 C73.7,541.77 73.7,561.24 73.7,581.24 C73.7,601.25 73.7,621.79 73.7,632.06 L73.7,642.33"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M73.7,690.33 L73.7,700.6 C73.7,710.88 73.7,731.42 73.7,747.55 C73.7,763.69 73.7,775.43 73.7,781.29 L73.7,787.16"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M73.7,844.76 L73.7,850.63 C73.7,856.49 73.7,868.23 73.7,883.42 C73.7,898.61 73.7,917.26 73.7,926.58 L73.7,935.91"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M73.7,983.91 L73.7,993.23 C73.7,1002.56 73.7,1021.21 73.7,1042.43 C73.7,1063.64 73.7,1087.43 73.7,1099.32 L73.7,1111.21"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M73.7,1159.21 L73.7,1171.1 C73.7,1182.99 73.7,1206.78 73.7,1224.5 C73.7,1242.23 73.7,1253.89 73.7,1259.73 L73.7,1265.56"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M250.25,64 L250.25,70.5 C250.25,77 250.25,90 250.25,104.43 C250.25,118.85 250.25,134.7 250.25,142.63 L250.25,150.55"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M250.25,210.55 L250.25,218.48 C250.25,226.4 250.25,242.25 250.25,258.33 C250.25,274.4 250.25,290.7 250.25,298.85 L250.25,307"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M250.25,367 L250.25,375.15 C250.25,383.3 250.25,399.6 250.25,413.58 C250.25,427.56 250.25,439.23 250.25,445.06 L250.25,450.9"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M250.25,545.71 L250.25,551.54 C250.25,557.38 250.25,569.04 250.25,583.15 C250.25,597.25 250.25,613.79 250.25,622.06 L250.25,630.33"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M250.25,702.33 L250.25,710.6 C250.25,718.88 250.25,735.42 250.25,749.52 C250.25,763.63 250.25,775.29 250.25,781.13 L250.25,786.96"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M250.25,844.96 L250.25,850.79 C250.25,856.63 250.25,868.29 250.25,883.45 C250.25,898.61 250.25,917.26 250.25,926.58 L250.25,935.91"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M250.25,983.91 L250.25,993.23 C250.25,1002.56 250.25,1021.21 250.25,1043.43 C250.25,1065.64 250.25,1091.43 250.25,1104.32 L250.25,1117.21"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M455.73,58 L455.73,65.5 C455.73,73 455.73,88 455.73,101.33 C455.73,114.67 455.73,126.33 455.73,132.17 L455.73,138"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M455.73,223.11 L455.73,228.94 C455.73,234.77 455.73,246.44 455.73,261.42 C455.73,276.4 455.73,294.7 455.73,303.85 L455.73,313"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M455.73,361 L455.73,370.15 C455.73,379.3 455.73,397.6 455.73,416.48 C455.73,435.36 455.73,454.83 455.73,464.57 L455.73,474.3"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M455.73,522.3 L455.73,532.04 C455.73,541.77 455.73,561.24 455.73,581.24 C455.73,601.25 455.73,621.79 455.73,632.06 L455.73,642.33"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M455.73,690.33 L455.73,700.6 C455.73,710.88 455.73,731.42 455.73,748.35 C455.73,765.29 455.73,778.63 455.73,785.29 L455.73,791.96"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M455.73,839.96 L455.73,846.63 C455.73,853.29 455.73,866.63 455.73,882.62 C455.73,898.61 455.73,917.26 455.73,926.58 L455.73,935.91"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M455.73,983.91 L455.73,993.23 C455.73,1002.56 455.73,1021.21 455.73,1042.43 C455.73,1063.64 455.73,1087.43 455.73,1099.32 L455.73,1111.21"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M635.78,67.6 L635.78,73.5 C635.78,79.4 635.78,91.2 635.78,106.03 C635.78,120.85 635.78,138.7 635.78,147.63 L635.78,156.55"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M635.78,204.55 L635.78,213.48 C635.78,222.4 635.78,240.25 635.78,258.33 C635.78,276.4 635.78,294.7 635.78,303.85 L635.78,313"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M635.78,361 L635.78,370.15 C635.78,379.3 635.78,397.6 635.78,416.48 C635.78,435.36 635.78,454.83 635.78,464.57 L635.78,474.3"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M635.78,522.3 L635.78,532.04 C635.78,541.77 635.78,561.24 635.78,581.24 C635.78,601.25 635.78,621.79 635.78,632.06 L635.78,642.33"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M635.78,690.33 L635.78,700.6 C635.78,710.88 635.78,731.42 635.78,748.35 C635.78,765.29 635.78,778.63 635.78,785.29 L635.78,791.96"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M635.78,839.96 L635.78,846.63 C635.78,853.29 635.78,866.63 635.78,879.13 C635.78,891.63 635.78,903.29 635.78,909.13 L635.78,914.96"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M635.78,1004.86 L635.78,1010.69 C635.78,1016.53 635.78,1028.19 635.78,1039.86 C635.78,1051.53 635.78,1063.19 635.78,1069.03 L635.78,1074.86"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M635.78,1195.56 L635.78,1201.39 C635.78,1207.23 635.78,1218.89 635.78,1231.39 C635.78,1243.89 635.78,1257.23 635.78,1263.89 L635.78,1270.56"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M792.88,63 L792.88,69.67 C792.88,76.33 792.88,89.67 792.88,104.43 C792.88,119.18 792.88,135.37 792.88,143.46 L792.88,151.55"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M792.88,209.55 L792.88,217.65 C792.88,225.74 792.88,241.92 792.88,258.33 C792.88,274.74 792.88,291.37 792.88,299.69 L792.88,308"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M792.88,366 L792.88,374.32 C792.88,382.63 792.88,399.26 792.88,415.61 C792.88,431.95 792.88,448 792.88,456.03 L792.88,464.05"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M792.88,532.55 L792.88,540.58 C792.88,548.6 792.88,564.66 792.88,581.89 C792.88,599.12 792.88,617.53 792.88,626.73 L792.88,635.93"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M792.88,696.73 L792.88,705.94 C792.88,715.14 792.88,733.55 792.88,748.75 C792.88,763.96 792.88,775.96 792.88,781.96 L792.88,787.96"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M792.88,843.96 L792.88,849.96 C792.88,855.96 792.88,867.96 792.88,882.22 C792.88,896.48 792.88,912.99 792.88,921.25 L792.88,929.51"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M950.43,68 L950.43,73.83 C950.43,79.67 950.43,91.33 950.43,104.59 C950.43,117.85 950.43,132.7 950.43,140.13 L950.43,147.55"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M950.43,213.55 L950.43,220.98 C950.43,228.4 950.43,243.25 950.43,256.51 C950.43,269.77 950.43,281.44 950.43,287.27 L950.43,293.11"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M950.43,380.9 L950.43,386.73 C950.43,392.56 950.43,404.23 950.43,418.66 C950.43,433.08 950.43,450.27 950.43,458.86 L950.43,467.45"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M950.43,529.15 L950.43,537.74 C950.43,546.34 950.43,563.52 950.43,577.95 C950.43,592.38 950.43,604.04 950.43,609.88 L950.43,615.71"
+      fill="none"
+      stroke="#333333"
+      stroke-width="2"
+      marker-end="url(#naiad_flowchart-pointEnd)"
+      class="flowchart-link" />
+    <path
+      d="M31.75,10 H115.65 V58 H31.75 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="31.75"
+      y="10"
+      width="83.9"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;">
+        <span>
+          <p>Process</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M44.45,156.55 H102.95 Q107.95,156.55 107.95,161.55 V199.55 Q107.95,204.55 102.95,204.55 H44.45 Q39.45,204.55 39.45,199.55 V161.55 Q39.45,156.55 44.45,156.55 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="39.45"
+      y="156.55"
+      width="68.5"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 68.5px; height: 48px;">
+        <span>
+          <p>Event</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M51.9,313 H95.5 A24,24 0 0 1 95.5,361 H51.9 A24,24 0 0 1 51.9,313 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="27.9"
+      y="313"
+      width="91.6"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 91.6px; height: 48px;">
+        <span>
+          <p>Terminal</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M12.2,474.3 H135.2 V522.3 H12.2 Z M20.2,474.3 V522.3 M127.2,474.3 V522.3"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="12.2"
+      y="474.3"
+      width="123"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 123px; height: 48px;">
+        <span>
+          <p>Subprocess</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M0.65,642.33 H146.75 V690.33 H0.65 Z M8.65,642.33 V690.33"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="8.65"
+      y="642.33"
+      width="138.1"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 138.1px; height: 48px;">
+        <span>
+          <p>Lined process</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M31.75,787.16 H115.65 V844.76 H31.75 Z M31.75,796.76 H115.65"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="31.75"
+      y="796.76"
+      width="83.9"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;">
+        <span>
+          <p>Divided</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M55.3,935.91 H104.1 V983.91 H43.3 V947.91 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="43.3"
+      y="935.91"
+      width="60.8"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 60.8px; height: 48px;">
+        <span>
+          <p>Card</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M0,1111.21 H147.4 V1159.21 H0 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <path
+      d="M137.8,1159.21 H147.4 V1149.61 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="0"
+      y="1111.21"
+      width="147.4"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 147.4px; height: 48px;">
+        <span>
+          <p>Tagged process</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M19.05,1275.56 V1323.56 H118.35 V1318.56 H123.35 V1313.56 H128.35 V1265.56 H29.05 V1270.56 H24.05 V1275.56 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <path
+      d="M24.05,1275.56 H118.35 V1318.56 H123.35 V1270.56 H24.05 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="19.05"
+      y="1275.56"
+      width="99.3"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 99.3px; height: 48px;">
+        <span>
+          <p>Processes</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M204.45,58 C208.81,59.44 213.17,60.87 217.54,61.95 C221.9,63.03 226.26,63.75 230.62,63.95 C234.98,64.14 239.35,63.8 243.71,63.01 C248.07,62.22 252.43,60.98 256.79,59.6 C261.15,58.21 265.52,56.69 269.88,55.4 C274.24,54.1 278.6,53.05 282.96,52.48 C287.33,51.92 291.69,51.85 296.05,52.29 V4 H204.45 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="204.45"
+      y="4"
+      width="91.6"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 91.6px; height: 48px;">
+        <span>
+          <p>Document</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M174.46,204.55 C181.68,205.99 188.9,207.42 196.11,208.5 C203.33,209.58 210.55,210.31 217.77,210.5 C224.99,210.69 232.2,210.35 239.42,209.56 C246.64,208.77 253.86,207.53 261.08,206.15 C268.3,204.76 275.51,203.24 282.73,201.95 C289.95,200.66 297.17,199.6 304.39,199.04 C311.6,198.47 318.82,198.4 326.04,198.85 V150.55 H174.46 Z M181.35,150.55 V205.91"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="181.35"
+      y="150.55"
+      width="144.69"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 144.69px; height: 48px;">
+        <span>
+          <p>Lined document</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M170.23,361 C177.85,362.44 185.47,363.87 193.09,364.95 C200.71,366.03 208.33,366.75 215.95,366.95 C223.58,367.14 231.2,366.8 238.82,366.01 C246.44,365.22 254.06,363.98 261.68,362.6 C269.3,361.21 276.93,359.69 284.55,358.4 C292.17,357.1 299.79,356.05 307.41,355.48 C315.03,354.92 322.65,354.85 330.28,355.29 V307 H170.23 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <path
+      d="M301.18,356.05 L330.28,341.56 V355.29 C325.43,355.01 320.58,354.93 315.73,355.06 C310.88,355.19 306.03,355.53 301.18,356.05 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="170.23"
+      y="307"
+      width="160.05"
+      height="54"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 160.05px; height: 54px;">
+        <span>
+          <p>Tagged document</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M190.6,470.9 V537.83 C195.33,539.72 200.06,541.6 204.79,543.01 C209.51,544.43 214.24,545.38 218.97,545.64 C223.7,545.89 228.43,545.44 233.16,544.41 C237.89,543.37 242.61,541.75 247.34,539.93 C252.07,538.11 256.8,536.11 261.53,534.42 C266.26,532.72 270.99,531.33 275.71,530.59 C280.44,529.85 285.17,529.76 289.9,530.34 V520.34 H299.9 V510.34 H309.9 V450.9 H210.6 V460.9 H200.6 V470.9 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <path
+      d="M200.6,470.9 H289.9 V520.34 H299.9 V460.9 H200.6 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="190.6"
+      y="470.9"
+      width="99.3"
+      height="59.06"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 99.3px; height: 59.06px;">
+        <span>
+          <p>Documents</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M196.75,696.33 C201.21,697.9 205.67,699.47 210.13,700.58 C214.58,701.69 219.04,702.33 223.5,702.33 C227.96,702.33 232.42,701.69 236.88,700.58 C241.33,699.47 245.79,697.9 250.25,696.33 C254.71,694.76 259.17,693.2 263.63,692.09 C268.08,690.98 272.54,690.33 277,690.33 C281.46,690.33 285.92,690.98 290.38,692.09 C294.83,693.2 299.29,694.76 303.75,696.33 V636.33 C299.29,634.76 294.83,633.2 290.38,632.09 C285.92,630.98 281.46,630.33 277,630.33 C272.54,630.33 268.08,630.98 263.63,632.09 C259.17,633.2 254.71,634.76 250.25,636.33 C245.79,637.9 241.33,639.47 236.88,640.58 C232.42,641.69 227.96,642.33 223.5,642.33 C219.04,642.33 214.58,641.69 210.13,640.58 C205.67,639.47 201.21,637.9 196.75,636.33 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="196.75"
+      y="630.33"
+      width="107"
+      height="72"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 107px; height: 72px;">
+        <span>
+          <p>Paper tape</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M168.65,786.96 H331.85 V844.96 H168.65 Z M168.65,796.96 H331.85 M178.65,786.96 V844.96"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="178.65"
+      y="796.96"
+      width="153.2"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 153.2px; height: 48px;">
+        <span>
+          <p>Internal storage</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M200.6,935.91 H299.9 V983.91 H200.6 Z"
+      fill="#ECECFF"
+      stroke="none" />
+    <path
+      d="M200.6,935.91 H299.9 M200.6,983.91 H299.9"
+      fill="none"
+      stroke="#9370DB" />
+    <foreignObject
+      x="200.6"
+      y="935.91"
+      width="99.3"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 99.3px; height: 48px;">
+        <span>
+          <p>Datastore</p>
+        </span>
+      </div>
+    </foreignObject>
+    <foreignObject
+      x="204.25"
+      y="1117.21"
+      width="92"
+      height="36"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 92px; height: 36px;">
+        <span>
+          <p>Text block</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M409.93,14.8 A45.8,4.8 0 0 1 501.53,14.8 V53.2 A45.8,4.8 0 0 1 409.93,53.2 V14.8 Z M409.93,14.8 A45.8,4.8 0 0 0 501.53,14.8"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="409.93"
+      y="10"
+      width="91.6"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 91.6px; height: 48px;">
+        <span>
+          <p>Database</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M394.53,150.37 A61.2,12.37 0 0 0 516.93,150.37 A61.2,12.37 0 0 0 394.53,150.37 V210.74 A61.2,12.37 0 0 0 516.93,210.74 V150.37 M394.53,156.41 A61.2,12.37 0 0 0 516.93,156.41"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="394.53"
+      y="162.74"
+      width="122.4"
+      height="60.37"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 122.4px; height: 60.37px;">
+        <span>
+          <p>Disk storage</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M387.21,361 A6.94,24 0 0 1 387.21,313 H524.25 A6.94,24 0 0 1 524.25,361 Z M524.25,313 A6.94,24 0 0 0 524.25,361"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="380.28"
+      y="313"
+      width="137.04"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 137.04px; height: 48px;">
+        <span>
+          <p>Direct access</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M516.55,474.3 H401.85 A6.94,24 0 0 0 401.85,522.3 H516.55 A6.94,24 0 0 1 516.55,474.3 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="394.91"
+      y="474.3"
+      width="121.64"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 121.64px; height: 48px;">
+        <span>
+          <p>Stored data</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M419.06,642.33 H468.4 A24,24 0 0 1 468.4,690.33 H419.06 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="419.06"
+      y="642.33"
+      width="73.34"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 73.34px; height: 48px;">
+        <span>
+          <p>Delay</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M485.68,791.96 H413.78 L401.78,815.96 L413.78,839.96 H485.68 A24,24 0 0 0 485.68,791.96 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="401.78"
+      y="791.96"
+      width="107.9"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 107.9px; height: 48px;">
+        <span>
+          <p>Display</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M412.93,935.91 H498.53 L509.23,945.51 V983.91 H402.23 V945.51 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="402.23"
+      y="935.91"
+      width="107"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 107px; height: 48px;">
+        <span>
+          <p>Loop limit</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M394.53,1123.21 L516.93,1099.21 V1171.21 H394.53 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="394.53"
+      y="1123.21"
+      width="122.4"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 122.4px; height: 48px;">
+        <span>
+          <p>Manual input</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M635.78,0.4 L699.9,34 L635.78,67.6 L571.66,34 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="571.66"
+      y="0.4"
+      width="128.24"
+      height="67.2"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 128.24px; height: 67.2px;">
+        <span>
+          <p>Decision</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M614.81,156.55 L656.76,156.55 L677.73,180.55 L656.76,204.55 L614.81,204.55 L593.83,180.55 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="593.83"
+      y="156.55"
+      width="83.9"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 83.9px; height: 48px;">
+        <span>
+          <p>Prepare</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M605.18,313 L690.38,313 L666.38,361 L581.18,361 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="581.18"
+      y="313"
+      width="109.2"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 109.2px; height: 48px;">
+        <span>
+          <p>In out</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M581.18,474.3 L666.38,474.3 L690.38,522.3 L605.18,522.3 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="581.18"
+      y="474.3"
+      width="109.2"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 109.2px; height: 48px;">
+        <span>
+          <p>Out in</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M597.48,642.33 L674.08,642.33 L698.08,690.33 L573.48,690.33 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="573.48"
+      y="642.33"
+      width="124.6"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 124.6px; height: 48px;">
+        <span>
+          <p>Priority</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M573.68,791.96 L697.88,791.96 L673.88,839.96 597.68,839.96 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="573.68"
+      y="791.96"
+      width="124.2"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 124.2px; height: 48px;">
+        <span>
+          <p>Manual</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M590.83,1004.86 H680.73 L635.78,914.96 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="590.83"
+      y="976.36"
+      width="89.9"
+      height="21"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 89.9px; height: 21px;">
+        <span>
+          <p>Extract</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M575.43,1074.86 H696.13 L635.78,1195.56 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="575.43"
+      y="1082.36"
+      width="120.7"
+      height="21"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 120.7px; height: 21px;">
+        <span>
+          <p>Manual file</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M585.23,1270.56 L686.33,1270.56 L686.33,1318.56 L585.23,1318.56 L609.23,1294.56 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="585.23"
+      y="1270.56"
+      width="101.1"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 101.1px; height: 48px;">
+        <span>
+          <p>Odd</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M763.43,63 A5,5 0 0 1 758.43,58 V39 A5,5 0 0 0 753.43,34 A5,5 0 0 0 758.43,29 V10 A5,5 0 0 1 763.43,5 H832.33 V63 Z"
+      fill="#ECECFF"
+      stroke="none" />
+    <path
+      d="M763.43,63 A5,5 0 0 1 758.43,58 V39 A5,5 0 0 0 753.43,34 A5,5 0 0 0 758.43,29 V10 A5,5 0 0 1 763.43,5"
+      fill="none"
+      stroke="#9370DB" />
+    <foreignObject
+      x="763.43"
+      y="5"
+      width="68.9"
+      height="58"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 68.9px; height: 58px;">
+        <span>
+          <p>Comment</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M730.33,151.55 L845.43,151.55 A5,5 0 0 1 850.43,156.55 V175.55 A5,5 0 0 0 855.43,180.55 A5,5 0 0 0 850.43,185.55 V204.55 A5,5 0 0 1 845.43,209.55 H730.33 Z"
+      fill="#ECECFF"
+      stroke="none" />
+    <path
+      d="M845.43,151.55 A5,5 0 0 1 850.43,156.55 V175.55 A5,5 0 0 0 855.43,180.55 A5,5 0 0 0 850.43,185.55 V204.55 A5,5 0 0 1 845.43,209.55"
+      fill="none"
+      stroke="#9370DB" />
+    <foreignObject
+      x="730.33"
+      y="151.55"
+      width="125.1"
+      height="58"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 125.1px; height: 58px;">
+        <span>
+          <p>Comment right</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M766.03,366 A5,5 0 0 1 761.03,361 V342 A5,5 0 0 0 756.03,337 A5,5 0 0 0 761.03,332 V313 A5,5 0 0 1 766.03,308 L819.73,308 A5,5 0 0 1 824.73,313 V332 A5,5 0 0 0 829.73,337 A5,5 0 0 0 824.73,342 V361 A5,5 0 0 1 819.73,366 Z"
+      fill="#ECECFF"
+      stroke="none" />
+    <path
+      d="M766.03,366 A5,5 0 0 1 761.03,361 V342 A5,5 0 0 0 756.03,337 A5,5 0 0 0 761.03,332 V313 A5,5 0 0 1 766.03,308 M819.73,308 A5,5 0 0 1 824.73,313 V332 A5,5 0 0 0 829.73,337 A5,5 0 0 0 824.73,342 V361 A5,5 0 0 1 819.73,366"
+      fill="none"
+      stroke="#9370DB" />
+    <foreignObject
+      x="756.03"
+      y="308"
+      width="73.7"
+      height="58"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 73.7px; height: 58px;">
+        <span>
+          <p>Braces</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M792.88,464.05 A34.25,34.25 0 1 1 792.88,532.55 A34.25,34.25 0 1 1 792.88,464.05 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="758.63"
+      y="464.05"
+      width="68.5"
+      height="68.5"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 68.5px; height: 68.5px;">
+        <span>
+          <p>Start</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M792.88,635.93 A30.4,30.4 0 1 1 792.88,696.73 A30.4,30.4 0 1 1 792.88,635.93 Z M792.88,640.49 A25.84,25.84 0 1 1 792.88,692.17 A25.84,25.84 0 1 1 792.88,640.49 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="762.48"
+      y="635.93"
+      width="60.8"
+      height="60.8"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 60.8px; height: 60.8px;">
+        <span>
+          <p>Stop</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M747.88,787.96 H782.08 V795.96 H837.88 V843.96 H747.88 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="747.88"
+      y="795.96"
+      width="90"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 90px; height: 48px;">
+        <span>
+          <p>Folder</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M752.88,935.91 L764.08,983.91 A28.8,6.4 0 0 0 821.68,983.91 L832.88,935.91 A40,6.4 0 0 0 752.88,935.91 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <path
+      d="M752.88,935.91 A40,6.4 0 1 0 832.88,935.91 A40,6.4 0 1 0 752.88,935.91 Z"
+      fill="none"
+      stroke="#9370DB" />
+    <foreignObject
+      x="752.88"
+      y="929.51"
+      width="80"
+      height="60.8"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 80px; height: 60.8px;">
+        <span>
+          <p>Bucket</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M917.43,0 H983.43 A12,12 0 0 1 995.43,12 V56 A12,12 0 0 1 983.43,68 H917.43 A12,12 0 0 1 905.43,56 V12 A12,12 0 0 1 917.43,0 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <text
+      x="917.43"
+      y="16"
+      font-size="14px"
+      font-family="monospace"
+      font-weight="bold"
+      fill="#9370DB">&gt;_</text>
+    <foreignObject
+      x="905.43"
+      y="20"
+      width="90"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 90px; height: 48px;">
+        <span>
+          <p>Console</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M917.43,147.55 H983.43 A12,12 0 0 1 995.43,159.55 V201.55 A12,12 0 0 1 983.43,213.55 H917.43 A12,12 0 0 1 905.43,201.55 V159.55 A12,12 0 0 1 917.43,147.55 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <path
+      d="M905.43,165.55 H995.43"
+      fill="none"
+      stroke="#9370DB" />
+    <path
+      d="M914.93,156.55 A2.5,2.5 0 1 0 919.93,156.55 A2.5,2.5 0 1 0 914.93,156.55 Z M923.93,156.55 A2.5,2.5 0 1 0 928.93,156.55 A2.5,2.5 0 1 0 923.93,156.55 Z M932.93,156.55 A2.5,2.5 0 1 0 937.93,156.55 A2.5,2.5 0 1 0 932.93,156.55 Z"
+      fill="#9370DB"
+      stroke="#9370DB" />
+    <path
+      d="M952.43,151.55 H980.43 A3,3 0 0 1 983.43,154.55 V158.55 A3,3 0 0 1 980.43,161.55 H952.43 A3,3 0 0 1 949.43,158.55 V154.55 A3,3 0 0 1 952.43,151.55 Z"
+      fill="none"
+      stroke="#9370DB"
+      opacity="0.6" />
+    <foreignObject
+      x="905.43"
+      y="165.55"
+      width="90"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 90px; height: 48px;">
+        <span>
+          <p>Browser</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M918.13,332.9 H982.73 A17.7,17.7 0 0 1 1000.43,350.6 V363.2 A17.7,17.7 0 0 1 982.73,380.9 H918.13 A17.7,17.7 0 0 1 900.43,363.2 V350.6 A17.7,17.7 0 0 1 918.13,332.9 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <path
+      d="M927.43,316.11 A23,23 0 1 0 973.43,316.11 A23,23 0 1 0 927.43,316.11 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="900.43"
+      y="332.9"
+      width="100"
+      height="48"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 100px; height: 48px;">
+        <span>
+          <p>Person</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M917.32,481.8 a9.54,9.54 0 0 1 15.9,-6.36 a22.26,22.26 0 0 1 25.44,-6.36 a15.9,15.9 0 0 1 22.26,12.72 a9.54,9.54 0 0 1 9.54,10.87 a12.72,12.72 0 0 1 -9.54,20.19 a15.9,9.54 0 0 1 -15.9,9.54 a22.26,22.26 0 0 1 -31.8,0 a9.54,9.54 0 0 1 -15.9,-9.54 a9.54,9.54 0 0 1 -6.36,-10.87 a12.72,12.72 0 0 1 6.36,-20.19 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="917.32"
+      y="481.8"
+      width="63.6"
+      height="31.06"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 63.6px; height: 31.06px;">
+        <span>
+          <p>Cloud</p>
+        </span>
+      </div>
+    </foreignObject>
+    <path
+      d="M894.89,623.81 a15.87,15.87 0 0 0 26.45,-8.1 a15.87,15.87 0 0 0 26.45,0 a15.87,15.87 0 0 0 26.45,0 a15.87,15.87 0 0 0 26.45,8.1 a15.87,15.87 0 0 0 15.87,26.73 a12.7,12.7 0 0 0 0,27.54 a15.87,15.87 0 0 0 -15.87,26.73 a15.87,15.87 0 0 0 -26.45,12.15 a15.87,15.87 0 0 0 -26.45,0 a15.87,15.87 0 0 0 -26.45,0 a15.87,15.87 0 0 0 -26.45,-12.15 a15.87,15.87 0 0 0 -10.58,-26.73 a12.7,12.7 0 0 0 0,-27.54 a15.87,15.87 0 0 0 10.58,-26.73 Z"
+      fill="#ECECFF"
+      stroke="#9370DB" />
+    <foreignObject
+      x="894.89"
+      y="623.81"
+      width="105.8"
+      height="81"
+      class="nodeLabel">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 105.8px; height: 81px;">
+        <span>
+          <p>Bang</p>
+        </span>
+      </div>
+    </foreignObject>
+  </g>
+</svg>

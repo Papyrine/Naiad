@@ -103,6 +103,17 @@ public class PngRenderTests
          A[sample:box Storage] --> B[sample:ring Cache]
         """;
 
+    // Mermaid's expanded shapes: relative and large arcs (cloud, rims), sine Béziers (documents, paper tape),
+    // fill-only backings under stroke-only braces, stacked sheets, and the solid junction.
+    const string flowchartShapes =
+        """
+        flowchart LR
+         a@{ shape: braces, label: "Note" } --> b@{ shape: docs, label: "Docs" }
+         b --> c@{ shape: flag, label: "Tape" } --> d@{ shape: f-circ }
+         d --> e@{ shape: bucket, label: "Bucket" } --> f@{ shape: cloud, label: "Cloud" }
+         f --> g@{ shape: lin-cyl, label: "Disk" } --> h@{ shape: browser, label: "Web" }
+        """;
+
     const string iconPack =
         """
         {
@@ -167,6 +178,12 @@ public class PngRenderTests
 
     [Test]
     public Task ImageSharpEntityRelationship() => VerifyPng(ImageSharpRenderer.RenderPng(entityRelationship, HighDpi));
+
+    [Test]
+    public Task SkiaFlowchartShapes() => VerifyPng(SkiaRenderer.RenderPng(flowchartShapes, HighDpi));
+
+    [Test]
+    public Task ImageSharpFlowchartShapes() => VerifyPng(ImageSharpRenderer.RenderPng(flowchartShapes, HighDpi));
 
     [Test]
     public Task SkiaFlowchartIcons()

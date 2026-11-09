@@ -23,7 +23,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
     public SvgDocument Render(FlowchartModel model, RenderOptions options)
     {
-        MeasureNodes(model.Nodes, options);
+        MeasureNodes(model.Nodes, options, model.Direction);
         SizeEmptySubgraphs(model.Subgraphs, options);
         MeasureEdgeLabels(model.Edges, options);
 
@@ -62,7 +62,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         // Render nodes
         foreach (var node in model.Nodes)
         {
-            RenderNode(builder, node);
+            RenderNode(builder, node, options.FontSize);
         }
 
         // Titles go last: an edge crossing into a subgraph passes through the title band, and painting the
@@ -75,42 +75,23 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
     }
 
     // Sizes each node around its label, then to suit its shape. Shared with the swimlane renderer, which
-    // draws the same nodes.
-    internal static void MeasureNodes(IEnumerable<Node> nodes, RenderOptions options)
+    // draws the same nodes. The direction stands a fork upright across a left-to-right flow.
+    internal static void MeasureNodes(IEnumerable<Node> nodes, RenderOptions options, Direction direction = Direction.TopToBottom)
     {
         foreach (var node in nodes)
         {
-            var label = DisplayText(node.Label ?? node.Id);
-            var (textForMeasure, iconCount) = AnalyzeLabel(label);
-            var textSize = MeasureText(textForMeasure, options.FontSize);
-            node.Width = textSize.Width + 30 + iconCount * 20;
-            node.Height = textSize.Height + 27;
-
-            // Adjust size for different shapes
-            if (node.Shape is NodeShape.Circle or NodeShape.DoubleCircle)
-            {
-                var diameter = Math.Max(node.Width, node.Height);
-                node.Width = diameter;
-                node.Height = diameter;
-            }
-            else if (node.Shape == NodeShape.Diamond)
-            {
-                node.Width *= 1.4;
-                node.Height *= 1.4;
-            }
-            else if (node.Shape == NodeShape.Asymmetric)
-            {
-                // The left notch bites into the box, and the label is centred in it, so grow the box by the
-                // notch's depth on both sides rather than letting it cut across the text.
-                node.Width += ShapePathGenerator.AsymmetricNotch(node.Height) * 2;
-            }
-            else if (node.Shape == NodeShape.Subroutine)
-            {
-                // The vertical bars are drawn inside the node, so the label needs the space between them
-                // rather than the full width.
-                node.Width += ShapePathGenerator.SubroutineBarInset * 2;
-            }
+            var size = ShapePathGenerator.NodeSize(node.Shape, MeasureLabel(node, options.FontSize), direction);
+            node.Width = size.Width;
+            node.Height = size.Height;
         }
+    }
+
+    // The room a node's label takes: its text, plus a square for each icon in it.
+    static Size MeasureLabel(Node node, double fontSize)
+    {
+        var (text, iconCount) = AnalyzeLabel(DisplayText(node.Label ?? node.Id));
+        var textSize = MeasureText(text, fontSize);
+        return new(textSize.Width + iconCount * 20, textSize.Height);
     }
 
     // Reserve space for edge labels so the layout keeps a rank gap clear for them.
@@ -207,6 +188,10 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
 
             case NodeShape.Circle:
             case NodeShape.DoubleCircle:
+            case NodeShape.SmallCircle:
+            case NodeShape.FramedCircle:
+            case NodeShape.FilledCircle:
+            case NodeShape.CrossedCircle:
                 reach = Math.Min(halfWidth, halfHeight) / length;
                 break;
 
@@ -218,7 +203,19 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
                 break;
 
             default:
-                return current;
+                var outline = ShapePathGenerator.Outline(
+                    node.Shape,
+                    node.Position.X - halfWidth,
+                    node.Position.Y - halfHeight,
+                    node.Width,
+                    node.Height);
+                if (outline is null)
+                {
+                    return current;
+                }
+
+                reach = ReachToOutline(node.Position, dx, dy, outline);
+                break;
         }
 
         if (reach >= 1)
@@ -227,6 +224,37 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         return new(node.Position.X + dx * reach, node.Position.Y + dy * reach);
+    }
+
+    // How far along (dx, dy) from the centre the line first crosses the outline, as a multiple of (dx, dy).
+    static double ReachToOutline(Position center, double dx, double dy, Position[] outline)
+    {
+        var reach = double.MaxValue;
+        for (var i = 0; i < outline.Length; i++)
+        {
+            var start = outline[i];
+            var end = outline[(i + 1) % outline.Length];
+            var ex = end.X - start.X;
+            var ey = end.Y - start.Y;
+            var denominator = dx * ey - dy * ex;
+            if (Math.Abs(denominator) < 1e-12)
+            {
+                continue;
+            }
+
+            // Solve center + t·(dx, dy) = start + s·(ex, ey) for t along the line and s along the side.
+            var sx = start.X - center.X;
+            var sy = start.Y - center.Y;
+            var t = (sx * ey - sy * ex) / denominator;
+            var s = (sx * dy - sy * dx) / denominator;
+            if (t > 0 &&
+                s is >= 0 and <= 1)
+            {
+                reach = Math.Min(reach, t);
+            }
+        }
+
+        return reach;
     }
 
     // A markdown string is measured, and falls back to plain text, without its markers.
@@ -335,20 +363,60 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             cssClass: "cluster-label");
     }
 
-    internal static void RenderNode(SvgBuilder builder, Node node)
+    internal static void RenderNode(SvgBuilder builder, Node node, double fontSize)
     {
         var x = node.Position.X - node.Width / 2;
         var y = node.Position.Y - node.Height / 2;
 
-        var shapePath = ShapePathGenerator.GetPath(node.Shape, x, y, node.Width, node.Height);
-
         var style = node.Style;
-        builder.AddPath(
-            shapePath,
-            fill: style?.Fill ?? nodeFill,
-            stroke: style?.Stroke ?? nodeStroke,
-            strokeWidth: style?.StrokeWidth ?? 1,
-            strokeDasharray: style?.StrokeDasharray);
+        var fill = style?.Fill ?? nodeFill;
+        var stroke = style?.Stroke ?? nodeStroke;
+        foreach (var part in ShapePathGenerator.GetParts(node.Shape, x, y, node.Width, node.Height))
+        {
+            var (partFill, partStroke) = part.Paint switch
+            {
+                ShapePaint.Fill => (fill, "none"),
+                ShapePaint.Stroke => ("none", stroke),
+                ShapePaint.Solid => (style?.Fill ?? stroke, stroke),
+                ShapePaint.Hidden => (style?.Fill ?? "none", style?.Stroke ?? "none"),
+                _ => (fill, stroke)
+            };
+
+            // A text block draws nothing unless its style gives it a fill or a border.
+            if (partFill == "none" &&
+                partStroke == "none")
+            {
+                continue;
+            }
+
+            builder.AddPath(
+                part.Path,
+                fill: partFill,
+                stroke: partStroke,
+                strokeWidth: style?.StrokeWidth ?? 1,
+                strokeDasharray: style?.StrokeDasharray,
+                opacity: part.Opacity);
+        }
+
+        if (node.Shape == NodeShape.Console)
+        {
+            // The prompt in the console's title band.
+            builder.AddText(
+                x + 12,
+                y + 16,
+                ">_",
+                fontSize: 14,
+                fontFamily: "monospace",
+                fontWeight: "bold",
+                fill: stroke);
+        }
+
+        if (!ShapePathGenerator.HasLabel(node.Shape))
+        {
+            return;
+        }
+
+        var labelBox = ShapePathGenerator.LabelBox(node.Shape, x, y, node.Width, node.Height, MeasureLabel(node, fontSize));
 
         // Render label with icon support
         var label = node.Label ?? node.Id;
@@ -366,9 +434,10 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         }
 
         builder.AddLabel(
-            x, y,
-            node.Width,
-            node.Height,
+            labelBox.X,
+            labelBox.Y,
+            labelBox.Width,
+            labelBox.Height,
             htmlLabel,
             plainText,
             className: "nodeLabel");

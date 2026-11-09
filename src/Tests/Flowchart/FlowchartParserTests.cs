@@ -620,4 +620,54 @@ public class FlowchartParserTests
         await Assert.That(nodes[2].Shape).IsEqualTo(NodeShape.Rectangle);
         await Assert.That(nodes[2].Label).IsEqualTo("Still drawn");
     }
+
+    // A sample of the short names and aliases from Mermaid 12.3's shape table, including the camel-case
+    // names its renderer used internally.
+    [Test]
+    [Arguments("notch-rect", NodeShape.NotchedRectangle)]
+    [Arguments("card", NodeShape.NotchedRectangle)]
+    [Arguments("lin-proc", NodeShape.LinedRectangle)]
+    [Arguments("start", NodeShape.SmallCircle)]
+    [Arguments("stateStart", NodeShape.SmallCircle)]
+    [Arguments("framed-circle", NodeShape.FramedCircle)]
+    [Arguments("join", NodeShape.ForkJoin)]
+    [Arguments("collate", NodeShape.Hourglass)]
+    [Arguments("comment", NodeShape.CurlyBracket)]
+    [Arguments("brace-r", NodeShape.CurlyBracketRight)]
+    [Arguments("braces", NodeShape.CurlyBraces)]
+    [Arguments("com-link", NodeShape.Lightning)]
+    [Arguments("half-rounded-rectangle", NodeShape.HalfRoundedRectangle)]
+    [Arguments("das", NodeShape.TiltedCylinder)]
+    [Arguments("disk", NodeShape.LinedCylinder)]
+    [Arguments("display", NodeShape.CurvedTrapezoid)]
+    [Arguments("divided-process", NodeShape.DividedRectangle)]
+    [Arguments("extract", NodeShape.TriangleUp)]
+    [Arguments("internal-storage", NodeShape.WindowPane)]
+    [Arguments("junction", NodeShape.FilledCircle)]
+    [Arguments("loop-limit", NodeShape.NotchedPentagon)]
+    [Arguments("manual-file", NodeShape.TriangleDown)]
+    [Arguments("manual-input", NodeShape.SlopedRectangle)]
+    [Arguments("st-doc", NodeShape.MultiDocument)]
+    [Arguments("procs", NodeShape.MultiProcess)]
+    [Arguments("paper-tape", NodeShape.Flag)]
+    [Arguments("stored-data", NodeShape.BowTie)]
+    [Arguments("summary", NodeShape.CrossedCircle)]
+    [Arguments("tagged-document", NodeShape.TaggedDocument)]
+    [Arguments("tag-proc", NodeShape.TaggedRect)]
+    [Arguments("data-store", NodeShape.Datastore)]
+    [Arguments("text", NodeShape.Text)]
+    [Arguments("lined-document", NodeShape.LinedDocument)]
+    [Arguments("directory", NodeShape.Folder)]
+    [Arguments("person", NodeShape.Person)]
+    [Arguments("cloud", NodeShape.Cloud)]
+    [Arguments("lean_right", NodeShape.Parallelogram)]
+    [Arguments("inv_trapezoid", NodeShape.TrapezoidAlt)]
+    [Arguments("rect_left_inv_arrow", NodeShape.Asymmetric)]
+    public async Task ShapeAttributes_MermaidShapeNames(string name, NodeShape shape)
+    {
+        var result = new FlowchartParser().Parse($"flowchart TD\n    A@{{ shape: {name} }}");
+
+        await Assert.That(result.Success).IsTrue();
+        await Assert.That(result.Value.Nodes[0].Shape).IsEqualTo(shape);
+    }
 }
