@@ -6,6 +6,16 @@ public class SequenceSyntaxTests
     static SequenceModel Parse(string input) =>
         new SequenceParser().Parse(input).Value;
 
+    // A participant, actor or activation line followed by a blank before its line end was rejected.
+    [Test]
+    public async Task TrailingWhitespace_IsTolerated()
+    {
+        var model = Parse("sequenceDiagram\n    participant A \n    actor B as Bob \t\n    create participant C  \n    activate A \n    A->>B: hi\n    deactivate A  \n");
+
+        await Assert.That(string.Join(",", model.Participants.Select(_ => $"{_.Id}:{_.Alias}"))).IsEqualTo("A:,B:Bob,C:");
+        await Assert.That(model.Elements.OfType<Activation>().Count()).IsEqualTo(2);
+    }
+
     [Test]
     public async Task HyphenatedNames_AreParticipantIds()
     {

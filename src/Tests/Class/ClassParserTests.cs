@@ -128,7 +128,7 @@ public class ClassParserTests
     [Test]
     public async Task TrailingWhitespace_IsTolerated()
     {
-        const string input = "classDiagram  \n    class Animal {  \n        +String name  \n    }  \n    Animal <|-- Dog  \n";
+        const string input = "classDiagram  \n    direction LR  \n    class Animal {  \n        +String name  \n    }  \n    Animal <|-- Dog  \n";
 
         var result = new ClassParser().Parse(input);
 
