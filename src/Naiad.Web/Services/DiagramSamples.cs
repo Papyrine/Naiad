@@ -1,5 +1,3 @@
-namespace Naiad.Web.Services;
-
 /// <summary>
 /// The starter diagrams offered in the editor's sample picker — one per diagram type Naiad supports.
 /// Each source is a known-good minimal example, mirroring the rendered fixtures under src/test-renders.

@@ -1,5 +1,3 @@
-namespace Naiad.Web.Services;
-
 /// <summary>Build/version facts worth attaching to a bug report.</summary>
 public static class AppInfo
 {

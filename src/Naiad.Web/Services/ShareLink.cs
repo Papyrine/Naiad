@@ -1,7 +1,3 @@
-using System.IO.Compression;
-
-namespace Naiad.Web.Services;
-
 /// <summary>
 /// Carries the diagram source in the URL fragment (<c>#code=…</c>, the UTF-8 bytes deflated and
 /// base64url-encoded) so a link reopens it. The fragment never reaches the server, so only the browser's
