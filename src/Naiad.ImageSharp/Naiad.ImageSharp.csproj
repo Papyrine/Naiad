@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
     <IsPackable>true</IsPackable>
     <Description>SixLabors.ImageSharp-backed PNG render backend for Naiad. Rasterizes the same parse, layout and styling pipeline that produces Naiad's SVG, through ImageSharp. Unlike Naiad itself this package takes third-party dependencies (SixLabors.ImageSharp and SixLabors.ImageSharp.Drawing, under the Six Labors Split License).</Description>
   </PropertyGroup>

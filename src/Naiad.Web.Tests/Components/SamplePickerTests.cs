@@ -25,7 +25,7 @@ public class SamplePickerTests : BunitTestContext
         DiagramSample? picked = null;
         var cut = Render<SamplePicker>(_ => _
             .Add(_ => _.Samples, DiagramSamples.All)
-            .Add(_ => _.OnSampleSelected, (DiagramSample sample) => picked = sample));
+            .Add(_ => _.OnSampleSelected, sample => picked = sample));
 
         await cut.Find("select").ChangeAsync("Pie");
 
@@ -39,7 +39,7 @@ public class SamplePickerTests : BunitTestContext
         var raised = false;
         var cut = Render<SamplePicker>(_ => _
             .Add(_ => _.Samples, DiagramSamples.All)
-            .Add(_ => _.OnSampleSelected, (DiagramSample _) => raised = true));
+            .Add(_ => _.OnSampleSelected, _ => raised = true));
 
         await cut.Find("select").ChangeAsync("");
 
