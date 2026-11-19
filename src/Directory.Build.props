@@ -1,11 +1,16 @@
 <Project>
   <PropertyGroup>
-    <Version>2.3.0</Version>
+    <Version>2.4.0</Version>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <!-- BL0016 wants every JS interop call inside a try/catch. The calls it flags are pass-through
+         wrappers whose callers decide what a failure means (JsModule), module import and init, and
+         the bundled host's startup config read: a catch at any of them could only swallow a
+         failure that should surface. Disconnects are caught where they are expected
+         (JsModule.DisposeAsync). -->
+    <NoWarn>$(NoWarn);CS1591;BL0016</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
