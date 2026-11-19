@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <PackageVersion Include="AngleSharp" Version="1.10.4" />
+    <PackageVersion Include="AngleSharp" Version="1.10.5" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="30.0.1" />
     <PackageVersion Include="Svg.Skia" Version="5.2.3" />
     <PackageVersion Include="Parlot" Version="2.3.1" />
@@ -31,7 +31,7 @@
     <PackageVersion Include="bunit" Version="2.15.2" />
     <PackageVersion Include="Verify.Bunit" Version="14.1.0" />
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="11.0.0" />
-    <PackageVersion Include="Microsoft.Playwright" Version="1.65.0" />
+    <PackageVersion Include="Microsoft.Playwright" Version="1.65.1" />
     <PackageVersion Include="Verify.Playwright" Version="3.3.0" />
   </ItemGroup>
 </Project>
