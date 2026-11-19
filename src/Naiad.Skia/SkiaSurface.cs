@@ -149,7 +149,7 @@ sealed class SkiaSurface : IRenderSurface
             {
                 // Join controls and variation selectors have no glyph of their own; keep them with the
                 // character they modify rather than hunting for a font.
-                typeface = Rune.GetUnicodeCategory(rune) is System.Globalization.UnicodeCategory.Format or System.Globalization.UnicodeCategory.NonSpacingMark
+                typeface = Rune.GetUnicodeCategory(rune) is UnicodeCategory.Format or UnicodeCategory.NonSpacingMark
                     ? runTypeface
                     : FallbackFor(rune.Value, primary, style);
             }
