@@ -141,6 +141,7 @@ sealed class SkiaSurface : IRenderSurface
         var run = new StringBuilder();
         var primary = font.Typeface;
         var runTypeface = primary;
+        Span<char> utf16 = stackalloc char[2];
 
         foreach (var rune in text.EnumerateRunes())
         {
@@ -162,7 +163,7 @@ sealed class SkiaSurface : IRenderSurface
             }
 
             runTypeface = typeface;
-            run.Append(rune.ToString());
+            run.Append(utf16[..rune.EncodeToUtf16(utf16)]);
         }
 
         if (run.Length > 0)
