@@ -1,0 +1,133 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 552.7 245"
+  style="max-width: 552.7px;"
+  role="graphics-document document">
+  <style
+    xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
+  <path
+    d="M 150.1 112.5 C 170.1 112.5, 170.1 37.5, 190.1 37.5"
+    fill="none"
+    stroke="#87CEEB"
+    stroke-width="2" />
+  <path
+    d="M 150.1 112.5 C 170.1 112.5, 170.1 87.5, 190.1 87.5"
+    fill="none"
+    stroke="#87CEEB"
+    stroke-width="2" />
+  <path
+    d="M 150.1 112.5 C 170.1 112.5, 170.1 137.5, 190.1 137.5"
+    fill="none"
+    stroke="#87CEEB"
+    stroke-width="2" />
+  <path
+    d="M 150.1 112.5 C 170.1 112.5, 170.1 187.5, 190.1 187.5"
+    fill="none"
+    stroke="#87CEEB"
+    stroke-width="2" />
+  <rect
+    x="20"
+    y="86.6"
+    width="130.1"
+    height="51.8"
+    fill="#FFB6C1"
+    stroke="#B27F87"
+    stroke-width="2" />
+  <foreignObject
+    x="17.99"
+    y="93.6"
+    width="134.12"
+    height="37.8"
+    style="font-size:14px;font-family:Arial, sans-serif">
+    <div
+      xmlns="http://www.w3.org/1999/xhtml"
+      style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 134.12px; height: 37.8px;">
+      <span>
+        <p
+          style="margin:0">
+          <strong>Root</strong> with<br />a second line</p>
+      </span>
+    </div>
+  </foreignObject>
+  <rect
+    x="190.1"
+    y="20"
+    width="322.6"
+    height="35"
+    fill="#87CEEB"
+    stroke="#5E90A4"
+    stroke-width="2" />
+  <foreignObject
+    x="168.84"
+    y="27"
+    width="365.12"
+    height="21"
+    style="font-size:14px;font-family:Arial, sans-serif">
+    <div
+      xmlns="http://www.w3.org/1999/xhtml"
+      style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 365.12px; height: 21px;">
+      <span>
+        <p
+          style="margin:0">The dog in <strong>the</strong> hog... a <em>very long text</em></p>
+      </span>
+    </div>
+  </foreignObject>
+  <rect
+    x="190.1"
+    y="70"
+    width="222.5"
+    height="35"
+    fill="#87CEEB"
+    stroke="#5E90A4"
+    stroke-width="2" />
+  <text
+    x="301.35"
+    y="87.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Regular labels still work</text>
+  <rect
+    x="190.1"
+    y="120"
+    width="153.2"
+    height="35"
+    rx="15"
+    ry="15"
+    fill="#87CEEB"
+    stroke="#5E90A4"
+    stroke-width="2" />
+  <foreignObject
+    x="185.78"
+    y="127"
+    width="161.84"
+    height="21"
+    style="font-size:14px;font-family:Arial, sans-serif">
+    <div
+      xmlns="http://www.w3.org/1999/xhtml"
+      style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 161.84px; height: 21px;">
+      <span>
+        <p
+          style="margin:0">
+          <em>Rounded</em> and <strong>bold</strong></p>
+      </span>
+    </div>
+  </foreignObject>
+  <rect
+    x="190.1"
+    y="170"
+    width="122.4"
+    height="35"
+    fill="#87CEEB"
+    stroke="#5E90A4"
+    stroke-width="2" />
+  <text
+    x="251.3"
+    y="187.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">Quoted label</text>
+</svg>

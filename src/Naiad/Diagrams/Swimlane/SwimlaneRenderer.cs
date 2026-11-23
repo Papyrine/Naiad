@@ -251,7 +251,7 @@ public class SwimlaneRenderer : IDiagramRenderer<SwimlaneModel>
             var centerX = band / 2;
             var centerY = y + lane.Size / 2;
             builder.BeginGroup(transform: string.Create(CultureInfo.InvariantCulture, $"rotate(-90, {centerX:0.##}, {centerY:0.##})"));
-            AddLaneTitle(builder, centerX, centerY, lane.Title, style, options);
+            AddLaneTitle(builder, centerX, centerY, lane, style, options);
             builder.EndGroup();
         }
         else
@@ -259,27 +259,27 @@ public class SwimlaneRenderer : IDiagramRenderer<SwimlaneModel>
             var x = lane.Start;
             builder.AddRect(x, top, lane.Size, band, fill: fill, stroke: stroke, strokeWidth: strokeWidth, cssClass: "swimlane-title");
             builder.AddRect(x, top + band, lane.Size, layout.Height - top - band, fill: fill, stroke: stroke, strokeWidth: strokeWidth, cssClass: "swimlane-body");
-            AddLaneTitle(builder, x + lane.Size / 2, top + band / 2, lane.Title, style, options);
+            AddLaneTitle(builder, x + lane.Size / 2, top + band / 2, lane, style, options);
         }
     }
 
-    static void AddLaneTitle(SvgBuilder builder, double x, double y, string title, NodeStyle? style, RenderOptions options)
+    static void AddLaneTitle(SvgBuilder builder, double x, double y, Lane lane, NodeStyle? style, RenderOptions options)
     {
-        if (title.Length == 0)
+        if (lane.Title.Length == 0 ||
+            lane.Subgraph is not { } subgraph)
         {
             return;
         }
 
-        builder.AddText(
+        builder.AddMarkdownText(
             x,
             y,
-            title,
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: options.FontSize,
+            subgraph.Title ?? subgraph.Id,
+            options.FontSize,
             fontFamily: options.FontFamily,
             fill: style?.Color ?? textColor,
-            cssClass: "swimlane-label");
+            cssClass: "swimlane-label",
+            singleLine: true);
     }
 
     /// <summary>

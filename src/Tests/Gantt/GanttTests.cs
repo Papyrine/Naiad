@@ -202,4 +202,53 @@ public class GanttTests : TestBase
         await Assert.That(Mermaid.Render("---\nconfig:\n  gantt:\n    displayMode: compact\n---\n" + body))
             .IsEqualTo(Mermaid.Render("---\ndisplayMode: compact\n---\n" + body));
     }
+
+    // The axis is written in the diagram's `axisFormat`, and labels longer than the default month/day ones
+    // are spaced so they do not run into each other.
+    [Test]
+    public Task AxisFormat()
+    {
+        const string input =
+            """
+            gantt
+                title Release Plan
+                dateFormat YYYY-MM-DD
+                axisFormat %Y-%m-%d
+                section Build
+                    Design :a1, 2024-01-01, 4d
+                    Implement :a2, after a1, 6d
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // A label on the last tick that reaches past the end of the chart widens the drawing to hold it.
+    [Test]
+    public Task AxisFormat_LongLabels()
+    {
+        const string input =
+            """
+            gantt
+                dateFormat YYYY-MM-DD
+                axisFormat %A, %B %e
+                Kickoff :a1, 2024-09-02, 10d
+                Review :a2, after a1, 18d
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // Mermaid takes the `gantt.axisFormat` setting when the diagram has no `axisFormat` of its own, and the
+    // diagram's own when it has one.
+    [Test]
+    public async Task AxisFormat_FromConfig()
+    {
+        const string config = "---\nconfig:\n  gantt:\n    axisFormat: \"%d %b\"\n---\n";
+        const string header = "gantt\n    dateFormat YYYY-MM-DD\n";
+        const string task = "    Task :a1, 2024-03-01, 5d\n";
+
+        await Assert.That(Mermaid.Render(header + task)).Contains(">03/01</text>");
+        await Assert.That(Mermaid.Render(config + header + task)).Contains(">01 Mar</text>");
+        await Assert.That(Mermaid.Render(config + header + "    axisFormat %b %-d\n" + task)).Contains(">Mar 1</text>");
+    }
 }

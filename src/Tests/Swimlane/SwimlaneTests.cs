@@ -116,6 +116,32 @@ public class SwimlaneTests : TestBase
         return VerifySvg(input);
     }
 
+    // Markdown strings titling lanes and a nested subgraph: bold and italic where they say, as Mermaid
+    // draws them.
+    [Test]
+    public Task MarkdownLaneTitles() =>
+        VerifySvg(MarkdownLanes("TB"));
+
+    // Down the side, the lane titles are turned to read bottom to top.
+    [Test]
+    public Task MarkdownLaneTitles_Horizontal() =>
+        VerifySvg(MarkdownLanes("LR"));
+
+    static string MarkdownLanes(string direction) =>
+        $"""
+         swimlane-beta {direction}
+           subgraph sales ["`**Sales** team`"]
+             lead[New lead]
+             subgraph inner ["`_Qualified_ leads`"]
+               qualify[Qualify]
+             end
+           end
+           subgraph support ["`Customer _support_`"]
+             ticket[Open ticket]
+           end
+           lead --> qualify --> ticket
+         """;
+
     // The edge forms the documentation lists: open, dotted and thick links alongside arrows.
     [Test]
     public Task EdgeStyles()

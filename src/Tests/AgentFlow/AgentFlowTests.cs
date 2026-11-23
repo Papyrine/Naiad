@@ -228,6 +228,26 @@ public class AgentFlowTests : TestBase
         return VerifySvg(input);
     }
 
+    // A markdown string titling a flow is bold and italic where it says, as Mermaid draws it, and a nested
+    // flow's plain title is unchanged.
+    [Test]
+    public Task MarkdownTitles()
+    {
+        const string input =
+            """
+            agentflow-beta TB
+              flow team["`**Content** and _review_`"]
+                flow writer["Writer"]
+                  draft["Draft post"]@{ shape: task }
+                end
+                review["`Review **draft**`"]@{ shape: task }
+              end
+              draft --> review
+            """;
+
+        return VerifySvg(input);
+    }
+
     // Bracket shapes, `&` groups, pipe labels, comments and styling.
     [Test]
     public Task FlowchartForms()

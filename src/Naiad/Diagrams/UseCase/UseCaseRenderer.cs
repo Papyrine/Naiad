@@ -555,16 +555,15 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
                 stroke: "none");
         }
 
-        builder.AddText(
+        builder.AddMarkdownText(
             centerX,
             centerY,
-            title,
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: fontSize,
+            boundary.Title,
+            fontSize,
             fontFamily: options.FontFamily,
             fill: boundary.Style?.Color ?? textColor,
-            cssClass: "system-boundary-title");
+            cssClass: "system-boundary-title",
+            singleLine: true);
     }
 
     static void DrawEdge(SvgBuilder builder, Edge edge, UseCaseRelationship? relationship, double fontSize, RenderOptions options)

@@ -259,6 +259,43 @@ public class FlowchartFeatureTests
         await Assert.That(lines).IsEquivalentTo([$"a{entity}b"]);
     }
 
+    // A markdown subgraph title is bold and italic where it says, as Mermaid draws it, and otherwise of normal
+    // weight. Without HTML it falls back to its plain text, bold as any other title.
+    [Test]
+    public async Task MarkdownSubgraphTitle_BecomesBoldAndItalicMarkup()
+    {
+        const string input = "flowchart LR\n    subgraph one [\"`**Bold** and _italic_`\"]\n        a\n    end";
+
+        var svg = Mermaid.Render(input);
+        await Assert.That(svg).Contains("<strong>Bold</strong> and <em>italic</em>");
+        await Assert.That(svg).DoesNotContain("`");
+
+        var plain = Mermaid.Render(input, new() { AllowHtmlElements = false });
+        await Assert.That(plain).Contains("font-weight='bold' fill='#333333' class='cluster-label'>Bold and italic</text>");
+    }
+
+    // Both PNG backends draw a markdown subgraph title: the bold title puts down more ink than the same
+    // words plain.
+    [Test]
+    public async Task Png_DrawsBoldSubgraphTitleHeavierThanPlain()
+    {
+        var options = new RenderOptions { Png = new() { Scale = 2 } };
+        Func<string, RenderOptions, byte[]>[] backends =
+        [
+            SkiaRenderer.RenderPng,
+            ImageSharpRenderer.RenderPng
+        ];
+
+        foreach (var backend in backends)
+        {
+            var bold = DarkPixels(backend("flowchart LR\n    subgraph one [\"`**Heavy words here**`\"]\n        a\n    end", options));
+            var plain = DarkPixels(backend("flowchart LR\n    subgraph one [\"`Heavy words here`\"]\n        a\n    end", options));
+
+            await Assert.That(plain).IsGreaterThan(0);
+            await Assert.That(bold).IsGreaterThan((int) (plain * 1.1));
+        }
+    }
+
     // Both PNG backends draw a markdown label: the bold word puts down more ink than the same word plain.
     [Test]
     public async Task Png_DrawsBoldHeavierThanPlain()

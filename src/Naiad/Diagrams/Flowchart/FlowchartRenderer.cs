@@ -353,17 +353,18 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             fill: style?.Fill ?? subgraphFill,
             stroke: "none");
 
-        builder.AddText(
+        // Where HTML is allowed, a markdown title is bold only where it says, as Mermaid draws it. Any other
+        // title is bold throughout.
+        builder.AddMarkdownText(
             graph.Position.X,
             titleY,
-            title,
-            anchor: "middle",
-            baseline: "middle",
-            fontSize: options.FontSize,
+            graph.Title ?? graph.Id,
+            options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: "bold",
             fill: style?.Color ?? edgeStroke,
-            cssClass: "cluster-label");
+            cssClass: "cluster-label",
+            singleLine: true);
     }
 
     internal static void RenderNode(SvgBuilder builder, Node node, double fontSize)

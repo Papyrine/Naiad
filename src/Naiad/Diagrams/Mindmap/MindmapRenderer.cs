@@ -9,6 +9,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
     const double verticalSpacing = 15;
     const double iconSize = 18;
     const double iconGap = 6;
+    const double charWidthFactor = 0.55;
 
     static string[] levelColors =
     [
@@ -106,10 +107,20 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
 
     static void CalculateNodeSize(MindmapNode node, RenderOptions options)
     {
+        // A markdown string is measured without its markers, and a line break in it makes the node a line
+        // taller for each.
+        var lines = 1;
         var textWidth = MeasureText(node.Text, options.FontSize);
+        if (MarkdownLabel.IsMarkdown(node.Text))
+        {
+            var plain = MarkdownLabel.Plain(node.Text);
+            lines = LabelLines.Count(plain);
+            textWidth = LabelLines.WidestLength(plain) * options.FontSize * charWidthFactor;
+        }
+
         var iconAllowance = node.Icon is null ? 0 : iconSize + iconGap;
         node.Width = Math.Max(nodeMinWidth, textWidth + nodePadding * 2 + iconAllowance);
-        node.Height = nodeHeight;
+        node.Height = nodeHeight + (lines - 1) * options.FontSize * SvgBuilder.LineHeightFactor;
 
         // A circle is as tall as it is wide, and the layout has to leave it that much room or its top and
         // bottom are cut off.
@@ -314,16 +325,31 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
             DrawIcon(builder, icon, x + nodePadding, node.Position.Y - iconSize / 2, iconSize);
         }
 
-        // Draw text, shifted right to leave room for the icon
+        // Draw text, shifted right to leave room for the icon. The root is bold; a markdown string drawn as
+        // HTML is bold only where it says, as Mermaid draws it.
+        var textX = node.Position.X + iconAllowance / 2;
+        var fontWeight = node.Level == 0 ? "bold" : "normal";
+        if (MarkdownLabel.IsMarkdown(node.Text))
+        {
+            builder.AddMarkdownText(
+                textX,
+                node.Position.Y,
+                node.Text,
+                options.FontSize,
+                fontFamily: options.FontFamily,
+                fontWeight: fontWeight);
+            return;
+        }
+
         builder.AddText(
-            node.Position.X + iconAllowance / 2,
+            textX,
             node.Position.Y,
             node.Text,
             anchor: "middle",
             baseline: "middle",
             fontSize: options.FontSize,
             fontFamily: options.FontFamily,
-            fontWeight: node.Level == 0 ? "bold" : "normal");
+            fontWeight: fontWeight);
     }
 
     // Draws a node icon: a registered iconify pack icon (prefix:name) as inline
@@ -401,6 +427,6 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
     }
 
     static double MeasureText(string text, double fontSize) =>
-        text.Length * fontSize * 0.55;
+        text.Length * fontSize * charWidthFactor;
 
 }
