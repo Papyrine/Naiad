@@ -52,6 +52,212 @@ static class EdgeObstacleRouter
             ReAimEnd(edge.Points, boxes[target], blockers, atEnd: true);
             ReAimEnd(edge.Points, boxes[source], blockers, atEnd: false);
         }
+
+        ClearClusters(diagram, grown, indexById);
+    }
+
+    // How far a drawn curve may reach into a cluster it does not belong to before it counts as running
+    // through it, so one that grazes a border is left alone.
+    const double clusterInset = 2;
+
+    /// <summary>
+    /// Dagre runs a long edge down beside a cluster it passes and turns it towards its target on the rank of
+    /// the cluster's border. The route stays outside, but the drawn curve, a B-spline that cuts its corners,
+    /// rounds that turn through the cluster's corner: in <c>ComplexPipeline</c> five edges ran through
+    /// subgraphs that held neither of their ends. Such a turn gets a point that carries the straight run on
+    /// past the border, so the curve turns outside. Only an edge whose curve enters such a cluster is touched,
+    /// and the point is kept only if the curve then enters fewer of them and the new legs clear every node.
+    /// </summary>
+    static void ClearClusters(GraphDiagramBase diagram, Rect[] grown, Dictionary<string, int> indexById)
+    {
+        var clusters = Clusters(diagram.Subgraphs);
+        if (clusters.Count == 0)
+        {
+            return;
+        }
+
+        var foreign = new List<Rect>();
+        foreach (var edge in diagram.Edges)
+        {
+            if (edge.Points.Count < 3)
+            {
+                continue;
+            }
+
+            foreign.Clear();
+            foreach (var (box, members) in clusters)
+            {
+                if (!members.Contains(edge.SourceId) &&
+                    !members.Contains(edge.TargetId))
+                {
+                    foreign.Add(box.Grow(-clusterInset));
+                }
+            }
+
+            if (foreign.Count == 0)
+            {
+                continue;
+            }
+
+            // An end that is a subgraph has no node box of its own to be skipped.
+            var source = indexById.GetValueOrDefault(edge.SourceId, -1);
+            var target = indexById.GetValueOrDefault(edge.TargetId, -1);
+            var blockers = new Blockers(grown, source, target);
+
+            // Each pass turns one corner outside; an edge passing several clusters may need a few.
+            for (var pass = 0; pass < 4; pass++)
+            {
+                if (!TurnOutside(edge.Points, foreign, blockers))
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    // Adds a point to the turn nearest where the curve first enters a foreign cluster, if one helps.
+    static bool TurnOutside(List<Position> points, List<Rect> foreign, Blockers blockers)
+    {
+        var flat = EdgePath.Flatten(points);
+        if (FirstEntry(flat, foreign) is not { } entry)
+        {
+            return false;
+        }
+
+        var entered = Entered(flat, foreign);
+
+        // The turn the curve rounds into the cluster is the waypoint nearest where it goes in.
+        var turn = 1;
+        for (var i = 2; i < points.Count - 1; i++)
+        {
+            if (Distance(points[i], entry) < Distance(points[turn], entry))
+            {
+                turn = i;
+            }
+        }
+
+        var before = points[turn - 1];
+        var at = points[turn];
+        var after = points[turn + 1];
+
+        // The straight run leads into the turn or away from it: carry it on past the turn, on whichever side
+        // the long leg is not.
+        Span<(Position Corner, int Index, Position From, Position To)> candidates =
+        [
+            (Beyond(before, at, after), turn + 1, at, after),
+            (Beyond(after, at, before), turn, before, at)
+        ];
+
+        foreach (var (corner, index, from, to) in candidates)
+        {
+            if (double.IsNaN(corner.X) ||
+                Blocked(from, corner, blockers) ||
+                Blocked(corner, to, blockers))
+            {
+                continue;
+            }
+
+            points.Insert(index, corner);
+            if (Entered(EdgePath.Flatten(points), foreign) < entered)
+            {
+                return true;
+            }
+
+            points.RemoveAt(index);
+        }
+
+        return false;
+    }
+
+    // The point the clearance past `at` along the line from `from`, or NaN when there is no line to follow or
+    // the far leg is too short to take the step.
+    static Position Beyond(Position from, Position at, Position far)
+    {
+        var length = Distance(from, at);
+        if (length == 0 ||
+            Distance(at, far) < clearance * 2)
+        {
+            return new(double.NaN, double.NaN);
+        }
+
+        return new(
+            at.X + (at.X - from.X) / length * clearance,
+            at.Y + (at.Y - from.Y) / length * clearance);
+    }
+
+    static Position? FirstEntry(List<Position> curve, List<Rect> boxes)
+    {
+        for (var i = 1; i < curve.Count; i++)
+        {
+            foreach (var box in boxes)
+            {
+                if (box.Crosses(curve[i - 1], curve[i]))
+                {
+                    return new((curve[i - 1].X + curve[i].X) / 2, (curve[i - 1].Y + curve[i].Y) / 2);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    // How many of the boxes the curve enters.
+    static int Entered(List<Position> curve, List<Rect> boxes)
+    {
+        var count = 0;
+        foreach (var box in boxes)
+        {
+            for (var i = 1; i < curve.Count; i++)
+            {
+                if (box.Crosses(curve[i - 1], curve[i]))
+                {
+                    count++;
+                    break;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    static double Distance(Position a, Position b) =>
+        Math.Sqrt((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y));
+
+    // Each cluster's box, with the ids of everything inside it: its nodes and subgraphs at any depth, and its
+    // own id, for an edge that ends on the cluster itself. Walked with a stack of its own.
+    static List<(Rect Box, HashSet<string> Members)> Clusters(List<Subgraph> subgraphs)
+    {
+        var clusters = new List<(Rect Box, HashSet<string> Members)>();
+        var pending = new Stack<Subgraph>(subgraphs);
+        while (pending.TryPop(out var subgraph))
+        {
+            var members = new HashSet<string>(StringComparer.Ordinal);
+            var inside = new Stack<Subgraph>();
+            inside.Push(subgraph);
+            while (inside.TryPop(out var nested))
+            {
+                members.Add(nested.Id);
+                members.UnionWith(nested.NodeIds);
+                foreach (var deeper in nested.NestedSubgraphs)
+                {
+                    inside.Push(deeper);
+                }
+            }
+
+            clusters.Add(
+                (new(
+                    subgraph.Position.X - subgraph.Width / 2,
+                    subgraph.Position.Y - subgraph.Height / 2,
+                    subgraph.Position.X + subgraph.Width / 2,
+                    subgraph.Position.Y + subgraph.Height / 2),
+                    members));
+            foreach (var nested in subgraph.NestedSubgraphs)
+            {
+                pending.Push(nested);
+            }
+        }
+
+        return clusters;
     }
 
     // The grown boxes of every node except the two an edge joins.

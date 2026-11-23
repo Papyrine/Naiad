@@ -62,4 +62,53 @@ static class EdgePath
         path.Append(CultureInfo.InvariantCulture, $" L{F(x1)},{F(y1)}");
         return path.ToString();
     }
+
+    /// <summary>
+    /// The curve <see cref="Build"/> draws through <paramref name="points"/>, as a polyline: the same line and
+    /// cubic segments, each cubic cut into <paramref name="steps"/> straight pieces. For testing what the
+    /// drawn edge passes through, which the waypoints alone do not tell, since the curve cuts their corners.
+    /// </summary>
+    internal static List<Position> Flatten(IReadOnlyList<Position> points, int steps = 12)
+    {
+        var flat = new List<Position>();
+        if (points.Count < 3)
+        {
+            flat.AddRange(points);
+            return flat;
+        }
+
+        flat.Add(points[0]);
+        var current = Mix(points[0], 5, points[1], 1, 6);
+        flat.Add(current);
+
+        void Cubic(Position a, Position b, Position next)
+        {
+            var control1 = Mix(a, 2, b, 1, 3);
+            var control2 = Mix(a, 1, b, 2, 3);
+            var end = new Position((a.X + 4 * b.X + next.X) / 6, (a.Y + 4 * b.Y + next.Y) / 6);
+            for (var step = 1; step <= steps; step++)
+            {
+                var t = (double) step / steps;
+                var u = 1 - t;
+                flat.Add(
+                    new(
+                        u * u * u * current.X + 3 * u * u * t * control1.X + 3 * u * t * t * control2.X + t * t * t * end.X,
+                        u * u * u * current.Y + 3 * u * u * t * control1.Y + 3 * u * t * t * control2.Y + t * t * t * end.Y));
+            }
+
+            current = end;
+        }
+
+        for (var i = 2; i < points.Count; i++)
+        {
+            Cubic(points[i - 2], points[i - 1], points[i]);
+        }
+
+        Cubic(points[^2], points[^1], points[^1]);
+        flat.Add(points[^1]);
+        return flat;
+    }
+
+    static Position Mix(Position a, double weightA, Position b, double weightB, double total) =>
+        new((weightA * a.X + weightB * b.X) / total, (weightA * a.Y + weightB * b.Y) / total);
 }
