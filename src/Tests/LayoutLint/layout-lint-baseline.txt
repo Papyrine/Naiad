@@ -2,4 +2,3 @@
 # LayoutLintTests. A count may only go down: after a layout fix lowers one, rewrite this file by
 # running LayoutLintTests with LAYOUT_LINT_UPDATE=1.
 
-FlowchartTests.ComplexPipeline edge-through-cluster 5
