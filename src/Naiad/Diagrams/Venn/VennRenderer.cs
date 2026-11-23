@@ -74,22 +74,22 @@ public class VennRenderer : IDiagramRenderer<VennModel>
             if (area.IsSet)
             {
                 var circle = circles[0];
-                var baseColor = Clean(style?.GetValueOrDefault("fill")) ?? palette[setIndex % palette.Length];
+                var baseColor = Color(style?.GetValueOrDefault("fill")) ?? palette[setIndex % palette.Length];
                 setIndex++;
-                var stroke = Clean(style?.GetValueOrDefault("stroke")) ?? baseColor;
-                var strokeWidth = Clean(style?.GetValueOrDefault("stroke-width")) ?? Format(5 * scale);
-                var fillOpacity = Clean(style?.GetValueOrDefault("fill-opacity")) ?? "0.1";
+                var stroke = Color(style?.GetValueOrDefault("stroke")) ?? baseColor;
+                var strokeWidth = Number(style?.GetValueOrDefault("stroke-width")) ?? Format(5 * scale);
+                var fillOpacity = Number(style?.GetValueOrDefault("fill-opacity")) ?? "0.1";
                 builder.AddPath(
                     CirclePath(circle.X, circle.Y + titleHeight, circle.Radius),
                     style: $"fill:{baseColor};fill-opacity:{fillOpacity};stroke:{stroke};stroke-width:{strokeWidth};stroke-opacity:0.95");
 
-                var labelColor = Clean(style?.GetValueOrDefault("color")) ?? Darken(baseColor, 30);
+                var labelColor = Color(style?.GetValueOrDefault("color")) ?? Darken(baseColor, 30);
                 labelBands[key] = AddLabel(builder, layout, area, area.Label ?? area.Sets[0], titleHeight, labelColor, options);
             }
             else
             {
                 // An overlap is only filled when styled; otherwise it is there for its label alone.
-                if (Clean(style?.GetValueOrDefault("fill")) is { } fill)
+                if (Color(style?.GetValueOrDefault("fill")) is { } fill)
                 {
                     VennLayout.IntersectionArea(circles, out var arcs);
                     if (arcs.Count > 0)
@@ -100,7 +100,7 @@ public class VennRenderer : IDiagramRenderer<VennModel>
 
                 if (area.Label is { } label)
                 {
-                    var labelColor = Clean(style?.GetValueOrDefault("color")) ?? textColor;
+                    var labelColor = Color(style?.GetValueOrDefault("color")) ?? textColor;
                     labelBands[key] = AddLabel(builder, layout, area, label, titleHeight, labelColor, options);
                 }
             }
@@ -365,7 +365,7 @@ public class VennRenderer : IDiagramRenderer<VennModel>
                 var cellX = startX + cellWidth * (i % columns + 0.5);
                 var cellY = startY + shift + cellHeight * (i / columns + 0.5) + titleHeight;
                 var fill = styles.TryGetValue(node.Id, out var style)
-                    ? Clean(style.GetValueOrDefault("color")) ?? textColor
+                    ? Color(style.GetValueOrDefault("color")) ?? textColor
                     : textColor;
 
                 // The region may narrow away from its centre, so the node is wrapped again to the width
@@ -465,19 +465,26 @@ public class VennRenderer : IDiagramRenderer<VennModel>
     static string Format(double value) =>
         value.ToString("0.##", CultureInfo.InvariantCulture);
 
-    /// <summary>
-    /// A style value as written, less anything that could break out of the attribute or declaration it
-    /// is written into. Empty values count as unset.
-    /// </summary>
-    static string? Clean(string? value)
+    // A style value as written when it is a colour, or a number, and otherwise unset: they go into one style
+    // attribute, where anything else could add declarations of its own or fetch from elsewhere (CssValue).
+    static string? Color(string? value)
     {
-        if (value is null)
+        if (CssValue.IsColor(value))
         {
-            return null;
+            return value.Trim();
         }
 
-        var cleaned = new string(value.Where(static _ => _ is not ('\'' or '"' or '<' or '>' or '&' or ';')).ToArray()).Trim();
-        return cleaned.Length == 0 ? null : cleaned;
+        return null;
+    }
+
+    static string? Number(string? value)
+    {
+        if (CssValue.IsNumber(value))
+        {
+            return value.Trim();
+        }
+
+        return null;
     }
 
     /// <summary>

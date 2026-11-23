@@ -3,6 +3,8 @@
 // <foreignObject>, an attribute, the stylesheet), it must come out as text: the SVG still parses as XML and
 // holds no script element and no event-handler attribute. Each slot's payload carries its own marker
 // (q1z, q2z, ...), and every marker must still be in the output, so a slot cannot pass by not being drawn.
+// A slot that takes a colour or another style value gets the same payload marked s1z, s2z, ...: anything
+// but such a value is dropped (CssValue), so its marker is not looked for, but it must still be inert.
 public partial class InjectionSweepTests
 {
     [Test]
@@ -64,6 +66,9 @@ public partial class InjectionSweepTests
     // The payload for slot n.
     static string P(int n) => $"<script>q{n}z</script><img src=x onerror=q{n}z>";
 
+    // The payload for a slot that takes a colour or another style value.
+    static string S(int n) => $"<script>s{n}z</script><img src=x onerror=s{n}z>";
+
     public static IEnumerable<(string Name, string Input)> Diagrams()
     {
         static (string, string) Case(string name, string input) => (name, input);
@@ -92,10 +97,10 @@ public partial class InjectionSweepTests
                 subgraph S3 ["`**bold** {{P(22)}}`"]
                     N
                 end
-                style N fill:{{P(23)}}
-                classDef hot stroke:{{P(24)}}
+                style N fill:{{S(23)}}
+                classDef hot stroke:{{S(24)}}
                 class M hot
-                linkStyle 0 stroke:{{P(25)}}
+                linkStyle 0 stroke:{{S(25)}}
                 N -. {{P(26)}} .-> O["first<br/>{{P(27)}}"]
                 O -->|first<br/>{{P(28)}}| A
             """);
@@ -115,8 +120,8 @@ public partial class InjectionSweepTests
                 end
                 A -- "{{P(11)}}" --> B
                 B -- "`**bold** {{P(12)}}`" --> C
-                style J fill:{{P(13)}}
-                classDef hot stroke:{{P(14)}}
+                style J fill:{{S(13)}}
+                classDef hot stroke:{{S(14)}}
                 class H hot
             """);
         yield return Case("AgentFlow", $$"""
@@ -140,8 +145,8 @@ public partial class InjectionSweepTests
                 end
                 f3@{ view: collapsed }
                 e --> g
-                style g fill:{{P(15)}}
-                classDef hot stroke:{{P(16)}}
+                style g fill:{{S(15)}}
+                classDef hot stroke:{{S(16)}}
                 class e hot
             """);
         yield return Case("Swimlane", $$"""
@@ -164,7 +169,7 @@ public partial class InjectionSweepTests
                 b -- {{P(12)}} --> d
                 d -->|"`**bold** {{P(13)}}`"| e
                 c --> a
-                style e fill:{{P(14)}}
+                style e fill:{{S(14)}}
             """);
         yield return Case("Class", $$"""
             ---
@@ -298,7 +303,7 @@ public partial class InjectionSweepTests
                 note for U1 "{{P(18)}}"
                 note for U2 "`**bold** {{P(19)}}`"
                 json J @{ "{{P(20)}}": "{{P(21)}}" }
-                style U4 fill:{{P(22)}}
+                style U4 fill:{{S(22)}}
                 U5 <-- {{P(23)}} -- A
             """);
         yield return Case("EventModeling", $$"""
@@ -352,7 +357,7 @@ public partial class InjectionSweepTests
                 break {{P(22)}}
                     A->>B: x
                 end
-                rect {{P(23)}}
+                rect {{S(23)}}
                     A->>B: x
                 end
                 create participant D as {{P(24)}}
@@ -508,7 +513,7 @@ public partial class InjectionSweepTests
             config:
               themeVariables:
                 xyChart:
-                  plotColorPalette: {{P(8)}}
+                  plotColorPalette: {{S(8)}}
             ---
             xychart-beta
                 title "{{P(1)}}"
@@ -583,7 +588,7 @@ public partial class InjectionSweepTests
                 prefix: {{P(2)}}
                 suffix: {{P(3)}}
                 nodeColors:
-                  {{P(4)}}: {{P(5)}}
+                  {{P(4)}}: {{S(5)}}
             ---
             sankey-beta
             {{P(4)}},{{P(6)}},10
@@ -612,10 +617,10 @@ public partial class InjectionSweepTests
                 text "{{P(7)}}"
                 text B t1["{{P(8)}}"]
                 text "{{P(2)}}" "{{P(9)}}"
-                style B fill:"{{P(10)}}", color:"{{P(11)}}"
-                style "{{P(2)}}" stroke:"{{P(12)}}", stroke-width:"{{P(13)}}", fill-opacity:"{{P(14)}}"
-                style B,C fill:"{{P(15)}}", color:"{{P(16)}}"
-                style t1 color:"{{P(17)}}"
+                style B fill:"{{S(10)}}", color:"{{S(11)}}"
+                style "{{P(2)}}" stroke:"{{S(12)}}", stroke-width:"{{S(13)}}", fill-opacity:"{{S(14)}}"
+                style B,C fill:"{{S(15)}}", color:"{{S(16)}}"
+                style t1 color:"{{S(17)}}"
             """);
 
         yield return Case("Wardley", $$"""

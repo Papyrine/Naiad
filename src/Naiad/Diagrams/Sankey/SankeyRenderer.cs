@@ -54,12 +54,18 @@ public class SankeyRenderer : IDiagramRenderer<SankeyModel>
         var nodes = BuildNodes(model);
         AssignColumns(nodes, model);
 
-        // Each node's colour: its own if configured, else the next in the palette.
+        // Each node's colour: its own if configured (and a colour: see CssValue), else the next in the palette.
         var colors = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var name in nodes.Keys)
         {
-            colors[name] = customColors?.GetValueOrDefault(name) as string ??
-                           nodeColors[colors.Count % nodeColors.Length];
+            if (customColors?.GetValueOrDefault(name) is string custom &&
+                CssValue.IsColor(custom))
+            {
+                colors[name] = custom;
+                continue;
+            }
+
+            colors[name] = nodeColors[colors.Count % nodeColors.Length];
         }
 
         // Calculate scale
