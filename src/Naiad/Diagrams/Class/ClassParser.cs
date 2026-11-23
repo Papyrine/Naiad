@@ -93,14 +93,15 @@ class ClassParser : IDiagramParser<ClassModel>
                 .Map(static (visibility, firstWord, rest, suffix) =>
                     new ClassMember
                     {
-                        Name = rest.Name ?? firstWord,
-                        Type = rest.Name is null ? rest.Type : firstWord,
+                        Name = EntityCodes.Decode(rest.Name ?? firstWord),
+                        Type = EntityCodes.Decode(rest.Name is null ? rest.Type : firstWord),
                         Visibility = visibility.OrSome(Visibility.None),
                         IsStatic = suffix is {HasValue: true, Value: '$'},
                         TypeFirst = rest.Name is not null
                     });
 
-        // Method: +makeSound(), +move(int distance) : void, +getId() int or +validate()$ bool
+        // Method: +makeSound(), +move(int distance) : void, +getId() int, +validate()$ bool or
+        // +area() double*
         var methodParser =
             CommonParsers.InlineWhitespace
                 .SkipAnd(visibilityParser.Optional())
@@ -113,15 +114,18 @@ class ClassParser : IDiagramParser<ClassModel>
                         typeAnnotation,
                         inlineGap.SkipAnd(typeName)
                     ).Optional())
+                // Mermaid also takes the classifier after the return type (`someAbstractMethod() int*`,
+                // `someStaticMethod() String$`), when there is none straight after the parentheses.
+                .And(classifier.Optional())
                 .AndSkip(CommonParsers.InlineWhitespace)
                 .AndSkip(CommonParsers.LineEnd)
-                .Map(static (visibility, name, parameters, suffix, returnType) =>
+                .Map(static (visibility, name, parameters, suffix, returnType, trailing) =>
                     CreateMethod(
                         name,
                         parameters,
                         returnType.OrNull(),
                         visibility.OrSome(Visibility.None),
-                        suffix));
+                        suffix.HasValue ? suffix : trailing));
 
         // Class annotation: <<interface>>, <<abstract>>, or any other text, such as <<Entity>>.
         var annotationText =
@@ -451,8 +455,8 @@ class ClassParser : IDiagramParser<ClassModel>
     {
         var method = new ClassMethod
         {
-            Name = name,
-            ReturnType = returnType,
+            Name = EntityCodes.Decode(name),
+            ReturnType = EntityCodes.Decode(returnType),
             Visibility = visibility,
             IsStatic = classifier is {HasValue: true, Value: '$'},
             IsAbstract = classifier is {HasValue: true, Value: '*'}
@@ -484,8 +488,8 @@ class ClassParser : IDiagramParser<ClassModel>
                 parameters.Add(
                     new()
                     {
-                        Name = NormalizeGenerics(text[..colon].Trim()),
-                        Type = NormalizeGenerics(text[(colon + 1)..].Trim())
+                        Name = EntityCodes.Decode(NormalizeGenerics(text[..colon].Trim())),
+                        Type = EntityCodes.Decode(NormalizeGenerics(text[(colon + 1)..].Trim()))
                     });
                 continue;
             }
@@ -498,7 +502,7 @@ class ClassParser : IDiagramParser<ClassModel>
                 parameters.Add(
                     new()
                     {
-                        Name = NormalizeGenerics(text)
+                        Name = EntityCodes.Decode(NormalizeGenerics(text))
                     });
                 continue;
             }
@@ -506,8 +510,8 @@ class ClassParser : IDiagramParser<ClassModel>
             parameters.Add(
                 new()
                 {
-                    Name = NormalizeGenerics(text[(space + 1)..]),
-                    Type = NormalizeGenerics(text[..space].TrimEnd()),
+                    Name = EntityCodes.Decode(NormalizeGenerics(text[(space + 1)..])),
+                    Type = EntityCodes.Decode(NormalizeGenerics(text[..space].TrimEnd())),
                     TypeFirst = true
                 });
         }
@@ -580,7 +584,7 @@ class ClassParser : IDiagramParser<ClassModel>
             return new MemberItem(
                 new()
                 {
-                    Name = NormalizeNestedGenerics(line),
+                    Name = EntityCodes.Decode(NormalizeNestedGenerics(line)),
                     Visibility = visibility,
                     IsStatic = isStatic
                 });
@@ -594,10 +598,20 @@ class ClassParser : IDiagramParser<ClassModel>
         }
 
         var returnType = suffix.TrimStart().TrimStart(':').Trim();
+
+        // As Mermaid reads it, a classifier can instead end the return type (`someAbstractMethod() int*`)
+        // when none follows the parentheses.
+        if (classifier is not ('$' or '*') &&
+            returnType is [.., '$' or '*'])
+        {
+            classifier = returnType[^1];
+            returnType = returnType[..^1].TrimEnd();
+        }
+
         var method = new ClassMethod
         {
-            Name = NormalizeNestedGenerics(line[..open].TrimEnd()),
-            ReturnType = returnType.IsEmpty ? null : NormalizeNestedGenerics(returnType),
+            Name = EntityCodes.Decode(NormalizeNestedGenerics(line[..open].TrimEnd())),
+            ReturnType = returnType.IsEmpty ? null : EntityCodes.Decode(NormalizeNestedGenerics(returnType)),
             Visibility = visibility,
             IsStatic = classifier == '$',
             IsAbstract = classifier == '*'
@@ -806,7 +820,7 @@ class ClassParser : IDiagramParser<ClassModel>
                         new()
                         {
                             // Mermaid writes a line break in a note as a literal backslash-n.
-                            Text = note.Text.Replace("\\n", "<br/>"),
+                            Text = EntityCodes.Decode(note.Text.Replace("\\n", "<br/>")),
                             ForClassId = note.Owner is { } noteOwner ? Class(noteOwner).Id : null
                         });
                     break;
@@ -844,6 +858,22 @@ class ClassParser : IDiagramParser<ClassModel>
         {
             throw new MermaidParseException(
                 $"Failed to parse class diagram: namespace '{currentNamespace}' is missing its closing '}}'");
+        }
+
+        // Mermaid's entity codes (`#lt;`, `#9829;`) stand for characters in any text a class diagram shows.
+        // Members, methods and notes are decoded as they are made; the rest is decoded here, once every
+        // declaration of a class has had its say.
+        foreach (var classDef in model.Classes)
+        {
+            classDef.DisplayName = EntityCodes.Decode(classDef.DisplayName);
+            classDef.AnnotationText = EntityCodes.Decode(classDef.AnnotationText);
+        }
+
+        foreach (var relationship in model.Relationships)
+        {
+            relationship.Label = EntityCodes.Decode(relationship.Label);
+            relationship.FromCardinality = EntityCodes.Decode(relationship.FromCardinality);
+            relationship.ToCardinality = EntityCodes.Decode(relationship.ToCardinality);
         }
 
         return model;

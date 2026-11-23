@@ -185,4 +185,26 @@ public class ERParserTests
     [Arguments("erDiagram\n    CUSTOMER maybe to 1 ORDER")]
     public async Task BrokenStatement_FailsTheParse(string input) =>
         await Assert.That(new ERParser().Parse(input).Success).IsFalse();
+
+    // Mermaid's entity codes stand for characters in any text the diagram shows. An entity's name stays as
+    // written in the model, since relationships refer to it by that name, and is decoded where it is drawn.
+    [Test]
+    public async Task EntityCodes_AreDecoded()
+    {
+        var model = new ERParser().Parse(
+            """
+            erDiagram
+                ORDER["Order #quot;A#quot;"] {
+                    string id PK "key #amp; index"
+                }
+                "R#amp;D" ||--o{ ORDER : "has #9829;"
+            """).Value;
+
+        await Assert.That(model.Entities.Single(_ => _.Name == "ORDER").Alias).IsEqualTo("Order \"A\"");
+        await Assert.That(model.Entities.Single(_ => _.Name == "ORDER").Attributes.Single().Comment)
+            .IsEqualTo("key & index");
+        await Assert.That(model.Entities.Select(_ => _.Name)).Contains("R#amp;D");
+        await Assert.That(model.Relationships.Single().Label).IsEqualTo("has ♥");
+        await Assert.That(Mermaid.Render("erDiagram\n    \"R#amp;D\" ||--o{ ORDER : has")).Contains(">R&amp;D<");
+    }
 }

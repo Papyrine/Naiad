@@ -5,9 +5,11 @@
 /// </summary>
 static partial class EntityCodes
 {
-    public static string Decode(string text)
+    [return: NotNullIfNotNull(nameof(text))]
+    public static string? Decode(string? text)
     {
-        if (!text.Contains('#'))
+        if (text is null ||
+            !text.Contains('#'))
         {
             return text;
         }

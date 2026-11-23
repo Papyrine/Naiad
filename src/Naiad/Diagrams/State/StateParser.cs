@@ -310,12 +310,13 @@ class StateParser : IDiagramParser<StateModel>
     // A note's lines as the one `<br/>`-separated label the renderer draws. A literal `\n` breaks a line
     // too, as it does in Mermaid.
     static string NoteText(IEnumerable<string> lines) =>
-        string.Join(
-            "<br/>",
-            lines
-                .SelectMany(_ => _.Split("\\n"))
-                .Select(_ => _.Trim())
-                .Where(_ => _.Length > 0));
+        EntityCodes.Decode(
+            string.Join(
+                "<br/>",
+                lines
+                    .SelectMany(_ => _.Split("\\n"))
+                    .Select(_ => _.Trim())
+                    .Where(_ => _.Length > 0)));
 
     static StateModel BuildModel(IEnumerable<IStateContent?> content)
     {
@@ -493,7 +494,40 @@ class StateParser : IDiagramParser<StateModel>
             }
         }
 
+        DecodeEntityCodes(model);
         return model;
+    }
+
+    // Mermaid's entity codes (`#amp;`, `#9829;`) stand for characters in any text the diagram shows. Notes
+    // are decoded as they are made; descriptions and transition labels here, once every declaration has
+    // had its say. The walk keeps a stack of its own, as composite states nest as deep as the input does,
+    // and decodes each state and transition once, as decoding twice would turn `#35;lt;` into `<`.
+    static void DecodeEntityCodes(StateModel model)
+    {
+        var visited = new HashSet<object>(ReferenceEqualityComparer.Instance);
+        var pending = new Stack<(List<State> States, List<StateTransition> Transitions)>();
+        pending.Push((model.States, model.Transitions));
+        while (pending.TryPop(out var level))
+        {
+            foreach (var state in level.States)
+            {
+                if (!visited.Add(state))
+                {
+                    continue;
+                }
+
+                state.Description = EntityCodes.Decode(state.Description);
+                pending.Push((state.NestedStates, state.NestedTransitions));
+            }
+
+            foreach (var transition in level.Transitions)
+            {
+                if (visited.Add(transition))
+                {
+                    transition.Label = EntityCodes.Decode(transition.Label);
+                }
+            }
+        }
     }
 
     static State NewRegion(State owner) =>
