@@ -545,6 +545,21 @@ public class FlowchartParserTests
         await Assert.That(result.Value.Edges.Single().Label).IsEqualTo("quoted");
     }
 
+    // In quotes, a `|text|` label can hold a `|`, as Mermaid reads it; the first `|` used to end it.
+    [Test]
+    [Arguments("A -->|\"x | y\"| B", "x | y")]
+    [Arguments("A -->| \"x | y\" | B", "x | y")]
+    [Arguments("A |\"x | y\"|--> B", "x | y")]
+    [Arguments("A -->|\"`**x** | y`\"| B", "`**x** | y`")]
+    [Arguments("A -->|\"x\" y| B", "\"x\" y")]
+    public async Task QuotedEdgeLabel_CanHoldAPipe(string statement, string label)
+    {
+        var result = new FlowchartParser().Parse($"flowchart LR\n    {statement}");
+
+        await Assert.That(result.Success).IsTrue();
+        await Assert.That(result.Value.Edges.Single().Label).IsEqualTo(label);
+    }
+
     // `o--o` and `x--x` used to be drawn as `<-->`, with an arrowhead at each end.
     [Test]
     [Arguments("<-->", "pointStart", "pointEnd")]

@@ -334,6 +334,24 @@ class ERParser : IDiagramParser<ERModel>
             }
         }
 
+        // Mermaid's entity codes (`#quot;`, `#9829;`) stand for characters in any text the diagram shows.
+        // An entity's name is also what relationships refer to it by, so it is decoded only where it is
+        // drawn (see ERRenderer.HeaderRuns).
+        foreach (var entity in model.Entities)
+        {
+            entity.Alias = EntityCodes.Decode(entity.Alias);
+            foreach (var attribute in entity.Attributes)
+            {
+                attribute.Type = EntityCodes.Decode(attribute.Type);
+                attribute.Comment = EntityCodes.Decode(attribute.Comment);
+            }
+        }
+
+        foreach (var relationship in model.Relationships)
+        {
+            relationship.Label = EntityCodes.Decode(relationship.Label);
+        }
+
         return model;
     }
 

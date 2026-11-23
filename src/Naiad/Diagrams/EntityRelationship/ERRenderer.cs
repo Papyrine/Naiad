@@ -249,13 +249,14 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
     /// <summary>
     /// The header text, split wherever its weight changes. A name, or an alias with no markup, is one bold
     /// run — the header's own style. An alias that marks <c>**bold**</c> spans decides its weights itself,
-    /// so <c>**Employee**: staff</c> keeps the name bold and sets the rest in the regular weight.
+    /// so <c>**Employee**: staff</c> keeps the name bold and sets the rest in the regular weight. The name
+    /// has its entity codes decoded here rather than in the model, where it is what relationships match on.
     /// </summary>
     static List<HeaderRun> HeaderRuns(Entity entity)
     {
         if (string.IsNullOrWhiteSpace(entity.Alias))
         {
-            return [new(entity.Name, true)];
+            return [new(EntityCodes.Decode(entity.Name), true)];
         }
 
         const string marker = "**";
@@ -288,7 +289,7 @@ public class ERRenderer(ILayoutEngine? layoutEngine = null) :
 
         if (runs.Count == 0)
         {
-            return [new(entity.Name, true)];
+            return [new(EntityCodes.Decode(entity.Name), true)];
         }
 
         return runs;

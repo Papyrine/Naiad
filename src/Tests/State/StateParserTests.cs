@@ -244,4 +244,36 @@ public class StateParserTests
         var outer = model.States.Single(_ => _.Id == "Outer");
         await Assert.That(outer.NestedStates.Single(_ => _.Id == "B").Description).IsEqualTo("Desc");
     }
+
+    // Mermaid's entity codes stand for characters in any text the diagram shows, nested states included.
+    [Test]
+    public async Task EntityCodes_AreDecoded()
+    {
+        var model = new StateParser().Parse(
+            """
+            stateDiagram-v2
+                state "Outer #amp; more" as Outer {
+                    Inner : waits #8230;
+                    Inner --> Done : a #amp; b
+                }
+                [*] --> Outer : start #9829;
+                note right of Outer : see #quot;docs#quot;
+            """).Value;
+
+        var outer = model.States.Single(_ => _.Id == "Outer");
+        await Assert.That(outer.Description).IsEqualTo("Outer & more");
+        await Assert.That(outer.NestedStates.Single(_ => _.Id == "Inner").Description).IsEqualTo("waits …");
+        await Assert.That(outer.NestedTransitions.Single().Label).IsEqualTo("a & b");
+        await Assert.That(model.Transitions.Single().Label).IsEqualTo("start ♥");
+        await Assert.That(model.Notes.Single().Text).IsEqualTo("see \"docs\"");
+    }
+
+    // Decoding once leaves the code an entity code spells as text.
+    [Test]
+    public async Task EntityCodes_AreDecodedOnce()
+    {
+        var model = new StateParser().Parse("stateDiagram-v2\n    A --> B : #35;lt;").Value;
+
+        await Assert.That(model.Transitions.Single().Label).IsEqualTo("#lt;");
+    }
 }

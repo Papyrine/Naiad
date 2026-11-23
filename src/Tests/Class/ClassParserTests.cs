@@ -90,6 +90,71 @@ public class ClassParserTests
         await Assert.That(methods[3].ReturnType).IsEqualTo("bool");
     }
 
+    // Mermaid's documented spellings put the classifier after the return type as well as after the
+    // parentheses. Behind the return type it went into the type, so `int*` was drawn as the type.
+    [Test]
+    public async Task ClassifierAfterReturnType_MarksTheMethod()
+    {
+        const string input =
+            """
+            classDiagram
+                class Shape {
+                    +someAbstractMethod() int*
+                    +someStaticMethod() String$
+                    +validate()$ bool
+                    +lookup(Map<string, int> index) List~int~*
+                    +area() : double$
+                    +plain() int
+                }
+            """;
+
+        var methods = new ClassParser().Parse(input).Value.Classes.Single().Methods;
+
+        await Assert.That(methods.Select(_ => $"{_.Name}:{_.ReturnType}:{_.IsAbstract}:{_.IsStatic}"))
+            .IsEquivalentTo(
+            [
+                "someAbstractMethod:int:True:False",
+                "someStaticMethod:String:False:True",
+                "validate:bool:False:True",
+                "lookup:List<int>:True:False",
+                "area:double:False:True",
+                "plain:int:False:False"
+            ]);
+    }
+
+    // Mermaid's entity codes stand for characters in any text a class diagram shows.
+    [Test]
+    public async Task EntityCodes_AreDecoded()
+    {
+        const string input =
+            """
+            classDiagram
+                class Box["Box #lt;T#gt;"] {
+                    <<generic #amp; sealed>>
+                    +List#lt;T#gt; items
+                    +add(T#91;#93; values) #quot;ok#quot;
+                    +weird(a, b) Map#lt;K, V#gt; strange
+                }
+                Box "1 #8230;" --> "#42;" Item : holds #9829;
+                note for Box "fragile #amp; heavy"
+            """;
+
+        var model = new ClassParser().Parse(input).Value;
+        var box = model.Classes.Single(_ => _.Id == "Box");
+        var relationship = model.Relationships.Single();
+
+        await Assert.That(box.DisplayName).IsEqualTo("Box <T>");
+        await Assert.That(box.AnnotationText).IsEqualTo("generic & sealed");
+        await Assert.That(box.Members.Single().Name).IsEqualTo("List<T> items");
+        await Assert.That(box.Methods[0].Parameters.Single().Type).IsEqualTo("T[]");
+        await Assert.That(box.Methods[0].ReturnType).IsEqualTo("\"ok\"");
+        await Assert.That(box.Methods[1].ReturnType).IsEqualTo("Map<K, V> strange");
+        await Assert.That(relationship.Label).IsEqualTo("holds ♥");
+        await Assert.That(relationship.FromCardinality).IsEqualTo("1 …");
+        await Assert.That(relationship.ToCardinality).IsEqualTo("*");
+        await Assert.That(model.Notes.Single().Text).IsEqualTo("fragile & heavy");
+    }
+
     [Test]
     public async Task BodyOnOneLine_IsParsed()
     {

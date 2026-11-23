@@ -144,10 +144,18 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                 .And(contiguousLink.Or(inlineLabeledLink))
                 .Map((start, body) => ToLink(start.ToNullable(), body));
 
-        // Edge label: |text|
+        // Edge label: |text|. In quotes it can hold the `|` that would otherwise end it, as Mermaid reads
+        // `-->|"a | b"|`; the quotes are kept here and dropped with the rest by Unquote.
         var edgeLabelParser =
-            Between(Literals.Char('|'), Literals.NoneOf("|", minSize: 0), Literals.Char('|'))
-                .AsString();
+            Literals.Char('|')
+                .SkipAnd(
+                    CommonParsers.InlineWhitespace
+                        .SkipAnd(CommonParsers.DoubleQuotedString)
+                        .AndSkip(CommonParsers.InlineWhitespace)
+                        .WhenFollowedBy(Literals.Char('|'))
+                        .Then(static _ => $"\"{_}\"")
+                        .Or(Literals.NoneOf("|", minSize: 0).AsString()))
+                .AndSkip(Literals.Char('|'));
 
         var flowchartDirection =
             OneOf(
