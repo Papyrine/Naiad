@@ -61,6 +61,7 @@ static class Order
 
         for (int i = 0, lastBest = 0; lastBest < 4; ++i, ++lastBest)
         {
+            RenderScope.ThrowIfCancelled();
             SweepLayerGraphs(i % 2 != 0 ? downLayerGraphs : upLayerGraphs, i % 4 >= 2, scratch);
 
             var layering = Util.BuildLayerMatrix(graph, spare);

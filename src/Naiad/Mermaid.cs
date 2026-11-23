@@ -9,6 +9,17 @@ public static class Mermaid
     }
 
     /// <summary>
+    /// Renders <paramref name="input"/>, stopping with an <see cref="OperationCanceledException"/> once
+    /// <paramref name="cancellationToken"/> is cancelled. The render looks at the token between its stages and
+    /// as the graph layout works, so it stops soon after, not at once.
+    /// </summary>
+    public static string Render(string input, RenderOptions? options, CancellationToken cancellationToken)
+    {
+        options ??= RenderOptions.Default;
+        return ToXml(RenderToSvgDocument(input, options, cancellationToken), options);
+    }
+
+    /// <summary>
     /// Lays out Mermaid <paramref name="input"/> as source: the diagram's body indented under its header and
     /// each block (<c>subgraph</c>, <c>loop</c>/<c>alt</c>, <c>{ … }</c>, <c>section</c>) indented within it;
     /// trailing whitespace and runs of blank lines removed. Front matter and multi-line strings are kept as
@@ -24,10 +35,13 @@ public static class Mermaid
     /// parse → layout → model pipeline that produces the SVG and differ only in how the document is
     /// turned into pixels.
     /// </summary>
-    internal static SvgDocument RenderToSvgDocument(string input, RenderOptions? options = null)
+    internal static SvgDocument RenderToSvgDocument(
+        string input,
+        RenderOptions? options = null,
+        CancellationToken cancellationToken = default)
     {
         IconPackRegistry.MarkRendered();
-        return Run(input, options ?? RenderOptions.Default, parseOnly: false)!;
+        return Run(input, options ?? RenderOptions.Default, parseOnly: false, cancellationToken)!;
     }
 
     /// <summary>
@@ -49,8 +63,17 @@ public static class Mermaid
     }
 
     // Parses and, unless parseOnly, renders. Returns null only when parseOnly.
-    static SvgDocument? Run(string input, RenderOptions options, bool parseOnly)
+    static SvgDocument? Run(
+        string input,
+        RenderOptions options,
+        bool parseOnly,
+        CancellationToken cancellationToken = default)
     {
+        // The limits hold for the whole render, the layout deep inside it included.
+        using var scope = RenderScope.Enter(options.Limits ?? RenderLimits.Default, cancellationToken);
+        RenderScope.CheckInput(input.Length);
+        RenderScope.ThrowIfCancelled();
+
         var source = input;
         input = TrimInput(input);
         var body = StripFrontMatter(input.AsSpan().TrimStart(), out var frontMatter).ToString();
@@ -213,6 +236,7 @@ public static class Mermaid
         }
 
         model.Config = config;
+        RenderScope.ThrowIfCancelled();
         var document = renderer.Render(model, options);
         document.AccessibilityTitle = model.AccessibilityTitle;
         document.AccessibilityDescription = model.AccessibilityDescription;

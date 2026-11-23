@@ -122,6 +122,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             CollectCompositeContents(model.States);
         }
 
+        // Each composite's interior is laid out on its own, one level at a time, so the layout never sees how
+        // deep they nest; the limit is kept here instead, before that recursion starts.
+        RenderScope.CheckSubgraphDepth(CompositeDepth(model.States));
+
         // Size every composite from its own contents before the outer layout runs, so it takes part as a
         // node of the right size rather than one sized from its label.
         LayoutCompositeInteriors(model.States, model.Direction, options);
@@ -824,6 +828,28 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
             maxExtraHeight > 0 ? maxExtraHeight + 20 : 0,
             maxExtraLeft > 0 ? maxExtraLeft + 20 : 0
         );
+    }
+
+    // How deep composite states nest: 0 with none, 1 with composites holding only simple states. Walked with a
+    // stack of its own, as the nesting is what is being measured.
+    static int CompositeDepth(List<State> states)
+    {
+        var deepest = 0;
+        var pending = new Stack<(List<State> States, int Depth)>();
+        pending.Push((states, 1));
+        while (pending.TryPop(out var level))
+        {
+            foreach (var state in level.States)
+            {
+                if (state.IsComposite)
+                {
+                    deepest = Math.Max(deepest, level.Depth);
+                    pending.Push((state.NestedStates, level.Depth + 1));
+                }
+            }
+        }
+
+        return deepest;
     }
 
     /// <summary>

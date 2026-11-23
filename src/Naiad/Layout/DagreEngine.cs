@@ -24,6 +24,9 @@ class DagreEngine : ILayoutEngine
 
     public LayoutResult BuildLayout(GraphDiagramBase diagram, LayoutOptions options)
     {
+        // The layout is what a large or deeply nested graph costs, so this is where the limits are kept.
+        RenderScope.CheckGraph(diagram);
+
         if (diagram.Nodes.Count == 0 &&
             diagram.Subgraphs.Count == 0)
         {
