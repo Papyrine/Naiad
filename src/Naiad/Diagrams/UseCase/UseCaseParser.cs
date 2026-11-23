@@ -463,12 +463,13 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
                 continue;
             }
 
+            // A value that is not a colour (or a dash list) is dropped rather than written: see CssValue.
             switch (key)
             {
-                case "fill":
+                case "fill" when CssValue.IsColor(value):
                     style.Fill = value;
                     break;
-                case "stroke":
+                case "stroke" when CssValue.IsColor(value):
                     style.Stroke = value;
                     break;
                 case "stroke-width":
@@ -479,10 +480,10 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
                     }
 
                     break;
-                case "color":
+                case "color" when CssValue.IsColor(value):
                     style.Color = value;
                     break;
-                case "stroke-dasharray":
+                case "stroke-dasharray" when CssValue.IsDashArray(value):
                     style.StrokeDasharray = value;
                     break;
             }

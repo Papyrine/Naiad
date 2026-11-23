@@ -370,6 +370,9 @@ public class XYChartRenderer : IDiagramRenderer<XYChartModel>
             _ => null
         };
 
+        // Only colours are kept: see CssValue.
+        colors = colors?.Where(CssValue.IsColor).ToArray();
+
         if (colors is null ||
             colors.Length == 0)
         {

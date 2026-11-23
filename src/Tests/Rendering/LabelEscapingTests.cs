@@ -1,3 +1,5 @@
+using Naiad.Diagrams.Flowchart;
+
 // Regression coverage for label escaping: user-supplied diagram text must never reach the rendered SVG as
 // live markup. Flowchart node/edge labels travel through the <foreignObject> seam (SvgForeignObject emits
 // raw XHTML, so the renderer pre-encodes the text), while other diagrams' labels go through native <text>
@@ -88,7 +90,9 @@ public class LabelEscapingTests
 
     // A label's own colour (`color:` in style or classDef) is written into the <p> that holds an HTML label
     // in its <foreignObject>. It went in as written, so a quote in it ended the paragraph's style attribute
-    // and the rest of the value became live HTML in the label.
+    // and the rest of the value became live HTML in the label. Such a value is no colour, so it is now
+    // dropped before it gets that far (CssValue); the renderers still encode what they are given, which
+    // LabelColour_IsEncodedByTheRenderer holds them to.
     [Test]
     [Arguments("flowchart style", "flowchart LR\n    A --> B\n    style A color:red\"><img src=x onerror=alert(1)>")]
     [Arguments("flowchart classDef", "flowchart LR\n    A:::bad --> B\n    classDef bad color:red\"><img src=x onerror=alert(1)>")]
@@ -105,8 +109,64 @@ public class LabelEscapingTests
             .Where(_ => _.Name.LocalName == "img" || _.Attribute("onerror") is not null)
             .ToList();
         await Assert.That(injected).IsEmpty().Because(name);
-        // The colour still reaches the label, as text, so the test cannot pass by it having been dropped.
-        await Assert.That(svg).Contains("&quot;&gt;&lt;img").Because(name);
+        await Assert.That(svg).DoesNotContain("onerror").Because(name);
+    }
+
+    // Whatever colour a label is given reaches its paragraph encoded, should one that is not a colour ever
+    // get past the parser.
+    [Test]
+    public async Task LabelColour_IsEncodedByTheRenderer()
+    {
+        var model = new FlowchartParser().Parse("flowchart LR\n    A[Hello] --> B").Value;
+        model.Nodes.Single(_ => _.Id == "A").Style = new() { Color = "red\"><img src=x onerror=alert(1)>" };
+
+        var document = new FlowchartRenderer().Render(model, new());
+        var builder = new StringBuilder();
+        document.ToXml(builder);
+        var svg = builder.ToString();
+
+        XDocument.Parse(svg);
+        await Assert.That(svg).DoesNotContain("<img");
+        await Assert.That(svg).Contains("&quot;&gt;&lt;img");
+    }
+
+    // A style value that is not a colour (or, where that is wanted, a number or a dash list) is dropped, so
+    // it can neither fetch from a host it names nor add declarations of its own. Escaping alone left both.
+    [Test]
+    [Arguments("flowchart fill", "flowchart LR\n    A --> B\n    style A fill:url(https://attacker.invalid/x)")]
+    [Arguments("flowchart classDef", "flowchart LR\n    A:::c --> B\n    classDef c stroke:red;background:url(https://attacker.invalid/x)")]
+    [Arguments("flowchart linkStyle", "flowchart LR\n    A --> B\n    linkStyle 0 stroke:url(https://attacker.invalid/x)")]
+    [Arguments("flowchart dash array", "flowchart LR\n    A --> B\n    style A stroke-dasharray:5 url(https://attacker.invalid/x)")]
+    [Arguments("flowchart escape", "flowchart LR\n    A --> B\n    style A fill:u\\72l(https://attacker.invalid/x)")]
+    [Arguments("block", "block-beta\n    a[\"A\"]\n    style a fill:url(https://attacker.invalid/x)")]
+    [Arguments("use case", "usecase-beta\n    actor A\n    style A fill:url(https://attacker.invalid/x)")]
+    [Arguments("sequence rect", "sequenceDiagram\n    rect url(https://attacker.invalid/x)\n    A->>B: hi\n    end")]
+    [Arguments("venn", "venn-beta\n    set A\n    set B\n    style A fill:\"url(https://attacker.invalid/x)\", stroke-width:\"url(https://attacker.invalid/y)\"")]
+    [Arguments("xychart palette", "---\nconfig:\n  themeVariables:\n    xyChart:\n      plotColorPalette: \"url(https://attacker.invalid/x)\"\n---\nxychart-beta\n    x-axis [a, b]\n    bar [1, 2]")]
+    [Arguments("sankey nodeColors", "---\nconfig:\n  sankey:\n    nodeColors:\n      A: \"url(https://attacker.invalid/x)\"\n---\nsankey-beta\nA,B,1")]
+    [Arguments("theme variable", "%%{init: {\"themeVariables\": {\"pieStrokeColor\": \"url(https://attacker.invalid/x)\"}}}%%\npie\n    \"A\" : 1")]
+    public async Task StyleValue_ThatIsNotAColour_IsDropped(string name, string input)
+    {
+        var svg = Mermaid.Render(input);
+
+        XDocument.Parse(svg);
+        await Assert.That(svg).DoesNotContain("attacker.invalid").Because(name);
+    }
+
+    // The colours Mermaid's documentation and its users write are kept.
+    [Test]
+    [Arguments("hex", "fill:#f9f,stroke:#333,color:#ffffff,stroke-dasharray: 5 5", "#f9f")]
+    [Arguments("named", "fill:lightblue", "lightblue")]
+    [Arguments("rgb", "fill:rgb(255 0 0)", "rgb(255 0 0)")]
+    [Arguments("hsl", "fill:hsl(120deg 50% 50%)", "hsl(120deg 50% 50%)")]
+    [Arguments("oklch", "fill:oklch(70% 0.1 200)", "oklch(70% 0.1 200)")]
+    [Arguments("none", "fill:none", "fill='none'")]
+    [Arguments("custom property", "fill:var(--accent)", "var(--accent)")]
+    public async Task StyleValue_ThatIsAColour_IsKept(string name, string style, string expected)
+    {
+        var svg = Mermaid.Render($"flowchart LR\n    A --> B\n    style A {style}");
+
+        await Assert.That(svg).Contains(expected).Because(name);
     }
 
     // A themeVariables value is written into the diagram's stylesheet. It went in as written, so a value

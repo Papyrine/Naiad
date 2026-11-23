@@ -507,7 +507,8 @@ class SequenceParser : IDiagramParser<SequenceModel>
                             Open(breakBlock, breakBlock.Elements);
                             break;
                         case "rect":
-                            var rect = new Rect { Color = text };
+                            // Anything but a colour is dropped, and the rect takes the default fill: see CssValue.
+                            var rect = new Rect { Color = CssValue.IsColor(text) ? text : null };
                             Open(rect, rect.Elements);
                             break;
                         case "else":
