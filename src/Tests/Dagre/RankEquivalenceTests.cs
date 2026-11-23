@@ -290,7 +290,9 @@ public class RankEquivalenceTests
     {
         var graph = Declined(name);
         await Assert.That(IndexedNetworkSimplex.TryRun(graph)).IsFalse();
-        await Assert.That(graph.NodeLabels().All(_ => _.Rank is null)).IsTrue();
+        // A node set without a label holds null, whatever NodeLabels' type says.
+        // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+        await Assert.That(graph.NodeLabels().All(_ => _?.Rank is null)).IsTrue();
     }
 
     // A graph whose weights only the port can sum the way it does is still ranked, by the port.
