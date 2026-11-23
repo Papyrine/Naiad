@@ -168,7 +168,8 @@ public class RobustnessTests
         await Assert.That(svg).IsNotNull();
     }
 
-    // A deliberately small stack makes a recursive walk's depth cheap to reach.
+    // A deliberately small stack makes a recursive walk's depth cheap to reach. The inputs are larger than the
+    // default limits allow, which would turn them down before any walk began.
     static (string? Svg, Exception? Failure) RenderOnSmallStack(string input)
     {
         string? svg = null;
@@ -178,7 +179,7 @@ public class RobustnessTests
             {
                 try
                 {
-                    svg = Mermaid.Render(input);
+                    svg = Mermaid.Render(input, new() { Limits = RenderLimits.Unlimited });
                 }
                 catch (Exception exception)
                 {

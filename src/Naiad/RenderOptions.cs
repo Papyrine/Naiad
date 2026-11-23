@@ -24,4 +24,11 @@ public class RenderOptions
     /// Ignored by <see cref="Mermaid.Render(string, RenderOptions)"/>, which only produces SVG.
     /// </summary>
     public PngOptions Png { get; set; } = new();
+
+    /// <summary>
+    /// Caps on how long a diagram may be and how large and deeply nested its graph, on by default so a host
+    /// rendering diagrams it does not control is safe without having to ask. Set
+    /// <see cref="RenderLimits.Unlimited"/> for trusted input.
+    /// </summary>
+    public RenderLimits Limits { get; set; } = new();
 }

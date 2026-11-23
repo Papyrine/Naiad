@@ -15,7 +15,10 @@ static class Layout
         RemoveSelfEdges(graph);
         Acyclic.Run(graph);
         NestingGraph.Run(graph);
+        // A render that is cancelled stops between the phases that cost the most, and within ordering.
+        RenderScope.ThrowIfCancelled();
         NetworkSimplex.RunOnLayoutGraph(graph);
+        RenderScope.ThrowIfCancelled();
         InjectEdgeLabelProxies(graph);
         Util.RemoveEmptyRanks(graph);
         NestingGraph.Cleanup(graph);
@@ -28,6 +31,7 @@ static class Layout
         Order.Run(graph);
         InsertSelfEdges(graph);
         CoordinateSystem.Adjust(graph);
+        RenderScope.ThrowIfCancelled();
         Positioning.Run(graph);
         PositionSelfEdges(graph);
         RemoveBorderNodes(graph);

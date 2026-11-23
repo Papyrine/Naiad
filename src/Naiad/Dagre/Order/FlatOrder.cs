@@ -287,6 +287,7 @@ sealed class FlatOrder
 
         for (int i = 0, lastBest = 0; lastBest < 4; ++i, ++lastBest)
         {
+            RenderScope.ThrowIfCancelled();
             Sweep(down: i % 2 != 0, biasRight: i % 4 >= 2);
 
             // Only a strict improvement replaces the best ordering, as in Order.Run.
