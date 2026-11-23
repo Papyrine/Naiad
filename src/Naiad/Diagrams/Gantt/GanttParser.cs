@@ -88,7 +88,9 @@ class GanttParser : IDiagramParser<GanttModel>
                     OneOf(
                         OneOf(TextIgnoreCase("accTitle"), TextIgnoreCase("accDescr"))
                             .WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1))
-                            .SkipAnd(restOfLine),
+                            .And(restOfLine)
+                            .Noting(DiagramParseContext.Accessibility)
+                            .Then(static _ => _.Item2),
                         OneOf(
                                 TextIgnoreCase("click"),
                                 TextIgnoreCase("todayMarker"),
@@ -110,7 +112,7 @@ class GanttParser : IDiagramParser<GanttModel>
                 .SkipAnd(TextIgnoreCase("accDescr"))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(Literals.Char('{'))
-                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0).Noting(DiagramParseContext.AccessibilityBlock))
                 .SkipAnd(Literals.Char('}'))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(CommonParsers.LineEnd);

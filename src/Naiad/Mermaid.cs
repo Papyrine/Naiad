@@ -213,7 +213,10 @@ public static class Mermaid
         }
 
         model.Config = config;
-        return renderer.Render(model, options);
+        var document = renderer.Render(model, options);
+        document.AccessibilityTitle = model.AccessibilityTitle;
+        document.AccessibilityDescription = model.AccessibilityDescription;
+        return document;
     }
 
     // A parse error ends "at line L, col C", counted from the diagram's keyword. Moves that past what was

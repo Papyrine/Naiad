@@ -6,9 +6,6 @@ public class UseCaseModel : DiagramBase
     public UseCaseModel() =>
         Direction = Direction.LeftToRight;
 
-    public string? AccessibilityTitle { get; set; }
-    public string? AccessibilityDescription { get; set; }
-
     public List<UseCaseActor> Actors { get; } = [];
     public List<UseCase> UseCases { get; } = [];
     public List<SystemBoundary> Boundaries { get; } = [];

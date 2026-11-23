@@ -236,7 +236,8 @@ class StateParser : IDiagramParser<StateModel>
         var ignoredDirective =
             CommonParsers.InlineWhitespace
                 .SkipAnd(ignoredKeyword.WhenFollowedBy(keywordBoundary))
-                .SkipAnd(restOfLineText)
+                .And(restOfLineText)
+                .Noting(DiagramParseContext.Accessibility)
                 .SkipAnd(CommonParsers.LineEnd);
 
         // `accDescr { ... }` may run over several lines.
@@ -245,7 +246,7 @@ class StateParser : IDiagramParser<StateModel>
                 .SkipAnd(Literals.Text("accDescr"))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(Literals.Char('{'))
-                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0).Noting(DiagramParseContext.AccessibilityBlock))
                 .SkipAnd(Literals.Char('}'))
                 .SkipAnd(endOfLine);
 

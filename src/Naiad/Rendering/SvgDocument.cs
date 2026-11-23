@@ -16,6 +16,16 @@ public class SvgDocument
     public string? AriaRoledescription { get; set; }
     public string? FontAwesomeImport { get; set; } = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css\");";
 
+    /// <summary>The diagram's <c>accTitle</c>, written as the <c>&lt;title&gt;</c> the root is labelled by.</summary>
+    public string? AccessibilityTitle { get; set; }
+
+    /// <summary>The diagram's <c>accDescr</c>, written as the <c>&lt;desc&gt;</c> the root is described by.</summary>
+    public string? AccessibilityDescription { get; set; }
+
+    string TitleId => $"chart-title-{Id}";
+
+    string DescriptionId => $"chart-desc-{Id}";
+
     public void ToXml(StringBuilder builder)
     {
         // Build mermaid-compatible SVG root element (attribute order matches Mermaid exactly)
@@ -36,7 +46,38 @@ public class SvgDocument
             builder.AppendAttribute("aria-roledescription", AriaRoledescription);
         }
 
+        // As Mermaid writes them: the root names its <title> and <desc>, which come before anything else.
+        var hasDescription = !string.IsNullOrEmpty(AccessibilityDescription);
+        if (hasDescription)
+        {
+            builder.AppendAttribute("aria-describedby", DescriptionId);
+        }
+
+        var hasTitle = !string.IsNullOrEmpty(AccessibilityTitle);
+        if (hasTitle)
+        {
+            builder.AppendAttribute("aria-labelledby", TitleId);
+        }
+
         builder.Append('>');
+
+        if (hasTitle)
+        {
+            builder.Append("<title");
+            builder.AppendAttribute("id", TitleId);
+            builder.Append('>');
+            SvgXml.AppendText(builder, AccessibilityTitle!);
+            builder.Append("</title>");
+        }
+
+        if (hasDescription)
+        {
+            builder.Append("<desc");
+            builder.AppendAttribute("id", DescriptionId);
+            builder.Append('>');
+            SvgXml.AppendText(builder, AccessibilityDescription!);
+            builder.Append("</desc>");
+        }
 
         // Font Awesome import
         if (!string.IsNullOrEmpty(FontAwesomeImport))

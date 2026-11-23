@@ -10,7 +10,7 @@ class TreeViewParser : IDiagramParser<TreeViewModel>
         var restOfLine = Literals.NoneOf("\r\n", minSize: 0);
 
         // The title and the accessibility title and description may only come before the first node, as in
-        // Mermaid's grammar. The accessibility text is accepted and dropped, as other diagrams here do.
+        // Mermaid's grammar. The accessibility text is not drawn: it becomes the SVG's <title> and <desc>.
         var title =
             CommonParsers.InlineWhitespace
                 .SkipAnd(TextIgnoreCase("title"))
@@ -23,7 +23,7 @@ class TreeViewParser : IDiagramParser<TreeViewModel>
                 .SkipAnd(Literals.Text("accTitle"))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(Literals.Char(':'))
-                .SkipAnd(restOfLine)
+                .SkipAnd(restOfLine.Noting(DiagramParseContext.AccessibilityTitleLine))
                 .AndSkip(CommonParsers.LineEnd)
                 .Then<Line?>(static _ => null);
 
@@ -32,11 +32,11 @@ class TreeViewParser : IDiagramParser<TreeViewModel>
                 .SkipAnd(Literals.Text("accDescr"))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(
-                    Literals.Char(':').SkipAnd(restOfLine)
+                    Literals.Char(':').SkipAnd(restOfLine.Noting(DiagramParseContext.AccessibilityDescriptionLine))
                         .Or(
                             // `accDescr { ... }` may run over several lines.
                             Literals.Char('{')
-                                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                                .SkipAnd(Literals.NoneOf("}", minSize: 0).Noting(DiagramParseContext.AccessibilityBlock))
                                 .AndSkip(Literals.Char('}'))
                                 .AndSkip(CommonParsers.InlineWhitespace)))
                 .AndSkip(CommonParsers.LineEnd)

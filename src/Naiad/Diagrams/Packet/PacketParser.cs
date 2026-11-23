@@ -59,7 +59,8 @@ class PacketParser : IDiagramParser<PacketModel>
                 .SkipAnd(
                     OneOf(Literals.Text("accTitle"), Literals.Text("accDescr"))
                         .WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1)))
-                .SkipAnd(Literals.NoneOf("\r\n", minSize: 0))
+                .And(Literals.NoneOf("\r\n", minSize: 0))
+                .Noting(DiagramParseContext.Accessibility)
                 .SkipAnd(CommonParsers.LineEnd);
 
         // `accDescr { ... }` may run over several lines.
@@ -68,7 +69,7 @@ class PacketParser : IDiagramParser<PacketModel>
                 .SkipAnd(Literals.Text("accDescr"))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(Literals.Char('{'))
-                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0).Noting(DiagramParseContext.AccessibilityBlock))
                 .SkipAnd(Literals.Char('}'))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(CommonParsers.LineEnd);

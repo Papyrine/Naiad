@@ -113,7 +113,7 @@ static class RailroadGrammar
             Literals.Text("accTitle")
                 .SkipAnd(Literals.AnyOf(" \t", minSize: 0))
                 .SkipAnd(Literals.Char(':'))
-                .SkipAnd(restOfLineBeforeComment)
+                .SkipAnd(restOfLineBeforeComment.Noting(DiagramParseContext.AccessibilityTitleLine))
                 .Then<string?>(static _ => null);
 
         var accessibilityDescription =
@@ -121,11 +121,11 @@ static class RailroadGrammar
                 .SkipAnd(
                     Literals.AnyOf(" \t", minSize: 0)
                         .SkipAnd(Literals.Char(':'))
-                        .SkipAnd(restOfLineBeforeComment)
+                        .SkipAnd(restOfLineBeforeComment.Noting(DiagramParseContext.AccessibilityDescriptionLine))
                         .Or(
                             Literals.AnyOf(" \t\r\n", minSize: 0)
                                 .SkipAnd(Literals.Char('{'))
-                                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                                .SkipAnd(Literals.NoneOf("}", minSize: 0).Noting(DiagramParseContext.AccessibilityBlock))
                                 .AndSkip(Literals.Char('}'))))
                 .Then<string?>(static _ => null);
 

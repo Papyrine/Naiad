@@ -302,7 +302,8 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
         var ignoredDirective =
             CommonParsers.InlineWhitespace
                 .SkipAnd(ignoredKeyword.WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1)))
-                .SkipAnd(restOfLineText)
+                .And(restOfLineText)
+                .Noting(DiagramParseContext.Accessibility)
                 .SkipAnd(CommonParsers.LineEnd);
 
         // `accDescr { ... }` may run over several lines.
@@ -311,7 +312,7 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                 .SkipAnd(Literals.Text("accDescr"))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(Literals.Char('{'))
-                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0).Noting(DiagramParseContext.AccessibilityBlock))
                 .SkipAnd(Literals.Char('}'))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(CommonParsers.LineEnd);

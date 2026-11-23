@@ -57,14 +57,16 @@ class CynefinParser : IDiagramParser<CynefinModel>
                     Literals.Text("accDescr")
                         .AndSkip(CommonParsers.InlineWhitespace)
                         .AndSkip(Literals.Char('{'))
-                        .AndSkip(Literals.NoneOf("}", minSize: 0))
+                        .AndSkip(Literals.NoneOf("}", minSize: 0).Noting(DiagramParseContext.AccessibilityBlock))
                         .AndSkip(Literals.Char('}'))
                         .AndSkip(endOfLine)
                         .Or(
                             Literals.Text("accTitle").Or(Literals.Text("accDescr"))
                                 .AndSkip(CommonParsers.InlineWhitespace)
                                 .AndSkip(Literals.Char(':'))
-                                .AndSkip(restOfLine)
+                                .And(restOfLine)
+                                .Noting(DiagramParseContext.Accessibility)
+                                .Then(static _ => _.Item1)
                                 .AndSkip(CommonParsers.LineEnd)))
                 .Then<object?>(static _ => null);
 

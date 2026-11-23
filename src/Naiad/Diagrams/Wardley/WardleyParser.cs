@@ -59,27 +59,26 @@ class WardleyParser : IDiagramParser<WardleyModel>
                 .AndSkip(CommonParsers.LineEnd)
                 .Then<IContent?>(static _ => new TitleItem(_));
 
-        // The accessible title and description have nowhere to go in the rendered map, so they are read and
-        // dropped.
+        // The accessible title and description are not drawn: they become the SVG's <title> and <desc>.
         var accessibility =
             OneOf(
                     whitespace
                         .SkipAnd(TextIgnoreCase("accTitle"))
                         .SkipAnd(whitespace)
                         .SkipAnd(Literals.Char(':'))
-                        .SkipAnd(restOfLine)
+                        .SkipAnd(restOfLine.Noting(DiagramParseContext.AccessibilityTitleLine))
                         .SkipAnd(CommonParsers.LineEnd),
                     whitespace
                         .SkipAnd(TextIgnoreCase("accDescr"))
                         .SkipAnd(whitespace)
                         .SkipAnd(Literals.Char(':'))
-                        .SkipAnd(restOfLine)
+                        .SkipAnd(restOfLine.Noting(DiagramParseContext.AccessibilityDescriptionLine))
                         .SkipAnd(CommonParsers.LineEnd),
                     whitespace
                         .SkipAnd(TextIgnoreCase("accDescr"))
                         .SkipAnd(whitespace)
                         .SkipAnd(Literals.Char('{'))
-                        .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                        .SkipAnd(Literals.NoneOf("}", minSize: 0).Noting(DiagramParseContext.AccessibilityBlock))
                         .SkipAnd(Literals.Char('}'))
                         .SkipAnd(lineEnd))
                 .Then<IContent?>(static _ => null);
