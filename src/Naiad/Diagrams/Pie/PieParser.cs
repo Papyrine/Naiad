@@ -34,7 +34,8 @@ class PieParser : IDiagramParser<PieModel>
                 .SkipAnd(
                     OneOf(Literals.Text("accTitle"), Literals.Text("accDescr"))
                         .WhenFollowedBy(Literals.AnyOf(" \t:", minSize: 1, maxSize: 1)))
-                .SkipAnd(restOfLine)
+                .And(restOfLine)
+                .Noting(DiagramParseContext.Accessibility)
                 .SkipAnd(CommonParsers.LineEnd);
 
         // `accDescr { ... }` may run over several lines.
@@ -43,7 +44,7 @@ class PieParser : IDiagramParser<PieModel>
                 .SkipAnd(Literals.Text("accDescr"))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(Literals.Char('{'))
-                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                .SkipAnd(Literals.NoneOf("}", minSize: 0).Noting(DiagramParseContext.AccessibilityBlock))
                 .SkipAnd(Literals.Char('}'))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(CommonParsers.LineEnd);

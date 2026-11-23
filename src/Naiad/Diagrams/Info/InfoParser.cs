@@ -34,14 +34,13 @@ class InfoParser : IDiagramParser<InfoModel>
                 .AndSkip(CommonParsers.LineEnd)
                 .Then<string?>(static _ => _.HasValue ? _.Value.Span.Trim().ToString() : "");
 
-        // The accessibility text has nothing to label in a drawing of one line of text, so it is accepted
-        // and dropped, as other diagrams here do.
+        // The accessibility text is not drawn: it becomes the SVG's <title> and <desc>, as in other diagrams.
         var accessibilityTitle =
             CommonParsers.InlineWhitespace
                 .SkipAnd(Literals.Text("accTitle"))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(Literals.Char(':'))
-                .SkipAnd(restOfLine)
+                .SkipAnd(restOfLine.Noting(DiagramParseContext.AccessibilityTitleLine))
                 .AndSkip(CommonParsers.LineEnd)
                 .Then<string?>(static _ => null);
 
@@ -50,11 +49,11 @@ class InfoParser : IDiagramParser<InfoModel>
                 .SkipAnd(Literals.Text("accDescr"))
                 .SkipAnd(CommonParsers.InlineWhitespace)
                 .SkipAnd(
-                    Literals.Char(':').SkipAnd(restOfLine)
+                    Literals.Char(':').SkipAnd(restOfLine.Noting(DiagramParseContext.AccessibilityDescriptionLine))
                         .Or(
                             // `accDescr { ... }` may run over several lines.
                             Literals.Char('{')
-                                .SkipAnd(Literals.NoneOf("}", minSize: 0))
+                                .SkipAnd(Literals.NoneOf("}", minSize: 0).Noting(DiagramParseContext.AccessibilityBlock))
                                 .AndSkip(Literals.Char('}'))
                                 .AndSkip(CommonParsers.InlineWhitespace)))
                 .AndSkip(CommonParsers.LineEnd)

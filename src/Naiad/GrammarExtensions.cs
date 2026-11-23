@@ -11,7 +11,11 @@ static class GrammarExtensions
         {
             if (parser.Parse(context, ref result))
             {
-                return new(result.Value);
+                // A grammar that keeps them in its own statements has set them already.
+                var model = result.Value;
+                model.AccessibilityTitle ??= context.AccessibilityTitle;
+                model.AccessibilityDescription ??= context.AccessibilityDescription;
+                return new(model);
             }
         }
         catch (ParseException)
@@ -76,6 +80,12 @@ static class GrammarExtensions
 
     internal static Parser<T> Assert<T>(this Parser<T> parser, Func<T, bool> predicate, Func<T, string> message) =>
         new AssertParser<T>(parser, predicate, message);
+
+    // Hands what a rule matched to `note`, with the context it was matched in, and passes it on unchanged.
+    // For what a statement says about the diagram as a whole rather than as part of what the grammar
+    // builds, such as its accessibility title, which every diagram's grammar would otherwise have to carry.
+    internal static Parser<T> Noting<T>(this Parser<T> parser, Action<ParseContext, T> note) =>
+        new NotingParser<T>(parser, note);
 
     // The rest of the line up to where a rule first matches, which is left unread. Fails if the line ends
     // before the rule matches. Parlot's AnyCharBefore reads on across lines.
@@ -187,6 +197,21 @@ static class GrammarExtensions
 
             DiagramParseContext.Failed(context, cursor.Offset);
             result.Set(start, cursor.Offset, items ?? (IReadOnlyList<T>)[]);
+            return true;
+        }
+    }
+
+    sealed class NotingParser<T>(Parser<T> parser, Action<ParseContext, T> note) :
+        Parser<T>
+    {
+        public override bool Parse(ParseContext context, ref ParseResult<T> result)
+        {
+            if (!parser.Parse(context, ref result))
+            {
+                return false;
+            }
+
+            note(context, result.Value);
             return true;
         }
     }

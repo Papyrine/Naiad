@@ -8,6 +8,85 @@ sealed class DiagramParseContext(string input) :
     int furthest;
     string? reason;
 
+    // The diagram's accTitle and accDescr, which most grammars read only to step over. They are noted here
+    // as they are read, and ParseDiagram hands them to the model. The last of each wins, as in Mermaid.
+    internal string? AccessibilityTitle { get; private set; }
+    internal string? AccessibilityDescription { get; private set; }
+
+    // The shapes the grammars read these statements in, for Noting.
+    internal static void Accessibility(ParseContext context, (string Keyword, TextSpan Text) line) =>
+        Accessibility(context, line.Keyword, line.Text.Span);
+
+    internal static void Accessibility(ParseContext context, (string Keyword, string Text) line) =>
+        Accessibility(context, line.Keyword, line.Text);
+
+    internal static void AccessibilityTitleLine(ParseContext context, TextSpan text) =>
+        Accessibility(context, "accTitle", text.Span);
+
+    internal static void AccessibilityDescriptionLine(ParseContext context, TextSpan text) =>
+        Accessibility(context, "accDescr", text.Span);
+
+    internal static void AccessibilityTitleLine(ParseContext context, string text) =>
+        Accessibility(context, "accTitle", text);
+
+    internal static void AccessibilityDescriptionLine(ParseContext context, string text) =>
+        Accessibility(context, "accDescr", text);
+
+    internal static void AccessibilityBlock(ParseContext context, TextSpan body) =>
+        AccessibilityBlock(context, body.Span);
+
+    internal static void AccessibilityBlock(ParseContext context, string body) =>
+        AccessibilityBlock(context, body.AsSpan());
+
+    // Notes `accTitle: x` or `accDescr: x`, given its keyword and the rest of its line, for whichever context
+    // is in use. A rule that steps over other keywords too passes them through here, and they are ignored.
+    internal static void Accessibility(ParseContext context, string keyword, CharSpan rest)
+    {
+        if (context is not DiagramParseContext diagram)
+        {
+            return;
+        }
+
+        var text = rest.Trim();
+        if (text is [':', ..])
+        {
+            text = text[1..].TrimStart();
+        }
+
+        if (keyword.Equals("accTitle", StringComparison.OrdinalIgnoreCase))
+        {
+            diagram.AccessibilityTitle = text.ToString();
+            return;
+        }
+
+        if (keyword.Equals("accDescr", StringComparison.OrdinalIgnoreCase))
+        {
+            diagram.AccessibilityDescription = text.ToString();
+        }
+    }
+
+    // Notes the body of `accDescr { ... }`. As Mermaid reads it, each line loses its indentation, and the
+    // blank lines go.
+    internal static void AccessibilityBlock(ParseContext context, CharSpan body)
+    {
+        if (context is not DiagramParseContext diagram)
+        {
+            return;
+        }
+
+        var lines = new List<string>();
+        foreach (var line in body.EnumerateLines())
+        {
+            var trimmed = line.Trim();
+            if (trimmed.Length > 0)
+            {
+                lines.Add(trimmed.ToString());
+            }
+        }
+
+        diagram.AccessibilityDescription = string.Join('\n', lines);
+    }
+
     // Notes a place a rule gave up on behalf of whichever context is in use. Only a diagram's own context
     // keeps it: the shared parsers also run under a plain ParseContext.
     internal static void Failed(ParseContext context, int offset, string? why = null)

@@ -8,9 +8,6 @@ namespace Naiad.Diagrams.AgentFlow;
 /// </summary>
 public class AgentFlowModel : GraphDiagramBase
 {
-    public string? AccessibilityTitle { get; set; }
-    public string? AccessibilityDescription { get; set; }
-
     public IEnumerable<AgentFlowNode> AgentNodes => Nodes.OfType<AgentFlowNode>();
     public IEnumerable<AgentFlowEdge> AgentEdges => Edges.OfType<AgentFlowEdge>();
 

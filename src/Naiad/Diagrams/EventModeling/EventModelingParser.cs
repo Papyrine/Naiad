@@ -203,13 +203,12 @@ class EventModelingParser : IDiagramParser<EventModelingModel>
                 .AndSkip(CommonParsers.LineEnd)
                 .Then(static object (_) => new TitleStatement(_));
 
-        // Accessibility titles and descriptions are accepted and left out: an SVG of this diagram has nowhere
-        // they are shown.
+        // Accessibility titles and descriptions are not drawn: they become the SVG's <title> and <desc>.
         var accessibility =
             OneOf(
-                    TextIgnoreCase("accTitle").SkipAnd(optionalSpace).SkipAnd(Literals.Char(':')).SkipAnd(Literals.NoneOf("\r\n", minSize: 0)),
-                    TextIgnoreCase("accDescr").SkipAnd(optionalSpace).SkipAnd(Literals.Char(':')).SkipAnd(Literals.NoneOf("\r\n", minSize: 0)),
-                    TextIgnoreCase("accDescr").SkipAnd(anySpace).SkipAnd(Literals.Char('{')).SkipAnd(Literals.NoneOf("}", minSize: 0)).AndSkip(Literals.Char('}')))
+                    TextIgnoreCase("accTitle").SkipAnd(optionalSpace).SkipAnd(Literals.Char(':')).SkipAnd(Literals.NoneOf("\r\n", minSize: 0).Noting(DiagramParseContext.AccessibilityTitleLine)),
+                    TextIgnoreCase("accDescr").SkipAnd(optionalSpace).SkipAnd(Literals.Char(':')).SkipAnd(Literals.NoneOf("\r\n", minSize: 0).Noting(DiagramParseContext.AccessibilityDescriptionLine)),
+                    TextIgnoreCase("accDescr").SkipAnd(anySpace).SkipAnd(Literals.Char('{')).SkipAnd(Literals.NoneOf("}", minSize: 0).Noting(DiagramParseContext.AccessibilityBlock)).AndSkip(Literals.Char('}')))
                 .AndSkip(lineEnd)
                 .Then(static object? (_) => null);
 

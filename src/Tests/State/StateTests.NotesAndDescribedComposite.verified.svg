@@ -4,7 +4,14 @@
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 447.6 590"
   style="max-width: 447.6px;"
-  role="graphics-document document">
+  role="graphics-document document"
+  aria-describedby="chart-desc-naiad"
+  aria-labelledby="chart-title-naiad">
+  <title
+    id="chart-title-naiad">Order handling</title>
+  <desc
+    id="chart-desc-naiad">How an order moves
+through the system</desc>
   <style
     xmlns="http://www.w3.org/1999/xhtml">@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");</style>
   <defs>
