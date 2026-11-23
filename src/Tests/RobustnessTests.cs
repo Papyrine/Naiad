@@ -141,6 +141,33 @@ public class RobustnessTests
         }
     }
 
+    // Mindmap and treemap nest by indentation, and their layout, drawing and totals recursed into each
+    // node's children, as deep as the indentation went.
+    [Test]
+    [Arguments("mindmap", "n{0}", "")]
+    [Arguments("treemap-beta", "\"n{0}\"", ": 1")]
+    [Arguments("treeView-beta", "\"n{0}\"", "")]
+    public async Task DeepIndentation_DoesNotOverflowTheStack(string header, string node, string leafSuffix)
+    {
+        const int depth = 1000;
+        var input = new StringBuilder(header).Append('\n');
+        for (var i = 0; i < depth; i++)
+        {
+            input.Append(' ', i + 2).AppendFormat(CultureInfo.InvariantCulture, node, i);
+            if (i == depth - 1)
+            {
+                input.Append(leafSuffix);
+            }
+
+            input.Append('\n');
+        }
+
+        var (svg, failure) = RenderOnSmallStack(input.ToString());
+
+        await Assert.That(failure).IsNull();
+        await Assert.That(svg).IsNotNull();
+    }
+
     // A deliberately small stack makes a recursive walk's depth cheap to reach.
     static (string? Svg, Exception? Failure) RenderOnSmallStack(string input)
     {

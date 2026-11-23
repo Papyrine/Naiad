@@ -91,6 +91,16 @@ sealed class MermaidTheme
         }
     }
 
+    // Characters that let a value escape the one CSS value it is written as in the diagram's stylesheet:
+    // `;` ends the declaration, `{` and `}` open and close rules (which, in an SVG inlined in a page, style
+    // the whole page), and `<` and `>` close the <style> element and start markup.
+    static readonly SearchValues<char> unsafeValueChars = SearchValues.Create("<>{};");
+
+    // A themeVariables value holding one of those is ignored, as Mermaid ignores a config value holding `<`
+    // or `>`, and the theme's own value stands.
+    static bool IsSafeValue(string value) =>
+        !value.AsSpan().ContainsAny(unsafeValueChars);
+
     string MkBorder(string color)
     {
         if (darkMode)
@@ -130,7 +140,8 @@ sealed class MermaidTheme
                 _ => null
             };
 
-            if (text2 is not null)
+            if (text2 is not null &&
+                IsSafeValue(text2))
             {
                 given.Add((key, text2));
             }
