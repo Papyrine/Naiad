@@ -514,17 +514,17 @@ public partial class InjectionSweepTests
             """);
         yield return Case(
             "Quadrant",
-            $$"""
+            $"""
             quadrantChart
-                title {{P(1)}}
-                x-axis {{P(2)}} --> {{P(3)}}
-                y-axis "{{P(4)}}" --> "{{P(5)}}"
-                quadrant-1 {{P(6)}}
-                quadrant-2 {{P(7)}}
-                quadrant-3 {{P(8)}}
-                quadrant-4 {{P(9)}}
-                {{P(10)}}: [0.3, 0.6]
-                {{P(11)}}: [0.7, 0.2]
+                title {P(1)}
+                x-axis {P(2)} --> {P(3)}
+                y-axis "{P(4)}" --> "{P(5)}"
+                quadrant-1 {P(6)}
+                quadrant-2 {P(7)}
+                quadrant-3 {P(8)}
+                quadrant-4 {P(9)}
+                {P(10)}: [0.3, 0.6]
+                {P(11)}: [0.7, 0.2]
             """);
         yield return Case(
             "XYChart",
