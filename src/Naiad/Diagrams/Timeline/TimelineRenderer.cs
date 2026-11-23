@@ -98,8 +98,7 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
         var titleFontSize = options.FontSize * 2.0;
         var titleHeight = string.IsNullOrEmpty(model.Title) ? 0 : titleFontSize * 1.5;
 
-        var headerY = titleHeight;
-        var periodY = headerY + (hasSections ? headerHeight + sectionGap : 0);
+        var periodY = titleHeight + (hasSections ? headerHeight + sectionGap : 0);
         var activityLineY = periodY + periodHeight + activityLineGap;
         var eventY = periodY + eventDrop;
         var connectorTop = periodY + periodHeight;
@@ -140,7 +139,7 @@ public class TimelineRenderer : IDiagramRenderer<TimelineModel>
                 DrawNode(
                     builder,
                     SlotX(slot),
-                    headerY,
+                    titleHeight,
                     (slots - 1) * nodePitch + nodeWidth,
                     headerHeight,
                     WrapLines(section.Name, options),

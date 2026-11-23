@@ -260,7 +260,7 @@ class ZenUMLParser : IDiagramParser<SequenceModel>
     /// </summary>
     sealed class Frame(List<SequenceElement> elements, string current, string? caller)
     {
-        public List<SequenceElement> Elements { get; set; } = elements;
+        public List<SequenceElement> Elements { get; } = elements;
         public string Current { get; } = current;
         public string? Caller { get; } = caller;
 

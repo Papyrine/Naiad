@@ -14,8 +14,7 @@ public static class ShareLink
     /// <summary>The fragment (without <c>#</c>) for <paramref name="source"/>, or null when it is empty or too large.</summary>
     public static string? Encode(string source)
     {
-        if (source.Length == 0 ||
-            source.Length > maxSourceLength)
+        if (source.Length is 0 or > maxSourceLength)
         {
             return null;
         }

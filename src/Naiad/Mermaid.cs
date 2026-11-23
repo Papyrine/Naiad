@@ -13,7 +13,7 @@ public static class Mermaid
     /// <paramref name="cancellationToken"/> is cancelled. The render looks at the token between its stages and
     /// as the graph layout works, so it stops soon after, not at once.
     /// </summary>
-    public static string Render(string input, RenderOptions? options, CancellationToken cancellationToken)
+    public static string Render(string input, RenderOptions? options, Cancel cancellationToken)
     {
         options ??= RenderOptions.Default;
         return ToXml(RenderToSvgDocument(input, options, cancellationToken), options);

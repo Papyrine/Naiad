@@ -1,4 +1,4 @@
-partial class UseCaseParser : IDiagramParser<UseCaseModel>
+class UseCaseParser : IDiagramParser<UseCaseModel>
 {
     static Parser<UseCaseModel> parser;
 

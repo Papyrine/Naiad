@@ -1845,17 +1845,17 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var towardCorridor = Math.Sign(corridorX - startX);
         var towardTarget = endY < startY ? -1 : 1;
 
-        double x0 = startX, y0 = startY;
+        double y0 = startY;
         double x1 = startX + towardCorridor * radius, y1 = startY;
-        double x2 = corridorX, y2 = startY + towardTarget * radius;
-        double x3 = corridorX, y3 = startY + towardTarget * radius * 2;
+        double y2 = startY + towardTarget * radius;
+        double y3 = startY + towardTarget * radius * 2;
 
         const int samples = 24;
         for (var i = 0; i <= samples; i++)
         {
             var t = (double) i / samples;
             var u = 1 - t;
-            var x = u * u * u * x0 + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t * t * t * x3;
+            var x = u * u * u * startX + 3 * u * u * t * x1 + 3 * u * t * t * corridorX + t * t * t * corridorX;
             var y = u * u * u * y0 + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t * t * t * y3;
 
             foreach (var blocker in blockers)
