@@ -1,5 +1,27 @@
 static class NetworkSimplex
 {
+    // Set by a test to rank a whole layout through the copies of the graph dagre ranks, so that it can be
+    // compared with the same layout ranked over arrays. Per thread, and never set otherwise.
+    [ThreadStatic]
+    internal static bool UseGraphCopies;
+
+    /// <summary>
+    /// Ranks the nodes of a layout graph that are not subgraphs: <see cref="Run"/> over the graph's
+    /// non-compound copy, which is what dagre does. <see cref="IndexedNetworkSimplex"/> comes to the same
+    /// ranks without the copy, or the second copy <see cref="Run"/> takes to merge parallel edges, and a
+    /// graph it declines goes through the copies.
+    /// </summary>
+    internal static void RunOnLayoutGraph(Graph graph)
+    {
+        if (!UseGraphCopies &&
+            IndexedNetworkSimplex.TryRun(graph))
+        {
+            return;
+        }
+
+        Run(Util.AsNonCompoundGraph(graph));
+    }
+
     /*
      * The network simplex algorithm assigns ranks to each node in the input graph
      * and iteratively improves the ranking to reduce the length of edges.
