@@ -1,0 +1,5 @@
+# The layout problems each snapshot test's diagram has today, as `diagram check count`, counted by
+# LayoutLintTests. A count may only go down: after a layout fix lowers one, rewrite this file by
+# running LayoutLintTests with LAYOUT_LINT_UPDATE=1.
+
+FlowchartTests.ComplexPipeline edge-through-cluster 5
