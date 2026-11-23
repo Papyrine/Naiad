@@ -26,10 +26,10 @@ public partial class InjectionSweepTests
     public static IEnumerable<(string Name, string Input)> HtmlOnlyDiagrams()
     {
         yield return ("Mindmap icon",
-            $$"""
+            $"""
             mindmap
                 root
-                    {{P(1)}} ::icon(fa {{P(2)}})
+                    {P(1)} ::icon(fa {P(2)})
             """);
     }
 
@@ -268,13 +268,15 @@ public partial class InjectionSweepTests
                 SystemDb(sdb, "{{P(9)}}", "{{P(10)}}")
                 RelIndex(1, q, sdb, "{{P(11)}}", "{{P(12)}}")
             """);
-        yield return Case("Architecture", $$"""
+        yield return Case(
+            "Architecture",
+            $"""
             architecture-beta
-                group g1(cloud)[{{P(1)}}]
-                group g2(database)[{{P(2)}}] in g1
-                service s1(server)[{{P(3)}}] in g1
-                service s2(disk)[{{P(4)}}] in g2
-                s1:R -[{{P(5)}}]- L:s2
+                group g1(cloud)[{P(1)}]
+                group g2(database)[{P(2)}] in g1
+                service s1(server)[{P(3)}] in g1
+                service s2(disk)[{P(4)}] in g2
+                s1:R -[{P(5)}]- L:s2
             """);
         yield return Case("UseCase", $$"""
             ---
@@ -317,51 +319,53 @@ public partial class InjectionSweepTests
                 }
             """);
 
-        yield return Case("Sequence", $$"""
+        yield return Case(
+            "Sequence",
+            $"""
             sequenceDiagram
-                title {{P(1)}}
-                box Aqua {{P(2)}}
-                participant A as {{P(3)}}
-                actor B as {{P(4)}}
+                title {P(1)}
+                box Aqua {P(2)}
+                participant A as {P(3)}
+                actor B as {P(4)}
                 end
-                box {{P(5)}}
-                participant C as {{P(6)}}
+                box {P(5)}
+                participant C as {P(6)}
                 end
-                A->>B: {{P(7)}}
-                B-->>A: {{P(8)}}
-                A->>A: {{P(9)}}
-                Note right of A: {{P(10)}}
-                Note over A,B: {{P(11)}}
-                Note left of B: {{P(12)}}
-                loop {{P(13)}}
-                    A->>C: {{P(14)}}
+                A->>B: {P(7)}
+                B-->>A: {P(8)}
+                A->>A: {P(9)}
+                Note right of A: {P(10)}
+                Note over A,B: {P(11)}
+                Note left of B: {P(12)}
+                loop {P(13)}
+                    A->>C: {P(14)}
                 end
-                alt {{P(15)}}
+                alt {P(15)}
                     A->>B: x
-                else {{P(16)}}
+                else {P(16)}
                     B->>A: x
                 end
-                opt {{P(17)}}
+                opt {P(17)}
                     A->>B: x
                 end
-                par {{P(18)}}
+                par {P(18)}
                     A->>B: x
-                and {{P(19)}}
+                and {P(19)}
                     B->>C: x
                 end
-                critical {{P(20)}}
+                critical {P(20)}
                     A->>B: x
-                option {{P(21)}}
+                option {P(21)}
                     B->>A: x
                 end
-                break {{P(22)}}
+                break {P(22)}
                     A->>B: x
                 end
-                rect {{S(23)}}
+                rect {S(23)}
                     A->>B: x
                 end
-                create participant D as {{P(24)}}
-                A->>D: {{P(25)}}
+                create participant D as {P(24)}
+                A->>D: {P(25)}
             """);
         yield return Case("ZenUML", $$"""
             zenuml
@@ -406,66 +410,76 @@ public partial class InjectionSweepTests
                     A.x()
                 }
             """);
-        yield return Case("Gantt", $$"""
+        yield return Case(
+            "Gantt",
+            $"""
             gantt
-                title {{P(1)}}
+                title {P(1)}
                 dateFormat YYYY-MM-DD
-                section {{P(2)}}
-                {{P(3)}} :a1, 2024-01-01, 3d
-                {{P(4)}} :milestone, m1, 2024-01-04, 0d
-                {{P(5)}} :done, after a1, 2d
-                section {{P(6)}}
-                {{P(7)}} :crit, active, 2024-01-02, 2d
+                section {P(2)}
+                {P(3)} :a1, 2024-01-01, 3d
+                {P(4)} :milestone, m1, 2024-01-04, 0d
+                {P(5)} :done, after a1, 2d
+                section {P(6)}
+                {P(7)} :crit, active, 2024-01-02, 2d
             """);
-        yield return Case("GanttCompact", $$"""
+        yield return Case(
+            "GanttCompact",
+            $"""
             ---
-            title: {{P(1)}}
+            title: {P(1)}
             displayMode: compact
             ---
             gantt
                 dateFormat YYYY-MM-DD
-                section {{P(2)}}
-                {{P(3)}} :a1, 2024-01-01, 3d
-                {{P(4)}} :a2, 2024-01-05, 2d
-                {{P(5)}} :milestone, m1, 2024-01-08, 0d
+                section {P(2)}
+                {P(3)} :a1, 2024-01-01, 3d
+                {P(4)} :a2, 2024-01-05, 2d
+                {P(5)} :milestone, m1, 2024-01-08, 0d
             """);
-        yield return Case("Timeline", $$"""
+        yield return Case(
+            "Timeline",
+            $"""
             timeline
-                title {{P(1)}}
-                section {{P(2)}}
-                    {{P(3)}} : {{P(4)}} : {{P(5)}}
-                             : {{P(6)}}
-                section {{P(7)}}
-                    {{P(8)}} : {{P(9)}}
+                title {P(1)}
+                section {P(2)}
+                    {P(3)} : {P(4)} : {P(5)}
+                             : {P(6)}
+                section {P(7)}
+                    {P(8)} : {P(9)}
             """);
-        yield return Case("UserJourney", $$"""
+        yield return Case(
+            "UserJourney",
+            $"""
             journey
-                title {{P(1)}}
-                section {{P(2)}}
-                    {{P(3)}}: 5: {{P(4)}}, {{P(5)}}
-                    {{P(6)}}: 3: {{P(4)}}
-                section {{P(7)}}
-                    {{P(8)}}: 1
+                title {P(1)}
+                section {P(2)}
+                    {P(3)}: 5: {P(4)}, {P(5)}
+                    {P(6)}: 3: {P(4)}
+                section {P(7)}
+                    {P(8)}: 1
             """);
-        yield return Case("GitGraph", $$"""
+        yield return Case(
+            "GitGraph",
+            $"""
             ---
-            title: {{P(1)}}
+            title: {P(1)}
             config:
               gitGraph:
-                mainBranchName: {{P(2)}}
+                mainBranchName: {P(2)}
             ---
             gitGraph
-                commit id: "{{P(3)}}" tag: "{{P(4)}}"
+                commit id: "{P(3)}" tag: "{P(4)}"
                 branch develop
                 checkout develop
-                commit id: '{{P(5)}}' type: HIGHLIGHT
-                commit tag: "{{P(6)}}"
+                commit id: '{P(5)}' type: HIGHLIGHT
+                commit tag: "{P(6)}"
                 branch feature
                 checkout feature
-                commit id: "{{P(7)}}"
+                commit id: "{P(7)}"
                 checkout develop
-                merge feature id: "{{P(8)}}" tag: "{{P(9)}}"
-                cherry-pick id: "{{P(3)}}" tag: "{{P(10)}}"
+                merge feature id: "{P(8)}" tag: "{P(9)}"
+                cherry-pick id: "{P(3)}" tag: "{P(10)}"
             """);
         yield return Case("GitGraphVertical", $$"""
             %%{init: {"gitGraph": {"mainBranchName": "{{P(1)}}", "rotateCommitLabel": false} } }%%
@@ -491,12 +505,16 @@ public partial class InjectionSweepTests
                 {{P(7)}}
                     t2[{{P(8)}}]@{ assigned: "{{P(9)}}" }
             """);
-        yield return Case("Pie", $$"""
-            pie showData title {{P(1)}}
-                "{{P(2)}}" : 40
-                '{{P(3)}}' : 30
+        yield return Case(
+            "Pie",
+            $"""
+            pie showData title {P(1)}
+                "{P(2)}" : 40
+                '{P(3)}' : 30
             """);
-        yield return Case("Quadrant", $$"""
+        yield return Case(
+            "Quadrant",
+            $$"""
             quadrantChart
                 title {{P(1)}}
                 x-axis {{P(2)}} --> {{P(3)}}
@@ -508,27 +526,31 @@ public partial class InjectionSweepTests
                 {{P(10)}}: [0.3, 0.6]
                 {{P(11)}}: [0.7, 0.2]
             """);
-        yield return Case("XYChart", $$"""
+        yield return Case(
+            "XYChart",
+            $"""
             ---
             config:
               themeVariables:
                 xyChart:
-                  plotColorPalette: {{S(8)}}
+                  plotColorPalette: {S(8)}
             ---
             xychart-beta
-                title "{{P(1)}}"
-                x-axis "{{P(2)}}" [{{P(3)}}, "{{P(4)}}"]
-                y-axis "{{P(5)}}" 0 --> 100
-                bar "{{P(6)}}" [10, 20]
-                line "{{P(7)}}" [30, 40]
+                title "{P(1)}"
+                x-axis "{P(2)}" [{P(3)}, "{P(4)}"]
+                y-axis "{P(5)}" 0 --> 100
+                bar "{P(6)}" [10, 20]
+                line "{P(7)}" [30, 40]
             """);
-        yield return Case("XYChartHorizontal", $$"""
+        yield return Case(
+            "XYChartHorizontal",
+            $"""
             xychart-beta horizontal
-                title {{P(1)}}
-                x-axis "{{P(2)}}" [{{P(3)}}, {{P(4)}}]
-                y-axis "{{P(5)}}" 0 --> 100
-                bar "{{P(6)}}" [10, 20]
-                line "{{P(7)}}" [30, 40]
+                title {P(1)}
+                x-axis "{P(2)}" [{P(3)}, {P(4)}]
+                y-axis "{P(5)}" 0 --> 100
+                bar "{P(6)}" [10, 20]
+                line "{P(7)}" [30, 40]
             """);
         yield return Case("Radar", $$"""
             radar-beta
@@ -552,75 +574,87 @@ public partial class InjectionSweepTests
                     {{{P(11)}}} :::urgent large
             """);
 
-        yield return Case("Treemap", $$"""
+        yield return Case(
+            "Treemap",
+            $"""
             treemap-beta
-            "{{P(1)}}"
-                "{{P(2)}}": 20
-                "{{P(3)}}"
-                    "{{P(4)}}": 5
-                    "{{P(5)}}": 5
-            "{{P(6)}}": 30
+            "{P(1)}"
+                "{P(2)}": 20
+                "{P(3)}"
+                    "{P(4)}": 5
+                    "{P(5)}": 5
+            "{P(6)}": 30
             """);
 
-        yield return Case("Treemap front matter title", $$"""
+        yield return Case(
+            "Treemap front matter title",
+            $"""
             ---
-            title: {{P(1)}}
+            title: {P(1)}
             ---
             treemap-beta
-            "{{P(2)}}": 1
+            "{P(2)}": 1
             """);
 
-        yield return Case("TreeView", $$"""
+        yield return Case(
+            "TreeView",
+            $"""
             treeView-beta
-                title {{P(1)}}
-                {{P(2)}}/ ## {{P(3)}}
-                    {{P(4)}} ## {{P(5)}}
-                    "{{P(6)}}"
-                        "{{P(7)}}/" ## {{P(8)}}
-                            {{P(9)}}
+                title {P(1)}
+                {P(2)}/ ## {P(3)}
+                    {P(4)} ## {P(5)}
+                    "{P(6)}"
+                        "{P(7)}/" ## {P(8)}
+                            {P(9)}
             """);
 
-        yield return Case("Sankey", $$"""
+        yield return Case(
+            "Sankey",
+            $"""
             ---
-            title: {{P(1)}}
+            title: {P(1)}
             config:
               sankey:
-                prefix: {{P(2)}}
-                suffix: {{P(3)}}
+                prefix: {P(2)}
+                suffix: {P(3)}
                 nodeColors:
-                  {{P(4)}}: {{S(5)}}
+                  {P(4)}: {S(5)}
             ---
             sankey-beta
-            {{P(4)}},{{P(6)}},10
-            "{{P(7)}}","{{P(8)}}",5
-            {{P(6)}},"{{P(9)}} ""q"" x",3
+            {P(4)},{P(6)},10
+            "{P(7)}","{P(8)}",5
+            {P(6)},"{P(9)} ""q"" x",3
             """);
 
-        yield return Case("Packet", $$"""
+        yield return Case(
+            "Packet",
+            $"""
             packet-beta
-                title {{P(1)}}
-                0-15: "{{P(2)}}"
-                16-31: {{P(3)}}
-                32: "{{P(4)}}"
-                +7: {{P(5)}}
-                40-95: "{{P(6)}}"
+                title {P(1)}
+                0-15: "{P(2)}"
+                16-31: {P(3)}
+                32: "{P(4)}"
+                +7: {P(5)}
+                40-95: "{P(6)}"
             """);
 
-        yield return Case("Venn", $$"""
+        yield return Case(
+            "Venn",
+            $"""
             venn-beta
-                title {{P(1)}}
-                set "{{P(2)}}"
-                set B["{{P(3)}}"]
-                set C[{{P(4)}}]
-                union "{{P(2)}}",B["{{P(5)}}"]
-                union B,C[{{P(6)}}]
-                text "{{P(7)}}"
-                text B t1["{{P(8)}}"]
-                text "{{P(2)}}" "{{P(9)}}"
-                style B fill:"{{S(10)}}", color:"{{S(11)}}"
-                style "{{P(2)}}" stroke:"{{S(12)}}", stroke-width:"{{S(13)}}", fill-opacity:"{{S(14)}}"
-                style B,C fill:"{{S(15)}}", color:"{{S(16)}}"
-                style t1 color:"{{S(17)}}"
+                title {P(1)}
+                set "{P(2)}"
+                set B["{P(3)}"]
+                set C[{P(4)}]
+                union "{P(2)}",B["{P(5)}"]
+                union B,C[{P(6)}]
+                text "{P(7)}"
+                text B t1["{P(8)}"]
+                text "{P(2)}" "{P(9)}"
+                style B fill:"{S(10)}", color:"{S(11)}"
+                style "{P(2)}" stroke:"{S(12)}", stroke-width:"{S(13)}", fill-opacity:"{S(14)}"
+                style B,C fill:"{S(15)}", color:"{S(16)}"
+                style t1 color:"{S(17)}"
             """);
 
         yield return Case("Wardley", $$"""
@@ -646,35 +680,41 @@ public partial class InjectionSweepTests
                 evolve "{{P(8)}}" 0.9
             """);
 
-        yield return Case("Ishikawa", $$"""
+        yield return Case(
+            "Ishikawa",
+            $"""
             ishikawa-beta
-                {{P(1)}}
-                {{P(2)}}
-                    {{P(3)}}
-                        {{P(4)}}
-                            {{P(5)}}
-                {{P(6)}}
-                    {{P(7)}}
+                {P(1)}
+                {P(2)}
+                    {P(3)}
+                        {P(4)}
+                            {P(5)}
+                {P(6)}
+                    {P(7)}
             """);
 
-        yield return Case("Cynefin", $$"""
+        yield return Case(
+            "Cynefin",
+            $"""
             cynefin-beta
-                title {{P(1)}}
-                complex "{{P(2)}}" '{{P(3)}}'
-                    "{{P(4)}}"
+                title {P(1)}
+                complex "{P(2)}" '{P(3)}'
+                    "{P(4)}"
                 complicated
-                    "{{P(5)}}"
-                clear "{{P(6)}}"
-                chaotic "{{P(7)}}"
-                confusion "{{P(8)}}" "{{P(9)}}" "{{P(10)}}"
-                complex --> complicated : "{{P(11)}}"
-                clear --> chaotic : '{{P(12)}}'
+                    "{P(5)}"
+                clear "{P(6)}"
+                chaotic "{P(7)}"
+                confusion "{P(8)}" "{P(9)}" "{P(10)}"
+                complex --> complicated : "{P(11)}"
+                clear --> chaotic : '{P(12)}'
             """);
 
-        yield return Case("Railroad", $$"""
+        yield return Case(
+            "Railroad",
+            $"""
             railroad-beta
-                title {{P(1)}}
-                rule = sequence(terminal("{{P(2)}}"), nonterminal("{{P(3)}}"), special('{{P(4)}}'), choice(terminal("{{P(5)}}"), optional(nonterminal("{{P(6)}}"))), zeroOrMore(terminal("{{P(7)}}")), oneOrMore(special("{{P(8)}}")));
+                title {P(1)}
+                rule = sequence(terminal("{P(2)}"), nonterminal("{P(3)}"), special('{P(4)}'), choice(terminal("{P(5)}"), optional(nonterminal("{P(6)}"))), zeroOrMore(terminal("{P(7)}")), oneOrMore(special("{P(8)}")));
             """);
 
         yield return Case("Railroad EBNF", $$"""
@@ -683,16 +723,20 @@ public partial class InjectionSweepTests
                 rule ::= "{{P(2)}}" ? {{P(3)}} ? | [ '{{P(4)}}' ] , { "{{P(5)}}" }+ | other - "{{P(6)}}" ;
             """);
 
-        yield return Case("Railroad ABNF", $$"""
+        yield return Case(
+            "Railroad ABNF",
+            $"""
             railroad-abnf-beta
-                title {{P(1)}}
-                rule = "{{P(2)}}" / 1*3"{{P(3)}}" / [ "{{P(4)}}" ] other ;
+                title {P(1)}
+                rule = "{P(2)}" / 1*3"{P(3)}" / [ "{P(4)}" ] other ;
             """);
 
-        yield return Case("Railroad PEG", $$"""
+        yield return Case(
+            "Railroad PEG",
+            $"""
             railroad-peg-beta
-                title {{P(1)}}
-                Rule <- "{{P(2)}}" / &'{{P(3)}}' !"{{P(4)}}" ('{{P(5)}}')* ;
+                title {P(1)}
+                Rule <- "{P(2)}" / &'{P(3)}' !"{P(4)}" ('{P(5)}')* ;
             """);
     }
 }

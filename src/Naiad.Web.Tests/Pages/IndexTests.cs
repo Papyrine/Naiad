@@ -55,7 +55,7 @@ public class IndexTests : BunitTestContext
         var navigation = Services.GetRequiredService<NavigationManager>();
         navigation.NavigateTo("/#" + ShareLink.Encode("pie\n    \"Pasted\" : 1"));
 
-        cut.WaitForState(() => cut.Markup.Contains("Pasted"));
+        await cut.WaitForStateAsync(() => cut.Markup.Contains("Pasted"));
         await Assert.That(cut.Find(".doc-link").TextContent).Contains("Pie");
     }
 

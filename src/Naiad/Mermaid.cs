@@ -38,10 +38,10 @@ public static class Mermaid
     internal static SvgDocument RenderToSvgDocument(
         string input,
         RenderOptions? options = null,
-        CancellationToken cancellationToken = default)
+        Cancel cancel = default)
     {
         IconPackRegistry.MarkRendered();
-        return Run(input, options ?? RenderOptions.Default, parseOnly: false, cancellationToken)!;
+        return Run(input, options ?? RenderOptions.Default, parseOnly: false, cancel)!;
     }
 
     /// <summary>
@@ -67,10 +67,10 @@ public static class Mermaid
         string input,
         RenderOptions options,
         bool parseOnly,
-        CancellationToken cancellationToken = default)
+        Cancel cancel = default)
     {
         // The limits hold for the whole render, the layout deep inside it included.
-        using var scope = RenderScope.Enter(options.Limits ?? RenderLimits.Default, cancellationToken);
+        using var scope = RenderScope.Enter(options.Limits, cancel);
         RenderScope.CheckInput(input.Length);
         RenderScope.ThrowIfCancelled();
 

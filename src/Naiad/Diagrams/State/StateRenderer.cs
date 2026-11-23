@@ -1845,10 +1845,10 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         var towardCorridor = Math.Sign(corridorX - startX);
         var towardTarget = endY < startY ? -1 : 1;
 
-        double y0 = startY;
+        var y0 = startY;
         double x1 = startX + towardCorridor * radius, y1 = startY;
-        double y2 = startY + towardTarget * radius;
-        double y3 = startY + towardTarget * radius * 2;
+        var y2 = startY + towardTarget * radius;
+        var y3 = startY + towardTarget * radius * 2;
 
         const int samples = 24;
         for (var i = 0; i <= samples; i++)

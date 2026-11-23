@@ -191,8 +191,7 @@ static class LayoutLint
 
         void CheckEnd(DrawnEdge edge, string end, Position point, string id)
         {
-            if (DistanceToBorder(point, id) is { } distance &&
-                distance > endTolerance)
+            if (DistanceToBorder(point, id) is { } distance and > endTolerance)
             {
                 violations.Add(new(EdgeEnd, $"edge {edge.SourceId}->{edge.TargetId} {end} stops {distance:0.#}px from the border of {id}"));
             }

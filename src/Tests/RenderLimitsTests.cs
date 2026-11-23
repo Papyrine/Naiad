@@ -88,7 +88,7 @@ public class RenderLimitsTests
     [Test]
     public async Task CancelledToken_StopsBeforeAnyWork()
     {
-        using var source = new CancellationTokenSource();
+        using var source = new CancelSource();
         await source.CancelAsync();
 
         await Assert.That(() => Mermaid.Render("flowchart LR\n    A --> B", null, source.Token))
@@ -111,7 +111,7 @@ public class RenderLimitsTests
         }
 
         var options = new RenderOptions { Limits = RenderLimits.Unlimited };
-        using var source = new CancellationTokenSource(TimeSpan.FromMilliseconds(200));
+        using var source = new CancelSource(TimeSpan.FromMilliseconds(200));
         var watch = Stopwatch.StartNew();
 
         await Assert.That(() => Mermaid.Render(input.ToString(), options, source.Token))

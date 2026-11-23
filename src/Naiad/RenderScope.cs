@@ -10,18 +10,18 @@ static class RenderScope
     static RenderLimits? limits;
 
     [ThreadStatic]
-    static CancellationToken cancellation;
+    static Cancel cancel;
 
-    internal static Scope Enter(RenderLimits limits, CancellationToken cancellation)
+    internal static Scope Enter(RenderLimits limits, Cancel cancel)
     {
-        var scope = new Scope(RenderScope.limits, RenderScope.cancellation);
+        var scope = new Scope(RenderScope.limits, RenderScope.cancel);
         RenderScope.limits = limits;
-        RenderScope.cancellation = cancellation;
+        RenderScope.cancel = cancel;
         return scope;
     }
 
     internal static void ThrowIfCancelled() =>
-        cancellation.ThrowIfCancellationRequested();
+        cancel.ThrowIfCancellationRequested();
 
     internal static void CheckInput(int length)
     {
@@ -94,13 +94,13 @@ static class RenderScope
                 $"The diagram's subgraphs nest more than the {limits.MaxSubgraphDepth:N0} deep RenderOptions.Limits.MaxSubgraphDepth allows"));
     }
 
-    internal readonly struct Scope(RenderLimits? previousLimits, CancellationToken previousCancellation) :
+    internal readonly struct Scope(RenderLimits? previousLimits, Cancel previousCancel) :
         IDisposable
     {
         public void Dispose()
         {
             limits = previousLimits;
-            cancellation = previousCancellation;
+            cancel = previousCancel;
         }
     }
 }

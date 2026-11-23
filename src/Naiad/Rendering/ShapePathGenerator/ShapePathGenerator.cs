@@ -201,22 +201,19 @@ public static class ShapePathGenerator
     /// </summary>
     public const double SubroutineBarInset = 8;
 
-    static string Subroutine(double x, double y, double width, double height)
-    {
-        const double inset = SubroutineBarInset;
-        return string.Create(
+    static string Subroutine(double x, double y, double width, double height) =>
+        string.Create(
             culture,
             $"""
              M{x:0.##},{y:0.##}
              H{x + width:0.##}
              V{y + height:0.##} H{x:0.##}
              Z
-             M{x + inset:0.##},{y:0.##}
+             M{x + SubroutineBarInset:0.##},{y:0.##}
              V{y + height:0.##}
-             M{x + width - inset:0.##},{y:0.##}
+             M{x + width - SubroutineBarInset:0.##},{y:0.##}
              V{y + height:0.##}
              """);
-    }
 
     static string DoubleCircle(double cx, double cy, double r)
     {
@@ -994,28 +991,27 @@ public static class ShapePathGenerator
 
     static ShapePart[] MultiProcess(double x, double y, double width, double height)
     {
-        const double offset = processOffset;
         var outline = new PathData()
-            .M(x, y + offset * 2)
+            .M(x, y + processOffset * 2)
             .V(y + height)
-            .H(x + width - offset * 2)
-            .V(y + height - offset)
-            .H(x + width - offset)
-            .V(y + height - offset * 2)
+            .H(x + width - processOffset * 2)
+            .V(y + height - processOffset)
+            .H(x + width - processOffset)
+            .V(y + height - processOffset * 2)
             .H(x + width)
             .V(y)
-            .H(x + offset * 2)
-            .V(y + offset)
-            .H(x + offset)
-            .V(y + offset * 2)
+            .H(x + processOffset * 2)
+            .V(y + processOffset)
+            .H(x + processOffset)
+            .V(y + processOffset * 2)
             .Z();
         var front = new PathData()
-            .M(x + offset, y + offset * 2)
-            .H(x + width - offset * 2)
-            .V(y + height - offset)
-            .H(x + width - offset)
-            .V(y + offset)
-            .H(x + offset)
+            .M(x + processOffset, y + processOffset * 2)
+            .H(x + width - processOffset * 2)
+            .V(y + height - processOffset)
+            .H(x + width - processOffset)
+            .V(y + processOffset)
+            .H(x + processOffset)
             .Z();
         return [new(outline.ToString()), new(front.ToString())];
     }
