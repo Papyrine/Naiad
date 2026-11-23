@@ -5,8 +5,37 @@ static class SvgXml
     static bool IsDisallowed(char c) =>
         c < ' ' && c is not ('\t' or '\n' or '\r');
 
-    static readonly SearchValues<char> attributeSpecials = SearchValues.Create(
-        "&<'" + new string(Enumerable.Range(0, ' ').Select(_ => (char) _).Where(IsDisallowed).ToArray()));
+    static readonly string disallowedChars =
+        new(Enumerable.Range(0, ' ').Select(_ => (char) _).Where(IsDisallowed).ToArray());
+
+    static readonly SearchValues<char> disallowed = SearchValues.Create(disallowedChars);
+
+    static readonly SearchValues<char> attributeSpecials = SearchValues.Create("&<'" + disallowedChars);
+
+    /// <summary>
+    /// Appends markup as it is, but for the control characters XML does not allow, which are dropped.
+    /// Markup built from user text (an HTML label) has that text encoded, but HTML encoding leaves those
+    /// characters as they are, and a document holding one is not well-formed.
+    /// </summary>
+    public static void AppendMarkup(StringBuilder builder, string markup)
+    {
+        var rest = markup.AsSpan();
+        var index = rest.IndexOfAny(disallowed);
+        if (index < 0)
+        {
+            builder.Append(markup);
+            return;
+        }
+
+        while (index >= 0)
+        {
+            builder.Append(rest[..index]);
+            rest = rest[(index + 1)..];
+            index = rest.IndexOfAny(disallowed);
+        }
+
+        builder.Append(rest);
+    }
 
     /// <summary>
     /// Appends <c> name='value'</c>, escaping the value. Attribute values carry user text (colours and
