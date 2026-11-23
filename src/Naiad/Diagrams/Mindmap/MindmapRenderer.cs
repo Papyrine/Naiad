@@ -38,17 +38,28 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
             return emptyBuilder.Build();
         }
 
-        // Calculate node sizes
-        CalculateNodeSizes(model.Root, options);
+        // Every walk goes over this list rather than recursing into the children: nesting is as deep as the
+        // input's indentation, and a recursion that deep overflows the stack, which cannot be caught and
+        // takes the process down.
+        var nodes = PreOrder(model.Root);
 
-        // Calculate subtree heights
-        CalculateSubtreeHeights(model.Root);
+        // Calculate node sizes
+        foreach (var (node, _) in nodes)
+        {
+            CalculateNodeSize(node, options);
+        }
+
+        // Calculate subtree heights, children before their parents
+        for (var i = nodes.Count - 1; i >= 0; i--)
+        {
+            CalculateSubtreeHeight(nodes[i].Node);
+        }
 
         // Layout the tree
         LayoutTree(model.Root, options.Padding, options.Padding);
 
         // Calculate total dimensions
-        var (width, height) = CalculateBounds(model.Root);
+        var (width, height) = CalculateBounds(nodes);
         width += options.Padding * 2;
         height += options.Padding * 2;
 
@@ -57,15 +68,43 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         builder.Size(width, height);
 
         // Draw connections first (behind nodes)
-        DrawConnections(builder, model.Root);
+        foreach (var (node, parent) in nodes)
+        {
+            if (parent is not null)
+            {
+                DrawConnection(builder, parent, node);
+            }
+        }
 
         // Draw nodes
-        DrawNodes(builder, model.Root, options);
+        foreach (var (node, _) in nodes)
+        {
+            DrawNode(builder, node, options);
+        }
 
         return builder.Build();
     }
 
-    static void CalculateNodeSizes(MindmapNode node, RenderOptions options)
+    // The nodes in document order, each before its children, with the node each hangs from.
+    static List<(MindmapNode Node, MindmapNode? Parent)> PreOrder(MindmapNode root)
+    {
+        var nodes = new List<(MindmapNode Node, MindmapNode? Parent)>();
+        var pending = new Stack<(MindmapNode Node, MindmapNode? Parent)>();
+        pending.Push((root, null));
+        while (pending.TryPop(out var entry))
+        {
+            nodes.Add(entry);
+            var children = entry.Node.Children;
+            for (var i = children.Count - 1; i >= 0; i--)
+            {
+                pending.Push((children[i], entry.Node));
+            }
+        }
+
+        return nodes;
+    }
+
+    static void CalculateNodeSize(MindmapNode node, RenderOptions options)
     {
         var textWidth = MeasureText(node.Text, options.FontSize);
         var iconAllowance = node.Icon is null ? 0 : iconSize + iconGap;
@@ -78,48 +117,48 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         {
             node.Height = node.Width;
         }
-
-        foreach (var child in node.Children)
-        {
-            CalculateNodeSizes(child, options);
-        }
     }
 
-    static double CalculateSubtreeHeights(MindmapNode node)
+    // Needs the subtree heights of the node's children worked out already.
+    static void CalculateSubtreeHeight(MindmapNode node)
     {
         if (node.Children.Count == 0)
         {
             node.SubtreeHeight = node.Height;
-            return node.SubtreeHeight;
+            return;
         }
 
         double totalChildrenHeight = 0;
         foreach (var child in node.Children)
         {
-            totalChildrenHeight += CalculateSubtreeHeights(child);
+            totalChildrenHeight += child.SubtreeHeight;
         }
         totalChildrenHeight += (node.Children.Count - 1) * verticalSpacing;
 
         node.SubtreeHeight = Math.Max(node.Height, totalChildrenHeight);
-        return node.SubtreeHeight;
     }
 
-    static void LayoutTree(MindmapNode node, double x, double y)
+    // Places each node with its subtree's top-left corner at the point its parent hands it.
+    static void LayoutTree(MindmapNode root, double x, double y)
     {
-        // Position this node
-        node.Position = new(x + node.Width / 2, y + node.SubtreeHeight / 2);
-
-        if (node.Children.Count == 0)
-            return;
-
-        // Position children
-        var childX = x + node.Width + horizontalSpacing;
-        var childY = y + (node.SubtreeHeight - GetChildrenTotalHeight(node)) / 2;
-
-        foreach (var child in node.Children)
+        var pending = new Stack<(MindmapNode Node, double X, double Y)>();
+        pending.Push((root, x, y));
+        while (pending.TryPop(out var entry))
         {
-            LayoutTree(child, childX, childY);
-            childY += child.SubtreeHeight + verticalSpacing;
+            var (node, left, top) = entry;
+
+            // Position this node
+            node.Position = new(left + node.Width / 2, top + node.SubtreeHeight / 2);
+
+            // Position children
+            var childX = left + node.Width + horizontalSpacing;
+            var childY = top + (node.SubtreeHeight - GetChildrenTotalHeight(node)) / 2;
+
+            foreach (var child in node.Children)
+            {
+                pending.Push((child, childX, childY));
+                childY += child.SubtreeHeight + verticalSpacing;
+            }
         }
     }
 
@@ -131,44 +170,37 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         return node.Children.Sum(_ => _.SubtreeHeight) + (node.Children.Count - 1) * verticalSpacing;
     }
 
-    static (double width, double height) CalculateBounds(MindmapNode node)
+    static (double width, double height) CalculateBounds(List<(MindmapNode Node, MindmapNode? Parent)> nodes)
     {
-        var rightEdge = node.Position.X + node.Width / 2;
-        var bottomEdge = node.Position.Y + node.Height / 2;
+        var rightEdge = double.MinValue;
+        var bottomEdge = double.MinValue;
 
-        foreach (var child in node.Children)
+        foreach (var (node, _) in nodes)
         {
-            var (childRight, childBottom) = CalculateBounds(child);
-            rightEdge = Math.Max(rightEdge, childRight);
-            bottomEdge = Math.Max(bottomEdge, childBottom);
+            rightEdge = Math.Max(rightEdge, node.Position.X + node.Width / 2);
+            bottomEdge = Math.Max(bottomEdge, node.Position.Y + node.Height / 2);
         }
 
         return (rightEdge, bottomEdge);
     }
 
-    static void DrawConnections(SvgBuilder builder, MindmapNode node)
+    // Draws the curved connection from a parent to its child.
+    static void DrawConnection(SvgBuilder builder, MindmapNode parent, MindmapNode child)
     {
-        foreach (var child in node.Children)
-        {
-            // Draw curved connection from parent to child
-            var startX = node.Position.X + node.Width / 2;
-            var startY = node.Position.Y;
-            var endX = child.Position.X - child.Width / 2;
-            var endY = child.Position.Y;
+        var startX = parent.Position.X + parent.Width / 2;
+        var startY = parent.Position.Y;
+        var endX = child.Position.X - child.Width / 2;
+        var endY = child.Position.Y;
 
-            var controlX1 = startX + horizontalSpacing / 2;
-            var controlX2 = endX - horizontalSpacing / 2;
+        var controlX1 = startX + horizontalSpacing / 2;
+        var controlX2 = endX - horizontalSpacing / 2;
 
-            var path = string.Create(
-                CultureInfo.InvariantCulture,
-                $"M {startX:0.##} {startY:0.##} C {controlX1:0.##} {startY:0.##}, {controlX2:0.##} {endY:0.##}, {endX:0.##} {endY:0.##}");
+        var path = string.Create(
+            CultureInfo.InvariantCulture,
+            $"M {startX:0.##} {startY:0.##} C {controlX1:0.##} {startY:0.##}, {controlX2:0.##} {endY:0.##}, {endX:0.##} {endY:0.##}");
 
-            var color = GetLevelColor(child.Level);
-            builder.AddPath(path, stroke: color, strokeWidth: 2, fill: "none");
-
-            // Recursively draw children's connections
-            DrawConnections(builder, child);
-        }
+        var color = GetLevelColor(child.Level);
+        builder.AddPath(path, stroke: color, strokeWidth: 2, fill: "none");
     }
 
     /// <summary>
@@ -201,7 +233,7 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
         builder.AddLine(x, y + height, x + width, y + height, stroke: stroke, strokeWidth: 2);
     }
 
-    static void DrawNodes(SvgBuilder builder, MindmapNode node, RenderOptions options)
+    static void DrawNode(SvgBuilder builder, MindmapNode node, RenderOptions options)
     {
         var x = node.Position.X - node.Width / 2;
         var y = node.Position.Y - node.Height / 2;
@@ -292,12 +324,6 @@ public class MindmapRenderer : IDiagramRenderer<MindmapModel>
             fontSize: options.FontSize,
             fontFamily: options.FontFamily,
             fontWeight: node.Level == 0 ? "bold" : "normal");
-
-        // Draw children
-        foreach (var child in node.Children)
-        {
-            DrawNodes(builder, child, options);
-        }
     }
 
     // Draws a node icon: a registered iconify pack icon (prefix:name) as inline

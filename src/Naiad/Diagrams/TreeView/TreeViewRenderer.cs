@@ -54,7 +54,7 @@ public class TreeViewRenderer : IDiagramRenderer<TreeViewModel>
 
         var rows = new List<Row>();
         var lines = new List<(double x1, double y1, double x2, double y2)>();
-        Layout(root, 0);
+        Layout(root);
 
         var contentWidth = rows.Max(static _ => _.X + _.Width);
         var descriptionX = rows.Max(static _ => _.LabelRight) + descriptionGap;
@@ -158,8 +158,39 @@ public class TreeViewRenderer : IDiagramRenderer<TreeViewModel>
 
         return builder.Build();
 
-        // Places a node's row and then its children's below it, and returns the middle of the node's row.
-        double Layout(TreeViewNode node, int depth)
+        // Places each node's row and then its children's below it. The walk keeps a stack of its own rather
+        // than recursing into the children: nesting is as deep as the input's indentation, and a recursion
+        // that deep overflows the stack, which cannot be caught and takes the process down.
+        void Layout(TreeViewNode top)
+        {
+            var pending = new Stack<LayoutFrame>();
+            pending.Push(Place(top, 0));
+            while (pending.TryPeek(out var frame))
+            {
+                if (frame.NextChild < frame.Node.Children.Count)
+                {
+                    var child = frame.Node.Children[frame.NextChild];
+                    frame.NextChild++;
+                    pending.Push(Place(child, frame.Depth + 1));
+                    continue;
+                }
+
+                // Every child is placed, so the line down to the last of them can be drawn.
+                pending.Pop();
+                if (frame.Node.Children.Count > 0)
+                {
+                    lines.Add((frame.X + paddingX, frame.Y + rowHeight, frame.X + paddingX, frame.LastChildCenterY + lineThickness / 2));
+                }
+
+                if (pending.TryPeek(out var parent))
+                {
+                    parent.LastChildCenterY = frame.CenterY;
+                }
+            }
+        }
+
+        // Places a node's row, below the rows placed so far.
+        LayoutFrame Place(TreeViewNode node, int depth)
         {
             var x = depth * (rowIndent + paddingX);
             var y = rows.Count * rowHeight;
@@ -176,19 +207,21 @@ public class TreeViewRenderer : IDiagramRenderer<TreeViewModel>
                 lines.Add((x - rowIndent, centerY, x, centerY));
             }
 
-            var lastChildCenterY = 0.0;
-            foreach (var child in node.Children)
-            {
-                lastChildCenterY = Layout(child, depth + 1);
-            }
-
-            if (node.Children.Count > 0)
-            {
-                lines.Add((x + paddingX, y + rowHeight, x + paddingX, lastChildCenterY + lineThickness / 2));
-            }
-
-            return centerY;
+            return new(node, depth, x, y, centerY);
         }
+    }
+
+    // A node being laid out: where its row is, which child is placed next, and the middle of the last
+    // child's row, where the line down from the node ends.
+    sealed class LayoutFrame(TreeViewNode node, int depth, double x, double y, double centerY)
+    {
+        public TreeViewNode Node { get; } = node;
+        public int Depth { get; } = depth;
+        public double X { get; } = x;
+        public double Y { get; } = y;
+        public double CenterY { get; } = centerY;
+        public int NextChild { get; set; }
+        public double LastChildCenterY { get; set; }
     }
 
     // The `treeView` options that decide which icon a node shows.

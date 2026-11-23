@@ -390,7 +390,7 @@ public class UseCaseRenderer(ILayoutEngine? layoutEngine = null) :
             y - size.Height / 2,
             width,
             size.Height,
-            $"<p style=\"margin:0;color:{fill}\">{html}</p>",
+            $"<p style=\"margin:0;color:{WebUtility.HtmlEncode(fill)}\">{html}</p>",
             cssClass,
             string.Create(CultureInfo.InvariantCulture, $"font-size:{fontSize:0.##}px;font-family:{options.FontFamily}"));
     }

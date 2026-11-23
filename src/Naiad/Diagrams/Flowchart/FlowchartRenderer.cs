@@ -535,7 +535,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         var html = new StringBuilder(
             color is null
                 ? "<p>"
-                : $"<p style=\"color:{color}\">");
+                : $"<p style=\"color:{WebUtility.HtmlEncode(color)}\">");
         var lines = LabelLines.Split(text);
         for (var i = 0; i < lines.Length; i++)
         {
@@ -551,7 +551,9 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
         return html.ToString();
     }
 
-    // A label's paragraph, carrying its text colour when it has one of its own.
+    // A label's paragraph, carrying its text colour when it has one of its own. The colour is the user's
+    // `style`/`classDef` value as written, so it is encoded: a quote in it would end the attribute and let
+    // the rest of it into the label as live HTML.
     static string Paragraph(string innerHtml, string? color)
     {
         if (color is null)
@@ -559,7 +561,7 @@ public partial class FlowchartRenderer(ILayoutEngine? layoutEngine = null) :
             return $"<p>{innerHtml}</p>";
         }
 
-        return $"<p style=\"color:{color}\">{innerHtml}</p>";
+        return $"<p style=\"color:{WebUtility.HtmlEncode(color)}\">{innerHtml}</p>";
     }
 
     static void AppendLineHtml(StringBuilder html, string text)

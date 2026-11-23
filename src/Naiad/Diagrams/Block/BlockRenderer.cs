@@ -464,7 +464,7 @@ public class BlockRenderer : IDiagramRenderer<BlockModel>
 
         if (style?.Color is { } color)
         {
-            html = $"<p style=\"color:{color}\">{html}</p>";
+            html = $"<p style=\"color:{WebUtility.HtmlEncode(color)}\">{html}</p>";
         }
         else
         {

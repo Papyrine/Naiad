@@ -86,6 +86,64 @@ public class LabelEscapingTests
         await Assert.That(injected).IsEmpty().Because(name);
     }
 
+    // A label's own colour (`color:` in style or classDef) is written into the <p> that holds an HTML label
+    // in its <foreignObject>. It went in as written, so a quote in it ended the paragraph's style attribute
+    // and the rest of the value became live HTML in the label.
+    [Test]
+    [Arguments("flowchart style", "flowchart LR\n    A --> B\n    style A color:red\"><img src=x onerror=alert(1)>")]
+    [Arguments("flowchart classDef", "flowchart LR\n    A:::bad --> B\n    classDef bad color:red\"><img src=x onerror=alert(1)>")]
+    [Arguments("flowchart markdown", "flowchart LR\n    A[\"`**bold**`\"] --> B\n    style A color:red\"><img src=x onerror=alert(1)>")]
+    [Arguments("block style", "block-beta\n    a[\"Hello\"]\n    style a color:red\"><img src=x onerror=alert(1)>")]
+    [Arguments("use case style", "usecase-beta\n    Formatted(\"`**Formatted**`\")\n    style Formatted color:red\"><img src=x onerror=alert(1)>")]
+    public async Task LabelColour_CannotBreakOutOfTheLabel(string name, string input)
+    {
+        var svg = Mermaid.Render(input);
+
+        var document = XDocument.Parse(svg);
+        var injected = document
+            .Descendants()
+            .Where(_ => _.Name.LocalName == "img" || _.Attribute("onerror") is not null)
+            .ToList();
+        await Assert.That(injected).IsEmpty().Because(name);
+        // The colour still reaches the label, as text, so the test cannot pass by it having been dropped.
+        await Assert.That(svg).Contains("&quot;&gt;&lt;img").Because(name);
+    }
+
+    // A themeVariables value is written into the diagram's stylesheet. It went in as written, so a value
+    // could close the <style> element and inject markup, or close its rule and add rules of its own, which
+    // in an SVG inlined in a page style the whole page.
+    [Test]
+    [Arguments("closes the style element", "red}</style><img src=x onerror=alert(1)><style>", "onerror")]
+    [Arguments("adds a rule", "red} svg{display:none", "display:none")]
+    [Arguments("adds a declaration", "red;fill:url(https://attacker.invalid/x)", "attacker.invalid")]
+    public async Task ThemeVariable_CannotBreakOutOfItsValue(string name, string value, string marker)
+    {
+        var input =
+            "%%{init: {\"themeVariables\": {\"pieStrokeColor\": \"" + value + "\"}}}%%\n" +
+            "pie\n    \"A\" : 1\n    \"B\" : 2";
+
+        var svg = Mermaid.Render(input);
+
+        XDocument.Parse(svg);
+        await Assert.That(svg).DoesNotContain(marker).Because(name);
+        // The theme's own value stands in for the one ignored.
+        await Assert.That(svg).Contains("#naiad .pieCircle{stroke:black;").Because(name);
+    }
+
+    [Test]
+    public async Task ThemeVariable_SafeValueIsApplied()
+    {
+        var svg = Mermaid.Render(
+            """
+            %%{init: {"themeVariables": {"pieStrokeColor": "#123456"}}}%%
+            pie
+                "A" : 1
+                "B" : 2
+            """);
+
+        await Assert.That(svg).Contains("#naiad .pieCircle{stroke:#123456;");
+    }
+
     // XML 1.0 allows no C0 control character but tab, line feed and carriage return, not even as a
     // character reference. Cynefin unescapes \0, \b, \f and \v into them, and they went into the text as
     // they were, so no XML parser would read the SVG.
