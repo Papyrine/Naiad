@@ -95,24 +95,26 @@ public class RenderLimitsTests
             .Throws<OperationCanceledException>();
     }
 
-    // A graph whose layout takes seconds stops soon after the token is cancelled, part-way through.
+    // A graph whose layout takes seconds (3,000 nodes joined by 9,000 edges, over the default limits) stops
+    // soon after the token is cancelled, part-way through.
     [Test]
     public async Task CancelledToken_StopsTheLayout()
     {
         var random = new Random(1);
         var input = new StringBuilder("flowchart TD\n");
-        for (var i = 1; i < 1000; i++)
+        for (var i = 1; i < 3000; i++)
         {
-            for (var k = 0; k < 2; k++)
+            for (var k = 0; k < 3; k++)
             {
                 input.Append(CultureInfo.InvariantCulture, $"    N{random.Next(Math.Max(0, i - 50), i)} --> N{i}\n");
             }
         }
 
+        var options = new RenderOptions { Limits = RenderLimits.Unlimited };
         using var source = new CancellationTokenSource(TimeSpan.FromMilliseconds(200));
         var watch = Stopwatch.StartNew();
 
-        await Assert.That(() => Mermaid.Render(input.ToString(), null, source.Token))
+        await Assert.That(() => Mermaid.Render(input.ToString(), options, source.Token))
             .Throws<OperationCanceledException>();
         await Assert.That(watch.Elapsed).IsLessThan(TimeSpan.FromSeconds(3));
     }

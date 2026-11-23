@@ -7,9 +7,10 @@ namespace Naiad;
 /// the work it would cost is done. Use <see cref="Unlimited"/> for input that is trusted.
 /// </summary>
 /// <remarks>
-/// The graph caps bound the layout, which is what grows fastest: laying out 1,000 nodes joined by 2,000 edges
-/// takes seconds, and twice that many takes most of a minute. Mermaid itself turns a flowchart down past 500
-/// edges and 50,000 characters.
+/// The graph caps bound the layout, which is what grows fastest with a diagram's size: 1,000 nodes joined by
+/// 2,000 edges lay out in about half a second and 5,000 joined by 10,000 in about seven, while subgraphs nested
+/// 100 deep take a few seconds and 300 deep most of a quarter of a minute. Mermaid itself turns a flowchart
+/// down past 500 edges and 50,000 characters.
 /// </remarks>
 public sealed class RenderLimits
 {
@@ -36,7 +37,8 @@ public sealed class RenderLimits
 
     /// <summary>
     /// How deep subgraphs, and the composite states, namespaces and boundaries laid out as subgraphs, may nest
-    /// in a graph laid out by layers. The layout's cost grows with the cube of the depth.
+    /// in a graph laid out by layers. Each level adds to the cost of the layout around it, so deep nesting is
+    /// slow well before a graph is large.
     /// </summary>
     public int MaxSubgraphDepth { get; set; } = 100;
 }
