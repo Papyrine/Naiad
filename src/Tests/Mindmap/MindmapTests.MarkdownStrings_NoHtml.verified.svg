@@ -1,0 +1,44 @@
+﻿<svg
+  id="naiad"
+  width="100%"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 344.8 95"
+  style="max-width: 344.8px;"
+  role="graphics-document document">
+  <path
+    d="M 119.3 37.5 C 139.3 37.5, 139.3 37.5, 159.3 37.5"
+    fill="none"
+    stroke="#87CEEB"
+    stroke-width="2" />
+  <rect
+    x="20"
+    y="20"
+    width="99.3"
+    height="35"
+    fill="#FFB6C1"
+    stroke="#B27F87"
+    stroke-width="2" />
+  <text
+    x="69.65"
+    y="37.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif"
+    font-weight="bold">Root node</text>
+  <rect
+    x="159.3"
+    y="20"
+    width="145.5"
+    height="35"
+    fill="#87CEEB"
+    stroke="#5E90A4"
+    stroke-width="2" />
+  <text
+    x="232.05"
+    y="37.5"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-size="14px"
+    font-family="Arial, sans-serif">An italic child</text>
+</svg>

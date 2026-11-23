@@ -23,22 +23,22 @@ class MindmapParser : IDiagramParser<MindmapModel>
             OneOf(
                 // Circle: ((text))
                 Between(Literals.Text("(("), Literals.NoneOf(")"), Literals.Text("))"))
-                    .Then(static _ => (text: _.Span.Trim().ToString(), shape: MindmapShape.Circle)),
+                    .Then(static _ => (text: ShapeText(_), shape: MindmapShape.Circle)),
                 // Bang/explosion: ))text((
                 Between(Literals.Text("))"), Literals.NoneOf("("), Literals.Text("(("))
-                    .Then(static _ => (text: _.Span.Trim().ToString(), shape: MindmapShape.Bang)),
+                    .Then(static _ => (text: ShapeText(_), shape: MindmapShape.Bang)),
                 // Cloud: )text(
                 Between(Literals.Char(')'), Literals.NoneOf("("), Literals.Char('('))
-                    .Then(static _ => (text: _.Span.Trim().ToString(), shape: MindmapShape.Cloud)),
+                    .Then(static _ => (text: ShapeText(_), shape: MindmapShape.Cloud)),
                 // Hexagon: {{text}}
                 Between(Literals.Text("{{"), Literals.NoneOf("}"), Literals.Text("}}"))
-                    .Then(static _ => (text: _.Span.Trim().ToString(), shape: MindmapShape.Hexagon)),
+                    .Then(static _ => (text: ShapeText(_), shape: MindmapShape.Hexagon)),
                 // Rounded: (text)
                 Between(Literals.Char('('), Literals.NoneOf(")"), Literals.Char(')'))
-                    .Then(static _ => (text: _.Span.Trim().ToString(), shape: MindmapShape.Rounded)),
+                    .Then(static _ => (text: ShapeText(_), shape: MindmapShape.Rounded)),
                 // Square: [text]
                 Between(Literals.Char('['), Literals.NoneOf("]"), Literals.Char(']'))
-                    .Then(static _ => (text: _.Span.Trim().ToString(), shape: MindmapShape.Square))
+                    .Then(static _ => (text: ShapeText(_), shape: MindmapShape.Square))
             );
 
         // Optional node id preceding a shape, e.g. the "root" in root((text)). Mindmap
@@ -90,6 +90,24 @@ class MindmapParser : IDiagramParser<MindmapModel>
                 .SkipAnd(contentLine.Many())
                 .AndSkip(CommonParsers.End)
                 .Then(static _ => BuildModel(_.Where(static _ => _.HasValue).Select(static _ => _!.Value).ToList()));
+    }
+
+    /// <summary>
+    /// The text inside a shape's brackets. Mermaid reads a quoted label without its quotes, and one whose
+    /// quotes hold backticks (<c>["`**bold** _it_`"]</c>) as a markdown string, which keeps its backticks so
+    /// the renderer knows it for one.
+    /// </summary>
+    static string ShapeText(TextSpan span)
+    {
+        var text = span.Span.Trim();
+        if (text.Length >= 2 &&
+            text[0] == '"' &&
+            text[^1] == '"')
+        {
+            text = text[1..^1];
+        }
+
+        return text.ToString();
     }
 
     static MindmapModel BuildModel(List<(int indent, string text, MindmapShape shape, string? icon, string? cssClass)> lines)

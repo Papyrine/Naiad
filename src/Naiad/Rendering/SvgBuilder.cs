@@ -632,6 +632,75 @@ public class SvgBuilder
         }
     }
 
+    /// <summary>
+    /// Adds a label centred on (<paramref name="x"/>, <paramref name="y"/>) that may be a markdown string (see
+    /// <see cref="MarkdownLabel"/>). SVG text cannot change weight or slant part-way through a line, so where
+    /// HTML is allowed a markdown string is HTML in a <c>&lt;foreignObject&gt;</c>, bold and italic only where it
+    /// marks them, as Mermaid draws it. Any other label, and a markdown string where HTML is not allowed, is
+    /// its plain text in <paramref name="fontWeight"/>, as <see cref="AddTextLines"/> draws it. With
+    /// <paramref name="singleLine"/> its line breaks become spaces, for places that have room for one line.
+    /// </summary>
+    internal void AddMarkdownText(
+        double x,
+        double y,
+        string label,
+        double fontSize,
+        string? fontFamily = null,
+        string? fontWeight = null,
+        string? fill = null,
+        string? cssClass = null,
+        bool singleLine = false)
+    {
+        var markdown = MarkdownLabel.IsMarkdown(label);
+        var plain = label;
+        if (markdown)
+        {
+            plain = MarkdownLabel.Plain(label);
+        }
+
+        if (singleLine)
+        {
+            plain = LabelLines.Flatten(plain);
+        }
+
+        if (!markdown ||
+            !allowHtmlElements)
+        {
+            AddTextLines(
+                x,
+                y,
+                plain,
+                anchor: "middle",
+                baseline: "middle",
+                fontSize: fontSize,
+                fontFamily: fontFamily,
+                fontWeight: fontWeight,
+                fill: fill,
+                cssClass: cssClass);
+            return;
+        }
+
+        // The width is an estimate, and bold runs wider, so the box is given room to spare; its text is
+        // centred in it and does not wrap. Without a fill of its own the text takes the document's colour,
+        // as the plain text would.
+        var width = LabelLines.WidestLength(plain) * fontSize * 0.66 + fontSize;
+        var height = fontSize * (1.5 + LineHeightFactor * (LabelLines.Count(plain) - 1));
+        var paragraphStyle = "margin:0";
+        if (fill is not null)
+        {
+            paragraphStyle += $";color:{WebUtility.HtmlEncode(fill)}";
+        }
+
+        AddForeignObject(
+            x - width / 2,
+            y - height / 2,
+            width,
+            height,
+            $"<p style=\"{paragraphStyle}\">{MarkdownLabel.Html(label, singleLine)}</p>",
+            cssClass,
+            string.Create(CultureInfo.InvariantCulture, $"font-size:{fontSize:0.##}px;font-family:{fontFamily ?? labelFontFamily}"));
+    }
+
     void AddElement(SvgElement element)
     {
         if (groupStack.TryPeek(out var parent))

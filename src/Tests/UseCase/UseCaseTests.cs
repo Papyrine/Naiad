@@ -316,6 +316,29 @@ public class UseCaseTests : TestBase
         return VerifySvg(input);
     }
 
+    // Markdown strings titling a boundary and a package boundary are bold and italic where they say, as
+    // Mermaid draws them.
+    [Test]
+    public Task MarkdownBoundaryTitles()
+    {
+        const string input =
+            """
+            usecase-beta
+            direction LR
+            actor Customer
+            systemBoundary shop["`**Online** shop _front_`"]
+              Browse("Browse catalogue")
+            end
+            systemBoundary pay["`Payment **service**`"]@{ type: package }
+              Pay("Pay")
+            end
+            Customer --> Browse
+            Customer --> Pay
+            """;
+
+        return VerifySvg(input);
+    }
+
     [Test]
     public Task FrontMatterTitle()
     {

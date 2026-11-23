@@ -219,15 +219,22 @@
       height="25"
       fill="#ffffde"
       stroke="none" />
-    <text
-      x="242.75"
-      y="14"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="14px"
-      font-family="Arial, sans-serif"
-      font-weight="bold"
-      fill="#333333"
-      class="cluster-label">One group</text>
+    <foreignObject
+      x="194.17"
+      y="3.5"
+      width="97.16"
+      height="21"
+      class="cluster-label"
+      style="font-size:14px;font-family:Arial, sans-serif">
+      <div
+        xmlns="http://www.w3.org/1999/xhtml"
+        style="display: table-cell; white-space: nowrap; text-align: center; vertical-align: middle; width: 97.16px; height: 21px;">
+        <span>
+          <p
+            style="margin:0;color:#333333">
+            <strong>One</strong> group</p>
+        </span>
+      </div>
+    </foreignObject>
   </g>
 </svg>

@@ -1,3 +1,5 @@
+using Naiad.Diagrams.Mindmap;
+
 public class MindmapTests : TestBase
 {
     [Test]
@@ -227,5 +229,73 @@ public class MindmapTests : TestBase
         await Assert.That(children.Select(_ => _.Text)).IsEquivalentTo(["Long history", "Ratio 1:2"], CollectionOrdering.Matching);
         await Assert.That(children[0].Icon).IsEqualTo("fa fa-book");
         await Assert.That(children[1].CssClass).IsEqualTo("urgent large");
+    }
+
+    // Markdown strings, as Mermaid's documentation writes them: bold and italic, a line break taken from the
+    // source, and a plain label beside them. A quoted label is drawn without its quotes.
+    [Test]
+    public Task MarkdownStrings()
+    {
+        const string input =
+            """
+            mindmap
+                id1["`**Root** with
+            a second line`"]
+                  id2["`The dog in **the** hog... a *very long text*`"]
+                  id3[Regular labels still work]
+                  id4("`_Rounded_ and **bold**`")
+                  id5["Quoted label"]
+            """;
+
+        return VerifySvg(input);
+    }
+
+    // Without HTML a markdown string falls back to its plain text, without the markers.
+    [Test]
+    public Task MarkdownStrings_NoHtml()
+    {
+        const string input =
+            """
+            mindmap
+                root["`**Root** node`"]
+                  child["`An _italic_ child`"]
+            """;
+
+        return VerifySvg(input, new RenderOptions { AllowHtmlElements = false });
+    }
+
+    // A markdown string keeps its backticks in the model, which is how the renderer knows it for one; the
+    // quotes around a label are not part of it.
+    [Test]
+    public async Task QuotedLabels_LoseTheirQuotes()
+    {
+        var result = new MindmapParser().Parse(
+            """
+            mindmap
+              root["`**Bold** root`"]
+                plain["Just text"]
+                bare[No quotes]
+            """);
+
+        await Assert.That(result.Error).IsNull();
+        var root = result.Value.Root!;
+        await Assert.That(root.Text).IsEqualTo("`**Bold** root`");
+        await Assert.That(root.Children.Select(_ => _.Text)).IsEquivalentTo(["Just text", "No quotes"], CollectionOrdering.Matching);
+    }
+
+    // A markdown string is drawn with its bold and italics, not its markers, and a node is a line taller
+    // for each line break in it.
+    [Test]
+    public async Task MarkdownString_IsBoldAndItalicMarkup()
+    {
+        var svg = Mermaid.Render("mindmap\n  root[\"`**Bold** and _italic_`\"]");
+
+        await Assert.That(svg).Contains("<strong>Bold</strong> and <em>italic</em>");
+        await Assert.That(svg).DoesNotContain("`");
+        await Assert.That(svg).DoesNotContain("**");
+
+        var model = new MindmapParser().Parse("mindmap\n  root[\"`one\ntwo`\"]\n    single[\"`one`\"]").Value;
+        new MindmapRenderer().Render(model, RenderOptions.Default);
+        await Assert.That(model.Root!.Height).IsGreaterThan(model.Root.Children[0].Height);
     }
 }

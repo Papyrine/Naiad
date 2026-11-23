@@ -26,9 +26,12 @@ static partial class MarkdownLabel
             "<br/>",
             Lines(label).Select(line => string.Concat(Runs(line).Select(_ => _.Text))));
 
-    /// <summary>The label as HTML, with <c>&lt;strong&gt;</c> and <c>&lt;em&gt;</c> where it marked them.</summary>
-    public static string Html(string label) =>
-        string.Join("<br/>", Lines(label).Select(LineHtml));
+    /// <summary>
+    /// The label as HTML, with <c>&lt;strong&gt;</c> and <c>&lt;em&gt;</c> where it marked them. On a single line,
+    /// for places that have room for only one, its lines are joined by spaces instead of breaks.
+    /// </summary>
+    public static string Html(string label, bool singleLine = false) =>
+        string.Join(singleLine ? " " : "<br/>", Lines(label).Select(LineHtml));
 
     // The text between the backticks, a line at a time. Indentation is how the source was laid out, not
     // part of the label.

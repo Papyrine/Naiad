@@ -329,16 +329,15 @@ public class AgentFlowRenderer(ILayoutEngine? layoutEngine = null) :
             var title = LabelLines.Flatten(DisplayText(subgraph.Title ?? ""));
             if (!string.IsNullOrWhiteSpace(title))
             {
-                builder.AddText(
+                builder.AddMarkdownText(
                     TitleCentre(subgraph, MeasureText(title, options.FontSize).Width, graph),
                     subgraph.Bounds.Y + 14,
-                    title,
-                    anchor: "middle",
-                    baseline: "middle",
-                    fontSize: options.FontSize,
+                    subgraph.Title ?? "",
+                    options.FontSize,
                     fontFamily: options.FontFamily,
                     fill: graph.Container(subgraph.Id)?.Style?.Color ?? textColor,
-                    cssClass: "cluster-label");
+                    cssClass: "cluster-label",
+                    singleLine: true);
             }
 
             RenderContainerTitles(builder, subgraph.NestedSubgraphs, graph, options);

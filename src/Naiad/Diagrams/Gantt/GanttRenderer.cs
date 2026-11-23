@@ -11,6 +11,12 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
     const double dayWidth = 20;
     const double milestoneSize = 12;
 
+    // Without an `axisFormat` the axis keeps Naiad's month/day labels, which its tick spacing is set for.
+    const string defaultAxisFormat = "%m/%d";
+    const int defaultAxisLabelLength = 5;
+    const double axisCharWidthFactor = 0.6;
+    const double axisLabelGap = 8;
+
     const string taskColor = "#4CAF50";
     const string taskDoneColor = "#808080";
     const string taskActiveColor = "#2196F3";
@@ -69,11 +75,22 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
 
         var hasTitle = !string.IsNullOrEmpty(model.Title);
 
+        // `axisFormat` writes the axis's dates in d3-time-format specifiers, as Mermaid does, and the
+        // `gantt.axisFormat` setting does so for a diagram that does not say.
+        var axisFormat = model.AxisFormat ?? model.Config.GetString("gantt", "axisFormat") ?? defaultAxisFormat;
+        var axisLabelFontSize = options.FontSize - 2;
+        var ticks = AxisTicks(minDate, totalDays, axisFormat, axisLabelFontSize);
+
         var chartWidth = totalDays * dayWidth;
         // The title occupies its own band above the axis; include it so the bottom row is not clipped.
         var chartHeight = totalRows * rowHeight + axisHeight + (hasTitle ? titleHeight : 0);
 
-        var width = leftMargin + chartWidth + options.Padding * 2;
+        // A long label on the last tick can reach past the end of the chart; the drawing widens to hold it.
+        var axisReach = ticks
+            .Select(_ => _.Day * dayWidth + AxisLabelWidth(_.Label, axisLabelFontSize) / 2)
+            .DefaultIfEmpty(0)
+            .Max();
+        var width = leftMargin + Math.Max(chartWidth, axisReach) + options.Padding * 2;
         var height = chartHeight + options.Padding * 2;
 
         var builder = new SvgBuilder();
@@ -97,7 +114,7 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         }
 
         // Draw axis
-        DrawAxis(builder, minDate, totalDays, offsetX, offsetY, chartWidth, options);
+        DrawAxis(builder, ticks, offsetX, offsetY, chartWidth, axisLabelFontSize, options);
         offsetY += axisHeight;
 
         // Draw grid lines
@@ -183,8 +200,51 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         return rowEnds.Count;
     }
 
-    static void DrawAxis(SvgBuilder builder, DateTime startDate, int totalDays, double offsetX, double offsetY,
-        double chartWidth, RenderOptions options)
+    /// <summary>
+    /// The days the axis labels, and what each says. Naiad's tick spacing is set for a month/day label; a
+    /// format that writes longer labels has them spaced at least their own width apart, so they do not run
+    /// into each other.
+    /// </summary>
+    static List<(int Day, string Label)> AxisTicks(DateTime startDate, int totalDays, string axisFormat, double fontSize)
+    {
+        var interval = totalDays > 30 ? 7 : totalDays > 14 ? 3 : 1;
+
+        var widest = "";
+        for (var day = 0; day < totalDays; day++)
+        {
+            var label = TimeFormat.Format(axisFormat, startDate.AddDays(day));
+            if (label.Length > widest.Length)
+            {
+                widest = label;
+            }
+        }
+
+        if (widest.Length > defaultAxisLabelLength)
+        {
+            var labelDays = (int) Math.Ceiling((AxisLabelWidth(widest, fontSize) + axisLabelGap) / dayWidth);
+            interval = Math.Max(interval, labelDays);
+        }
+
+        var ticks = new List<(int Day, string Label)>();
+        for (var day = 0; day < totalDays; day += interval)
+        {
+            ticks.Add((day, TimeFormat.Format(axisFormat, startDate.AddDays(day))));
+        }
+
+        return ticks;
+    }
+
+    static double AxisLabelWidth(string label, double fontSize) =>
+        label.Length * fontSize * axisCharWidthFactor;
+
+    static void DrawAxis(
+        SvgBuilder builder,
+        List<(int Day, string Label)> ticks,
+        double offsetX,
+        double offsetY,
+        double chartWidth,
+        double fontSize,
+        RenderOptions options)
     {
         // Axis line
         builder.AddLine(
@@ -194,12 +254,9 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             offsetY + axisHeight - 5,
             stroke: "#333", strokeWidth: 1);
 
-        // Date labels (show every few days based on scale)
-        var interval = totalDays > 30 ? 7 : totalDays > 14 ? 3 : 1;
-        for (var i = 0; i < totalDays; i += interval)
+        foreach (var (day, label) in ticks)
         {
-            var x = offsetX + i * dayWidth;
-            var date = startDate.AddDays(i);
+            var x = offsetX + day * dayWidth;
 
             // Tick mark
             builder.AddLine(
@@ -210,15 +267,13 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
                 stroke: "#333",
                 strokeWidth: 1);
 
-            // Date label
-            var label = date.ToString("MM/dd", CultureInfo.InvariantCulture);
             builder.AddText(
                 x,
                 offsetY + axisHeight - 20,
                 label,
                 anchor: "middle",
                 baseline: "middle",
-                fontSize: options.FontSize - 2,
+                fontSize: fontSize,
                 fontFamily: options.FontFamily,
                 fill: "#666");
         }
