@@ -282,7 +282,9 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
         boundariesById = model.Boundaries.DistinctBy(_ => _.Id).ToDictionary(_ => _.Id);
         nodeSeparation = ComputeNodeSeparation(model, options);
 
-        // Pass 1: lay out each container, children before parents.
+        // Pass 1: lay out each container, children before parents. The layout recurses into each boundary, so
+        // how deep they nest is kept to the limit first.
+        RenderScope.CheckSubgraphDepth(BoundaryDepth(model));
         var topLayout = LayoutContainer(model, null);
         containerLayouts[""] = topLayout;
 
@@ -459,6 +461,28 @@ public class C4Renderer(ILayoutEngine? layoutEngine = null) :
 
         absolute = points.Select(_ => new Position(_.X + origin.x, _.Y + origin.y)).ToList();
         return true;
+    }
+
+    // How deep boundaries nest. They are read in the order they were declared, each after the one it is in, so
+    // a boundary's depth is one more than its parent's.
+    static int BoundaryDepth(C4Model model)
+    {
+        var depths = new Dictionary<string, int>(StringComparer.Ordinal);
+        var deepest = 0;
+        foreach (var boundary in model.Boundaries)
+        {
+            var depth = 1;
+            if (boundary.ParentBoundaryId is { } parent &&
+                depths.TryGetValue(parent, out var above))
+            {
+                depth = above + 1;
+            }
+
+            depths[boundary.Id] = Math.Max(depths.GetValueOrDefault(boundary.Id), depth);
+            deepest = Math.Max(deepest, depth);
+        }
+
+        return deepest;
     }
 
     /// <summary>

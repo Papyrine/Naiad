@@ -511,7 +511,8 @@ partial class UseCaseParser : IDiagramParser<UseCaseModel>
             AddRows(rows, document.RootElement, "");
             return rows;
         }
-        catch (JsonException)
+        // Text that is not JSON, or holds half a surrogate pair, which the reader cannot turn into UTF-8.
+        catch (Exception exception) when (exception is JsonException or ArgumentException)
         {
             return null;
         }

@@ -241,4 +241,26 @@ public class LabelEscapingTests
         XDocument.Parse(svg);
         await Assert.That(svg).Contains(expected).Because(name);
     }
+
+    // XML allows neither U+FFFE nor U+FFFF, nor half of a surrogate pair, and they went through the text, the
+    // attributes and the HTML labels as they were, so no XML parser would read the SVG. A whole pair, an emoji,
+    // is one character and is kept.
+    [Test]
+    [Arguments("text, U+FFFF", "xychart-beta\n    x-axis [a\uFFFFb, c]\n    bar [1, 2]", "ab")]
+    [Arguments("text, U+FFFE", "pie\n    \"a\uFFFEb\" : 1", "ab")]
+    [Arguments("text, lone high surrogate", "pie\n    \"a\uD800b\" : 1", "ab")]
+    [Arguments("text, lone low surrogate", "mindmap\n    root\n        a\uDC00b", "ab")]
+    [Arguments("description", "pie\n    accDescr {\n        a\uD800w\n    }\n    \"A\" : 1", "aw")]
+    [Arguments("HTML label", "flowchart LR\n    A[a\uFFFFb]", "ab")]
+    [Arguments("emoji kept", "flowchart LR\n    A[a\uD83D\uDE00b]", "a\uD83D\uDE00b")]
+    public async Task CharactersXmlDoesNotAllow_AreDropped(string name, string input, string expected)
+    {
+        foreach (var html in new[] { true, false })
+        {
+            var svg = Mermaid.Render(input, new() { AllowHtmlElements = html });
+
+            var shown = string.Concat(XDocument.Parse(svg).DescendantNodes().OfType<XText>().Select(_ => _.Value));
+            await Assert.That(shown).Contains(expected).Because(name);
+        }
+    }
 }

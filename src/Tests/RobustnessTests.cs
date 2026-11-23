@@ -191,4 +191,66 @@ public class RobustnessTests
         thread.Join();
         return (svg, failure);
     }
+
+    // Each of these was found by RandomInputTests, and threw something other than a MermaidException, or
+    // never finished.
+    [Test]
+    [Arguments("subgraph inside one of the same id", "flowchart TD\n    subgraph Review\n        subgraph Review\n            a\n        end\n    end")]
+    [Arguments("swimlane inside one of the same id", "swimlane-beta LR\n    subgraph Review\n        subgraph Review\n            a\n        end\n    end")]
+    [Arguments("C4 boundary inside one of the same alias", "C4Context\n    Boundary(b, \"B\") {\n        Boundary(b, \"Again\") {\n            Person(p, \"P\")\n        }\n    }")]
+    [Arguments("C4 boundaries inside each other's aliases", "C4Context\n    Boundary(a, \"A\") {\n        Boundary(b, \"B\") {\n            Person(p, \"P\")\n        }\n    }\n    Boundary(b, \"B again\") {\n        Boundary(a, \"A again\") {\n            Person(q, \"Q\")\n        }\n    }")]
+    [Arguments("gantt duration in days", "gantt\n    dateFormat YYYY-MM-DD\n    Task :t1, 2024-01-01, 1010101010101010101010d")]
+    [Arguments("gantt duration in months", "gantt\n    dateFormat YYYY-MM-DD\n    Task :t1, 2024-01-01, 99999999999M")]
+    [Arguments("gantt duration in years", "gantt\n    dateFormat YYYY-MM-DD\n    Task :t1, 2024-01-01, 9999999y")]
+    [Arguments("gantt tasks past the year 9999", "gantt\n    dateFormat YYYY-MM-DD\n    A :a, 9990-01-01, 36000d\n    B :b, after a, 36000d")]
+    [Arguments("gantt tasks centuries apart", "gantt\n    dateFormat YYYY-MM-DD\n    A :a, 0100-01-01, 1d\n    B :b, 9000-01-01, 1d")]
+    public async Task Input_IsTurnedDownWithAReason(string name, string input)
+    {
+        var exception = await Assert.That(() => Mermaid.Render(input)).Throws<MermaidException>().Because(name);
+
+        await Assert.That(exception!.Message).IsNotEmpty().Because(name);
+    }
+
+    // A note or an activation naming a participant nothing had declared left the renderer without a column
+    // for it, and it threw. Mermaid adds such a participant, as a message would.
+    [Test]
+    [Arguments("note", "sequenceDiagram\n    Note left of Alice: alone", "Alice")]
+    [Arguments("note over two", "sequenceDiagram\n    A->>B: hi\n    Note over B,C: both", "C")]
+    [Arguments("activation", "sequenceDiagram\n    A->>B: hi\n    activate Carol\n    deactivate Carol", "Carol")]
+    public async Task Sequence_UndeclaredParticipant_IsAdded(string name, string input, string participant)
+    {
+        var svg = Mermaid.Render(input);
+
+        XDocument.Parse(svg);
+        await Assert.That(svg).Contains($">{participant}<").Because(name);
+    }
+
+    // Half a surrogate pair in a use case's JSON note made the JSON reader throw an ArgumentException. Such a
+    // note is not JSON the reader can take, and is turned down as any other is.
+    [Test]
+    public async Task UseCase_JsonNoteWithHalfASurrogatePair_IsTurnedDown() =>
+        await Assert.That(() => Mermaid.Render("usecase-beta\n    json J @{ \"a\uD800\": \"b\" }"))
+            .Throws<MermaidParseException>();
+
+    // C4 boundaries are laid out by recursion, and C4 does not go through the layout that keeps the limit.
+    [Test]
+    public async Task C4_DeepBoundaries_AreTurnedDown()
+    {
+        var input = new StringBuilder("C4Context\n");
+        for (var i = 0; i < 5; i++)
+        {
+            input.Append(CultureInfo.InvariantCulture, $"Boundary(b{i}, \"B{i}\") {{\n");
+        }
+
+        input.Append("Person(p, \"P\")\n");
+        for (var i = 0; i < 5; i++)
+        {
+            input.Append("}\n");
+        }
+
+        var options = new RenderOptions { Limits = { MaxSubgraphDepth = 4 } };
+        await Assert.That(() => Mermaid.Render(input.ToString(), options)).Throws<MermaidLimitException>();
+        options.Limits.MaxSubgraphDepth = 5;
+        await Assert.That(Mermaid.Render(input.ToString(), options)).Contains("<svg");
+    }
 }

@@ -2,6 +2,9 @@
 
 public class GanttRenderer : IDiagramRenderer<GanttModel>
 {
+    // The longest span of days a chart is drawn over: a hundred years.
+    const int maxDays = 36_525;
+
     const double rowHeight = 30;
     const double taskBarHeight = 20;
     const double sectionHeaderHeight = 25;
@@ -49,6 +52,14 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
         var minDate = tasks.Min(_ => _.ComputedStart);
         var maxDate = tasks.Max(_ => _.ComputedEnd);
         var totalDays = (maxDate - minDate).Days + 1;
+
+        // The chart is drawn a day at a time, so tasks dated centuries apart would have it step through
+        // millions of days, and draw a line for every week of them.
+        if (totalDays > maxDays)
+        {
+            throw new MermaidException(
+                string.Create(CultureInfo.InvariantCulture, $"Failed to render gantt: the tasks span {totalDays:N0} days, more than the 100 years a chart is drawn over"));
+        }
 
         // `gantt.displayMode: compact` (or a front matter `displayMode: compact`) lets tasks of a section
         // that do not overlap share a row. The rows then hold several tasks, so their names are only on
@@ -556,7 +567,16 @@ public class GanttRenderer : IDiagramRenderer<GanttModel>
             }
             else if (task.Duration.HasValue || task.DurationMonths != 0)
             {
-                task.ComputedEnd = start.AddMonths(task.DurationMonths).Add(task.Duration ?? TimeSpan.Zero);
+                // Tasks that follow one another can each be short enough and still run past the last date
+                // there is.
+                try
+                {
+                    task.ComputedEnd = start.AddMonths(task.DurationMonths).Add(task.Duration ?? TimeSpan.Zero);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    throw new MermaidException($"Failed to render gantt: task '{task.Name}' would end after the year 9999");
+                }
             }
             else
             {

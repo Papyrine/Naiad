@@ -734,6 +734,15 @@ class FlowchartParser : IDiagramParser<FlowchartModel>
                         Direction = direction
                     };
                     subgraphCount++;
+
+                    // Opened inside one of the same id, a subgraph would be its own parent, which no layout
+                    // can draw: dagre gave up with an exception of its own.
+                    if (subgraphStack.Any(_ => _.Id == subgraph.Id))
+                    {
+                        throw new MermaidParseException(
+                            $"Failed to parse diagram: subgraph '{subgraph.Id}' is opened inside a subgraph of the same id");
+                    }
+
                     if (subgraphStack.Count > 0)
                     {
                         subgraphStack.Peek().NestedSubgraphs.Add(subgraph);

@@ -331,6 +331,42 @@ class C4Parser : IDiagramParser<C4Model>
         return model;
     }
 
+    // Whether `alias` is `parent`, or encloses it, among the boundaries read so far, following each one's parent
+    // by alias as the layout does. An alias may be used by more than one boundary, so each is followed.
+    static bool Encloses(C4Model model, string alias, string? parent)
+    {
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        var pending = new Stack<string>();
+        if (parent is not null)
+        {
+            pending.Push(parent);
+        }
+
+        while (pending.TryPop(out var current))
+        {
+            if (current == alias)
+            {
+                return true;
+            }
+
+            if (!seen.Add(current))
+            {
+                continue;
+            }
+
+            foreach (var boundary in model.Boundaries)
+            {
+                if (boundary.Id == current &&
+                    boundary.ParentBoundaryId is { } above)
+                {
+                    pending.Push(above);
+                }
+            }
+        }
+
+        return false;
+    }
+
     static void ProcessContent(C4Model model, IEnumerable<IC4Content?> content, string? parentBoundaryId)
     {
         foreach (var item in content)
@@ -351,6 +387,14 @@ class C4Parser : IDiagramParser<C4Model>
                     break;
 
                 case BoundaryItem(var boundary, var c4Contents):
+                    // Boundaries are laid out by alias, so one whose alias already encloses the place it is
+                    // declared in would be among its own children: laying it out never ended.
+                    if (Encloses(model, boundary.Id, parentBoundaryId))
+                    {
+                        throw new MermaidParseException(
+                            $"Failed to parse C4 diagram: boundary '{boundary.Id}' is declared inside a boundary of the same alias");
+                    }
+
                     boundary.ElementIds.Clear();
                     boundary.ChildBoundaryIds.Clear();
                     boundary.ParentBoundaryId = parentBoundaryId;

@@ -384,35 +384,58 @@ class GanttParser : IDiagramParser<GanttModel>
             return false;
         }
 
+        double days;
         switch (text[digits..])
         {
             case "ms":
-                duration = TimeSpan.FromMilliseconds(amount);
-                return true;
+                days = amount / 86_400_000;
+                break;
             case "s":
-                duration = TimeSpan.FromSeconds(amount);
-                return true;
+                days = amount / 86_400;
+                break;
             case "m":
-                duration = TimeSpan.FromMinutes(amount);
-                return true;
+                days = amount / 1_440;
+                break;
             case "h":
-                duration = TimeSpan.FromHours(amount);
-                return true;
+                days = amount / 24;
+                break;
             case "d":
-                duration = TimeSpan.FromDays(amount);
-                return true;
+                days = amount;
+                break;
             case "w":
-                duration = TimeSpan.FromDays(amount * 7);
-                return true;
+                days = amount * 7;
+                break;
             case "M":
-                months = (int) Math.Round(amount);
+                months = CheckedMonths(Math.Round(amount), text);
                 return true;
             case "y":
-                months = (int) Math.Round(amount * 12);
+                months = CheckedMonths(Math.Round(amount * 12), text);
                 return true;
             default:
                 return false;
         }
+
+        CheckLength(days, text);
+        duration = TimeSpan.FromDays(days);
+        return true;
+    }
+
+    // Longer than any plan is drawn over, a duration overflowed the time and date arithmetic it went into, and
+    // the chart that held it would step through every day of it.
+    const double maxDurationDays = 36_525;
+
+    static void CheckLength(double days, CharSpan text)
+    {
+        if (days > maxDurationDays)
+        {
+            throw new MermaidParseException($"Failed to parse gantt: the duration '{text}' is longer than 100 years");
+        }
+    }
+
+    static int CheckedMonths(double months, CharSpan text)
+    {
+        CheckLength(months * 30.4375, text);
+        return (int) months;
     }
 
     static List<string> ParseExcludes(string excludes)

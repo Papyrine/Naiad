@@ -383,6 +383,19 @@ class SequenceParser : IDiagramParser<SequenceModel>
             open.Push((block, body));
         }
 
+        // A participant named before it is declared, if it ever is, is added where it is first named.
+        void Mention(string id)
+        {
+            if (participantIds.Add(id))
+            {
+                model.Participants.Add(
+                    new()
+                    {
+                        Id = id
+                    });
+            }
+        }
+
         // `else`, `and` and `option` each continue one kind of block, which has to be the innermost.
         void Branch(string keyword, string owner, List<SequenceElement>? branch)
         {
@@ -447,33 +460,25 @@ class SequenceParser : IDiagramParser<SequenceModel>
 
                 case MessageItem message:
                     var m = message.Value;
-                    // Auto-add participants from messages
-                    if (!participantIds.Contains(m.FromId))
-                    {
-                        model.Participants.Add(
-                            new()
-                            {
-                                Id = m.FromId
-                            });
-                        participantIds.Add(m.FromId);
-                    }
-                    if (!participantIds.Contains(m.ToId))
-                    {
-                        model.Participants.Add(
-                            new()
-                            {
-                                Id = m.ToId
-                            });
-                        participantIds.Add(m.ToId);
-                    }
+                    Mention(m.FromId);
+                    Mention(m.ToId);
                     Add(m);
                     break;
 
+                // A note or an activation may name a participant nothing has declared yet, which Mermaid adds
+                // as a message would. Left out, the renderer had no column to put it in, and threw.
                 case NoteItem note:
+                    Mention(note.Value.ParticipantId);
+                    if (note.Value.OverParticipantId2 is { } second)
+                    {
+                        Mention(second);
+                    }
+
                     Add(note.Value);
                     break;
 
                 case ActivationItem activation:
+                    Mention(activation.Value.ParticipantId);
                     Add(activation.Value);
                     break;
 

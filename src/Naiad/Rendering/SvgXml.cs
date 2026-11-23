@@ -1,26 +1,61 @@
 static class SvgXml
 {
-    // The control characters XML 1.0 does not allow anywhere, even as character references: all of C0
-    // but tab, line feed and carriage return.
+    // The characters XML 1.0 does not allow anywhere, even as character references: all of C0 but tab, line
+    // feed and carriage return, and U+FFFE and U+FFFF. Half of a surrogate pair is not a character either;
+    // see AllowedAt.
     static bool IsDisallowed(char c) =>
-        c < ' ' && c is not ('\t' or '\n' or '\r');
+        c < ' ' && c is not ('\t' or '\n' or '\r') ||
+        c is '￾' or '￿';
 
-    static readonly string disallowedChars =
-        new(Enumerable.Range(0, ' ').Select(_ => (char) _).Where(IsDisallowed).ToArray());
+    // Every character that may have to be dropped: the disallowed ones, and the surrogates, which are kept
+    // only in whole pairs.
+    static readonly string suspectChars =
+        new(
+            Enumerable.Range(0, ' ')
+                .Select(_ => (char) _)
+                .Where(IsDisallowed)
+                .Concat(['￾', '￿'])
+                .Concat(Enumerable.Range(0xD800, 0x800).Select(_ => (char) _))
+                .ToArray());
 
-    static readonly SearchValues<char> disallowed = SearchValues.Create(disallowedChars);
+    static readonly SearchValues<char> suspects = SearchValues.Create(suspectChars);
 
-    static readonly SearchValues<char> attributeSpecials = SearchValues.Create("&<'" + disallowedChars);
+    static readonly SearchValues<char> attributeSpecials = SearchValues.Create("&<'" + suspectChars);
+
+    // How many characters from `index` XML allows: none for a disallowed one or half a surrogate pair, two for
+    // a whole pair, and otherwise one.
+    static int AllowedAt(CharSpan text, int index)
+    {
+        var c = text[index];
+        if (char.IsHighSurrogate(c))
+        {
+            if (index + 1 < text.Length &&
+                char.IsLowSurrogate(text[index + 1]))
+            {
+                return 2;
+            }
+
+            return 0;
+        }
+
+        if (char.IsLowSurrogate(c) ||
+            IsDisallowed(c))
+        {
+            return 0;
+        }
+
+        return 1;
+    }
 
     /// <summary>
-    /// Appends markup as it is, but for the control characters XML does not allow, which are dropped.
-    /// Markup built from user text (an HTML label) has that text encoded, but HTML encoding leaves those
-    /// characters as they are, and a document holding one is not well-formed.
+    /// Appends markup as it is, but for the characters XML does not allow, which are dropped. Markup built
+    /// from user text (an HTML label) has that text encoded, but HTML encoding leaves those characters as
+    /// they are, and a document holding one is not well-formed.
     /// </summary>
     public static void AppendMarkup(StringBuilder builder, string markup)
     {
         var rest = markup.AsSpan();
-        var index = rest.IndexOfAny(disallowed);
+        var index = rest.IndexOfAny(suspects);
         if (index < 0)
         {
             builder.Append(markup);
@@ -30,8 +65,10 @@ static class SvgXml
         while (index >= 0)
         {
             builder.Append(rest[..index]);
-            rest = rest[(index + 1)..];
-            index = rest.IndexOfAny(disallowed);
+            var allowed = AllowedAt(rest, index);
+            builder.Append(rest.Slice(index, allowed));
+            rest = rest[(index + Math.Max(allowed, 1))..];
+            index = rest.IndexOfAny(suspects);
         }
 
         builder.Append(rest);
@@ -77,6 +114,15 @@ static class SvgXml
         for (var i = 0; i < text.Length; i++)
         {
             var c = text[i];
+
+            // A whole surrogate pair is one character and is kept; half of one is none, and is dropped.
+            if (char.IsSurrogate(c) &&
+                AllowedAt(text, i) == 2)
+            {
+                i++;
+                continue;
+            }
+
             var replacement = c switch
             {
                 '&' => "&amp;",
@@ -85,7 +131,7 @@ static class SvgXml
                 '>' when !inAttribute => "&gt;",
                 '"' when !inAttribute => "&quot;",
                 // Dropped: a document holding one is not well-formed, and no XML parser reads it.
-                _ when IsDisallowed(c) => "",
+                _ when IsDisallowed(c) || char.IsSurrogate(c) => "",
                 _ => null
             };
 
