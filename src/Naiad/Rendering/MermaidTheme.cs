@@ -93,8 +93,10 @@ sealed class MermaidTheme
 
     // Characters that let a value escape the one CSS value it is written as in the diagram's stylesheet:
     // `;` ends the declaration, `{` and `}` open and close rules (which, in an SVG inlined in a page, style
-    // the whole page), and `<` and `>` close the <style> element and start markup.
-    static readonly SearchValues<char> unsafeValueChars = SearchValues.Create("<>{};");
+    // the whole page), `<` and `>` close the <style> element and start markup, and `&` starts an XML
+    // reference, which leaves the SVG unreadable or, completed by the `;` after the value (`&#125` gives
+    // `}`), spells one of the others.
+    static readonly SearchValues<char> unsafeValueChars = SearchValues.Create("<>{};&");
 
     // A themeVariables value holding one of those is ignored, as Mermaid ignores a config value holding `<`
     // or `>`, and the theme's own value stands.

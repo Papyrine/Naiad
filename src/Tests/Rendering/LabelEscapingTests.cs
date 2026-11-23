@@ -116,6 +116,8 @@ public class LabelEscapingTests
     [Arguments("closes the style element", "red}</style><img src=x onerror=alert(1)><style>", "onerror")]
     [Arguments("adds a rule", "red} svg{display:none", "display:none")]
     [Arguments("adds a declaration", "red;fill:url(https://attacker.invalid/x)", "attacker.invalid")]
+    [Arguments("spells a brace with the following ;", "red&#125", "red&#125")]
+    [Arguments("breaks the XML", "red&x", "red&x")]
     public async Task ThemeVariable_CannotBreakOutOfItsValue(string name, string value, string marker)
     {
         var input =
@@ -165,5 +167,18 @@ public class LabelEscapingTests
         await Assert.That(texts).Contains("ab");
         await Assert.That(texts).Contains("cd");
         await Assert.That(texts).Contains("efg");
+    }
+
+    // An HTML label's text is HTML-encoded, which leaves control characters as they are, and the label's
+    // markup is written into its <foreignObject> verbatim, so one in a label left the SVG unreadable.
+    [Test]
+    [Arguments("flowchart label", "flowchart LR\n    A[a\u0001b]", "ab")]
+    [Arguments("mindmap icon", "mindmap\n    root\n        a ::icon(fa x\u0001y)", "fa xy")]
+    public async Task ControlCharacters_AreDroppedFromHtmlLabels(string name, string input, string expected)
+    {
+        var svg = Mermaid.Render(input);
+
+        XDocument.Parse(svg);
+        await Assert.That(svg).Contains(expected).Because(name);
     }
 }
