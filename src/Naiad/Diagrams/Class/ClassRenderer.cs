@@ -1,8 +1,10 @@
 namespace Naiad.Diagrams.Class;
 
-public class ClassRenderer :
+public class ClassRenderer(ILayoutEngine? layoutEngine = null) :
     IDiagramRenderer<ClassModel>
 {
+    readonly ILayoutEngine layoutEngine = layoutEngine ?? new DagreEngine();
+
     const double classPadding = 10;
     const double lineHeight = 20;
     const double minWidth = 100;
@@ -25,8 +27,7 @@ public class ClassRenderer :
             NodeSeparation = 60,
             RankSeparation = 80
         };
-        var dagreEngine = new DagreEngine();
-        var layoutResult = dagreEngine.BuildLayout(graphModel, layoutOptions);
+        var layoutResult = layoutEngine.BuildLayout(graphModel, layoutOptions);
 
         // Build SVG
         var builder = new SvgBuilder();

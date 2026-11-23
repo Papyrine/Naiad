@@ -53,8 +53,21 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     // Layout self-checks (label/line/node overlaps, out-of-bounds). Opt-in via ValidateLayout so the
     // tracking and O(n^2) checks stay off the production render path; the test suite turns it on to guard
-    // against regressions. When false, the Track* calls below short-circuit and the checks never run.
+    // against regressions. When neither this nor TrackLayout is set, the Track* calls below short-circuit
+    // and the checks never run.
     internal bool ValidateLayout { get; set; }
+
+    // Records the drawn geometry the self-checks read, without running them. The test suite's layout lint
+    // reads it back through TrackedNodes and TrackedLines to count every problem, where the self-checks
+    // stop at the first. Transitions are routed here rather than by the layout, so this is the only place
+    // their drawn lines are known.
+    internal bool TrackLayout { get; set; }
+
+    internal IReadOnlyList<NodeBounds> TrackedNodes => nodeBounds;
+    internal IReadOnlyList<LineBounds> TrackedLines => lineBounds;
+
+    bool Tracking => ValidateLayout || TrackLayout;
+
     List<TextBounds> textBounds = [];
     List<LineBounds> lineBounds = [];
     List<NodeBounds> nodeBounds = [];
@@ -62,8 +75,8 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     double svgHeight;
 
     record TextBounds(double X, double Y, double Width, double Height, string Label);
-    record LineBounds(double X1, double Y1, double X2, double Y2, string Label, string? FromId, string? ToId);
-    record NodeBounds(double X, double Y, double Width, double Height, string Label, string? Id);
+    internal record LineBounds(double X1, double Y1, double X2, double Y2, string Label, string? FromId, string? ToId);
+    internal record NodeBounds(double X, double Y, double Width, double Height, string Label, string? Id);
 
     const double stateMinWidth = 40;
     const double stateHeight = 40;
@@ -216,7 +229,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     void TrackText(double x, double y, string text, string anchor, double fontSize, bool bold = false)
     {
-        if (!ValidateLayout)
+        if (!Tracking)
         {
             return;
         }
@@ -246,7 +259,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     /// </summary>
     void TrackTextBox(double centerX, double centerY, double width, double height, string text)
     {
-        if (!ValidateLayout)
+        if (!Tracking)
         {
             return;
         }
@@ -283,7 +296,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
     /// </summary>
     void TrackLine(double x1, double y1, double x2, double y2, string label, string? fromId = null, string? toId = null)
     {
-        if (!ValidateLayout)
+        if (!Tracking)
         {
             return;
         }
@@ -309,7 +322,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
         string? fromId,
         string? toId)
     {
-        if (!ValidateLayout)
+        if (!Tracking)
         {
             return;
         }
@@ -351,7 +364,7 @@ public class StateRenderer(ILayoutEngine? layoutEngine = null) :
 
     void TrackNode(double x, double y, double width, double height, string label, string? id = null)
     {
-        if (!ValidateLayout)
+        if (!Tracking)
         {
             return;
         }

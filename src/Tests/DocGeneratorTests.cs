@@ -18,7 +18,7 @@
 
         foreach (var testFile in testFiles)
         {
-            var tests = await ExtractTestsFromFile(testFile);
+            var tests = ExtractTestsFromFile(testFile);
             if (tests.Count == 0)
             {
                 continue;
@@ -150,144 +150,17 @@
         return firstLine.TrimEnd().EndsWith("-beta");
     }
 
-    static async Task<List<TestInfo>> ExtractTestsFromFile(string filePath)
-    {
-        var results = new List<TestInfo>();
-        var code = await File.ReadAllTextAsync(filePath);
-
-        var tree = CSharpSyntaxTree.ParseText(code);
-        var root = await tree.GetRootAsync();
-
-        var methods = root.DescendantNodes()
-            .OfType<MethodDeclarationSyntax>()
-            .Where(_ => _.AttributeLists
-                .SelectMany(_ => _.Attributes)
-                .Any(_ => _.Name.ToString() == "Test"));
-
-        foreach (var method in methods)
-        {
-            var body = method.Body?.ToString() ?? method.ExpressionBody?.ToString() ?? "";
-
-            if (!body.Contains("VerifySvg"))
+    static List<TestInfo> ExtractTestsFromFile(string filePath) =>
+        SnapshotInputs.Read(filePath)
+            .Where(_ => !string.IsNullOrEmpty(_.Input))
+            .Select(_ => new TestInfo
             {
-                continue;
-            }
-
-            var input = ExtractInputString(method) ?? await ResolveSharedSample(method, filePath);
-            if (string.IsNullOrEmpty(input))
-            {
-                continue;
-            }
-
-            var testName = method.Identifier.Text;
-            var className = method.Ancestors()
-                .OfType<ClassDeclarationSyntax>()
-                .FirstOrDefault()?.Identifier.Text ?? "";
-
-            var verifiedPngPath = FindVerifiedFile(filePath, className, testName, ".verified.png");
-
-            results.Add(new()
-            {
-                Name = testName,
-                ClassName = className,
-                Input = input,
-                VerifiedPngPath = verifiedPngPath
-            });
-        }
-
-        return results;
-    }
-
-    /// <summary>
-    /// Resolves an input passed as a shared constant, e.g. <c>VerifySvg(StateSamples.Simple)</c>. Without
-    /// this the test looks input-less, its whole category comes out empty, and the category's page is
-    /// deleted by the rebuild.
-    /// </summary>
-    static async Task<string?> ResolveSharedSample(MethodDeclarationSyntax method, string testFilePath)
-    {
-        var access = method.DescendantNodes()
-            .OfType<MemberAccessExpressionSyntax>()
-            .FirstOrDefault(_ => _.Expression is IdentifierNameSyntax);
-
-        if (access?.Expression is not IdentifierNameSyntax owner)
-        {
-            return null;
-        }
-
-        var directory = Path.GetDirectoryName(testFilePath);
-        if (directory is null)
-        {
-            return null;
-        }
-
-        var samplesPath = Path.Combine(directory, $"{owner.Identifier.Text}.cs");
-        if (!File.Exists(samplesPath))
-        {
-            return null;
-        }
-
-        var tree = CSharpSyntaxTree.ParseText(await File.ReadAllTextAsync(samplesPath));
-        var root = await tree.GetRootAsync();
-        var wanted = access.Name.Identifier.Text;
-
-        foreach (var field in root.DescendantNodes().OfType<FieldDeclarationSyntax>())
-        {
-            foreach (var declarator in field.Declaration.Variables)
-            {
-                if (declarator.Identifier.Text != wanted)
-                {
-                    continue;
-                }
-
-                if (declarator.Initializer?.Value is LiteralExpressionSyntax literal)
-                {
-                    return literal.Token.ValueText;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private static string? ExtractInputString(MethodDeclarationSyntax method)
-    {
-        // Find raw string literals (""" ... """)
-        var rawStrings = method.DescendantNodes()
-            .OfType<LiteralExpressionSyntax>()
-            .Where(_ => _.IsKind(SyntaxKind.Utf8StringLiteralExpression) ||
-                        _.Token.IsKind(SyntaxKind.SingleLineRawStringLiteralToken) ||
-                        _.Token.IsKind(SyntaxKind.MultiLineRawStringLiteralToken))
+                Name = _.MethodName,
+                ClassName = _.ClassName,
+                Input = _.Input!,
+                VerifiedPngPath = FindVerifiedFile(filePath, _.ClassName, _.MethodName, ".verified.png")
+            })
             .ToList();
-
-        if (rawStrings.Count > 0)
-        {
-            var token = rawStrings[0].Token;
-            var text = token.ValueText;
-            return text;
-        }
-
-        // Fall back to regular string literals
-        var stringLiterals = method.DescendantNodes()
-            .OfType<LiteralExpressionSyntax>()
-            .Where(_ => _.IsKind(SyntaxKind.StringLiteralExpression))
-            .ToList();
-
-        if (stringLiterals.Count > 0)
-        {
-            return stringLiterals[0].Token.ValueText;
-        }
-
-        // Try interpolated strings
-        var interpolated = method.DescendantNodes()
-            .OfType<InterpolatedStringExpressionSyntax>()
-            .FirstOrDefault();
-
-        return interpolated?
-            .Contents
-            .OfType<InterpolatedStringTextSyntax>()
-            .Select(_ => _.TextToken.ValueText)
-            .FirstOrDefault();
-    }
 
     static string FindVerifiedFile(string testFile, string className, string testName, string extension)
     {
